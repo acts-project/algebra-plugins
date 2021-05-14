@@ -10,16 +10,16 @@
 #include <cmath>
 
 #ifdef ALGEBRA_CUSTOM_SCALARTYPE
-using detray_scalar = ALGEBRA_CUSTOM_SCALARTYPE;
+using algebra_scalar = ALGEBRA_CUSTOM_SCALARTYPE;
 #else
-using detray_scalar = double;
+using algebra_scalar = double;
 #endif
 
 #define __plugin eigen
 
-namespace detray
+namespace algebra
 {
-    using scalar = detray_scalar;
+    using scalar = algebra_scalar;
 
     // eigen getter methdos
     namespace getter

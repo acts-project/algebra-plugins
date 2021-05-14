@@ -7,18 +7,18 @@
 #include <array>
 
 #ifdef ALGEBRA_CUSTOM_SCALARTYPE
-using detray_scalar = ALGEBRA_CUSTOM_SCALARTYPE;
+using algebra_scalar = ALGEBRA_CUSTOM_SCALARTYPE;
 #else
-using detray_scalar = double;
+using algebra_scalar = double;
 #endif
 
 #define __plugin array
 #define __plugin_without_matrix_element_accessor 1
 
-namespace detray
+namespace algebra
 {
 
-    using scalar = detray_scalar;
+    using scalar = algebra_scalar;
 
     std::array<scalar, 2> operator*(const std::array<scalar, 2> &a, scalar s)
     {

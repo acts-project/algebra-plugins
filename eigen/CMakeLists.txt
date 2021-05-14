@@ -1,8 +1,8 @@
-add_library(detray_eigen INTERFACE)
+message(STATUS "Building 'algebra::eigen' plugin")
 
-message(STATUS "Building 'detray::eigen' plugin")
+add_library(algebra_eigen INTERFACE)
 
-target_include_directories(detray_eigen
+target_include_directories(algebra_eigen
   INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
@@ -13,8 +13,8 @@ install(
 
 if(DETRAY_CUSTOM_SCALARTYPE)
   target_compile_definitions(
-    detray_eigen
-    INTERFACE -DDETRAY_CUSTOM_SCALARTYPE=${DETRAY_CUSTOM_SCALARTYPE})
+    algebra_eigen
+    INTERFACE -DALGEBRA_CUSTOM_SCALARTYPE=${ALGEBRA_CUSTOM_SCALARTYPE})
 endif()
 
-add_library(detray::eigen ALIAS detray_eigen)
+add_library(algebra::eigen ALIAS algebra_eigen)

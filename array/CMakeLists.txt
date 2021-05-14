@@ -1,8 +1,8 @@
-message(STATUS "Building 'detray::array' plugin")
+message(STATUS "Building 'algebra::array' plugin")
 
-add_library(detray_array INTERFACE)
+add_library(algebra_array INTERFACE)
 
-target_include_directories(detray_array
+target_include_directories(algebra_array
   INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
@@ -13,8 +13,8 @@ install(
 
 if(DETRAY_CUSTOM_SCALARTYPE)
   target_compile_definitions(
-    detray_array
-    INTERFACE -DDETRAY_CUSTOM_SCALARTYPE=${DETRAY_CUSTOM_SCALARTYPE})
+    algebra_array
+    INTERFACE -DALGEBRA_CUSTOM_SCALARTYPE=${ALGEBRA_CUSTOM_SCALARTYPE})
 endif()
 
-add_library(detray::array ALIAS detray_array)
+add_library(algebra::array ALIAS algebra_array)

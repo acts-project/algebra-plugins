@@ -6,8 +6,8 @@
 #include <cmath>
 #include <array>
 
-#ifdef DETRAY_CUSTOM_SCALARTYPE
-using detray_scalar = DETRAY_CUSTOM_SCALARTYPE;
+#ifdef ALGEBRA_CUSTOM_SCALARTYPE
+using detray_scalar = ALGEBRA_CUSTOM_SCALARTYPE;
 #else
 using detray_scalar = double;
 #endif

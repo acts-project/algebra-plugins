@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../../../common/include/algebra/common/types.hpp"
+#include "common/types.hpp"
 
 #include "Math/SMatrix.h"
 #include "Math/SVector.h"
@@ -9,19 +9,17 @@
 #include <tuple>
 #include <cmath>
 
-#ifdef ALGEBRA_CUSTOM_SCALARTYPE
-using algebra_scalar = ALGEBRA_CUSTOM_SCALARTYPE;
+#ifdef ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE
+using algebra_scalar = ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE;
 #else
 using algebra_scalar = double;
 #endif
 
-#define __plugin smatrix
+#define __plugin algebra::smatrix
 
-namespace detray
+namespace algebra
 {
     using scalar = algebra_scalar;
-    template <typename value_type>
-    using dvector = algebra::vector_t<value_type>;
 
     using namespace ROOT::Math;
 

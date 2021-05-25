@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../../../common/include/algebra/common/types.hpp"
+#include "common/types.hpp"
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -9,21 +9,17 @@
 #include <tuple>
 #include <cmath>
 
-#ifdef ALGEBRA_CUSTOM_SCALARTYPE
-using algebra_scalar = ALGEBRA_CUSTOM_SCALARTYPE;
+#ifdef ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE
+using algebra_scalar = ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE;
 #else
 using algebra_scalar = double;
 #endif
 
-#define __plugin eigen
+#define __plugin algebra::eigen
 
-namespace detray
+namespace algebra
 {
     using scalar = algebra_scalar;
-    template <typename value_type, unsigned int kDIM>
-    using darray = algebra::array_t<value_type, kDIM>;
-    template <typename value_type>
-    using dvector = algebra::vector_t<value_type>;
 
     // eigen getter methdos
     namespace getter
@@ -172,7 +168,7 @@ namespace detray
              * 
              * @param ma is the full 4x4 matrix asa 16 array
              **/
-            transform3(const darray<scalar, 16> &ma)
+            transform3(const array_t<scalar, 16> &ma)
             {
                 _data.matrix() << ma[0], ma[1], ma[2], ma[3], ma[4], ma[5], ma[6], ma[7],
                     ma[8], ma[9], ma[10], ma[11], ma[12], ma[13], ma[14], ma[15];

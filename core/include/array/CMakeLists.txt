@@ -5,7 +5,8 @@ add_library(algebra_array INTERFACE)
 target_include_directories(algebra_array
   INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>)
+    $<INSTALL_INTERFACE:include>
+    ${ALGEBRA_SOURCE_DIR}/common/include/algebra)
 
 install(
   DIRECTORY include/plugins/algebra

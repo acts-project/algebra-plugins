@@ -1,11 +1,12 @@
-message(STATUS "Building 'algebra::eigen' plugin")
+message(STATUS "Building 'algebra::smatrix' plugin")
 
-add_library(algebra_eigen INTERFACE)
+add_library(algebra_smatrix INTERFACE)
 
-target_include_directories(algebra_eigen
+target_include_directories(algebra_smatrix
   INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>)
+    $<INSTALL_INTERFACE:include>
+    ${ALGEBRA_SOURCE_DIR}/common/include/algebra)
 
 install(
   DIRECTORY include/plugins
@@ -13,8 +14,8 @@ install(
 
 if(ALGEBRA_CUSTOM_SCALARTYPE)
   target_compile_definitions(
-    algebra_eigen
+    algebra_smatrix
     INTERFACE -DALGEBRA_CUSTOM_SCALARTYPE=${ALGEBRA_CUSTOM_SCALARTYPE})
 endif()
 
-add_library(algebra::eigen ALIAS algebra_eigen)
+add_library(algebra::smatrix ALIAS algebra_smatrix)

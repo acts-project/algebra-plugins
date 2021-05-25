@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../../../common/include/algebra/common/types.hpp"
+#include "common/types.hpp"
 
 #include <any>
 #include <cmath>

@@ -15,7 +15,10 @@ using algebra_scalar = ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE;
 using algebra_scalar = double;
 #endif
 
+// namespace of the algebra object definitions
 #define __plugin algebra::smatrix
+// Name of the plugin
+#define ALGEBRA_PLUGIN smatrix
 
 namespace algebra
 {

@@ -5,7 +5,7 @@
  * Mozilla Public License Version 2.0
  */
 
-#include "utils/containers.hpp"
+#include "common/types.hpp"
 
 #include <cmath>
 #include <climits>
@@ -13,7 +13,7 @@
 #include <gtest/gtest.h>
 
 /// @note __plugin has to be defined with a preprocessor command
-using namespace detray;
+using namespace algebra;
 
 // Two-dimensional definitions
 using point2cart = __plugin::cartesian2::point2;
@@ -193,7 +193,7 @@ TEST(ALGEBRA_PLUGIN, transform3)
     ASSERT_NEAR(trnm[2], 4., epsilon);
 
     // Check a contruction from an array[16]
-    darray<scalar, 16> matray = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0};
+    array_t<scalar, 16> matray = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0};
     transform3 trfma(matray);
 
     // Re-evaluate rot and trn

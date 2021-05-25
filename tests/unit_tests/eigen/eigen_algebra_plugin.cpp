@@ -5,5 +5,5 @@
  * Mozilla Public License Version 2.0
  */
 
-#include "plugins/eigen_defs.hpp"
-#include "tests/common/test_core.inl"
+#include "algebra/containers/eigen.hpp"
+#include "tests/common/test_plugin.inl"

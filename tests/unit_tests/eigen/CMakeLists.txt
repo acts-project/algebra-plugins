@@ -1,20 +1,6 @@
 enable_testing()
 
 foreach(etest ${all_unit_tests})
-    add_detray_test(eigen_${etest}
-                eigen_${etest}.cpp algebra::eigen)
+    add_algebra_test(eigen_algebra_${etest}
+                     eigen_algebra_${etest}.cpp algebra::eigen)
 endforeach(etest)
-
-if (DETRAY_IO_CSV)
-    set(UNIT_TEST_EXTRA_LIBRARIES detray::io)
-    add_detray_test(eigen_read_detector
-                    eigen_read_detector.cpp
-                    algebra::eigen)
-endif()
-
-if (DETRAY_DISPLAY)
-    set(UNIT_TEST_EXTRA_LIBRARIES detray::display)
-    add_detray_test(eigen_display_masks
-                    eigen_display_masks.cpp
-                    algebra::eigen)
-endif()

@@ -12,9 +12,12 @@ using algebra_scalar = ALGEBRA_CUSTOM_SCALARTYPE;
 using algebra_scalar = double;
 #endif
 
+// namespace of the algebra object definitions
 #define __plugin algebra::array
-#define __plugin_without_matrix_element_accessor 1
+// Name of the plugin
 #define ALGEBRA_PLUGIN array
+
+#define __plugin_without_matrix_element_accessor 1
 
 namespace algebra
 {

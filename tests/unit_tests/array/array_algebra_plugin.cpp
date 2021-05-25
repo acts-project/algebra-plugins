@@ -5,5 +5,5 @@
  * Mozilla Public License Version 2.0
  */
 
-#include "plugins/algebra/array_container.hpp"
-#include "tests/common/tools_cylinder_intersection.inl"
+#include "algebra/containers/array.hpp"
+#include "tests/common/test_plugin.inl"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utils/containers.hpp"
+#include "../../../../../common/include/algebra/common/types.hpp"
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -17,9 +17,13 @@ using algebra_scalar = double;
 
 #define __plugin eigen
 
-namespace algebra
+namespace detray
 {
     using scalar = algebra_scalar;
+    template <typename value_type, unsigned int kDIM>
+    using darray = algebra::array_t<value_type, kDIM>;
+    template <typename value_type>
+    using dvector = algebra::vector_t<value_type>;
 
     // eigen getter methdos
     namespace getter

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utils/containers.hpp"
+#include "../../../../../common/include/algebra/common/types.hpp"
 
 #include <any>
 #include <cmath>
@@ -12,8 +12,9 @@ using algebra_scalar = ALGEBRA_CUSTOM_SCALARTYPE;
 using algebra_scalar = double;
 #endif
 
-#define __plugin array
+#define __plugin algebra::array
 #define __plugin_without_matrix_element_accessor 1
+#define ALGEBRA_PLUGIN array
 
 namespace algebra
 {
@@ -260,7 +261,7 @@ namespace algebra
              * 
              * @param ma is the full 4x4 matrix 16 array
              **/
-            transform3(const darray<scalar, 16> &ma)
+            transform3(const array_t<scalar, 16> &ma)
             {
                 _data[0][0] = ma[0];
                 _data[0][1] = ma[4];

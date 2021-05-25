@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utils/containers.hpp"
+#include "../../../../../common/include/algebra/common/types.hpp"
 
 #include "Math/SMatrix.h"
 #include "Math/SVector.h"
@@ -17,9 +17,11 @@ using algebra_scalar = double;
 
 #define __plugin smatrix
 
-namespace algebra
+namespace detray
 {
     using scalar = algebra_scalar;
+    template <typename value_type>
+    using dvector = algebra::vector_t<value_type>;
 
     using namespace ROOT::Math;
 
@@ -107,7 +109,7 @@ namespace algebra
 
     } // namespace getter
 
-    // eigen definitions
+    // smatrix definitions
     namespace smatrix
     {
         /** Transform wrapper class to ensure standard API within differnt plugins

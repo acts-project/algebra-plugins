@@ -110,12 +110,13 @@ namespace algebra
     // eigen definitions
     namespace eigen
     {
+        using vector3 = Eigen::Matrix<scalar, 3, 1>;
+        using point3  = vector3;
+        using point2  = Eigen::Matrix<scalar, 2, 1>;
+
         /** Transform wrapper class to ensure standard API within differnt plugins */
         struct transform3
         {
-            using vector3 = Eigen::Matrix<scalar, 3, 1>;
-            using point3 = vector3;
-
             Eigen::Transform<scalar, 3, Eigen::Affine> _data =
                 Eigen::Transform<scalar, 3, Eigen::Affine>::Identity();
 
@@ -253,8 +254,6 @@ namespace algebra
          */
         struct cartesian2
         {
-            using point2 = Eigen::Matrix<scalar, 2, 1>;
-
             /** This method transform from a point from the global 3D cartesian frame to the local 2D cartesian frame
              *
              * @param v the point in local frame
@@ -278,7 +277,7 @@ namespace algebra
              * @return a local point2
              **/
             auto operator()(const transform3 &trf,
-                            const transform3::point3 &p) const
+                            const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
@@ -287,8 +286,6 @@ namespace algebra
         /** Local frame projection into a polar coordinate frame */
         struct polar2
         {
-            using point2 = Eigen::Matrix<scalar, 2, 1>;
-
             /** This method transform from a point from 2D or 3D cartesian frame to a 2D polar point
              *              
              * @param v the point in local frame
@@ -312,7 +309,7 @@ namespace algebra
              * @return a local point2
              **/
             auto operator()(const transform3 &trf,
-                            const transform3::point3 &p) const
+                            const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
@@ -321,8 +318,6 @@ namespace algebra
         /** Local frame projection into a polar coordinate frame */
         struct cylindrical2
         {
-            using point2 = Eigen::Matrix<scalar, 2, 1>;
-
             /** This method transform from a point from 2D or 3D cartesian frame to a 2D polar point
              *              
              * @param v the point in local frame
@@ -347,7 +342,7 @@ namespace algebra
              * @return a local point2
              **/
             auto operator()(const transform3 &trf,
-                            const transform3::point3 &p) const
+                            const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
@@ -404,4 +399,4 @@ namespace algebra
         }
     } // namespace vector
 
-} // namespace detray
+} // namespace algebra

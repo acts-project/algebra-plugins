@@ -16,5 +16,4 @@ set(ALGEBRA_PLUGIN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 #if(not )
 
 add_subdirectory(core)
-add_subdirectory(external)
 add_subdirectory(tests)

@@ -1,4 +1,4 @@
-/** Detray library, part of the ACTS project (R&D line)
+/** Algebra plugins, part of the ACTS project
  * 
  * (c) 2020 CERN for the benefit of the ACTS project
  * 
@@ -27,4 +27,5 @@ namespace algebra
     using tuple_t = std::tuple<types ...>;
 
 
-} // namespace detray
+} // namespace algebra
+

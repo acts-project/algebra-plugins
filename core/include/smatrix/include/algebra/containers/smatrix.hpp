@@ -113,14 +113,16 @@ namespace algebra
     // smatrix definitions
     namespace smatrix
     {
+        using vector3 = SVector<scalar, 3>;
+        using point3 = vector3;
+        using vector2 = SVector<scalar, 2>;
+        using point2 = vector2;
+
         /** Transform wrapper class to ensure standard API within differnt plugins
          * 
          **/
         struct transform3
         {
-            using vector3 = SVector<scalar, 3>;
-            using point3 = vector3;
-
             SMatrix<scalar, 4, 4> _data = ROOT::Math::SMatrixIdentity();
             SMatrix<scalar, 4, 4> _data_inv = ROOT::Math::SMatrixIdentity();
 
@@ -306,7 +308,7 @@ namespace algebra
              * @return a local point2
              **/
             const auto operator()(const transform3 &trf,
-                                  const transform3::point3 &p) const
+                                  const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
@@ -338,7 +340,7 @@ namespace algebra
              * @return a local point2
              **/
             const auto operator()(const transform3 &trf,
-                                  const transform3::point3 &p) const
+                                  const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
@@ -370,7 +372,7 @@ namespace algebra
              * @return a local point2
              **/
             const auto operator()(const transform3 &trf,
-                                  const transform3::point3 &p) const
+                                  const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
@@ -428,4 +430,4 @@ namespace algebra
 
     } // namespace vector
 
-} // namespace detray
+} // namespace algebra

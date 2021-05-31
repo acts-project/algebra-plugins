@@ -6,8 +6,8 @@
 #include <cmath>
 #include <array>
 
-#ifdef ALGEBRA_CUSTOM_SCALARTYPE
-using algebra_scalar = ALGEBRA_CUSTOM_SCALARTYPE;
+#ifdef ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE
+using algebra_scalar = ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE;
 #else
 using algebra_scalar = double;
 #endif

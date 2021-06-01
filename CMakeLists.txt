@@ -13,7 +13,5 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 # This is a submodule project
 set(ALGEBRA_PLUGIN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-#if(not )
-
 add_subdirectory(core)
 add_subdirectory(tests)

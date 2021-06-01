@@ -1,0 +1,13 @@
+
+
+if (ALGEBRA_PLUGIN_INCLUDE_ARRAY)
+    add_subdirectory(array)
+endif()
+
+if (ALGEBRA_PLUGIN_INCLUDE_EIGEN)
+    add_subdirectory(eigen)
+endif()
+
+if (ALGEBRA_PLUGIN_INCLUDE_SMATRIX)
+    add_subdirectory(smatrix)
+endif()

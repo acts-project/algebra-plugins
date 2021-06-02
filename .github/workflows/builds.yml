@@ -23,7 +23,7 @@ jobs:
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On -DCMAKE_BUILD_TYPE=Release -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON -DALGEBRA_PLUGIN_INCLUDE_ARRAY=On -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
@@ -50,7 +50,7 @@ jobs:
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On -DDALGEBRA_PLUGIN_CUSTOM_SCALARTYPE=float
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON -DDALGEBRA_PLUGIN_CUSTOM_SCALARTYPE=float -DALGEBRA_PLUGIN_INCLUDE_ARRAY=On -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
@@ -77,7 +77,7 @@ jobs:
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON -DALGEBRA_PLUGIN_INCLUDE_ARRAY=On -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
@@ -104,7 +104,7 @@ jobs:
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON -DALGEBRA_PLUGIN_INCLUDE_ARRAY=On -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On
 
     - name: Build
       working-directory: ${{runner.workspace}}/build

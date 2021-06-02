@@ -5,5 +5,5 @@
  * Mozilla Public License Version 2.0
  */
 
-#include "algebra/containers/array.hpp"
+#include "algebra/definitions/array.hpp"
 #include "tests/common/test_plugin.inl"

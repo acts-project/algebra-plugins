@@ -5,5 +5,5 @@
  * Mozilla Public License Version 2.0
  */
 
-#include "algebra/containers/smatrix.hpp"
+#include "algebra/definitions/smatrix.hpp"
 #include "tests/common/test_plugin.inl"

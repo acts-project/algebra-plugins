@@ -16,9 +16,6 @@ jobs:
 
     - name: Install Dependencies
       run: sudo apt-get install libeigen3-dev
-
-    - name: Initialize Submodules      
-      run: cd $GITHUB_WORKSPACE; git submodule update --init
        
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build
@@ -26,7 +23,7 @@ jobs:
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On -DCMAKE_BUILD_TYPE=Release 
+      run: cmake $GITHUB_WORKSPACE -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On -DCMAKE_BUILD_TYPE=Release -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
@@ -46,9 +43,6 @@ jobs:
 
     - name: Install Dependencies
       run: sudo apt-get install libeigen3-dev
-
-    - name: Initialize Submodules      
-      run: cd $GITHUB_WORKSPACE; git submodule update --init
        
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build
@@ -56,7 +50,7 @@ jobs:
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On -DDALGEBRA_PLUGIN_CUSTOM_SCALARTYPE=float
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On -DDALGEBRA_PLUGIN_CUSTOM_SCALARTYPE=float
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
@@ -76,9 +70,6 @@ jobs:
 
     - name: Install Dependencies
       run: sudo apt-get install libeigen3-dev
-
-    - name: Initialize Submodules      
-      run: cd $GITHUB_WORKSPACE; git submodule update --init
        
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build
@@ -86,7 +77,7 @@ jobs:
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
@@ -106,9 +97,6 @@ jobs:
 
     - name: Install Dependencies
       run: brew install cmake eigen ninja
-
-    - name: Initialize Submodules      
-      run: cd $GITHUB_WORKSPACE; git submodule update --init
        
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build
@@ -116,7 +104,7 @@ jobs:
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK=ON -DALGEBRA_PLUGIN_INCLUDE_EIGEN=On
 
     - name: Build
       working-directory: ${{runner.workspace}}/build

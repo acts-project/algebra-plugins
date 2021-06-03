@@ -265,7 +265,7 @@ namespace algebra
              * 
              * @param ma is the full 4x4 matrix 16 array
              **/
-            transform3(const array_t<scalar, 16> &ma)
+            transform3(const array_s<scalar, 16> &ma)
             {
                 _data[0][0] = ma[0];
                 _data[0][1] = ma[4];

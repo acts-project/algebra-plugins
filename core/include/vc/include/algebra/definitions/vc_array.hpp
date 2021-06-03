@@ -1,12 +1,9 @@
 #pragma once
 
 #include "common/types.hpp"
-#include "common/simd_types.hpp"
 
 #include <any>
 #include <cmath>
-#include <array>
-#include <Vc/Vc>
 
 // namespace of the algebra object definitions
 #define __plugin algebra::vc_array
@@ -30,29 +27,10 @@ namespace algebra
          * 
          * @return a vector (expression) representing the cross product
          **/
-        template <typename vector_type>
-        vector_type cross(const vector_type &a, const vector_type &b)
+        simd::array<scalar, 4> cross(const simd::array<scalar, 4> &a, const simd::array<scalar, 4> &b)
         {
-            return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1], 0.};
+            return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1], 0};
         }
-
-        /** Cross product between two input vectors - 3 Dim
-         * 
-         * @tparam derived_type_lhs is the first matrix (epresseion) template
-         * @tparam derived_type_rhs is the second matrix (epresseion) template
-         *           
-         * @param a the first input vector/expression
-         * @param b the second input vector/expression
-         * 
-         * @return a vector (expression) representing the cross product
-         **/
-        template <typename vector_type, typename vec_expr>
-        vector_type cross(const vector_type &a, const vec_expr &b)
-        {
-            return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1], 0.};
-        }
-
-
     } // namespace vector
 
     // array getter methdos
@@ -114,14 +92,14 @@ namespace algebra
          * @param m the input matrix 
          **/
         template <unsigned int kROWS = 4, typename matrix_type>
-        auto vector(const matrix_type &m, unsigned int row, unsigned int col) noexcept
+        simd::array<scalar, 4> vector(const matrix_type m, unsigned int row, unsigned int col) noexcept
         {
-            simd::aligned::vector<decltype(m.x)> cols = {m.x, m.y, m.z, m.t};
-            simd::array<scalar, 4> subvector = cols[col];
-
-            //simd::array<scalar, 4> subvector = {m.x[col], m.y[col], m.z[col], 0.};
-            
-            return subvector;
+            switch (col) {
+                case 2: return m.z;
+                case 3: return m.t;
+                case 0: return m.x;
+                case 1: return m.y;
+            } 
         }
 
         /** This method retrieves a submatrix
@@ -208,7 +186,7 @@ namespace algebra
              * 
              * @param ma is the full 4x4 matrix 16 array
              **/
-            transform3(const array_t<scalar, 16> &ma)
+            transform3(const array_s<scalar, 16> &ma)
             {
                 _data.x = {ma[0], ma[4], ma[8], ma[12]};
                 _data.y = {ma[1], ma[5], ma[9], ma[13]};
@@ -312,7 +290,7 @@ namespace algebra
             /** This method retrieves the translation of a transform */
             point3 translation() const
             {
-                return {_data.t[0], _data.t[1], _data.t[2], 0.};
+                return _data.t;
             }
 
             /** This method retrieves the 4x4 matrix of a transform */

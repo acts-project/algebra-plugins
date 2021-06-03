@@ -118,6 +118,8 @@ namespace algebra
         {
             simd::aligned::vector<decltype(m.x)> cols = {m.x, m.y, m.z, m.t};
             simd::array<scalar, 4> subvector = cols[col];
+
+            //simd::array<scalar, 4> subvector = {m.x[col], m.y[col], m.z[col], 0.};
             
             return subvector;
         }

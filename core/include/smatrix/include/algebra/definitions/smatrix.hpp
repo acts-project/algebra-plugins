@@ -193,7 +193,7 @@ namespace algebra
              * 
              * @param ma is the full 4x4 matrix asa 16 array
              **/
-            transform3(const std::array<scalar, 16> &ma)
+            transform3(const array_s<scalar, 16> &ma)
             {
 
                 _data(0, 0) = ma[0];

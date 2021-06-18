@@ -15,8 +15,74 @@
 namespace algebra
 {
 
+    std::array<scalar, 2> operator*(const std::array<scalar, 2> &a, scalar s)
+    {
+        return {a[0] * s, a[1] * s};
+    }
+
+    std::array<scalar, 2> operator*(scalar s, const std::array<scalar, 2> &a)
+    {
+        return {s * a[0], s * a[1]};
+    }
+
+    std::array<scalar, 2> operator/(const std::array<scalar, 2> &a, scalar s)
+    {
+        return {a[0] / s, a[1] / s};
+    }
+
+    std::array<scalar, 2> operator/(scalar s, const std::array<scalar, 2> &a)
+    {
+        return {a[0] / s, a[1] / s};
+    }
+
+    std::array<scalar, 2> operator-(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+    {
+        return {a[0] - b[0], a[1] - b[1]};
+    }
+
+    std::array<scalar, 2> operator+(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+    {
+        return {a[0] + b[0], a[1] + b[1]};
+    }
+
     namespace vector
     {
+        /** Dot product between two input vectors - 3 Dim
+         * 
+         * @param a the first input vector
+         * @param b the second input vector
+         * 
+         * @return the scalar dot product value 
+         **/
+        //template <typename vector_type>
+        scalar dot(const  simd::array<scalar, 4> &a, const  simd::array<scalar, 4> &b)
+        {
+            return (a*b).sum();
+        }
+
+        /** Dot product between two input vectors - 3 Dim
+         * 
+         * @param a the first input vector
+         * @param b the second input vector
+         * 
+         * @return the scalar dot product value 
+         **/
+        //template <typename vector_type>
+        scalar dot(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+        {
+            return a[0]*b[0] + a[1]*b[1];
+        }
+
+        /** Get a normalized version of the input vector
+         * 
+         * @param v the input vector
+         **/
+        template <typename vector_type>
+        vector_type normalize(const vector_type &v)
+        {
+            return v / std::sqrt(dot(v, v));
+        }
+
         /** Cross product between two input vectors - 3 Dim
          * 
          * @tparam derived_type_lhs is the first matrix (epresseion) template
@@ -74,7 +140,7 @@ namespace algebra
         template <typename vector_type>
         auto norm(const vector_type &v)
         {
-            return std::sqrt((v*v).sum());
+            return std::sqrt(vector::dot(v, v));
         }
 
         /** This method retrieves the pseudo-rapidity from a vector or vector base with rows >= 3
@@ -125,9 +191,9 @@ namespace algebra
     namespace vc_array
     {
         using vector3 = simd::array<scalar, 4>;
-        using point3 = vector3;
-        using vector2 = simd::array<scalar, 2>;
-        using point2 = vector2;
+        using point3  = vector3;
+        using vector2 = std::array<scalar, 2>;
+        using point2  = vector2;
 
         /** Transform wrapper class to ensure standard API within differnt plugins
          **/
@@ -405,46 +471,5 @@ namespace algebra
         };
 
     } // namespace vc_array
-
-    // Vector transfroms
-    namespace vector
-    {
-        /** Dot product between two input vectors - 3 Dim
-         * 
-         * @param a the first input vector
-         * @param b the second input vector
-         * 
-         * @return the scalar dot product value 
-         **/
-        template <typename vector_type>
-        scalar dot(const vector_type &a, const vector_type &b)
-        {
-            return (a*b).sum();
-        }
-
-        /** Dot product between two input vectors - 3 Dim
-         * 
-         * @param a the first input vector/expression
-         * @param b the second input vector/expression
-         * 
-         * @return the scalar dot product value 
-         **/
-        template <typename vector_type, typename vec_expr>
-        scalar dot(const vector_type &a, const vec_expr &b)
-        {
-            return (a*b).sum();
-        }
-
-        /** Get a normalized version of the input vector
-         * 
-         * @param v the input vector
-         **/
-        template <typename vector_type>
-        vector_type normalize(const vector_type &v)
-        {
-            return v / std::sqrt(dot(v, v));
-        }
-
-    } // namespace vector
 
 } // namespace algebra

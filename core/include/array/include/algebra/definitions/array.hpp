@@ -24,42 +24,42 @@ namespace algebra
 
     using scalar = algebra_scalar;
 
-    std::array<scalar, 2> operator*(const std::array<scalar, 2> &a, scalar s)
+    inline std::array<scalar, 2> operator*(const std::array<scalar, 2> &a, scalar s)
     {
         return {a[0] * s, a[1] * s};
     }
 
-    std::array<scalar, 2> operator*(scalar s, const std::array<scalar, 2> &a)
+    inline std::array<scalar, 2> operator*(scalar s, const std::array<scalar, 2> &a)
     {
         return {s * a[0], s * a[1]};
     }
 
-    std::array<scalar, 2> operator-(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+    inline std::array<scalar, 2> operator-(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
     {
         return {a[0] - b[0], a[1] - b[1]};
     }
 
-    std::array<scalar, 2> operator+(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+    inline std::array<scalar, 2> operator+(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
     {
         return {a[0] + b[0], a[1] + b[1]};
     }
 
-    std::array<scalar, 3> operator*(const std::array<scalar, 3> &a, scalar s)
+    inline std::array<scalar, 3> operator*(const std::array<scalar, 3> &a, scalar s)
     {
         return {a[0] * s, a[1] * s, a[2] * s};
     }
 
-    std::array<scalar, 3> operator*(scalar s, const std::array<scalar, 3> &a)
+    inline std::array<scalar, 3> operator*(scalar s, const std::array<scalar, 3> &a)
     {
         return {s * a[0], s * a[1], s * a[2]};
     }
 
-    std::array<scalar, 3> operator-(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
+    inline std::array<scalar, 3> operator-(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
     {
         return {a[0] - b[0], a[1] - b[1], a[2] - b[2]};
     }
 
-    std::array<scalar, 3> operator+(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
+    inline std::array<scalar, 3> operator+(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
     {
         return {a[0] + b[0], a[1] + b[1], a[2] + b[2]};
     }

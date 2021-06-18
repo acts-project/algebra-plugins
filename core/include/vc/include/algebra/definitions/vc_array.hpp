@@ -99,7 +99,8 @@ namespace algebra
                 case 3: return m.t;
                 case 0: return m.x;
                 case 1: return m.y;
-            } 
+            }
+            return {};
         }
 
         /** This method retrieves a submatrix

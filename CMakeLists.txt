@@ -24,7 +24,7 @@ if (NOT EIGEN3_INCLUDE_DIRS)
 endif()
 
 if(ALGEBRA_PLUGIN_BUILD_VC)
-     add_subdirectory(externals/Vc)
+     add_subdirectory(extern/Vc)
 endif()
 
 # This is a submodule project

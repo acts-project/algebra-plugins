@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/types.hpp"
+#include "common/simd_array_wrapper.hpp"
 
 #include <any>
 #include <cmath>
@@ -15,32 +16,27 @@
 namespace algebra
 {
 
-    std::array<scalar, 2> operator*(const std::array<scalar, 2> &a, scalar s)
+    inline std::array<scalar, 2> operator*(const std::array<scalar, 2> &a, const scalar s)
     {
         return {a[0] * s, a[1] * s};
     }
 
-    std::array<scalar, 2> operator*(scalar s, const std::array<scalar, 2> &a)
+    inline std::array<scalar, 2> operator*(const scalar s, const std::array<scalar, 2> &a)
     {
         return {s * a[0], s * a[1]};
     }
 
-    std::array<scalar, 2> operator/(const std::array<scalar, 2> &a, scalar s)
+    inline std::array<scalar, 2> operator/(const std::array<scalar, 2> &a, const scalar s)
     {
         return {a[0] / s, a[1] / s};
     }
 
-    std::array<scalar, 2> operator/(scalar s, const std::array<scalar, 2> &a)
-    {
-        return {a[0] / s, a[1] / s};
-    }
-
-    std::array<scalar, 2> operator-(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+    inline std::array<scalar, 2> operator-(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
     {
         return {a[0] - b[0], a[1] - b[1]};
     }
 
-    std::array<scalar, 2> operator+(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+    inline std::array<scalar, 2> operator+(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
     {
         return {a[0] + b[0], a[1] + b[1]};
     }
@@ -54,8 +50,21 @@ namespace algebra
          * 
          * @return the scalar dot product value 
          **/
-        //template <typename vector_type>
-        scalar dot(const  simd::array<scalar, 4> &a, const  simd::array<scalar, 4> &b)
+        template <typename vector_type>
+        scalar dot(const vector_type &a, const vector_type &b)
+        {
+            return (a*b).sum();
+        }
+
+        /** Dot product between two input vectors - 3 Dim
+         * 
+         * @param a the first input vector/expression
+         * @param b the second input vector/expression
+         * 
+         * @return the scalar dot product value 
+         **/
+        template <typename vec_expr1, typename vec_expr2>
+        scalar dot(const vec_expr1 &a, const vec_expr2 &b)
         {
             return (a*b).sum();
         }
@@ -67,10 +76,9 @@ namespace algebra
          * 
          * @return the scalar dot product value 
          **/
-        //template <typename vector_type>
         scalar dot(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
         {
-            return a[0]*b[0] + a[1]*b[1];
+            return (a[0]*b[0] + a[1]*b[1]);
         }
 
         /** Get a normalized version of the input vector
@@ -93,10 +101,28 @@ namespace algebra
          * 
          * @return a vector (expression) representing the cross product
          **/
-        simd::array<scalar, 4> cross(const simd::array<scalar, 4> &a, const simd::array<scalar, 4> &b)
+        template <typename vector_type>
+        vector_type cross(const vector_type &a, const vector_type &b)
         {
             return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1], 0};
         }
+
+        /** Cross product between two input vectors - 3 Dim
+         * 
+         * @tparam derived_type_lhs is the first matrix (epresseion) template
+         * @tparam derived_type_rhs is the second matrix (epresseion) template
+         *           
+         * @param a the first input vector
+         * @param b the second input vector
+         * 
+         * @return a vector (expression) representing the cross product
+         **/
+        template <typename vec_expr1, typename vec_expr2>
+        auto cross(const vec_expr1 &a, const vec_expr2 &b) ->decltype(a * b - a * b)
+        {
+            return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1], 0};
+        }
+
     } // namespace vector
 
     // array getter methdos
@@ -143,16 +169,6 @@ namespace algebra
             return std::sqrt(vector::dot(v, v));
         }
 
-        /** This method retrieves the pseudo-rapidity from a vector or vector base with rows >= 3
-         * 
-         * @param v the input vector 
-         **/
-        template <typename vector_type>
-        auto eta(const vector_type &v) noexcept
-        {
-            return std::atanh(v[2] / norm(v));
-        }
-
         /** This method retrieves a column from a matrix
          * 
          * @param m the input matrix 
@@ -165,7 +181,8 @@ namespace algebra
                 case 3: return m.t;
                 case 0: return m.x;
                 case 1: return m.y;
-            } 
+            }
+            return {};
         }
 
         /** This method retrieves a submatrix
@@ -190,7 +207,7 @@ namespace algebra
     // array definitions
     namespace vc_array
     {
-        using vector3 = simd::array<scalar, 4>;
+        using vector3 = simd::array4_wrapper<scalar>;//simd::array<scalar, 4>;
         using point3  = vector3;
         using vector2 = std::array<scalar, 2>;
         using point2  = vector2;
@@ -200,7 +217,8 @@ namespace algebra
         struct transform3
         {
             //using matrix44 = simd::array<scalar, 16>;
-            using matrix44 = simd::Vector4<simd::array<scalar, 4>>;
+            using matrix44 = simd::Vector4<simd::array4_wrapper<scalar>>;
+            //using matrix44 = simd::Vector4<simd::array<scalar, 4>>;
 
             matrix44 _data;
             matrix44 _data_inv;
@@ -471,5 +489,12 @@ namespace algebra
         };
 
     } // namespace vc_array
+
+    // Vector transfroms
+    namespace vector
+    {
+
+
+    } // namespace vector
 
 } // namespace algebra

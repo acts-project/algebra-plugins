@@ -1,3 +1,9 @@
+/** Algebra plugins, part of the ACTS project
+ * 
+ * (c) 2020 CERN for the benefit of the ACTS project
+ * 
+ * Mozilla Public License Version 2.0
+ */
 #pragma once
 
 #include "common/types.hpp"
@@ -15,7 +21,7 @@
 
 namespace algebra
 {
-
+    // Define scalar array operator for the 2dim point types
     inline std::array<scalar, 2> operator*(const std::array<scalar, 2> &a, const scalar s)
     {
         return {a[0] * s, a[1] * s};
@@ -43,7 +49,9 @@ namespace algebra
 
     namespace vector
     {
-        /** Dot product between two input vectors - 3 Dim
+        /** Dot product between two input vectors
+         * 
+         * @tparam vector_type generic input vector type
          * 
          * @param a the first input vector
          * @param b the second input vector
@@ -56,7 +64,10 @@ namespace algebra
             return (a*b).sum();
         }
 
-        /** Dot product between two input vectors - 3 Dim
+        /** Dot product between two input vectors
+         *
+         * @tparam vec_expr1 vector or vector expression type
+         * @tparam vec_expr2 vector or vector expression type
          * 
          * @param a the first input vector/expression
          * @param b the second input vector/expression
@@ -69,7 +80,7 @@ namespace algebra
             return (a*b).sum();
         }
 
-        /** Dot product between two input vectors - 3 Dim
+        /** Dot product between two input vectors - 2 Dim
          * 
          * @param a the first input vector
          * @param b the second input vector
@@ -83,6 +94,8 @@ namespace algebra
 
         /** Get a normalized version of the input vector
          * 
+         * @tparam vector_type generic input vector type
+         *
          * @param v the input vector
          **/
         template <typename vector_type>
@@ -93,13 +106,12 @@ namespace algebra
 
         /** Cross product between two input vectors - 3 Dim
          * 
-         * @tparam derived_type_lhs is the first matrix (epresseion) template
-         * @tparam derived_type_rhs is the second matrix (epresseion) template
+         * @tparam vector_type generic input vector type
          *           
          * @param a the first input vector
          * @param b the second input vector
          * 
-         * @return a vector (expression) representing the cross product
+         * @return a vector representing the cross product
          **/
         template <typename vector_type>
         vector_type cross(const vector_type &a, const vector_type &b)
@@ -109,8 +121,8 @@ namespace algebra
 
         /** Cross product between two input vectors - 3 Dim
          * 
-         * @tparam derived_type_lhs is the first matrix (epresseion) template
-         * @tparam derived_type_rhs is the second matrix (epresseion) template
+         * @tparam vec_expr1 vector or vector expression type
+         * @tparam vec_expr2 vector or vector expression type
          *           
          * @param a the first input vector
          * @param b the second input vector
@@ -130,6 +142,8 @@ namespace algebra
     {
         /** This method retrieves phi from a vector, vector base with rows > 2
          * 
+         * @tparam vector_type generic input vector type
+         * 
          * @param v the input vector 
          **/
         template <typename vector_type>
@@ -140,16 +154,19 @@ namespace algebra
 
         /** This method retrieves theta from a vector, vector base with rows >= 3
          * 
+         * @tparam vector_type generic input vector type
+         * 
          * @param v the input vector 
          **/
         template <typename vector_type>
         auto theta(const vector_type &v) noexcept
         {
-            
             return std::atan2(std::sqrt(v[0] * v[0] + v[1] * v[1]), v[2]);
         }
 
-        /** This method retrieves the perpenticular magnitude of a vector with rows >= 2
+        /** This method retrieves the perpenticular magnitude of a vector with 2 rows
+         * 
+         * @tparam vector_type generic input vector type
          * 
          * @param v the input vector 
          **/
@@ -161,6 +178,8 @@ namespace algebra
 
         /** This method retrieves the norm of a vector, no dimension restriction
          * 
+         * @tparam vector_type generic input vector type
+         * 
          * @param v the input vector 
          **/
         template <typename vector_type>
@@ -169,7 +188,21 @@ namespace algebra
             return std::sqrt(vector::dot(v, v));
         }
 
+        /** This method retrieves the pseudo-rapidity from a vector with rows >= 3
+         * 
+         * @tparam vector_type generic input vector type
+         * 
+         * @param v the input vector 
+         **/
+        template <typename vector_type>
+        auto eta(const vector_type &v) noexcept
+        {
+            return std::atanh(v[2] / norm(v));
+        }
+
         /** This method retrieves a column from a matrix
+         * 
+         * @tparam matrix_type generic input matrix type
          * 
          * @param m the input matrix 
          **/
@@ -207,8 +240,10 @@ namespace algebra
     // array definitions
     namespace vc_array
     {
-        using vector3 = simd::array4_wrapper<scalar>;//simd::array<scalar, 4>;
+        // Needed only for correct value initialization
+        using vector3 = simd::array4_wrapper<scalar>;
         using point3  = vector3;
+        // Don't use vectorization on potentially half-filled vectors
         using vector2 = std::array<scalar, 2>;
         using point2  = vector2;
 
@@ -216,9 +251,8 @@ namespace algebra
          **/
         struct transform3
         {
-            //using matrix44 = simd::array<scalar, 16>;
+            // Keep 4 simd vector for easy handling
             using matrix44 = simd::Vector4<simd::array4_wrapper<scalar>>;
-            //using matrix44 = simd::Vector4<simd::array<scalar, 4>>;
 
             matrix44 _data;
             matrix44 _data_inv;
@@ -300,7 +334,6 @@ namespace algebra
             /** Equality operator */
             bool operator==(const transform3 &rhs) const
             {
-                  //for (Index_v i(scalar_v::IndexesFromZero()); (i < Index_v(planes.points.size())).isFull(); i += Index_v(scalar_v::Size))
                 return (_data == rhs._data);
             }
 
@@ -383,28 +416,60 @@ namespace algebra
                 return _data;
             }
 
-            /** This method transform from a point from the local 3D cartesian frame to the global 3D cartesian frame */
+            /** This method transform from a point from the local 3D cartesian frame 
+             *  to the global 3D cartesian frame 
+             *
+             * @tparam point_type 3D point
+             *
+             * @param v is the point to be transformed
+             *
+             * @return a global point
+             */
             template <typename point_type>
             const point_type point_to_global(const point_type &v) const
             {
                 return _data.x*v[0] + _data.y*v[1] + _data.z*v[2] + _data.t;
             }
 
-            /** This method transform from a vector from the global 3D cartesian frame into the local 3D cartesian frame */
+            /** This method transform from a vector from the global 3D cartesian frame 
+             *  into the local 3D cartesian frame
+             *
+             * @tparam point_type 3D point
+             *
+             * @param v is the point to be transformed
+             *
+             * @return a local point
+             */
             template <typename point_type>
             const point_type point_to_local(const point_type &v) const
             {
                 return _data_inv.x*v[0] + _data_inv.y*v[1] + _data_inv.z*v[2] + _data_inv.t;
             }
 
-            /** This method transform from a vector from the local 3D cartesian frame to the global 3D cartesian frame */
+            /** This method transform from a vector from the local 3D cartesian frame 
+             *  to the global 3D cartesian frame
+             *
+             * @tparam vector_type 3D vector 
+             *
+             * @param v is the vector to be transformed
+             *
+             * @return a vector in global coordinates
+             */
             template <typename vector_type>
             const vector_type vector_to_global(const vector_type &v) const
             {
                 return rotate(_data, v);
             }
 
-            /** This method transform from a vector from the global 3D cartesian frame into the local 3D cartesian frame */
+            /** This method transform from a vector from the global 3D cartesian frame
+             *  into the local 3D cartesian frame
+             *
+             * @tparam vector_type 3D vector 
+             *
+             * @param v is the vector to be transformed
+             *
+             * @return a vector in global coordinates
+             */
             template <typename vector_type>
             const auto vector_to_local(const vector_type &v) const
             {
@@ -416,7 +481,8 @@ namespace algebra
          */
         struct cartesian2
         {
-            /** This method transform from a point from the global 3D cartesian frame to the local 2D cartesian frame 
+            /** This method transform from a point from the global 3D cartesian frame 
+             *  to the local 2D cartesian frame 
              * 
              * @param trf the transform from global to local thredimensional frame
              * @param p the point in global frame
@@ -429,7 +495,8 @@ namespace algebra
                 return operator()(trf.point_to_local(p));
             }
 
-            /** This method transform from a point from the global 3D cartesian frame to the local 2D cartesian frame
+            /** This method transform from a point from the global 3D cartesian 
+             *  frame to the local 2D cartesian frame
              *
              * @param v the point in local frame
              * 
@@ -444,7 +511,8 @@ namespace algebra
         /** Local frame projection into a polar coordinate frame */
         struct polar2
         {
-            /** This method transform from a point from the global 3D cartesian frame to the local 2D cartesian frame 
+            /** This method transform from a point from the global 3D cartesian 
+             *  frame to the local 2D cartesian frame 
              * 
              * @param trf the transform from global to local thredimensional frame
              * @param p the point in global frame
@@ -457,7 +525,8 @@ namespace algebra
                 return operator()(trf.point_to_local(p));
             }
 
-            /** This method transform from a point from 2D or 3D cartesian frame to a 2D polar point */
+            /** This method transform from a point from 2D or 3D cartesian frame 
+                to a 2D polar point */
             template <typename point_type>
             point2 operator()(const point_type &v) const
             {
@@ -468,20 +537,22 @@ namespace algebra
         /** Local frame projection into a polar coordinate frame */
         struct cylindrical2
         {
-             /** This method transform from a point from the global 3D cartesian frame to the local 2D cartesian frame 
-             * 
-             * @param trf the transform from global to local thredimensional frame
-             * @param p the point in global frame
-             * 
-             * @return a local point2
-             **/
+             /** This method transform from a point from the global 3D cartesian 
+              *  frame to the local 2D cartesian frame 
+              * 
+              * @param trf the transform from global to local thredimensional frame
+              * @param p the point in global frame
+              * 
+              * @return a local point2
+              **/
             point2 operator()(const transform3 &trf,
                                   const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
 
-            /** This method transform from a point from 2 3D cartesian frame to a 2D cylindrical point */
+            /** This method transform from a point from 2 3D cartesian frame to 
+                a 2D cylindrical point */
             point2 operator()(const point3 &v) const
             {
                 return point2{getter::perp(v) * getter::phi(v), v[2]};
@@ -489,12 +560,5 @@ namespace algebra
         };
 
     } // namespace vc_array
-
-    // Vector transfroms
-    namespace vector
-    {
-
-
-    } // namespace vector
 
 } // namespace algebra

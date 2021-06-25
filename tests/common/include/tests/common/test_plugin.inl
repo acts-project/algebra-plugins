@@ -92,7 +92,7 @@ TEST(ALGEBRA_PLUGIN, vector3)
     ASSERT_EQ(vC[2], 4.);
 
     // Multiplication by scalar
-    vector3 vC2 = vC * 2.;
+    vector3 vC2 = vC * 2.0;
     ASSERT_EQ(vC2[0], 0.);
     ASSERT_EQ(vC2[1], 4.);
     ASSERT_EQ(vC2[2], 8.);

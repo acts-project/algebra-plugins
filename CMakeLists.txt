@@ -18,11 +18,6 @@ endif()
 
 option(ALGEBRA_PLUGIN_BUILD_VC "Download and build local Vc" Off)
 
-if (NOT EIGEN3_INCLUDE_DIRS)
-    find_package(Eigen3 REQUIRED)
-    include_directories(SYSTEM ${EIGEN3_INCLUDE_DIRS})
-endif()
-
 if(ALGEBRA_PLUGIN_BUILD_VC)
      add_subdirectory(extern/Vc)
 endif()

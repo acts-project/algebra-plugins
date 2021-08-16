@@ -9,7 +9,7 @@ target_include_directories(algebra_eigen
     ${ALGEBRA_PLUGIN_SOURCE_DIR}/common/include/algebra)
 
 install(
-  DIRECTORY include/plugins
+  DIRECTORY include/plugins/algebra
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 if(ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE)
@@ -19,6 +19,8 @@ if(ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE)
 endif()
 
 find_package(Eigen3 REQUIRED)
-target_link_libraries(algebra_eigen INTERFACE Eigen3::Eigen)
+target_link_libraries(algebra_eigen INTERFACE Eigen3::Eigen vecmem::core)
+
+target_compile_options(algebra_eigen INTERFACE -DALGEBRA_PLUGIN_USE_VECMEM)
 
 add_library(algebra::eigen ALIAS algebra_eigen)

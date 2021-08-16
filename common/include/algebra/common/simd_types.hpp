@@ -9,8 +9,6 @@
 
 #include <Vc/Vc>
 
-//#include <vecmem/containers/Vector.hpp>
-//#include <vecmem/memory/host_memory_resource.hpp>
 
 #ifdef ALGEBRA_CUSTOM_SCALARTYPE
 using algebra_scalar = ALGEBRA_CUSTOM_SCALARTYPE;

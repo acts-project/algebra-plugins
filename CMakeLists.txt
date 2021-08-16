@@ -18,6 +18,16 @@ endif()
 
 option(ALGEBRA_PLUGIN_BUILD_VC "Download and build local Vc" Off)
 
+if(ALGEBRA_PLUGIN_USE_VECMEM)
+     find_package( vecmem QUIET )
+
+     if( NOT vecmem_FOUND )
+          set(ALGEBRA_PLUGIN_BUILD_VECMEM On)
+     else ()
+          find_package( vecmem )
+     endif()
+endif()
+
 if(ALGEBRA_PLUGIN_BUILD_VC)
      add_subdirectory(extern/Vc)
 endif()

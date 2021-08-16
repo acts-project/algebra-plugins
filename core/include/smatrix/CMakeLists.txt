@@ -18,4 +18,8 @@ if(ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE)
     INTERFACE -DALGEBRA_PLUGIN_CUSTOM_SCALARTYPE=${ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE})
 endif()
 
+target_compile_options(algebra_smatrix INTERFACE -DALGEBRA_PLUGIN_USE_VECMEM)
+
+target_link_libraries(algebra_smatrix INTERFACE vecmem::core)
+
 add_library(algebra::smatrix ALIAS algebra_smatrix)

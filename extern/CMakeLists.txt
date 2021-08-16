@@ -17,3 +17,21 @@ if(ALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK)
 elseif(ALGEBRA_PLUGIN_UNIT_TESTS OR ALGEBRA_PLUGIN_BENCHMARKS)
      message(VERBOSE "Need google test/benchmark to be intalled for unittests/benchmarks to work")
 endif()
+
+if(ALGEBRA_PLUGIN_BUILD_VECMEM)
+     message(STATUS "Building vecmem")
+     include( FetchContent )
+     FetchContent_Declare( 
+          Vecmem
+          GIT_REPOSITORY "https://github.com/acts-project/vecmem.git"
+          GIT_TAG "v0.2.0"
+     )
+
+     # Do not build google test in vecmem again
+     set(BUILD_TESTING OFF CACHE INTERNAL "")
+
+     # Get it into the current directory.
+     FetchContent_Populate( vecmem )
+     add_subdirectory( "${vecmem_SOURCE_DIR}" "${vecmem_BINARY_DIR}"
+     EXCLUDE_FROM_ALL )
+endif()

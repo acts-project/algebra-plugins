@@ -18,4 +18,7 @@ if(ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE)
     INTERFACE -DALGEBRA_PLUGIN_CUSTOM_SCALARTYPE=${ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE})
 endif()
 
+find_package(Eigen3 REQUIRED)
+target_link_libraries(algebra_eigen INTERFACE Eigen3::Eigen)
+
 add_library(algebra::eigen ALIAS algebra_eigen)

@@ -14,6 +14,7 @@
 
 #ifdef ALGEBRA_PLUGIN_USE_VECMEM
 #include <vecmem/containers/vector.hpp>
+#include <vecmem/containers/static_array.hpp>
 #include <vecmem/memory/host_memory_resource.hpp>
 #endif
 
@@ -26,16 +27,10 @@ namespace algebra
     #ifdef ALGEBRA_PLUGIN_USE_VECMEM
     
     template <typename value_type, unsigned int kDIM>
-    using array_s = std::array<value_type, kDIM>;
+    using array_s = vecmem::static_array<value_type, kDIM>;
 
     template <typename value_type>
     using vector_s = vecmem::vector<value_type>;
-
-    template <typename key_type, typename value_type>
-    using map_s = std::map<key_type, value_type>;
-
-    template< class... types>
-    using tuple_s = std::tuple<types ...>;
 
     #else
 
@@ -44,12 +39,6 @@ namespace algebra
 
     template <typename value_type>
     using vector_s = std::vector<value_type>;
-
-    template <typename key_type, typename value_type>
-    using map_s = std::map<key_type, value_type>;
-
-    template< class... types>
-    using tuple_s = std::tuple<types ...>;
 
     #endif
 
@@ -63,6 +52,13 @@ namespace algebra
     using vector_v = simd::aligned::vector<value_type>;
 
     #endif
+
+
+    template <typename key_type, typename value_type>
+    using map_s = std::map<key_type, value_type>;
+
+    template< class... types>
+    using tuple_s = std::tuple<types ...>;
 
 
 } // namespace algebra

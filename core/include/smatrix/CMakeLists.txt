@@ -9,7 +9,7 @@ target_include_directories(algebra_smatrix
     ${ALGEBRA_PLUGIN_SOURCE_DIR}/common/include/algebra)
 
 install(
-  DIRECTORY include/plugins
+  DIRECTORY include/plugins/algebra
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 if(ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE)

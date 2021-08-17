@@ -83,7 +83,7 @@ namespace algebra
          * 
          * @return a vector (expression) representing the cross product
          **/
-        std::array<scalar, 3> cross(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
+        inline std::array<scalar, 3> cross(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
         {
             return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1]};
         }
@@ -97,7 +97,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
-        auto phi(const vector_type &v) noexcept
+        inline auto phi(const vector_type &v) noexcept
         {
             return std::atan2(v[1], v[0]);
         }
@@ -107,7 +107,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
-        auto theta(const vector_type &v) noexcept
+        inline auto theta(const vector_type &v) noexcept
         {
             return std::atan2(std::sqrt(v[0] * v[0] + v[1] * v[1]), v[2]);
         }
@@ -117,7 +117,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
-        auto perp(const vector_type &v) noexcept
+        inline auto perp(const vector_type &v) noexcept
         {
             return std::sqrt(v[0] * v[0] + v[1] * v[1]);
         }
@@ -126,7 +126,7 @@ namespace algebra
          * 
          * @param v the input vector 
          **/
-        auto norm(const std::array<scalar, 2> &v)
+        inline auto norm(const std::array<scalar, 2> &v)
         {
             return perp(v);
         }
@@ -135,7 +135,7 @@ namespace algebra
          * 
          * @param v the input vector 
          **/
-        auto norm(const std::array<scalar, 3> &v)
+        inline auto norm(const std::array<scalar, 3> &v)
         {
             return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
         }
@@ -145,7 +145,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
-        auto eta(const vector_type &v) noexcept
+        inline auto eta(const vector_type &v) noexcept
         {
             return std::atanh(v[2] / norm(v));
         }
@@ -155,7 +155,7 @@ namespace algebra
          * @param m the input matrix 
          **/
         template <unsigned int kROWS, typename matrix_type>
-        auto vector(const matrix_type &m, unsigned int row, unsigned int col) noexcept
+        inline auto vector(const matrix_type &m, unsigned int row, unsigned int col) noexcept
         {
             std::array<scalar, kROWS> subvector;
             for (unsigned int irow = row; irow < row + kROWS; ++irow)
@@ -170,7 +170,7 @@ namespace algebra
          * @param m the input matrix 
          **/
         template <unsigned int kROWS, unsigned int kCOLS, typename matrix_type>
-        auto block(const matrix_type &m, unsigned int row, unsigned int col) noexcept
+        inline auto block(const matrix_type &m, unsigned int row, unsigned int col) noexcept
         {
             std::array<std::array<scalar, kROWS>, kCOLS> submatrix;
             for (unsigned int icol = col; icol < col + kCOLS; ++icol)
@@ -532,7 +532,7 @@ namespace algebra
          * 
          * @return the scalar dot product value 
          **/
-        scalar dot(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+        inline scalar dot(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
         {
             return a[0] * b[0] + a[1] * b[1];
         }
@@ -541,7 +541,7 @@ namespace algebra
          * 
          * @param v the input vector
          **/
-        std::array<scalar, 3> normalize(const std::array<scalar, 2> &v)
+        inline std::array<scalar, 3> normalize(const std::array<scalar, 2> &v)
         {
             scalar oon = 1. / std::sqrt(dot(v, v));
             return {v[0] * oon, v[1] * oon};
@@ -554,7 +554,7 @@ namespace algebra
          * 
          * @return the scalar dot product value 
          **/
-        scalar dot(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
+        inline scalar dot(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
         {
             return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
         }
@@ -563,7 +563,7 @@ namespace algebra
          * 
          * @param v the input vector
          **/
-        std::array<scalar, 3> normalize(const std::array<scalar, 3> &v)
+        inline std::array<scalar, 3> normalize(const std::array<scalar, 3> &v)
         {
             scalar oon = 1. / std::sqrt(dot(v, v));
             return {v[0] * oon, v[1] * oon, v[2] * oon};

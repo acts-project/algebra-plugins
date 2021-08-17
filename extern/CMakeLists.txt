@@ -15,7 +15,7 @@ if(ALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK)
      # Also need benchmark
      endif()
 elseif(ALGEBRA_PLUGIN_UNIT_TESTS OR ALGEBRA_PLUGIN_BENCHMARKS)
-     message(VERBOSE "Need google test/benchmark to be intalled for unittests/benchmarks to work")
+     message(WARNING "Need google test/benchmark to be installed for unit tests/benchmarks to work")
 endif()
 
 if(ALGEBRA_PLUGIN_BUILD_VECMEM)

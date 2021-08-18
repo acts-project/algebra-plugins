@@ -9,9 +9,8 @@
 
 #include "common/types.hpp"
 
-#include <any>
-#include <cmath>
 #include <array>
+#include <cmath>
 
 #ifdef ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE
 using algebra_scalar = ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE;

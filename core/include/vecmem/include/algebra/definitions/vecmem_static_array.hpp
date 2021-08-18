@@ -9,9 +9,10 @@
 
 #include "common/types.hpp"
 
-#include <any>
+#include <vecmem/containers/static_array.hpp>
+#include <vecmem/memory/host_memory_resource.hpp>
+
 #include <cmath>
-#include <array>
 
 #ifdef ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE
 using algebra_scalar = ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE;

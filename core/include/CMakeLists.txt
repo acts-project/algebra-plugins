@@ -15,3 +15,7 @@ endif()
 if (ALGEBRA_PLUGIN_INCLUDE_VC)
     add_subdirectory(vc)
 endif()
+
+if(ALGEBRA_PLUGIN_USE_VECMEM)
+    add_subdirectory(vecmem)
+endif()

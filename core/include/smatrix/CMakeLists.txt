@@ -9,13 +9,18 @@ target_include_directories(algebra_smatrix
     ${ALGEBRA_PLUGIN_SOURCE_DIR}/common/include/algebra)
 
 install(
-  DIRECTORY include/plugins
+  DIRECTORY include/plugins/algebra
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 if(ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE)
   target_compile_definitions(
     algebra_smatrix
     INTERFACE -DALGEBRA_PLUGIN_CUSTOM_SCALARTYPE=${ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE})
+endif()
+
+if(ALGEBRA_PLUGIN_USE_VECMEM)
+  target_compile_options(algebra_smatrix INTERFACE -DALGEBRA_PLUGIN_USE_VECMEM)
+  target_link_libraries(algebra_smatrix INTERFACE vecmem::core)
 endif()
 
 add_library(algebra::smatrix ALIAS algebra_smatrix)

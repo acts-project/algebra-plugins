@@ -9,12 +9,10 @@
 
 #include <Vc/Vc>
 
-//#include <vecmem/containers/Vector.hpp>
-//#include <vecmem/memory/host_memory_resource.hpp>
 
-#ifdef ALGEBRA_CUSTOM_SCALARTYPE
-using algebra_scalar = ALGEBRA_CUSTOM_SCALARTYPE;
-using algebra_scalar_v = Vc::Vector<ALGEBRA_CUSTOM_SCALARTYPE>;
+#ifdef ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE
+using algebra_scalar = ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE;
+using algebra_scalar_v = Vc::Vector<ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE>;
 #else
 using algebra_scalar = double;
 using algebra_scalar_v = Vc::double_v;

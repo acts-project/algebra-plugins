@@ -6,7 +6,7 @@ project(algebra-plugins VERSION 0.1 LANGUAGES CXX)
 set(ALGEBRA_PLUGIN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 option(ALGEBRA_PLUGIN_UNIT_TESTS "Enable unit tests for algebra backends" On)
-option(ALGEBRA_PLUGIN_BENCHMARKS "Enable benchmark tests for algebra bakends" On)
+option(ALGEBRA_PLUGIN_BENCHMARKS "Enable benchmark tests for algebra bakends" Off)
 
 if(ALGEBRA_PLUGIN_INCLUDE_VC)
      find_package(Vc 1.4.1 REQUIRED)
@@ -17,6 +17,16 @@ if(ALGEBRA_PLUGIN_INCLUDE_VC)
 endif()
 
 option(ALGEBRA_PLUGIN_BUILD_VC "Download and build local Vc" Off)
+
+if(ALGEBRA_PLUGIN_USE_VECMEM)
+     find_package(vecmem QUIET)
+
+     if(NOT vecmem_FOUND)
+          set(ALGEBRA_PLUGIN_BUILD_VECMEM On)
+     else ()
+          find_package(vecmem)
+     endif()
+endif()
 
 if(ALGEBRA_PLUGIN_BUILD_VC)
      add_subdirectory(extern/Vc)

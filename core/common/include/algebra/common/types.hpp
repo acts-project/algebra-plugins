@@ -19,7 +19,7 @@
 #endif
 
 #ifdef ALGEBRA_PLUGIN_INCLUDE_VC
-#include "simd_types.hpp"
+#include "simd/simd_types.hpp"
 #endif
 
 namespace algebra

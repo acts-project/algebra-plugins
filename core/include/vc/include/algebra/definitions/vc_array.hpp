@@ -7,7 +7,7 @@
 #pragma once
 
 #include "common/types.hpp"
-#include "common/simd_array_wrapper.hpp"
+#include "common/simd/simd_array_wrapper.hpp"
 
 #include <any>
 #include <cmath>

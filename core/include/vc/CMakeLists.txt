@@ -6,7 +6,7 @@ target_include_directories(vc_array
   INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
-    ${ALGEBRA_PLUGIN_SOURCE_DIR}/common/include/algebra)
+    ${ALGEBRA_PLUGIN_SOURCE_DIR}/core/common/include/algebra)
 
 install(
   DIRECTORY include/plugins/algebra

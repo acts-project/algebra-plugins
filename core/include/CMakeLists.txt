@@ -1,5 +1,4 @@
 
-
 if (ALGEBRA_PLUGIN_INCLUDE_ARRAY)
     add_subdirectory(array)
 endif()

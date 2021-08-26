@@ -23,6 +23,7 @@ using algebra_scalar = double;
 #endif
 
 // namespace of the algebra object definitions
+#ifndef __plugin
 #define __plugin algebra::smatrix
 // Name of the plugin
 #define ALGEBRA_PLUGIN smatrix
@@ -438,3 +439,5 @@ namespace algebra
     } // namespace vector
 
 } // namespace algebra
+
+#endif

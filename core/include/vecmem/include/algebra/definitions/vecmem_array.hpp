@@ -16,6 +16,7 @@
 #include <cmath>
 
 // namespace of the algebra object definitions
+#ifndef __plugin
 #define __plugin algebra::vecmem_array
 // Name of the plugin
 #define ALGEBRA_PLUGIN vecmem_array
@@ -24,7 +25,7 @@
 #include "common/definitions/array.hpp"
 
 namespace algebra {
-    // array definitions
+    // pull array definitions into vecmem_array namespace
     namespace vecmem_array
     {
         using vector3 = vecmem::static_array<scalar, 3>;
@@ -39,5 +40,8 @@ namespace algebra {
         using polar2 = algebra::array::polar2;
         using cylindrical2 = algebra::array::cylindrical2;
 
-    } // namespace std_array
+    } // namespace vecmem_array
 } // namespace algebra
+
+#undef __plugin_array
+#endif

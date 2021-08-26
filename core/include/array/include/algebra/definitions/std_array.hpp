@@ -13,6 +13,7 @@
 #include <cmath>
 
 // namespace of the algebra object definitions
+#ifndef __plugin
 #define __plugin algebra::std_array
 // Name of the plugin
 #define ALGEBRA_PLUGIN array
@@ -39,3 +40,6 @@ namespace algebra {
 
     } // namespace std_array
 } // namespace algebra
+
+#undef __plugin_array
+#endif

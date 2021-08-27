@@ -9,20 +9,14 @@
 
 #include "common/types.hpp"
 
-#include <any>
-#include <cmath>
 #include <array>
+#include <cmath>
 
 #ifdef ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE
 using algebra_scalar = ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE;
 #else
 using algebra_scalar = double;
 #endif
-
-// namespace of the algebra object definitions
-#define __plugin algebra::array
-// Name of the plugin
-#define ALGEBRA_PLUGIN array
 
 #define __plugin_without_matrix_element_accessor 1
 
@@ -31,42 +25,42 @@ namespace algebra
 
     using scalar = algebra_scalar;
 
-    inline std::array<scalar, 2> operator*(const std::array<scalar, 2> &a, scalar s)
+    inline __plugin_array<scalar, 2> operator*(const __plugin_array<scalar, 2> &a, scalar s)
     {
         return {a[0] * s, a[1] * s};
     }
 
-    inline std::array<scalar, 2> operator*(scalar s, const std::array<scalar, 2> &a)
+    inline __plugin_array<scalar, 2> operator*(scalar s, const __plugin_array<scalar, 2> &a)
     {
         return {s * a[0], s * a[1]};
     }
 
-    inline std::array<scalar, 2> operator-(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+    inline __plugin_array<scalar, 2> operator-(const __plugin_array<scalar, 2> &a, const __plugin_array<scalar, 2> &b)
     {
         return {a[0] - b[0], a[1] - b[1]};
     }
 
-    inline std::array<scalar, 2> operator+(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+    inline __plugin_array<scalar, 2> operator+(const __plugin_array<scalar, 2> &a, const __plugin_array<scalar, 2> &b)
     {
         return {a[0] + b[0], a[1] + b[1]};
     }
 
-    inline std::array<scalar, 3> operator*(const std::array<scalar, 3> &a, scalar s)
+    inline __plugin_array<scalar, 3> operator*(const __plugin_array<scalar, 3> &a, scalar s)
     {
         return {a[0] * s, a[1] * s, a[2] * s};
     }
 
-    inline std::array<scalar, 3> operator*(scalar s, const std::array<scalar, 3> &a)
+    inline __plugin_array<scalar, 3> operator*(scalar s, const __plugin_array<scalar, 3> &a)
     {
         return {s * a[0], s * a[1], s * a[2]};
     }
 
-    inline std::array<scalar, 3> operator-(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
+    inline __plugin_array<scalar, 3> operator-(const __plugin_array<scalar, 3> &a, const __plugin_array<scalar, 3> &b)
     {
         return {a[0] - b[0], a[1] - b[1], a[2] - b[2]};
     }
 
-    inline std::array<scalar, 3> operator+(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
+    inline __plugin_array<scalar, 3> operator+(const __plugin_array<scalar, 3> &a, const __plugin_array<scalar, 3> &b)
     {
         return {a[0] + b[0], a[1] + b[1], a[2] + b[2]};
     }
@@ -83,7 +77,7 @@ namespace algebra
          * 
          * @return a vector (expression) representing the cross product
          **/
-        inline std::array<scalar, 3> cross(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
+        inline __plugin_array<scalar, 3> cross(const __plugin_array<scalar, 3> &a, const __plugin_array<scalar, 3> &b)
         {
             return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1]};
         }
@@ -126,7 +120,7 @@ namespace algebra
          * 
          * @param v the input vector 
          **/
-        inline auto norm(const std::array<scalar, 2> &v)
+        inline auto norm(const __plugin_array<scalar, 2> &v)
         {
             return perp(v);
         }
@@ -135,7 +129,7 @@ namespace algebra
          * 
          * @param v the input vector 
          **/
-        inline auto norm(const std::array<scalar, 3> &v)
+        inline auto norm(const __plugin_array<scalar, 3> &v)
         {
             return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
         }
@@ -157,7 +151,7 @@ namespace algebra
         template <unsigned int kROWS, typename matrix_type>
         inline auto vector(const matrix_type &m, unsigned int row, unsigned int col) noexcept
         {
-            std::array<scalar, kROWS> subvector;
+            __plugin_array<scalar, kROWS> subvector;
             for (unsigned int irow = row; irow < row + kROWS; ++irow)
             {
                 subvector[irow - row] = m[col][irow];
@@ -172,7 +166,7 @@ namespace algebra
         template <unsigned int kROWS, unsigned int kCOLS, typename matrix_type>
         inline auto block(const matrix_type &m, unsigned int row, unsigned int col) noexcept
         {
-            std::array<std::array<scalar, kROWS>, kCOLS> submatrix;
+            __plugin_array<__plugin_array<scalar, kROWS>, kCOLS> submatrix;
             for (unsigned int icol = col; icol < col + kCOLS; ++icol)
             {
                 for (unsigned int irow = row; irow < row + kROWS; ++irow)
@@ -188,15 +182,15 @@ namespace algebra
     // array definitions
     namespace array
     {
-        using vector3 = std::array<scalar, 3>;
+        using vector3 = __plugin_array<scalar, 3>;
         using point3 = vector3;
-        using point2 = std::array<scalar, 2>;
+        using point2 = __plugin_array<scalar, 2>;
 
         /** Transform wrapper class to ensure standard API within differnt plugins
          **/
         struct transform3
         {
-            using matrix44 = std::array<std::array<scalar, 4>, 4>;
+            using matrix44 = __plugin_array<__plugin_array<scalar, 4>, 4>;
 
             matrix44 _data;
             matrix44 _data_inv;
@@ -532,7 +526,7 @@ namespace algebra
          * 
          * @return the scalar dot product value 
          **/
-        inline scalar dot(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+        inline scalar dot(const __plugin_array<scalar, 2> &a, const __plugin_array<scalar, 2> &b)
         {
             return a[0] * b[0] + a[1] * b[1];
         }
@@ -541,7 +535,7 @@ namespace algebra
          * 
          * @param v the input vector
          **/
-        inline std::array<scalar, 3> normalize(const std::array<scalar, 2> &v)
+        inline __plugin_array<scalar, 2> normalize(const __plugin_array<scalar, 2> &v)
         {
             scalar oon = 1. / std::sqrt(dot(v, v));
             return {v[0] * oon, v[1] * oon};
@@ -554,7 +548,7 @@ namespace algebra
          * 
          * @return the scalar dot product value 
          **/
-        inline scalar dot(const std::array<scalar, 3> &a, const std::array<scalar, 3> &b)
+        inline scalar dot(const __plugin_array<scalar, 3> &a, const __plugin_array<scalar, 3> &b)
         {
             return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
         }
@@ -563,7 +557,7 @@ namespace algebra
          * 
          * @param v the input vector
          **/
-        inline std::array<scalar, 3> normalize(const std::array<scalar, 3> &v)
+        inline __plugin_array<scalar, 3> normalize(const __plugin_array<scalar, 3> &v)
         {
             scalar oon = 1. / std::sqrt(dot(v, v));
             return {v[0] * oon, v[1] * oon, v[2] * oon};

@@ -18,7 +18,7 @@ endif()
 
 option(ALGEBRA_PLUGIN_BUILD_VC "Download and build local Vc" Off)
 
-if(ALGEBRA_PLUGIN_USE_VECMEM)
+if(ALGEBRA_PLUGIN_USE_VECMEM OR ALGEBRA_PLUGIN_INCLUDE_VECMEM)
      find_package(vecmem QUIET)
 
      if(NOT vecmem_FOUND)

@@ -1,8 +1,8 @@
-message(STATUS "Building 'algebra::smatrix' plugin")
+message(STATUS "Building 'algebra::vecmem_array' plugin")
 
-add_library(algebra_smatrix INTERFACE)
+add_library(vecmem_array INTERFACE)
 
-target_include_directories(algebra_smatrix
+target_include_directories(vecmem_array
   INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
@@ -14,13 +14,11 @@ install(
 
 if(ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE)
   target_compile_definitions(
-    algebra_smatrix
+    vecmem_array
     INTERFACE -DALGEBRA_PLUGIN_CUSTOM_SCALARTYPE=${ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE})
 endif()
 
-if(ALGEBRA_PLUGIN_USE_VECMEM)
-  target_compile_options(algebra_smatrix INTERFACE -DALGEBRA_PLUGIN_USE_VECMEM)
-  target_link_libraries(algebra_smatrix INTERFACE vecmem::core)
-endif()
+target_compile_options(vecmem_array INTERFACE -DALGEBRA_PLUGIN_USE_VECMEM)
+target_link_libraries(vecmem_array INTERFACE vecmem::core)
 
-add_library(algebra::smatrix ALIAS algebra_smatrix)
+add_library(algebra::vecmem_array ALIAS vecmem_array)

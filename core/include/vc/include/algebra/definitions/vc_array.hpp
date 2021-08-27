@@ -13,6 +13,7 @@
 #include <cmath>
 
 // namespace of the algebra object definitions
+#ifndef __plugin
 #define __plugin algebra::vc_array
 // Name of the plugin
 #define ALGEBRA_PLUGIN vc_array
@@ -562,3 +563,5 @@ namespace algebra
     } // namespace vc_array
 
 } // namespace algebra
+
+#endif

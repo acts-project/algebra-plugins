@@ -24,8 +24,9 @@
 
 namespace algebra
 {
+    // General algebra container types to be used with plugin
     #ifdef ALGEBRA_PLUGIN_USE_VECMEM
-    
+
     template <typename value_type, unsigned int kDIM>
     using array_s = vecmem::static_array<value_type, kDIM>;
 

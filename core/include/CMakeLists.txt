@@ -1,5 +1,4 @@
 
-
 if (ALGEBRA_PLUGIN_INCLUDE_ARRAY)
     add_subdirectory(array)
 endif()
@@ -14,4 +13,8 @@ endif()
 
 if (ALGEBRA_PLUGIN_INCLUDE_VC)
     add_subdirectory(vc)
+endif()
+
+if(ALGEBRA_PLUGIN_INCLUDE_VECMEM)
+    add_subdirectory(vecmem)
 endif()

@@ -5,5 +5,5 @@
  * Mozilla Public License Version 2.0
  */
 
-#include "algebra/definitions/std_array.hpp"
+#include "algebra/definitions/vecmem_array.hpp"
 #include "tests/common/test_plugin.inl"

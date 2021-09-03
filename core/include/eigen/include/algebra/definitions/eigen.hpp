@@ -199,6 +199,18 @@ namespace algebra
                 return (_data.isApprox(rhs._data));
             }
 
+            /** Rotate a vector into / from a frame 
+             * 
+             * @param m is the rotation matrix
+             * @param v is the vector to be rotated
+             */
+	    
+            static vector3 rotate(const Eigen::Transform<scalar, 3, Eigen::Affine> &m, const vector3 &v)
+            {
+
+                return m.matrix().block<3,3>(0,0)*v;
+            }
+	    
             /** This method retrieves the rotation of a transform  **/
             auto rotation() const
             {

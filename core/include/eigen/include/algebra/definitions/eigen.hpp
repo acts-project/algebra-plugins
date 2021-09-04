@@ -199,6 +199,20 @@ namespace algebra
                 return (_data.isApprox(rhs._data));
             }
 
+            /** Rotate a vector into / from a frame 
+             * 
+             * @param m is the rotation matrix
+             * @param v is the vector to be rotated
+             */
+            template <typename derived_type>	    
+            static auto rotate(const Eigen::Transform<scalar, 3, Eigen::Affine> &m, const Eigen::MatrixBase<derived_type> &v)
+            {
+                constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
+                constexpr int cols = Eigen::MatrixBase<derived_type>::ColsAtCompileTime;
+                static_assert(rows == 3 and cols == 1, "transform::rotate(m,v) requires a (3,1) matrix");
+                return m.matrix().block<3,3>(0,0)*v;
+            }
+	    
             /** This method retrieves the rotation of a transform  **/
             auto rotation() const
             {

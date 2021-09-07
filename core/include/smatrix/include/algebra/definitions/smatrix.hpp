@@ -43,7 +43,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vec_expr_type>
-        auto phi(const vec_expr_type &v) noexcept
+        inline auto phi(const vec_expr_type &v) noexcept
         {
             //static_assert(kDIM >= 2, "vector::perp() required rows >= 2.");
             scalar element0 = v.apply(0);
@@ -56,7 +56,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <unsigned int kDIM>
-        auto theta(const SVector<scalar, kDIM> &v) noexcept
+        inline auto theta(const SVector<scalar, kDIM> &v) noexcept
         {
             static_assert(kDIM > 2, "vector::theta() required rows >= 3.");
             return std::atan2(std::sqrt(v[0] * v[0] + v[1] * v[1]), v[2]);
@@ -67,7 +67,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <unsigned int kDIM>
-        auto norm(const SVector<scalar, kDIM> &v)
+        inline auto norm(const SVector<scalar, kDIM> &v)
         {
             return std::sqrt(ROOT::Math::Dot(v, v));
         }
@@ -77,7 +77,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <unsigned int kDIM>
-        auto eta(const SVector<scalar, kDIM> &v) noexcept
+        inline auto eta(const SVector<scalar, kDIM> &v) noexcept
         {
             static_assert(kDIM > 2, "vector::eta() required rows >= 3.");
             return std::atanh(v[2] / norm(v));
@@ -88,7 +88,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vec_expr_type>
-        auto perp(const vec_expr_type &v) noexcept
+        inline auto perp(const vec_expr_type &v) noexcept
         {
             //static_assert(kDIM >= 2, "vector::perp() required rows >= 2.");
             scalar element0 = v.apply(0);
@@ -101,7 +101,7 @@ namespace algebra
          * @param m the input matrix 
          **/
         template <unsigned int kROWS, typename matrix_type>
-        auto vector(const matrix_type &m, unsigned int row, unsigned int col)
+        inline auto vector(const matrix_type &m, unsigned int row, unsigned int col)
         {
             return m.template SubCol<SVector<scalar, kROWS>>(col, row);
         }
@@ -111,7 +111,7 @@ namespace algebra
          * @param m the input matrix 
          **/
         template <unsigned int kROWS, unsigned int kCOLS, typename matrix_type>
-        auto block(const matrix_type &m, unsigned int row, unsigned int col)
+        inline auto block(const matrix_type &m, unsigned int row, unsigned int col)
         {
             return m.template Sub<SMatrix<scalar, kROWS, kCOLS>>(row, col);
         }
@@ -233,31 +233,31 @@ namespace algebra
             ~transform3() = default;
 
             /** Equality operator */
-            bool operator==(const transform3 &rhs) const
+            inline bool operator==(const transform3 &rhs) const
             {
                 return _data == rhs._data;
             }
 
             /** This method retrieves the rotation of a transform */
-            auto rotation() const
+            inline auto rotation() const
             {
                 return (_data.Sub<SMatrix<scalar, 3, 3>>(0, 0));
             }
 
             /** This method retrieves the translation of a transform */
-            auto translation() const
+            inline auto translation() const
             {
                 return (_data.SubCol<SVector<scalar, 3>>(3, 0));
             }
 
             /** This method retrieves the 4x4 matrix of a transform */
-            auto matrix() const
+            inline auto matrix() const
             {
                 return _data;
             }
 
             /** This method transform from a point from the local 3D cartesian frame to the global 3D cartesian frame */
-            const point3 point_to_global(const point3 &v) const
+            inline const point3 point_to_global(const point3 &v) const
             {
                SVector<scalar, 4> vector_4 = SVector<scalar, 4>();
                vector_4.Place_at(v, 0);
@@ -266,7 +266,7 @@ namespace algebra
             }
 
             /** This method transform from a vector from the global 3D cartesian frame into the local 3D cartesian frame */
-            const point3 point_to_local(const point3 &v) const
+            inline const point3 point_to_local(const point3 &v) const
             {
                SVector<scalar, 4> vector_4 = SVector<scalar, 4>();
                vector_4.Place_at(v, 0);
@@ -275,7 +275,7 @@ namespace algebra
             }
 
             /** This method transform from a vector from the local 3D cartesian frame to the global 3D cartesian frame */
-            const point3 vector_to_global(const vector3 &v) const
+            inline const point3 vector_to_global(const vector3 &v) const
             {
                SVector<scalar, 4> vector_4 = SVector<scalar, 4>();
                vector_4.Place_at(v, 0);
@@ -283,7 +283,7 @@ namespace algebra
             }
 
             /** This method transform from a vector from the global 3D cartesian frame into the local 3D cartesian frame */
-            const point3 vector_to_local(const vector3 &v) const
+            inline const point3 vector_to_local(const vector3 &v) const
             {
                SVector<scalar, 4> vector_4 = SVector<scalar, 4>();
                vector_4.Place_at(v, 0);
@@ -303,7 +303,7 @@ namespace algebra
              * @return a local point2
              */
             template <typename point3_type>
-            const auto operator()(const point3_type &v) const
+            inline const auto operator()(const point3_type &v) const
             {
                 return v.template Sub<SVector<scalar, 2>>(0);
             }
@@ -315,8 +315,8 @@ namespace algebra
              * 
              * @return a local point2
              **/
-            const auto operator()(const transform3 &trf,
-                                  const point3 &p) const
+            inline const auto operator()(const transform3 &trf,
+					 const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
@@ -335,7 +335,7 @@ namespace algebra
              * @return a local point2
              */
             template <typename point3_type>
-            const auto operator()(const point3_type &v) const
+            inline const auto operator()(const point3_type &v) const
             {
                 return point2{getter::perp(v), getter::phi(v)};
             }
@@ -347,8 +347,8 @@ namespace algebra
              * 
              * @return a local point2
              **/
-            const auto operator()(const transform3 &trf,
-                                  const point3 &p) const
+            inline const auto operator()(const transform3 &trf,
+					 const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
@@ -367,7 +367,7 @@ namespace algebra
              * @return a local point2
              */
             template <typename point3_type>
-            const auto operator()(const point3_type &v) const
+            inline const auto operator()(const point3_type &v) const
             {
                 return point2{getter::perp(v) * getter::phi(v), v[2]};
             }
@@ -379,8 +379,8 @@ namespace algebra
              * 
              * @return a local point2
              **/
-            const auto operator()(const transform3 &trf,
-                                  const point3 &p) const
+            inline const auto operator()(const transform3 &trf,
+					 const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
@@ -399,7 +399,7 @@ namespace algebra
          * @param v the input vector
          **/
         template <typename vector_type>
-        auto normalize(const vector_type &v)
+        inline auto normalize(const vector_type &v)
         {
             return ROOT::Math::Unit(v);
         }
@@ -415,7 +415,7 @@ namespace algebra
          * @return the scalar dot product value 
          **/
         template <typename vector3_type, typename vecexpr3_type>
-        auto dot(const vector3_type &a, const vecexpr3_type &b)
+        inline auto dot(const vector3_type &a, const vecexpr3_type &b)
         {
             return ROOT::Math::Dot(a, b);
         }
@@ -431,7 +431,7 @@ namespace algebra
          * @return a vector (expression) representing the cross product
          **/
         template <typename vector3_type, typename vecexpr3_type>
-        auto cross(const vecexpr3_type &a, const vector3_type &b)
+        inline auto cross(const vecexpr3_type &a, const vector3_type &b)
         {
             return ROOT::Math::Cross(a, b);
         }

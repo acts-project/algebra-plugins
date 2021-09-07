@@ -60,7 +60,7 @@ namespace algebra
          * @return the scalar dot product value 
          **/
         template <typename vector_type>
-        scalar dot(const vector_type &a, const vector_type &b)
+        inline scalar dot(const vector_type &a, const vector_type &b)
         {
             return (a*b).sum();
         }
@@ -76,7 +76,7 @@ namespace algebra
          * @return the scalar dot product value 
          **/
         template <typename vec_expr1, typename vec_expr2>
-        scalar dot(const vec_expr1 &a, const vec_expr2 &b)
+        inline scalar dot(const vec_expr1 &a, const vec_expr2 &b)
         {
             return (a*b).sum();
         }
@@ -88,7 +88,7 @@ namespace algebra
          * 
          * @return the scalar dot product value 
          **/
-        scalar dot(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
+        inline scalar dot(const std::array<scalar, 2> &a, const std::array<scalar, 2> &b)
         {
             return (a[0]*b[0] + a[1]*b[1]);
         }
@@ -100,7 +100,7 @@ namespace algebra
          * @param v the input vector
          **/
         template <typename vector_type>
-        vector_type normalize(const vector_type &v)
+        inline vector_type normalize(const vector_type &v)
         {
             return v / std::sqrt(dot(v, v));
         }
@@ -115,7 +115,7 @@ namespace algebra
          * @return a vector representing the cross product
          **/
         template <typename vector_type>
-        vector_type cross(const vector_type &a, const vector_type &b)
+        inline vector_type cross(const vector_type &a, const vector_type &b)
         {
             return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1], 0};
         }
@@ -131,7 +131,7 @@ namespace algebra
          * @return a vector (expression) representing the cross product
          **/
         template <typename vec_expr1, typename vec_expr2>
-        auto cross(const vec_expr1 &a, const vec_expr2 &b) ->decltype(a * b - a * b)
+        inline auto cross(const vec_expr1 &a, const vec_expr2 &b) ->decltype(a * b - a * b)
         {
             return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1], 0};
         }
@@ -148,7 +148,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
-        auto phi(const vector_type &v) noexcept
+        inline auto phi(const vector_type &v) noexcept
         {
             return std::atan2(v[1], v[0]);
         }
@@ -160,7 +160,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
-        auto theta(const vector_type &v) noexcept
+        inline auto theta(const vector_type &v) noexcept
         {
             return std::atan2(std::sqrt(v[0] * v[0] + v[1] * v[1]), v[2]);
         }
@@ -172,7 +172,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
-        auto perp(const vector_type &v) noexcept
+        inline auto perp(const vector_type &v) noexcept
         {
             return std::sqrt(v[0] * v[0] + v[1] * v[1]);
         }
@@ -184,7 +184,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
-        auto norm(const vector_type &v)
+        inline auto norm(const vector_type &v)
         {
             return std::sqrt(vector::dot(v, v));
         }
@@ -196,7 +196,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
-        auto eta(const vector_type &v) noexcept
+        inline auto eta(const vector_type &v) noexcept
         {
             return std::atanh(v[2] / norm(v));
         }
@@ -208,7 +208,7 @@ namespace algebra
          * @param m the input matrix 
          **/
         template <unsigned int kROWS = 4, typename matrix_type>
-        simd::array<scalar, 4> vector(const matrix_type m, unsigned int row, unsigned int col) noexcept
+        inline simd::array<scalar, 4> vector(const matrix_type m, unsigned int row, unsigned int col) noexcept
         {
             switch (col) {
                 case 2: return m.z;
@@ -224,7 +224,7 @@ namespace algebra
          * @param m the input matrix 
          **/
         template <unsigned int kROWS, unsigned int kCOLS, typename matrix_type>
-        auto block(const matrix_type &m, unsigned int row, unsigned int col) noexcept
+        inline auto block(const matrix_type &m, unsigned int row, unsigned int col) noexcept
         {
             simd::array<scalar, 16> submatrix;
             simd::aligned::vector<decltype(m.x)> vecs = {std::move(m.x), std::move(m.y), std::move(m.z), std::move(m.t)};
@@ -333,7 +333,7 @@ namespace algebra
             ~transform3() = default;
 
             /** Equality operator */
-            bool operator==(const transform3 &rhs) const
+            inline bool operator==(const transform3 &rhs) const
             {
                 return (_data == rhs._data);
             }
@@ -344,7 +344,7 @@ namespace algebra
              *
              * @return a sacalar determinant - no checking done 
              */
-            static scalar determinant(const matrix44 &m)
+            static inline scalar determinant(const matrix44 &m)
             {
                 return m.t[0] * m.z[1] * m.y[2] * m.x[3] - m.z[0] * m.t[1] * m.y[2] * m.x[3] - m.t[0] * m.y[1] * m.z[2] * m.x[3] + m.y[0] * m.t[1] * m.z[2] * m.x[3] +
                        m.z[0] * m.y[1] * m.t[2] * m.x[3] - m.y[0] * m.z[1] * m.t[2] * m.x[3] - m.t[0] * m.z[1] * m.x[2] * m.y[3] + m.z[0] * m.t[1] * m.x[2] * m.y[3] +
@@ -360,7 +360,7 @@ namespace algebra
              *
              * @return an inverse matrix 
              */
-            static matrix44 invert(const matrix44 &m)
+            static inline matrix44 invert(const matrix44 &m)
             {
                 matrix44 i;
                 i.x[0] = m.z[1] * m.t[2] * m.y[3] - m.t[1] * m.z[2] * m.y[3] + m.t[1] * m.y[2] * m.z[3] - m.y[1] * m.t[2] * m.z[3] - m.z[1] * m.y[2] * m.t[3] + m.y[1] * m.z[2] * m.t[3];
@@ -394,25 +394,25 @@ namespace algebra
              * @param m is the rotation matrix
              * @param v is the vector to be rotated
              */
-            static vector3 rotate(const matrix44 &m, const vector3 &v)
+            static inline vector3 rotate(const matrix44 &m, const vector3 &v)
             {
                 return m.x*v[0] + m.y*v[1] + m.z*v[2];
             }
 
             /** This method retrieves the rotation of a transform */
-            auto rotation() const
+            inline auto rotation() const
             {
                 return getter::block<3, 3>(_data, 0, 0);
             }
 
             /** This method retrieves the translation of a transform */
-            point3 translation() const
+            inline point3 translation() const
             {
                 return _data.t;
             }
 
             /** This method retrieves the 4x4 matrix of a transform */
-            const matrix44 &matrix() const
+            inline const matrix44 &matrix() const
             {
                 return _data;
             }
@@ -427,7 +427,7 @@ namespace algebra
              * @return a global point
              */
             template <typename point_type>
-            const point_type point_to_global(const point_type &v) const
+            inline const point_type point_to_global(const point_type &v) const
             {
                 return _data.x*v[0] + _data.y*v[1] + _data.z*v[2] + _data.t;
             }
@@ -442,7 +442,7 @@ namespace algebra
              * @return a local point
              */
             template <typename point_type>
-            const point_type point_to_local(const point_type &v) const
+            inline const point_type point_to_local(const point_type &v) const
             {
                 return _data_inv.x*v[0] + _data_inv.y*v[1] + _data_inv.z*v[2] + _data_inv.t;
             }
@@ -457,7 +457,7 @@ namespace algebra
              * @return a vector in global coordinates
              */
             template <typename vector_type>
-            const vector_type vector_to_global(const vector_type &v) const
+            inline const vector_type vector_to_global(const vector_type &v) const
             {
                 return rotate(_data, v);
             }
@@ -472,7 +472,7 @@ namespace algebra
              * @return a vector in global coordinates
              */
             template <typename vector_type>
-            const auto vector_to_local(const vector_type &v) const
+            inline const auto vector_to_local(const vector_type &v) const
             {
                 return rotate(_data_inv, v);
             }
@@ -490,7 +490,7 @@ namespace algebra
              * 
              * @return a local point2
              **/
-            point2 operator()(const transform3 &trf,
+            inline point2 operator()(const transform3 &trf,
                                   const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
@@ -503,7 +503,7 @@ namespace algebra
              * 
              * @return a local point2
              */
-            point2 operator()(const point3 &v) const
+            inline point2 operator()(const point3 &v) const
             {
                 return {v[0], v[1]};
             }
@@ -520,7 +520,7 @@ namespace algebra
              * 
              * @return a local point2
              **/
-            point2 operator()(const transform3 &trf,
+            inline point2 operator()(const transform3 &trf,
                                   const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
@@ -529,7 +529,7 @@ namespace algebra
             /** This method transform from a point from 2D or 3D cartesian frame 
                 to a 2D polar point */
             template <typename point_type>
-            point2 operator()(const point_type &v) const
+            inline point2 operator()(const point_type &v) const
             {
                 return point2{getter::perp(v), getter::phi(v)};
             }
@@ -546,7 +546,7 @@ namespace algebra
               * 
               * @return a local point2
               **/
-            point2 operator()(const transform3 &trf,
+            inline point2 operator()(const transform3 &trf,
                                   const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
@@ -554,7 +554,7 @@ namespace algebra
 
             /** This method transform from a point from 2 3D cartesian frame to 
                 a 2D cylindrical point */
-            point2 operator()(const point3 &v) const
+            inline point2 operator()(const point3 &v) const
             {
                 return point2{getter::perp(v) * getter::phi(v), v[2]};
             }

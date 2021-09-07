@@ -318,7 +318,7 @@ namespace algebra
             ~transform3() = default;
 
             /** Equality operator */
-            bool operator==(const transform3 &rhs) const
+            inline bool operator==(const transform3 &rhs) const
             {
                 return (_data == rhs._data);
             }
@@ -329,7 +329,7 @@ namespace algebra
              *
              * @return a sacalar determinant - no checking done 
              */
-            static scalar determinant(const matrix44 &m)
+            static inline scalar determinant(const matrix44 &m)
             {
                 return m[3][0] * m[2][1] * m[1][2] * m[0][3] - m[2][0] * m[3][1] * m[1][2] * m[0][3] - m[3][0] * m[1][1] * m[2][2] * m[0][3] + m[1][0] * m[3][1] * m[2][2] * m[0][3] +
                        m[2][0] * m[1][1] * m[3][2] * m[0][3] - m[1][0] * m[2][1] * m[3][2] * m[0][3] - m[3][0] * m[2][1] * m[0][2] * m[1][3] + m[2][0] * m[3][1] * m[0][2] * m[1][3] +
@@ -345,7 +345,7 @@ namespace algebra
              *
              * @return an inverse matrix 
              */
-            static matrix44 invert(const matrix44 &m)
+            static inline matrix44 invert(const matrix44 &m)
             {
                 matrix44 i;
                 i[0][0] = m[2][1] * m[3][2] * m[1][3] - m[3][1] * m[2][2] * m[1][3] + m[3][1] * m[1][2] * m[2][3] - m[1][1] * m[3][2] * m[2][3] - m[2][1] * m[1][2] * m[3][3] + m[1][1] * m[2][2] * m[3][3];
@@ -380,7 +380,7 @@ namespace algebra
              * @param m is the rotation matrix
              * @param v is the vector to be rotated
              */
-            static vector3 rotate(const matrix44 &m, const vector3 &v)
+            static inline vector3 rotate(const matrix44 &m, const vector3 &v)
             {
 
                 return vector3{m[0][0] * v[0] + m[1][0] * v[1] + m[2][0] * v[2],
@@ -389,26 +389,26 @@ namespace algebra
             }
 
             /** This method retrieves the rotation of a transform */
-            auto rotation() const
+            auto inline rotation() const
             {
                 return getter::block<3, 3>(_data, 0, 0);
             }
 
             /** This method retrieves the translation of a transform */
-            point3 translation() const
+            inline point3 translation() const
             {
                 return point3{_data[3][0], _data[3][1], _data[3][2]};
             }
 
             /** This method retrieves the 4x4 matrix of a transform */
-            const matrix44 &matrix() const
+            inline const matrix44 &matrix() const
             {
                 return _data;
             }
 
             /** This method transform from a point from the local 3D cartesian frame to the global 3D cartesian frame */
             template <typename point_type>
-            const point_type point_to_global(const point_type &v) const
+            inline const point_type point_to_global(const point_type &v) const
             {
                 vector3 rg = rotate(_data, v);
                 return point3{rg[0] + _data[3][0], rg[1] + _data[3][1], rg[2] + _data[3][2]};
@@ -416,7 +416,7 @@ namespace algebra
 
             /** This method transform from a vector from the global 3D cartesian frame into the local 3D cartesian frame */
             template <typename point_type>
-            const point_type point_to_local(const point_type &v) const
+            inline const point_type point_to_local(const point_type &v) const
             {
                 vector3 rg = rotate(_data_inv, v);
                 return point3{rg[0] + _data_inv[3][0], rg[1] + _data_inv[3][1], rg[2] + _data_inv[3][2]};
@@ -424,14 +424,14 @@ namespace algebra
 
             /** This method transform from a vector from the local 3D cartesian frame to the global 3D cartesian frame */
             template <typename vector_type>
-            const vector_type vector_to_global(const vector_type &v) const
+            inline const vector_type vector_to_global(const vector_type &v) const
             {
                 return rotate(_data, v);
             }
 
             /** This method transform from a vector from the global 3D cartesian frame into the local 3D cartesian frame */
             template <typename vector_type>
-            const auto vector_to_local(const vector_type &v) const
+            inline const auto vector_to_local(const vector_type &v) const
             {
                 return rotate(_data_inv, v);
             }
@@ -448,7 +448,7 @@ namespace algebra
              * 
              * @return a local point2
              **/
-            point2 operator()(const transform3 &trf,
+            inline point2 operator()(const transform3 &trf,
                                   const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
@@ -460,7 +460,7 @@ namespace algebra
              * 
              * @return a local point2
              */
-            point2 operator()(const point3 &v) const
+            inline point2 operator()(const point3 &v) const
             {
                 return {v[0], v[1]};
             }
@@ -476,7 +476,7 @@ namespace algebra
              * 
              * @return a local point2
              **/
-            point2 operator()(const transform3 &trf,
+            inline point2 operator()(const transform3 &trf,
                                   const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
@@ -484,7 +484,7 @@ namespace algebra
 
             /** This method transform from a point from 2D or 3D cartesian frame to a 2D polar point */
             template <typename point_type>
-            point2 operator()(const point_type &v) const
+            inline point2 operator()(const point_type &v) const
             {
                 return point2{getter::perp(v), getter::phi(v)};
             }
@@ -500,14 +500,14 @@ namespace algebra
              * 
              * @return a local point2
              **/
-            point2 operator()(const transform3 &trf,
+            inline point2 operator()(const transform3 &trf,
                                   const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
 
             /** This method transform from a point from 2 3D cartesian frame to a 2D cylindrical point */
-            point2 operator()(const point3 &v) const
+            inline point2 operator()(const point3 &v) const
             {
                 return point2{getter::perp(v) * getter::phi(v), v[2]};
             }

@@ -40,7 +40,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename derived_type>
-        auto phi(const Eigen::MatrixBase<derived_type> &v) noexcept
+	inline auto phi(const Eigen::MatrixBase<derived_type> &v) noexcept
         {
             constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
             static_assert(rows >= 2, "vector::phi() required rows >= 2.");
@@ -51,8 +51,8 @@ namespace algebra
          * 
          * @param v the input vector 
          **/
-        template <typename derived_type>
-        auto theta(const Eigen::MatrixBase<derived_type> &v) noexcept
+        template <typename derived_type> 
+        inline auto theta(const Eigen::MatrixBase<derived_type> &v) noexcept
         {
             constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
             static_assert(rows >= 2, "vector::theta() required rows >= 3.");
@@ -64,7 +64,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename derived_type>
-        auto eta(const Eigen::MatrixBase<derived_type> &v) noexcept
+        inline auto eta(const Eigen::MatrixBase<derived_type> &v) noexcept
         {
             constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
             static_assert(rows >= 2, "vector::eta() required rows >= 3.");
@@ -75,8 +75,8 @@ namespace algebra
          * 
          * @param v the input vector 
          **/
-        template <typename derived_type>
-        auto perp(const Eigen::MatrixBase<derived_type> &v) noexcept
+        template <typename derived_type> 
+        inline auto perp(const Eigen::MatrixBase<derived_type> &v) noexcept
         {
             constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
             static_assert(rows >= 2, "vector::perp() required rows >= 2.");
@@ -87,8 +87,8 @@ namespace algebra
          * 
          * @param v the input vector 
          **/
-        template <typename derived_type>
-        auto norm(const Eigen::MatrixBase<derived_type> &v)
+        template <typename derived_type> 
+        inline auto norm(const Eigen::MatrixBase<derived_type> &v)
         {
             return v.norm();
         }
@@ -97,8 +97,8 @@ namespace algebra
          * 
          * @param m the input matrix 
          **/
-        template <unsigned int kROWS, typename derived_type>
-        auto vector(const Eigen::MatrixBase<derived_type> &m, unsigned int row, unsigned int col)
+        template <unsigned int kROWS, typename derived_type> 
+        inline auto vector(const Eigen::MatrixBase<derived_type> &m, unsigned int row, unsigned int col)
         {
             return m.template block<kROWS, 1>(row, col);
         }
@@ -107,8 +107,8 @@ namespace algebra
          * 
          * @param m the input matrix 
          **/
-        template <unsigned int kROWS, unsigned int kCOLS, typename derived_type>
-        auto block(const Eigen::MatrixBase<derived_type> &m, unsigned int row, unsigned int col)
+        template <unsigned int kROWS, unsigned int kCOLS, typename derived_type> 
+        inline auto block(const Eigen::MatrixBase<derived_type> &m, unsigned int row, unsigned int col)
         {
             return m.template block<kROWS, kCOLS>(row, col);
         }
@@ -194,7 +194,7 @@ namespace algebra
             ~transform3() = default;
 
             /** Equality operator */
-            bool operator==(const transform3 &rhs) const
+            inline bool operator==(const transform3 &rhs) const
             {
                 return (_data.isApprox(rhs._data));
             }
@@ -204,8 +204,8 @@ namespace algebra
              * @param m is the rotation matrix
              * @param v is the vector to be rotated
              */
-            template <typename derived_type>	    
-            static auto rotate(const Eigen::Transform<scalar, 3, Eigen::Affine> &m, const Eigen::MatrixBase<derived_type> &v)
+            template <typename derived_type> 
+            static inline auto rotate(const Eigen::Transform<scalar, 3, Eigen::Affine> &m, const Eigen::MatrixBase<derived_type> &v)
             {
                 constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
                 constexpr int cols = Eigen::MatrixBase<derived_type>::ColsAtCompileTime;
@@ -214,26 +214,26 @@ namespace algebra
             }
 	    
             /** This method retrieves the rotation of a transform  **/
-            auto rotation() const
+            inline auto rotation() const
             {
                 return _data.matrix().block<3, 3>(0, 0);
             }
 
             /** This method retrieves the translation of a transform **/
-            auto translation() const
+            inline auto translation() const
             {
                 return _data.matrix().block<3, 1>(0, 3);
             }
 
             /** This method retrieves the 4x4 matrix of a transform */
-            const auto &matrix() const
+            inline const auto &matrix() const
             {
                 return _data.matrix();
             }
 
             /** This method transform from a point from the local 3D cartesian frame to the global 3D cartesian frame */
-            template <typename derived_type>
-            auto point_to_global(const Eigen::MatrixBase<derived_type> &v) const
+            template <typename derived_type> 
+            inline auto point_to_global(const Eigen::MatrixBase<derived_type> &v) const
             {
                 constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
                 constexpr int cols = Eigen::MatrixBase<derived_type>::ColsAtCompileTime;
@@ -242,8 +242,8 @@ namespace algebra
             }
 
             /** This method transform from a vector from the global 3D cartesian frame into the local 3D cartesian frame */
-            template <typename derived_type>
-            auto point_to_local(const Eigen::MatrixBase<derived_type> &v) const
+            template <typename derived_type> 
+            inline auto point_to_local(const Eigen::MatrixBase<derived_type> &v) const
             {
                 constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
                 constexpr int cols = Eigen::MatrixBase<derived_type>::ColsAtCompileTime;
@@ -253,7 +253,7 @@ namespace algebra
 
             /** This method transform from a vector from the local 3D cartesian frame to the global 3D cartesian frame */
             template <typename derived_type>
-            auto vector_to_global(const Eigen::MatrixBase<derived_type> &v) const
+            inline auto vector_to_global(const Eigen::MatrixBase<derived_type> &v) const
             {
                 constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
                 constexpr int cols = Eigen::MatrixBase<derived_type>::ColsAtCompileTime;
@@ -262,8 +262,8 @@ namespace algebra
             }
 
             /** This method transform from a vector from the global 3D cartesian frame into the local 3D cartesian frame */
-            template <typename derived_type>
-            auto vector_to_local(const Eigen::MatrixBase<derived_type> &v) const
+            template <typename derived_type> 
+            inline auto vector_to_local(const Eigen::MatrixBase<derived_type> &v) const
             {
                 constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
                 constexpr int cols = Eigen::MatrixBase<derived_type>::ColsAtCompileTime;
@@ -282,8 +282,8 @@ namespace algebra
              * 
              * @return a local point2
              */
-            template <typename derived_type>
-            auto operator()(const Eigen::MatrixBase<derived_type> &v) const
+            template <typename derived_type> 
+            inline auto operator()(const Eigen::MatrixBase<derived_type> &v) const
             {
                 constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
                 constexpr int cols = Eigen::MatrixBase<derived_type>::ColsAtCompileTime;
@@ -298,7 +298,7 @@ namespace algebra
              * 
              * @return a local point2
              **/
-            auto operator()(const transform3 &trf,
+            inline auto operator()(const transform3 &trf,
                             const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
@@ -314,8 +314,8 @@ namespace algebra
              * 
              * @return a local point2
              */
-            template <typename derived_type>
-            auto operator()(const Eigen::MatrixBase<derived_type> &v) const
+            template <typename derived_type> 
+            inline auto operator()(const Eigen::MatrixBase<derived_type> &v) const
             {
                 constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
                 constexpr int cols = Eigen::MatrixBase<derived_type>::ColsAtCompileTime;
@@ -330,8 +330,8 @@ namespace algebra
              * 
              * @return a local point2
              **/
-            auto operator()(const transform3 &trf,
-                            const point3 &p) const
+            inline auto operator()(const transform3 &trf,
+				   const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
@@ -346,8 +346,8 @@ namespace algebra
              * 
              * @return a local point2
              */
-            template <typename derived_type>
-            auto operator()(const Eigen::MatrixBase<derived_type> &v) const
+            template <typename derived_type> 
+            inline auto operator()(const Eigen::MatrixBase<derived_type> &v) const
             {
 
                 constexpr int rows = Eigen::MatrixBase<derived_type>::RowsAtCompileTime;
@@ -363,8 +363,8 @@ namespace algebra
              * 
              * @return a local point2
              **/
-            auto operator()(const transform3 &trf,
-                            const point3 &p) const
+            inline auto operator()(const transform3 &trf,
+				   const point3 &p) const
             {
                 return operator()(trf.point_to_local(p));
             }
@@ -382,8 +382,8 @@ namespace algebra
          * 
          * @param v the input vector
          **/
-        template <typename derived_type>
-        auto normalize(const Eigen::MatrixBase<derived_type> &v)
+        template <typename derived_type> 
+        inline auto normalize(const Eigen::MatrixBase<derived_type> &v)
         {
             return v.normalized();
         }
@@ -398,8 +398,8 @@ namespace algebra
          * 
          * @return the scalar dot product value 
          **/
-        template <typename derived_type_lhs, typename derived_type_rhs>
-        auto dot(const Eigen::MatrixBase<derived_type_lhs> &a, const Eigen::MatrixBase<derived_type_rhs> &b)
+        template <typename derived_type_lhs, typename derived_type_rhs> 
+        inline auto dot(const Eigen::MatrixBase<derived_type_lhs> &a, const Eigen::MatrixBase<derived_type_rhs> &b)
         {
             return a.dot(b);
         }
@@ -414,8 +414,8 @@ namespace algebra
          * 
          * @return a vector (expression) representing the cross product
          **/
-        template <typename derived_type_lhs, typename derived_type_rhs>
-        auto cross(const Eigen::MatrixBase<derived_type_lhs> &a, const Eigen::MatrixBase<derived_type_rhs> &b)
+        template <typename derived_type_lhs, typename derived_type_rhs> 
+        inline auto cross(const Eigen::MatrixBase<derived_type_lhs> &a, const Eigen::MatrixBase<derived_type_rhs> &b)
         {
             return a.cross(b);
         }

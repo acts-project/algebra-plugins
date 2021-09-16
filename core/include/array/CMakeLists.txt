@@ -9,7 +9,7 @@ target_include_directories(algebra_array
     ${ALGEBRA_PLUGIN_SOURCE_DIR}/core/common/include/algebra)
 
 install(
-  DIRECTORY include/plugins/algebra
+  DIRECTORY include/algebra
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 if(ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE)

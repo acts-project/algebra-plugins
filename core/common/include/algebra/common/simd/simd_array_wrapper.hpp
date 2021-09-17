@@ -6,7 +6,7 @@
  */
 #pragma once
 
-#include "common/simd_types.hpp"
+#include "common/simd/simd_types.hpp"
 
 #include <Vc/Vc>
 
@@ -60,7 +60,7 @@ namespace simd {
      * @param v1 optional value 4. dimension. if not passed, set to 0.0
      *
      */
-    array4_wrapper(scalar_t v1, scalar_t v2, scalar_t v3, scalar_t v4 = scalar_t{0.0}) 
+    array4_wrapper(scalar_t v1, scalar_t v2, scalar_t v3, scalar_t v4 = static_cast<scalar_t>(0.0)) 
       : _array{v1, v2, v3, v4} {}
 
     /** Constructor from wrapped class. Used for conversions into wrapped type.
@@ -74,7 +74,7 @@ namespace simd {
      * @param lhs wrap a copy of this data
      */
     template<typename other_type>
-    inline const array4_wrapper<scalar_t> & operator=(const other_type& lhs)
+    inline const array4_wrapper<scalar_t>& operator=(const other_type& lhs)
     {
         _array = lhs;
         return *this;
@@ -109,14 +109,14 @@ namespace simd {
      *
      * @return Value at given index
      */
-    inline auto operator[](const unsigned int i) {return _array[i];}
-    inline auto operator[](const unsigned int i) const {return _array[i];}
+    inline decltype(auto) operator[](const unsigned int i) {return _array[i];}
+    inline decltype(auto) operator[](const unsigned int i) const {return _array[i];}
 
     /** Operator*= overload from SimdArray for simd array wrapper.
      *
      * @return Vector expression/ return type according to the operation
      */
-    inline auto operator*=(scalar_t factor) ->decltype(_array*=factor) 
+    inline decltype(auto) operator*=(scalar_t factor)
     {
       return _array*=factor;
     }
@@ -130,9 +130,9 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator+(const array4_wrapper<scalar_t> &lhs, const double &rhs) /*->decltype(lhs._array + scalar_t{rhs})*/
+  inline decltype(auto) operator+(const array4_wrapper<scalar_t> &lhs, const double &rhs)
   {
-    return (lhs._array + scalar_t{rhs});
+    return (lhs._array + static_cast<scalar_t>(rhs));
   }
 
   /** Operator overload from SimdArray for simd array wrapper that handles the default
@@ -143,9 +143,9 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator+(const double &lhs, const array4_wrapper<scalar_t> &rhs) /*->decltype(scalar_t{lhs} + rhs._array)*/
+  inline decltype(auto) operator+(const double &lhs, const array4_wrapper<scalar_t> &rhs)
   {
-    return (scalar_t{lhs} + rhs._array);
+    return (static_cast<scalar_t>(lhs) + rhs._array);
   }
   
   /** Operator overload from SimdArray for simd array wrapper.
@@ -155,7 +155,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator+(const array4_wrapper<scalar_t> &lhs, const array4_wrapper<scalar_t> &rhs) ->decltype(lhs._array + rhs._array)
+  inline decltype(auto) operator+(const array4_wrapper<scalar_t> &lhs, const array4_wrapper<scalar_t> &rhs)
   {
     return (lhs._array + rhs._array);
   }
@@ -168,7 +168,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t, typename other_type>
-  inline auto operator+(const array4_wrapper<scalar_t> &lhs, const other_type &rhs) ->decltype(lhs._array + rhs)
+  inline decltype(auto) operator+(const array4_wrapper<scalar_t> &lhs, const other_type &rhs)
   {
     return (lhs._array + rhs);
   }
@@ -181,7 +181,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t, typename other_type>
-  inline auto operator+(const other_type &lhs, const array4_wrapper<scalar_t> &rhs) ->decltype(lhs + rhs._array)
+  inline decltype(auto) operator+(const other_type &lhs, const array4_wrapper<scalar_t> &rhs)
   {
     return (lhs + rhs._array);
   }
@@ -194,9 +194,9 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator-(const array4_wrapper<scalar_t> &lhs, const double &rhs) /*->decltype(lhs._array - scalar_t{rhs})*/
+  inline decltype(auto) operator-(const array4_wrapper<scalar_t> &lhs, const double &rhs)
   {
-    return (lhs._array - scalar_t{rhs});
+    return (lhs._array - static_cast<scalar_t>(rhs));
   }
 
   /** Operator overload from SimdArray for simd array wrapper that handles the default
@@ -207,9 +207,9 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator-(const double &lhs, const array4_wrapper<scalar_t> &rhs) /*->decltype(scalar_t{lhs} - rhs._array)*/
+  inline decltype(auto) operator-(const double &lhs, const array4_wrapper<scalar_t> &rhs)
   {
-    return (scalar_t{lhs} - rhs._array);
+    return (static_cast<scalar_t>(lhs) - rhs._array);
   }
 
   /** Operator overload from SimdArray for simd array wrapper.
@@ -219,7 +219,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator-(const array4_wrapper<scalar_t> &lhs, const array4_wrapper<scalar_t> &rhs) ->decltype(lhs._array - rhs._array)
+  inline decltype(auto) operator-(const array4_wrapper<scalar_t> &lhs, const array4_wrapper<scalar_t> &rhs)
   {
     return (lhs._array - rhs._array);
   }
@@ -232,7 +232,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t, typename other_type>
-  inline auto operator-(const array4_wrapper<scalar_t> &lhs, const other_type &rhs) ->decltype(lhs._array - rhs)
+  inline decltype(auto) operator-(const array4_wrapper<scalar_t> &lhs, const other_type &rhs)
   {
     return (lhs._array - rhs);
   }
@@ -245,9 +245,9 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t, typename other_type>
-  inline auto operator-(const other_type &lhs, const array4_wrapper<scalar_t> &rhs) ->decltype(lhs - rhs._array)
+  inline decltype(auto) operator-(const other_type &lhs, const array4_wrapper<scalar_t> &rhs)
   {
-    return (lhs- rhs._array);
+    return (lhs - rhs._array);
   }
 
   /** Operator overload from SimdArray for simd array wrapper that handles the default
@@ -258,9 +258,9 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator*(const array4_wrapper<scalar_t> &lhs, const double &rhs) /*->decltype(lhs._array * scalar_t{rhs})*/
+  inline decltype(auto) operator*(const array4_wrapper<scalar_t> &lhs, const double &rhs)
   {
-    return (lhs._array * scalar_t{rhs});
+    return (lhs._array * static_cast<scalar_t>(rhs));
   }
 
   /** Operator overload from SimdArray for simd array wrapper that handles the default
@@ -271,9 +271,9 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator*(const double &lhs, const array4_wrapper<scalar_t> &rhs) /*->decltype(scalar_t{lhs} * rhs._array)*/
+  inline decltype(auto) operator*(const double &lhs, const array4_wrapper<scalar_t> &rhs)
   {
-    return (scalar_t{lhs} * rhs._array);
+    return (static_cast<scalar_t>(lhs) * rhs._array);
   }
 
   /** Operator overload from SimdArray for simd array wrapper.
@@ -283,7 +283,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator*(const array4_wrapper<scalar_t> &lhs, const array4_wrapper<scalar_t> &rhs) ->decltype(lhs._array * rhs._array)
+  inline decltype(auto) operator*(const array4_wrapper<scalar_t> &lhs, const array4_wrapper<scalar_t> &rhs)
   {
     return (lhs._array * rhs._array);
   }
@@ -296,7 +296,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t, typename other_type>
-  inline auto operator*(const array4_wrapper<scalar_t> &lhs, const other_type &rhs) ->decltype(lhs._array * rhs)
+  inline decltype(auto) operator*(const array4_wrapper<scalar_t> &lhs, const other_type &rhs)
   {
     return (lhs._array * rhs);
   }
@@ -309,7 +309,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t, typename other_type>
-  inline auto operator*(const other_type &lhs, const array4_wrapper<scalar_t> &rhs) ->decltype(lhs * rhs._array)
+  inline decltype(auto) operator*(const other_type &lhs, const array4_wrapper<scalar_t> &rhs)
   {
     return (lhs * rhs._array);
   }
@@ -322,9 +322,9 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator/(const array4_wrapper<scalar_t> &lhs, const double &rhs) /*->decltype(lhs._array / scalar_t{rhs})*/
+  inline decltype(auto) operator/(const array4_wrapper<scalar_t> &lhs, const double &rhs)
   {
-    return (lhs._array / scalar_t{rhs});
+    return (lhs._array / static_cast<scalar_t>(rhs));
   }
 
   /** Operator overload from SimdArray for simd array wrapper that handles the default
@@ -335,9 +335,9 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator/(const double &lhs, const array4_wrapper<scalar_t> &rhs) /*->decltype(scalar_t{lhs} / rhs._array)*/
+  inline decltype(auto) operator/(const double &lhs, const array4_wrapper<scalar_t> &rhs)
   {
-    return (scalar_t{lhs} / rhs._array);
+    return (static_cast<scalar_t>(lhs) / rhs._array);
   }
 
   /** Operator overload from SimdArray for simd array wrapper.
@@ -347,7 +347,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator/(const array4_wrapper<scalar_t> &lhs, const array4_wrapper<scalar_t> &rhs) ->decltype(lhs._array / rhs._array)
+  inline decltype(auto) operator/(const array4_wrapper<scalar_t> &lhs, const array4_wrapper<scalar_t> &rhs)
   {
     return (lhs._array / rhs._array);
   }
@@ -360,7 +360,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t, typename other_type>
-  inline auto operator/(const other_type &lhs, const array4_wrapper<scalar_t> &rhs) ->decltype(lhs / rhs._array)
+  inline decltype(auto) operator/(const other_type &lhs, const array4_wrapper<scalar_t> &rhs)
   {
     return (lhs / rhs._array);
   }
@@ -373,7 +373,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t, typename other_type>
-  inline auto operator/(const array4_wrapper<scalar_t> &lhs, const other_type &rhs) ->decltype(lhs._array / rhs)
+  inline decltype(auto) operator/(const array4_wrapper<scalar_t> &lhs, const other_type &rhs)
   {
     return (lhs._array / rhs);
   }
@@ -386,7 +386,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t, typename other_type>
-  inline auto operator==(const array4_wrapper<scalar_t> &lhs, const other_type &rhs) {
+  inline decltype(auto) operator==(const array4_wrapper<scalar_t> &lhs, const other_type &rhs) {
     return (lhs._array == rhs);
   }
 
@@ -398,7 +398,7 @@ namespace simd {
    * @return Vector expression/ return type according to the operation
    */
   template<typename scalar_t>
-  inline auto operator==(const array4_wrapper<scalar_t> &lhs, const array4_wrapper<scalar_t> &rhs) {
+  inline decltype(auto) operator==(const array4_wrapper<scalar_t> &lhs, const array4_wrapper<scalar_t> &rhs) {
     return (lhs._array == rhs._array);
   }
 
@@ -409,7 +409,7 @@ namespace simd {
    * @return Result of comparision
    */
   template<typename scalar_t>
-  bool operator==(const Vector4<simd::array4_wrapper<scalar_t>> &lhs, 
+  inline decltype(auto) operator==(const Vector4<simd::array4_wrapper<scalar_t>> &lhs, 
                   const Vector4<simd::array4_wrapper<scalar_t>> &rhs) {
     bool is_eq_x = (lhs.x == rhs.x).isFull();
     bool is_eq_y = (lhs.y == rhs.y).isFull();

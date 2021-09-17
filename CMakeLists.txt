@@ -5,7 +5,8 @@ project(algebra-plugins VERSION 0.1 LANGUAGES CXX)
 # This is a submodule project
 set(ALGEBRA_PLUGIN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-option(ALGEBRA_PLUGIN_UNIT_TESTS "Enable unit tests for algebra backends" On)
+option(ALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK "Build googletest/google benchmark" Off)
+option(ALGEBRA_PLUGIN_UNIT_TESTS "Enable unit tests for algebra backends" Off)
 option(ALGEBRA_PLUGIN_BENCHMARKS "Enable benchmark tests for algebra bakends" Off)
 
 if(ALGEBRA_PLUGIN_INCLUDE_VC)

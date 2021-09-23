@@ -30,8 +30,12 @@ if(ALGEBRA_PLUGIN_BUILD_VECMEM)
      # Do not build google test in vecmem again
      set(BUILD_TESTING OFF CACHE INTERNAL "")
 
-     # Get it into the current directory.
-     FetchContent_Populate( vecmem )
-     add_subdirectory( "${vecmem_SOURCE_DIR}" "${vecmem_BINARY_DIR}"
-     EXCLUDE_FROM_ALL )
+     # Check whether vecmem has been already populated
+     FetchContent_GetProperties( vecmem )
+     if (NOT vecmem_POPULATED)
+       # Get it into the current directory.
+       FetchContent_Populate( vecmem )
+       add_subdirectory( "${vecmem_SOURCE_DIR}" "${vecmem_BINARY_DIR}"
+	 EXCLUDE_FROM_ALL )
+     endif()
 endif()

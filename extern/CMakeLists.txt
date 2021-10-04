@@ -24,7 +24,7 @@ if(ALGEBRA_PLUGIN_BUILD_VECMEM)
      FetchContent_Declare( 
           Vecmem
           GIT_REPOSITORY "https://github.com/acts-project/vecmem.git"
-          GIT_TAG "v0.3.0"
+          GIT_TAG "v0.4.0"
      )
 
      # Do not build google test in vecmem again

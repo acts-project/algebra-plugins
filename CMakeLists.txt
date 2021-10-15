@@ -1,53 +1,129 @@
-cmake_minimum_required(VERSION 3.14)
+# Algebra plugins library, part of the ACTS project (R&D line)
+#
+# (c) 2021 CERN for the benefit of the ACTS project
+#
+# Mozilla Public License Version 2.0
 
-project(algebra-plugins VERSION 0.1 LANGUAGES CXX)
+# Set up the project.
+cmake_minimum_required( VERSION 3.14 )
+project( algebra-plugins VERSION 0.1 LANGUAGES CXX )
 
-# This is a submodule project
-set(ALGEBRA_PLUGIN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+# Standard CMake include(s).
+include( GNUInstallDirs )
 
-option(ALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK "Build googletest/google benchmark" Off)
-option(ALGEBRA_PLUGIN_UNIT_TESTS "Enable unit tests for algebra backends" Off)
-option(ALGEBRA_PLUGIN_BENCHMARKS "Enable benchmark tests for algebra bakends" Off)
+# Explicitly set the output directory for the binaries. Such that if this
+# project is included by another project, the main project's configuration would
+# win out.
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY
+   "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}" CACHE PATH
+   "Directory for the built binaries" )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY
+   "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}" CACHE PATH
+   "Directory for the built libraries" )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+   "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}" CACHE PATH
+   "Directory for the built static libraries" )
 
-if(ALGEBRA_PLUGIN_INCLUDE_VC)
-     find_package(Vc 1.4.1 REQUIRED)
-     # Define an interface target for the Vc library
-     add_library(Vc INTERFACE)
-     target_include_directories(Vc INTERFACE ${Vc_INCLUDE_DIR})
-     target_link_libraries(Vc INTERFACE libVc.a -L${Vc_LIB_DIR})
+# Include the Algebra Plugins CMake code.
+list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
+include( algebra-plugins-compiler-options )
+include( algebra-plugins-functions )
+
+# Flags controlling how the Algebra Plugins code should behave.
+set( ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE "double" CACHE STRING
+   "Scalar type to use in Algebra Plugins" )
+option( ALGEBRA_PLUGIN_INCLUDE_ARRAY
+   "Include std::array types in Algebra Plugins" TRUE )
+option( ALGEBRA_PLUGIN_INCLUDE_EIGEN
+   "Include Eigen types in Algebra Plugins" FALSE )
+option( ALGEBRA_PLUGIN_INCLUDE_SMATRIX
+   "Include Smatrix types in Algebra Plugins" FALSE )
+option( ALGEBRA_PLUGIN_INCLUDE_VC
+   "Include Vc types in Algebra Plugins" FALSE )
+option( ALGEBRA_PLUGIN_INCLUDE_VECMEM
+   "Include VecMem types in Algebra Plugins" FALSE )
+option( ALGEBRA_PLUGIN_BUILD_TESTING "Build the unit tests of Algebra Plugins"
+   TRUE )
+
+# Set up VecMem.
+option( ALGEBRA_PLUGIN_SETUP_VECMEM
+   "Set up the VecMem target(s) explicitly" FALSE )
+option( ALGEBRA_PLUGIN_USE_SYSTEM_VECMEM
+   "Pick up an existing installation of VecMem from the build environment"
+   TRUE )
+if( ALGEBRA_PLUGIN_SETUP_VECMEM )
+   if( ALGEBRA_PLUGIN_USE_SYSTEM_VECMEM )
+      find_package( vecmem REQUIRED )
+   else()
+      add_subdirectory( extern/vecmem )
+   endif()
 endif()
 
-option(ALGEBRA_PLUGIN_BUILD_VC "Download and build local Vc" Off)
-
-if(ALGEBRA_PLUGIN_USE_VECMEM OR ALGEBRA_PLUGIN_INCLUDE_VECMEM)
-     find_package(vecmem QUIET)
-
-     if(NOT vecmem_FOUND)
-          set(ALGEBRA_PLUGIN_BUILD_VECMEM On)
-     else ()
-          find_package(vecmem)
-     endif()
+# Set up GoogleTest.
+option( ALGEBRA_PLUGIN_SETUP_GOOGLETEST
+   "Set up the GoogleTest target(s) explicitly" TRUE )
+option( ALGEBRA_PLUGIN_USE_SYSTEM_GOOGLETEST
+   "Pick up an existing installation of GoogleTest from the build environment"
+   FALSE )
+if( ALGEBRA_PLUGIN_SETUP_GOOGLETEST )
+   if( ALGEBRA_PLUGIN_USE_SYSTEM_GOOGLETEST )
+      find_package( GTest REQUIRED )
+   else()
+      add_subdirectory( extern/googletest )
+   endif()
 endif()
 
-if(ALGEBRA_PLUGIN_BUILD_VC)
-     add_subdirectory(extern/Vc)
+# Set up Eigen3.
+option( ALGEBRA_PLUGIN_SETUP_EIGEN3
+   "Set up the Eigen3 target(s) explicitly" FALSE )
+option( ALGEBRA_PLUGIN_USE_SYSTEM_EIGEN3
+   "Pick up an existing installation of Eigen3 from the build environment"
+   TRUE )
+if( ALGEBRA_PLUGIN_SETUP_EIGEN3 )
+   if( ALGEBRA_PLUGIN_USE_SYSTEM_EIGEN3 )
+      find_package( Eigen3 REQUIRED )
+   else()
+      add_subdirectory( extern/eigen3 )
+   endif()
 endif()
 
-# This is a submodule project
-set(ALGEBRA_PLUGIN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-if (NOT CMAKE_INSTALL_INCLUDEDIR)
-set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_INSTALL_PREFIX}/include)
-endif()
-if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
-endif()
-if (NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-set(CMAKE_INSTALL_LIBDIR ${CMAKE_INSTALL_PREFIX}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
+# Set up Vc.
+option( ALGEBRA_PLUGIN_SETUP_VC
+   "Set up the Vc target(s) explicitly" FALSE )
+option( ALGEBRA_PLUGIN_USE_SYSTEM_VC
+   "Pick up an existing installation of Vc from the build environment"
+   TRUE )
+if( ALGEBRA_PLUGIN_SETUP_VC )
+   if( ALGEBRA_PLUGIN_USE_SYSTEM_VC )
+      find_package( Vc 1.4.2 REQUIRED )
+   else()
+      add_subdirectory( extern/vc )
+   endif()
 endif()
 
-set(CMAKE_CXX_STANDARD 17)
+# Set up the Algebra Plugin libraries.
+add_subdirectory( common )
+if( ALGEBRA_PLUGIN_INCLUDE_ARRAY )
+   add_subdirectory( array )
+endif()
+if( ALGEBRA_PLUGIN_INCLUDE_EIGEN )
+   add_subdirectory( eigen )
+endif()
+if( ALGEBRA_PLUGIN_INCLUDE_SMATRIX )
+   add_subdirectory( smatrix )
+endif()
+if( ALGEBRA_PLUGIN_INCLUDE_VC )
+   add_subdirectory( vc_array )
+endif()
+if( ALGEBRA_PLUGIN_INCLUDE_VECMEM )
+   add_subdirectory( vecmem_array )
+endif()
 
-add_subdirectory(core)
-add_subdirectory(extern)
-add_subdirectory(tests)
+# Set up the test(s).
+include( CTest )
+if( BUILD_TESTING AND ALGEBRA_PLUGIN_BUILD_TESTING )
+  add_subdirectory( tests )
+endif()
+
+# Set up the packaging of the project.
+include( algebra-plugins-packaging )

@@ -1,15 +1,13 @@
-add_library(algebra_tests_common INTERFACE)
+# Algebra plugins library, part of the ACTS project (R&D line)
+#
+# (c) 2021 CERN for the benefit of the ACTS project
+#
+# Mozilla Public License Version 2.0
 
-target_include_directories(algebra_tests_common
-  INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-
-if(DETRAY_CUSTOM_SCALARTYPE)
-  target_compile_definitions(
-    algebra_tests_common
-    INTERFACE -DALGEBRA_PLUGIN_CUSTOM_SCALARTYPE=${ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE})
-endif()
-
-add_library(algebra::tests_common ALIAS algebra_tests_common)
+# Set up an INTERFACE library for the common header(s).
+add_library( algebra_tests_common INTERFACE )
+target_include_directories( algebra_tests_common INTERFACE
+   "${CMAKE_CURRENT_SOURCE_DIR}" )
+target_link_libraries( algebra_tests_common INTERFACE
+   algebra::common )
+add_library( algebra::tests_common ALIAS algebra_tests_common )

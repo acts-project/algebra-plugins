@@ -8,6 +8,7 @@
 #pragma once
 
 #include "common/types.hpp"
+#include "common/cuda_qualifiers.hpp"
 
 #include <array>
 #include <cmath>
@@ -25,41 +26,49 @@ namespace algebra
 
     using scalar = algebra_scalar;
 
+    ALGEBRA_HOST_DEVICE
     inline __plugin_array<scalar, 2> operator*(const __plugin_array<scalar, 2> &a, scalar s)
     {
         return {a[0] * s, a[1] * s};
     }
 
+    ALGEBRA_HOST_DEVICE
     inline __plugin_array<scalar, 2> operator*(scalar s, const __plugin_array<scalar, 2> &a)
     {
         return {s * a[0], s * a[1]};
     }
 
+    ALGEBRA_HOST_DEVICE
     inline __plugin_array<scalar, 2> operator-(const __plugin_array<scalar, 2> &a, const __plugin_array<scalar, 2> &b)
     {
         return {a[0] - b[0], a[1] - b[1]};
     }
 
+    ALGEBRA_HOST_DEVICE
     inline __plugin_array<scalar, 2> operator+(const __plugin_array<scalar, 2> &a, const __plugin_array<scalar, 2> &b)
     {
         return {a[0] + b[0], a[1] + b[1]};
     }
 
+    ALGEBRA_HOST_DEVICE
     inline __plugin_array<scalar, 3> operator*(const __plugin_array<scalar, 3> &a, scalar s)
     {
         return {a[0] * s, a[1] * s, a[2] * s};
     }
 
+    ALGEBRA_HOST_DEVICE
     inline __plugin_array<scalar, 3> operator*(scalar s, const __plugin_array<scalar, 3> &a)
     {
         return {s * a[0], s * a[1], s * a[2]};
     }
 
+    ALGEBRA_HOST_DEVICE
     inline __plugin_array<scalar, 3> operator-(const __plugin_array<scalar, 3> &a, const __plugin_array<scalar, 3> &b)
     {
         return {a[0] - b[0], a[1] - b[1], a[2] - b[2]};
     }
 
+    ALGEBRA_HOST_DEVICE
     inline __plugin_array<scalar, 3> operator+(const __plugin_array<scalar, 3> &a, const __plugin_array<scalar, 3> &b)
     {
         return {a[0] + b[0], a[1] + b[1], a[2] + b[2]};
@@ -77,6 +86,7 @@ namespace algebra
          * 
          * @return a vector (expression) representing the cross product
          **/
+	ALGEBRA_HOST_DEVICE
         inline __plugin_array<scalar, 3> cross(const __plugin_array<scalar, 3> &a, const __plugin_array<scalar, 3> &b)
         {
             return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1]};
@@ -91,6 +101,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
+	ALGEBRA_HOST_DEVICE
         inline auto phi(const vector_type &v) noexcept
         {
             return std::atan2(v[1], v[0]);
@@ -101,6 +112,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
+	ALGEBRA_HOST_DEVICE
         inline auto theta(const vector_type &v) noexcept
         {
             return std::atan2(std::sqrt(v[0] * v[0] + v[1] * v[1]), v[2]);
@@ -111,6 +123,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
+	ALGEBRA_HOST_DEVICE
         inline auto perp(const vector_type &v) noexcept
         {
             return std::sqrt(v[0] * v[0] + v[1] * v[1]);
@@ -120,6 +133,7 @@ namespace algebra
          * 
          * @param v the input vector 
          **/
+	ALGEBRA_HOST_DEVICE
         inline auto norm(const __plugin_array<scalar, 2> &v)
         {
             return perp(v);
@@ -129,6 +143,7 @@ namespace algebra
          * 
          * @param v the input vector 
          **/
+	ALGEBRA_HOST_DEVICE
         inline auto norm(const __plugin_array<scalar, 3> &v)
         {
             return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
@@ -139,6 +154,7 @@ namespace algebra
          * @param v the input vector 
          **/
         template <typename vector_type>
+	ALGEBRA_HOST_DEVICE
         inline auto eta(const vector_type &v) noexcept
         {
             return std::atanh(v[2] / norm(v));
@@ -149,6 +165,7 @@ namespace algebra
          * @param m the input matrix 
          **/
         template <unsigned int kROWS, typename matrix_type>
+	ALGEBRA_HOST_DEVICE
         inline auto vector(const matrix_type &m, unsigned int row, unsigned int col) noexcept
         {
             __plugin_array<scalar, kROWS> subvector;
@@ -164,6 +181,7 @@ namespace algebra
          * @param m the input matrix 
          **/
         template <unsigned int kROWS, unsigned int kCOLS, typename matrix_type>
+	ALGEBRA_HOST_DEVICE
         inline auto block(const matrix_type &m, unsigned int row, unsigned int col) noexcept
         {
             __plugin_array<__plugin_array<scalar, kROWS>, kCOLS> submatrix;
@@ -204,6 +222,7 @@ namespace algebra
              * @note y will be constructed by cross product
              * 
              **/
+	    ALGEBRA_HOST_DEVICE
             transform3(const vector3 &t, const vector3 &z, const vector3 &x)
             {
                 auto y = vector::cross(z, x);
@@ -231,6 +250,7 @@ namespace algebra
              *
              * @param t is the transform
              **/
+	    ALGEBRA_HOST_DEVICE
             transform3(const vector3 &t)
             {
                 _data[0][0] = 1.;
@@ -257,6 +277,7 @@ namespace algebra
              * 
              * @param m is the full 4x4 matrix 
              **/
+	    ALGEBRA_HOST_DEVICE
             transform3(const matrix44 &m)
             {
                 _data = m;
@@ -266,6 +287,7 @@ namespace algebra
              * 
              * @param ma is the full 4x4 matrix 16 array
              **/
+	    ALGEBRA_HOST_DEVICE
             transform3(const array_s<scalar, 16> &ma)
             {
                 _data[0][0] = ma[0];
@@ -291,6 +313,7 @@ namespace algebra
             /** Constructor with arguments: identity
              *
              **/
+	    ALGEBRA_HOST_DEVICE
             transform3()
             {
                 _data[0][0] = 1.;
@@ -318,6 +341,7 @@ namespace algebra
             ~transform3() = default;
 
             /** Equality operator */
+	    ALGEBRA_HOST_DEVICE
             inline bool operator==(const transform3 &rhs) const
             {
                 return (_data == rhs._data);
@@ -329,6 +353,7 @@ namespace algebra
              *
              * @return a sacalar determinant - no checking done 
              */
+	    ALGEBRA_HOST_DEVICE
             static inline scalar determinant(const matrix44 &m)
             {
                 return m[3][0] * m[2][1] * m[1][2] * m[0][3] - m[2][0] * m[3][1] * m[1][2] * m[0][3] - m[3][0] * m[1][1] * m[2][2] * m[0][3] + m[1][0] * m[3][1] * m[2][2] * m[0][3] +
@@ -345,6 +370,7 @@ namespace algebra
              *
              * @return an inverse matrix 
              */
+	    ALGEBRA_HOST_DEVICE
             static inline matrix44 invert(const matrix44 &m)
             {
                 matrix44 i;
@@ -380,6 +406,7 @@ namespace algebra
              * @param m is the rotation matrix
              * @param v is the vector to be rotated
              */
+	    ALGEBRA_HOST_DEVICE
             static inline vector3 rotate(const matrix44 &m, const vector3 &v)
             {
 
@@ -389,18 +416,21 @@ namespace algebra
             }
 
             /** This method retrieves the rotation of a transform */
+	    ALGEBRA_HOST_DEVICE
             auto inline rotation() const
             {
                 return getter::block<3, 3>(_data, 0, 0);
             }
 
             /** This method retrieves the translation of a transform */
+	    ALGEBRA_HOST_DEVICE
             inline point3 translation() const
             {
                 return point3{_data[3][0], _data[3][1], _data[3][2]};
             }
 
             /** This method retrieves the 4x4 matrix of a transform */
+	    ALGEBRA_HOST_DEVICE
             inline const matrix44 &matrix() const
             {
                 return _data;
@@ -408,6 +438,7 @@ namespace algebra
 
             /** This method transform from a point from the local 3D cartesian frame to the global 3D cartesian frame */
             template <typename point_type>
+	    ALGEBRA_HOST_DEVICE
             inline const point_type point_to_global(const point_type &v) const
             {
                 vector3 rg = rotate(_data, v);
@@ -416,6 +447,7 @@ namespace algebra
 
             /** This method transform from a vector from the global 3D cartesian frame into the local 3D cartesian frame */
             template <typename point_type>
+	    ALGEBRA_HOST_DEVICE
             inline const point_type point_to_local(const point_type &v) const
             {
                 vector3 rg = rotate(_data_inv, v);
@@ -424,6 +456,7 @@ namespace algebra
 
             /** This method transform from a vector from the local 3D cartesian frame to the global 3D cartesian frame */
             template <typename vector_type>
+	    ALGEBRA_HOST_DEVICE
             inline const vector_type vector_to_global(const vector_type &v) const
             {
                 return rotate(_data, v);
@@ -431,6 +464,7 @@ namespace algebra
 
             /** This method transform from a vector from the global 3D cartesian frame into the local 3D cartesian frame */
             template <typename vector_type>
+	    ALGEBRA_HOST_DEVICE
             inline const auto vector_to_local(const vector_type &v) const
             {
                 return rotate(_data_inv, v);
@@ -448,6 +482,7 @@ namespace algebra
              * 
              * @return a local point2
              **/
+	    ALGEBRA_HOST_DEVICE
             inline point2 operator()(const transform3 &trf,
                                   const point3 &p) const
             {
@@ -460,6 +495,7 @@ namespace algebra
              * 
              * @return a local point2
              */
+	    ALGEBRA_HOST_DEVICE
             inline point2 operator()(const point3 &v) const
             {
                 return {v[0], v[1]};
@@ -476,6 +512,7 @@ namespace algebra
              * 
              * @return a local point2
              **/
+	    ALGEBRA_HOST_DEVICE
             inline point2 operator()(const transform3 &trf,
                                   const point3 &p) const
             {
@@ -484,6 +521,7 @@ namespace algebra
 
             /** This method transform from a point from 2D or 3D cartesian frame to a 2D polar point */
             template <typename point_type>
+	    ALGEBRA_HOST_DEVICE
             inline point2 operator()(const point_type &v) const
             {
                 return point2{getter::perp(v), getter::phi(v)};
@@ -500,6 +538,7 @@ namespace algebra
              * 
              * @return a local point2
              **/
+	    ALGEBRA_HOST_DEVICE
             inline point2 operator()(const transform3 &trf,
                                   const point3 &p) const
             {
@@ -507,6 +546,7 @@ namespace algebra
             }
 
             /** This method transform from a point from 2 3D cartesian frame to a 2D cylindrical point */
+	    ALGEBRA_HOST_DEVICE
             inline point2 operator()(const point3 &v) const
             {
                 return point2{getter::perp(v) * getter::phi(v), v[2]};
@@ -526,6 +566,7 @@ namespace algebra
          * 
          * @return the scalar dot product value 
          **/
+	ALGEBRA_HOST_DEVICE
         inline scalar dot(const __plugin_array<scalar, 2> &a, const __plugin_array<scalar, 2> &b)
         {
             return a[0] * b[0] + a[1] * b[1];
@@ -535,6 +576,7 @@ namespace algebra
          * 
          * @param v the input vector
          **/
+	ALGEBRA_HOST_DEVICE
         inline __plugin_array<scalar, 2> normalize(const __plugin_array<scalar, 2> &v)
         {
             scalar oon = 1. / std::sqrt(dot(v, v));
@@ -548,6 +590,7 @@ namespace algebra
          * 
          * @return the scalar dot product value 
          **/
+	ALGEBRA_HOST_DEVICE
         inline scalar dot(const __plugin_array<scalar, 3> &a, const __plugin_array<scalar, 3> &b)
         {
             return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -557,6 +600,7 @@ namespace algebra
          * 
          * @param v the input vector
          **/
+	ALGEBRA_HOST_DEVICE
         inline __plugin_array<scalar, 3> normalize(const __plugin_array<scalar, 3> &v)
         {
             scalar oon = 1. / std::sqrt(dot(v, v));

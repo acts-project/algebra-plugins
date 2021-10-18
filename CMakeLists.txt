@@ -8,6 +8,7 @@ set(ALGEBRA_PLUGIN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 option(ALGEBRA_PLUGIN_BUILD_GOOGLE_BENCHMARK "Build googletest/google benchmark" Off)
 option(ALGEBRA_PLUGIN_UNIT_TESTS "Enable unit tests for algebra backends" Off)
 option(ALGEBRA_PLUGIN_BENCHMARKS "Enable benchmark tests for algebra bakends" Off)
+option(ALGEBRA_PLUGIN_BUILD_CUDA "Build the CUDA sources included in algebra backends" Off)
 
 if(ALGEBRA_PLUGIN_INCLUDE_VC)
      find_package(Vc 1.4.1 REQUIRED)
@@ -47,6 +48,12 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 endif()
 
 set(CMAKE_CXX_STANDARD 17)
+
+# Set GPU-related options
+if(ALGEBRA_PLUGIN_BUILD_CUDA)
+  set( CMAKE_CUDA_STANDARD 17 CACHE STRING "The (CUDA) C++ standard to use" )
+  enable_language(CUDA)
+endif()
 
 add_subdirectory(core)
 add_subdirectory(extern)

@@ -45,6 +45,13 @@ option( ALGEBRA_PLUGIN_INCLUDE_VECMEM
 option( ALGEBRA_PLUGIN_BUILD_TESTING "Build the unit tests of Algebra Plugins"
    TRUE )
 
+# Suppress developer warnings for all of the externals by default.
+# Unless the user explicitly requested otherwise.
+if( NOT DEFINED CMAKE_SUPPRESS_DEVELOPER_WARNINGS )
+   set( CMAKE_SUPPRESS_DEVELOPER_WARNINGS TRUE )
+   set( _unsetDevWarningFlag TRUE )
+endif()
+
 # Set up VecMem.
 option( ALGEBRA_PLUGIN_SETUP_VECMEM
    "Set up the VecMem target(s) explicitly" FALSE )
@@ -99,6 +106,12 @@ if( ALGEBRA_PLUGIN_SETUP_VC )
    else()
       add_subdirectory( extern/vc )
    endif()
+endif()
+
+# Undo the developer flag suppression.
+if( _unsetDevWarningFlag )
+   unset( CMAKE_SUPPRESS_DEVELOPER_WARNINGS )
+   unset( _unsetDevWarningFlag )
 endif()
 
 # Set up the Algebra Plugin libraries.

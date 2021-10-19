@@ -20,5 +20,9 @@ FetchContent_Declare( VecMem
 set( VECMEM_BUILD_TESTING FALSE CACHE BOOL
    "Turn off the build of the VecMem unit tests" )
 
-# Get it into the current directory.
-FetchContent_MakeAvailable( VecMem )
+# Check whether vecmem has been already populated
+FetchContent_GetProperties( vecmem )
+if (NOT vecmem_POPULATED)
+  # Get it into the current directory.
+  FetchContent_MakeAvailable( VecMem )
+endif()

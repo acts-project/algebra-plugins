@@ -9,6 +9,7 @@ algebra_add_library( algebra_common common
    "include/algebra/common/definitions/array.hpp"
    "include/algebra/common/simd/simd_array_wrapper.hpp"
    "include/algebra/common/simd/simd_types.hpp"
-   "include/algebra/common/types.hpp" )
+   "include/algebra/common/types.hpp"
+   "include/algebra/common/algebra_qualifiers.hpp")
 target_compile_definitions( algebra_common INTERFACE
    ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE=${ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE} )

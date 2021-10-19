@@ -44,8 +44,7 @@ option( ALGEBRA_PLUGIN_INCLUDE_VECMEM
    "Include VecMem types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGIN_BUILD_TESTING "Build the unit tests of Algebra Plugins"
    TRUE )
-option(ALGEBRA_PLUGIN_BUILD_CUDA "Build the CUDA sources included in algebra backends" FALSE)
- 
+
 # Suppress developer warnings for all of the externals by default.
 # Unless the user explicitly requested otherwise.
 if( NOT DEFINED CMAKE_SUPPRESS_DEVELOPER_WARNINGS )
@@ -141,9 +140,3 @@ endif()
 
 # Set up the packaging of the project.
 include( algebra-plugins-packaging )
-
-# Set GPU-related options
-if(ALGEBRA_PLUGIN_BUILD_CUDA)
-  set( CMAKE_CUDA_STANDARD 17 CACHE STRING "The (CUDA) C++ standard to use" )
-  enable_language(CUDA)
-endif()

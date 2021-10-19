@@ -19,7 +19,10 @@ if(ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE)
 endif()
 
 if(ALGEBRA_PLUGIN_USE_VECMEM)
-  target_compile_options(algebra_array INTERFACE -DALGEBRA_PLUGIN_USE_VECMEM)
+  target_compile_options(algebra_array INTERFACE
+    -DALGEBRA_PLUGIN_USE_VECMEM
+    $<$<COMPILE_LANGUAGE:CUDA>:
+    --expt-relaxed-constexpr>)
   target_link_libraries(algebra_array INTERFACE vecmem::core)
 endif()
 

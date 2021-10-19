@@ -344,9 +344,17 @@ namespace algebra
 	    ALGEBRA_HOST_DEVICE
             inline bool operator==(const transform3 &rhs) const
             {
-                return (_data == rhs._data);
+		for (int i=0; i<4; i++){
+		    for (int j = 0 ; j < 4; j++){
+			if (_data[i][j] != rhs._data[i][j]){
+			    return false;
+			}
+		    }
+		}
+		
+		return true;
             }
-
+	    
             /** The determinant of a 4x4 matrix
              * 
              * @param m is the matrix

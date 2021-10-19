@@ -8,7 +8,7 @@
 
 #include "algebra/common/types.hpp"
 #include "algebra/common/simd/simd_array_wrapper.hpp"
-#include "algebra/common/cuda_qualifiers.hpp"
+#include "algebra/common/algebra_qualifiers.hpp"
 
 #include <any>
 #include <cmath>

@@ -8,7 +8,7 @@
 #pragma once
 
 #include "algebra/common/types.hpp"
-#include "algebra/common/cuda_qualifiers.hpp"
+#include "algebra/common/algebra_qualifiers.hpp"
 
 #include <array>
 #include <cmath>

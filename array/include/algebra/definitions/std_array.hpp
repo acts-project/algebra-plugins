@@ -7,8 +7,10 @@
 
 #pragma once
 
+// Project include(s).
 #include "algebra/common/types.hpp"
 
+// System include(s).
 #include <array>
 #include <cmath>
 
@@ -23,23 +25,23 @@
 #include "algebra/common/definitions/array.hpp"
 
 namespace algebra {
-    // array definitions
-    namespace std_array
-    {
-        using vector3 = std::array<scalar, 3>;
-        using point3 = vector3;
-        using point2 = std::array<scalar, 2>;
+// array definitions
+namespace std_array {
 
-        /** Transform wrapper class to ensure standard API within differnt plugins
-         **/
-        using transform3 = array::transform3;
+using vector3 = std::array<scalar, 3>;
+using point3 = vector3;
+using point2 = std::array<scalar, 2>;
 
-        using cartesian2 = array::cartesian2;
-        using polar2 = array::polar2;
-        using cylindrical2 = array::cylindrical2;
+/** Transform wrapper class to ensure standard API within differnt plugins
+ **/
+using transform3 = array::transform3;
 
-    } // namespace std_array
-} // namespace algebra
+using cartesian2 = array::cartesian2;
+using polar2 = array::polar2;
+using cylindrical2 = array::cylindrical2;
+
+}  // namespace std_array
+}  // namespace algebra
 
 #undef __plugin_array
-#endif
+#endif  // __plugin

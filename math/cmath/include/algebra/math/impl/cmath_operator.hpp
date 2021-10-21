@@ -20,16 +20,30 @@ namespace algebra::cmath {
 
 template <template <typename, std::size_t> class array_t, typename scalar_t>
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 2> operator*(
-    const array_t<scalar_t, 2> &a, scalar_t s) {
+    const array_t<scalar_t, 2> &a, float s) {
 
-  return {a[0] * s, a[1] * s};
+  return {a[0] * static_cast<scalar_t>(s), a[1] * static_cast<scalar_t>(s)};
 }
 
 template <template <typename, std::size_t> class array_t, typename scalar_t>
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 2> operator*(
-    scalar_t s, const array_t<scalar_t, 2> &a) {
+    const array_t<scalar_t, 2> &a, double s) {
 
-  return {s * a[0], s * a[1]};
+  return {a[0] * static_cast<scalar_t>(s), a[1] * static_cast<scalar_t>(s)};
+}
+
+template <template <typename, std::size_t> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 2> operator*(
+    float s, const array_t<scalar_t, 2> &a) {
+
+  return {static_cast<scalar_t>(s) * a[0], static_cast<scalar_t>(s) * a[1]};
+}
+
+template <template <typename, std::size_t> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 2> operator*(
+    double s, const array_t<scalar_t, 2> &a) {
+
+  return {static_cast<scalar_t>(s) * a[0], static_cast<scalar_t>(s) * a[1]};
 }
 
 template <template <typename, std::size_t> class array_t, typename scalar_t>
@@ -53,16 +67,34 @@ ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 2> operator+(
 
 template <template <typename, std::size_t> class array_t, typename scalar_t>
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 3> operator*(
-    const array_t<scalar_t, 3> &a, scalar_t s) {
+    const array_t<scalar_t, 3> &a, float s) {
 
-  return {a[0] * s, a[1] * s, a[2] * s};
+  return {a[0] * static_cast<scalar_t>(s), a[1] * static_cast<scalar_t>(s),
+          a[2] * static_cast<scalar_t>(s)};
 }
 
 template <template <typename, std::size_t> class array_t, typename scalar_t>
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 3> operator*(
-    scalar_t s, const array_t<scalar_t, 3> &a) {
+    const array_t<scalar_t, 3> &a, double s) {
 
-  return {s * a[0], s * a[1], s * a[2]};
+  return {a[0] * static_cast<scalar_t>(s), a[1] * static_cast<scalar_t>(s),
+          a[2] * static_cast<scalar_t>(s)};
+}
+
+template <template <typename, std::size_t> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 3> operator*(
+    float s, const array_t<scalar_t, 3> &a) {
+
+  return {static_cast<scalar_t>(s) * a[0], static_cast<scalar_t>(s) * a[1],
+          static_cast<scalar_t>(s) * a[2]};
+}
+
+template <template <typename, std::size_t> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 3> operator*(
+    double s, const array_t<scalar_t, 3> &a) {
+
+  return {static_cast<scalar_t>(s) * a[0], static_cast<scalar_t>(s) * a[1],
+          static_cast<scalar_t>(s) * a[2]};
 }
 
 template <template <typename, std::size_t> class array_t, typename scalar_t>

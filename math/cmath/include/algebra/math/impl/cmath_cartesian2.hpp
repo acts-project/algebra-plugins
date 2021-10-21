@@ -19,8 +19,8 @@ namespace cmath {
 
 /** Frame projection into a cartesian coordinate frame
  */
-template<template <typename,std::size_t> class array_t, typename scalar_t,
-         typename transform3_t = transform3<array_t, scalar_t> >
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          typename transform3_t = transform3<array_t, scalar_t> >
 struct cartesian2 {
 
   /// @name Type definitions for the struct

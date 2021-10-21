@@ -22,10 +22,10 @@ namespace cmath {
  *
  * @param v the input vector
  **/
-template<template <typename, auto> class array_t, typename scalar_t,
-         auto N, std::enable_if_t<N>=2, bool> = true>
-ALGEBRA_HOST_DEVICE
-inline scalar_t phi(const array_t<scalar_t, N> &v) noexcept {
+template <template <typename, auto> class array_t, typename scalar_t, auto N,
+          std::enable_if_t<N >= 2, bool> = true>
+ALGEBRA_HOST_DEVICE inline scalar_t phi(
+    const array_t<scalar_t, N> &v) noexcept {
 
   return std::atan2(v[1], v[0]);
 }
@@ -34,9 +34,9 @@ inline scalar_t phi(const array_t<scalar_t, N> &v) noexcept {
  *
  * @param v the input vector
  **/
-template<template <typename, auto> class array_t, typename scalar_t>
-ALGEBRA_HOST_DEVICE
-inline scalar_t theta(const array_t<scalar_t, 3> &v) noexcept {
+template <template <typename, auto> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline scalar_t theta(
+    const array_t<scalar_t, 3> &v) noexcept {
 
   return std::atan2(std::sqrt(v[0] * v[0] + v[1] * v[1]), v[2]);
 }
@@ -45,10 +45,10 @@ inline scalar_t theta(const array_t<scalar_t, 3> &v) noexcept {
  *
  * @param v the input vector
  **/
-template<template <typename, auto> class array_t, typename scalar_t,
-         auto N, std::enable_if_t<N>=2, bool> = true>
-ALGEBRA_HOST_DEVICE
-inline scalar_t perp(const array_t<scalar_t, N> &v) noexcept {
+template <template <typename, auto> class array_t, typename scalar_t, auto N,
+          std::enable_if_t<N >= 2, bool> = true>
+ALGEBRA_HOST_DEVICE inline scalar_t perp(
+    const array_t<scalar_t, N> &v) noexcept {
 
   return std::sqrt(v[0] * v[0] + v[1] * v[1]);
 }
@@ -57,9 +57,8 @@ inline scalar_t perp(const array_t<scalar_t, N> &v) noexcept {
  *
  * @param v the input vector
  **/
-template<template <typename, auto> class array_t, typename scalar_t>
-ALGEBRA_HOST_DEVICE
-inline scalar_t norm(const array_t<scalar_t, 2> &v) {
+template <template <typename, auto> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, 2> &v) {
 
   return perp<array_t>(v);
 }
@@ -68,9 +67,8 @@ inline scalar_t norm(const array_t<scalar_t, 2> &v) {
  *
  * @param v the input vector
  **/
-template<template <typename, auto> class array_t, typename scalar_t>
-ALGEBRA_HOST_DEVICE
-inline scalar_t norm(const array_t<scalar_t, 3> &v) {
+template <template <typename, auto> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, 3> &v) {
 
   return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
@@ -80,9 +78,9 @@ inline scalar_t norm(const array_t<scalar_t, 3> &v) {
  *
  * @param v the input vector
  **/
-template<template <typename, auto> class array_t, typename scalar_t>
-ALGEBRA_HOST_DEVICE
-inline scalar_t eta(const array_t<scalar_t, 3> &v) noexcept {
+template <template <typename, auto> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline scalar_t eta(
+    const array_t<scalar_t, 3> &v) noexcept {
 
   return std::atanh(v[2] / norm<array_t>(v));
 }

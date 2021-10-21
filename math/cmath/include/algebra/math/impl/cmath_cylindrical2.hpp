@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
+#include "algebra/math/impl/cmath_getter.hpp"
 #include "algebra/math/impl/cmath_transform3.hpp"
 
 // System include(s).
@@ -19,8 +20,8 @@ namespace cmath {
 
 /** Local frame projection into a polar coordinate frame
  */
-template<template <typename,std::size_t> class array_t, typename scalar_t,
-         typename transform3_t = transform3<array_t, scalar_t>>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          typename transform3_t = transform3<array_t, scalar_t>>
 struct cylindrical2 {
 
   /// @name Type definitions for the struct

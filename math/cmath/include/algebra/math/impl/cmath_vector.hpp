@@ -26,10 +26,9 @@ namespace cmath {
  *
  * @return a vector (expression) representing the cross product
  **/
-template<template <typename, auto> class array_t, typename scalar_t>
-ALGEBRA_HOST_DEVICE
-inline array_t<scalar_t, 3> cross(const array_t<scalar_t, 3> &a,
-                                  const array_t<scalar_t, 3> &b) {
+template <template <typename, auto> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 3> cross(
+    const array_t<scalar_t, 3> &a, const array_t<scalar_t, 3> &b) {
 
   return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0],
           a[0] * b[1] - b[0] * a[1]};
@@ -42,10 +41,9 @@ inline array_t<scalar_t, 3> cross(const array_t<scalar_t, 3> &a,
  *
  * @return the scalar dot product value
  **/
-template<template <typename, auto> class array_t, typename scalar_t>
-ALGEBRA_HOST_DEVICE
-inline scalar_t dot(const array_t<scalar_t, 2> &a,
-                    const array_t<scalar_t, 2> &b) {
+template <template <typename, auto> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, 2> &a,
+                                        const array_t<scalar_t, 2> &b) {
 
   return a[0] * b[0] + a[1] * b[1];
 }
@@ -54,9 +52,9 @@ inline scalar_t dot(const array_t<scalar_t, 2> &a,
  *
  * @param v the input vector
  **/
-template<template <typename, auto> class array_t, typename scalar_t>
-ALGEBRA_HOST_DEVICE
-inline array_t<scalar_t, 2> normalize(const array_t<scalar_t, 2> &v) {
+template <template <typename, auto> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 2> normalize(
+    const array_t<scalar_t, 2> &v) {
 
   scalar_t oon = 1. / std::sqrt(dot<array_t>(v, v));
   return {v[0] * oon, v[1] * oon};
@@ -69,10 +67,9 @@ inline array_t<scalar_t, 2> normalize(const array_t<scalar_t, 2> &v) {
  *
  * @return the scalar dot product value
  **/
-template<template <typename, auto> class array_t, typename scalar_t>
-ALGEBRA_HOST_DEVICE
-inline scalar_t dot(const array_t<scalar_t, 3> &a,
-                    const array_t<scalar_t, 3> &b) {
+template <template <typename, auto> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, 3> &a,
+                                        const array_t<scalar_t, 3> &b) {
 
   return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 }
@@ -81,11 +78,11 @@ inline scalar_t dot(const array_t<scalar_t, 3> &a,
  *
  * @param v the input vector
  **/
-template<template <typename, auto> class array_t, typename scalar_t>
-ALGEBRA_HOST_DEVICE
-inline array_t<scalar_t, 3> normalize(const array_t<scalar_t, 3> &v) {
+template <template <typename, auto> class array_t, typename scalar_t>
+ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 3> normalize(
+    const array_t<scalar_t, 3> &v) {
 
-  scalar oon = 1. / std::sqrt(dot<array_t>(v, v));
+  scalar_t oon = 1. / std::sqrt(dot<array_t>(v, v));
   return {v[0] * oon, v[1] * oon, v[2] * oon};
 }
 

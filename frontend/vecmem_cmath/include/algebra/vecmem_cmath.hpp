@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/storage/vecmem.hpp"
 #include "algebra/math/cmath.hpp"
+#include "algebra/storage/vecmem.hpp"
 
 namespace algebra {
 
@@ -29,7 +29,9 @@ using cylindrical2 = cmath::cylindrical2<storage_type, scalar>;
 namespace getter {
 
 auto phi = [](const auto& a) { return cmath::phi<vecmem::storage_type>(a); };
-auto theta = [](const auto& a) { return cmath::theta<vecmem::storage_type>(a); };
+auto theta = [](const auto& a) {
+  return cmath::theta<vecmem::storage_type>(a);
+};
 auto perp = [](const auto& a) { return cmath::perp<vecmem::storage_type>(a); };
 auto norm = [](const auto& a) { return cmath::norm<vecmem::storage_type>(a); };
 auto eta = [](const auto& a) { return cmath::eta<vecmem::storage_type>(a); };
@@ -38,9 +40,15 @@ auto eta = [](const auto& a) { return cmath::eta<vecmem::storage_type>(a); };
 
 namespace vector {
 
-auto cross = [](const auto& a, const auto& b) { return cmath::cross<vecmem::storage_type>(a, b); };
-auto dot = [](const auto& a, const auto& b) { return cmath::dot<vecmem::storage_type>(a, b); };
-auto normalize = [](const auto& a) { return cmath::normalize<vecmem::storage_type>(a); };
+auto cross = [](const auto& a, const auto& b) {
+  return cmath::cross<vecmem::storage_type>(a, b);
+};
+auto dot = [](const auto& a, const auto& b) {
+  return cmath::dot<vecmem::storage_type>(a, b);
+};
+auto normalize = [](const auto& a) {
+  return cmath::normalize<vecmem::storage_type>(a);
+};
 
 }  // namespace vector
 }  // namespace algebra

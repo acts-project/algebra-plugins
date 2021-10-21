@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/storage/array.hpp"
 #include "algebra/math/cmath.hpp"
+#include "algebra/storage/array.hpp"
 
 namespace algebra {
 
@@ -38,9 +38,15 @@ auto eta = [](const auto& a) { return cmath::eta<array::storage_type>(a); };
 
 namespace vector {
 
-auto cross = [](const auto& a, const auto& b) { return cmath::cross<array::storage_type>(a, b); };
-auto dot = [](const auto& a, const auto& b) { return cmath::dot<array::storage_type>(a, b); };
-auto normalize = [](const auto& a) { return cmath::normalize<array::storage_type>(a); };
+auto cross = [](const auto& a, const auto& b) {
+  return cmath::cross<array::storage_type>(a, b);
+};
+auto dot = [](const auto& a, const auto& b) {
+  return cmath::dot<array::storage_type>(a, b);
+};
+auto normalize = [](const auto& a) {
+  return cmath::normalize<array::storage_type>(a);
+};
 
 }  // namespace vector
 }  // namespace algebra

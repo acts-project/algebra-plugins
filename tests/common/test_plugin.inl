@@ -190,9 +190,10 @@ TEST(ALGEBRA_PLUGIN, transform3) {
   ASSERT_NEAR(trnm[2], 4., epsilon);
 
   // Check a contruction from an array[16]
-  std::array<scalar, 16> matray_helper = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0};
+  std::array<scalar, 16> matray_helper = {1, 0, 0, 0, 0, 1, 0, 0,
+                                          0, 0, 1, 0, 0, 0, 0, 0};
   __plugin::storage_type<scalar, 16> matray;
-  for(int i = 0; i < 16; ++i) {
+  for (int i = 0; i < 16; ++i) {
     matray[i] = matray_helper[i];
   }
   transform3 trfma(matray);

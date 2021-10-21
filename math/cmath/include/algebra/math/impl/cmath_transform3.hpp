@@ -32,7 +32,7 @@ struct element_getter {
   }
 
   template<std::size_t ROWS, std::size_t COLS>
-  ALGEBRA_HOST_DEVICE inline scalar
+  ALGEBRA_HOST_DEVICE inline scalar_t
   operator()(const matrix_type<ROWS, COLS> &m, std::size_t row, std::size_t col) const {
 
     return m[col][row];

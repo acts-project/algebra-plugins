@@ -163,18 +163,6 @@ TEST(ALGEBRA_PLUGIN, transform3) {
   ASSERT_NEAR(transform3::element_getter()(rot, 1, 2), z[1], epsilon);
   ASSERT_NEAR(transform3::element_getter()(rot, 2, 2), z[2], epsilon);
 
-#ifndef __plugin_without_matrix_element_accessor
-  ASSERT_NEAR(rot(0, 0), x[0], epsilon);
-  ASSERT_NEAR(rot(1, 0), x[1], epsilon);
-  ASSERT_NEAR(rot(2, 0), x[2], epsilon);
-  ASSERT_NEAR(rot(0, 1), y[0], epsilon);
-  ASSERT_NEAR(rot(1, 1), y[1], epsilon);
-  ASSERT_NEAR(rot(2, 1), y[2], epsilon);
-  ASSERT_NEAR(rot(0, 2), z[0], epsilon);
-  ASSERT_NEAR(rot(1, 2), z[1], epsilon);
-  ASSERT_NEAR(rot(2, 2), z[2], epsilon);
-#endif
-
   auto trn = trf.translation();
   ASSERT_NEAR(trn[0], 2., epsilon);
   ASSERT_NEAR(trn[1], 3., epsilon);
@@ -195,18 +183,6 @@ TEST(ALGEBRA_PLUGIN, transform3) {
   ASSERT_NEAR(transform3::element_getter()(rotm, 0, 2), z[0], epsilon);
   ASSERT_NEAR(transform3::element_getter()(rotm, 1, 2), z[1], epsilon);
   ASSERT_NEAR(transform3::element_getter()(rotm, 2, 2), z[2], epsilon);
-
-#ifndef __plugin_without_matrix_element_accessor
-  ASSERT_NEAR(rotm(0, 0), x[0], epsilon);
-  ASSERT_NEAR(rotm(1, 0), x[1], epsilon);
-  ASSERT_NEAR(rotm(2, 0), x[2], epsilon);
-  ASSERT_NEAR(rotm(0, 1), y[0], epsilon);
-  ASSERT_NEAR(rotm(1, 1), y[1], epsilon);
-  ASSERT_NEAR(rotm(2, 1), y[2], epsilon);
-  ASSERT_NEAR(rotm(0, 2), z[0], epsilon);
-  ASSERT_NEAR(rotm(1, 2), z[1], epsilon);
-  ASSERT_NEAR(rotm(2, 2), z[2], epsilon);
-#endif
 
   auto trnm = trfm.translation();
   ASSERT_NEAR(trnm[0], 2., epsilon);
@@ -232,18 +208,6 @@ TEST(ALGEBRA_PLUGIN, transform3) {
   ASSERT_NEAR(transform3::element_getter()(rotma, 0, 2), 0., epsilon);
   ASSERT_NEAR(transform3::element_getter()(rotma, 1, 2), 0., epsilon);
   ASSERT_NEAR(transform3::element_getter()(rotma, 2, 2), 1., epsilon);
-
-#ifndef __plugin_without_matrix_element_accessor
-  ASSERT_NEAR(rotma(0, 0), 1., epsilon);
-  ASSERT_NEAR(rotma(1, 0), 0., epsilon);
-  ASSERT_NEAR(rotma(2, 0), 0., epsilon);
-  ASSERT_NEAR(rotma(0, 1), 0., epsilon);
-  ASSERT_NEAR(rotma(1, 1), 1., epsilon);
-  ASSERT_NEAR(rotma(2, 1), 0., epsilon);
-  ASSERT_NEAR(rotma(0, 2), 0., epsilon);
-  ASSERT_NEAR(rotma(1, 2), 0., epsilon);
-  ASSERT_NEAR(rotma(2, 2), 1., epsilon);
-#endif
 
   auto trnma = trfma.translation();
   ASSERT_NEAR(trnma[0], 0., epsilon);

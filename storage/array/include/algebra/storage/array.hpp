@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/common/scalar.hpp"
 
 // System include(s).
@@ -31,41 +30,4 @@ using point3 = vector3;
 using point2 = storage_type<scalar, 2>;
 
 }  // namespace array
-
-namespace getter {
-
-/** This method retrieves a column from a matrix
- *
- * @param m the input matrix
- **/
-template <unsigned int kROWS, typename matrix_type>
-ALGEBRA_HOST_DEVICE
-inline array::storage_type<scalar, kROWS> vector(const matrix_type &m, unsigned int row,
-                                                     unsigned int col) noexcept {
-
-  array::storage_type<scalar, kROWS> subvector;
-  for (unsigned int irow = row; irow < row + kROWS; ++irow) {
-    subvector[irow - row] = m[col][irow];
-  }
-  return subvector;
-}
-
-/** This method retrieves a column from a matrix
- *
- * @param m the input matrix
- **/
-template <unsigned int kROWS, unsigned int kCOLS, typename matrix_type>
-ALGEBRA_HOST_DEVICE inline array::storage_type<array::storage_type<scalar, kROWS>, kCOLS>
-block(const matrix_type &m, unsigned int row, unsigned int col) noexcept {
-
-  array::storage_type<array::storage_type<scalar, kROWS>, kCOLS> submatrix;
-  for (unsigned int icol = col; icol < col + kCOLS; ++icol) {
-    for (unsigned int irow = row; irow < row + kROWS; ++irow) {
-      submatrix[icol - col][irow - row] = m[icol][irow];
-    }
-  }
-  return submatrix;
-}
-
-}  // namespace getter
 }  // namespace algebra

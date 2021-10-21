@@ -1,9 +1,11 @@
-/** Algebra plugin library, part of the ACTS project
+/** Algebra plugins, part of the ACTS project
  *
  * (c) 2020 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
+
+#pragma once
 
 // Project include(s).
 #include "algebra/storage/array.hpp"
@@ -37,8 +39,3 @@ auto normalize = [](const auto& a) { return cmath::normalize<array::storage_type
 
 }  // namespace vector
 }  // namespace algebra
-
-// Test include(s).
-#define __plugin algebra::array
-#define __plugin_without_matrix_element_accessor 1
-#include "test_plugin.inl"

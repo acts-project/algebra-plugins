@@ -32,8 +32,6 @@ include( algebra-plugins-functions )
 # Flags controlling how the Algebra Plugins code should behave.
 set( ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE "double" CACHE STRING
    "Scalar type to use in Algebra Plugins" )
-option( ALGEBRA_PLUGIN_INCLUDE_ARRAY
-   "Include std::array types in Algebra Plugins" TRUE )
 option( ALGEBRA_PLUGIN_INCLUDE_EIGEN
    "Include Eigen types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGIN_INCLUDE_SMATRIX
@@ -116,21 +114,9 @@ endif()
 
 # Set up the Algebra Plugin libraries.
 add_subdirectory( common )
-if( ALGEBRA_PLUGIN_INCLUDE_ARRAY )
-   add_subdirectory( array )
-endif()
-if( ALGEBRA_PLUGIN_INCLUDE_EIGEN )
-   add_subdirectory( eigen )
-endif()
-if( ALGEBRA_PLUGIN_INCLUDE_SMATRIX )
-   add_subdirectory( smatrix )
-endif()
-if( ALGEBRA_PLUGIN_INCLUDE_VC )
-   add_subdirectory( vc_array )
-endif()
-if( ALGEBRA_PLUGIN_INCLUDE_VECMEM )
-   add_subdirectory( vecmem_array )
-endif()
+add_subdirectory( storage )
+add_subdirectory( math )
+add_subdirectory( frontend )
 
 # Set up the test(s).
 include( CTest )

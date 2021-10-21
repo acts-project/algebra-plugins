@@ -98,8 +98,13 @@ struct transform3 {
 
   /// @}
 
+  /// @name Data objects
+  /// @{
+
   matrix44 _data;
   matrix44 _data_inv;
+
+  /// @}
 
   /** Contructor with arguments: t, z, x
    *

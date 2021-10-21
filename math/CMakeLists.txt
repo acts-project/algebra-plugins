@@ -6,3 +6,6 @@
 
 # Set up all enabled libraries.
 add_subdirectory( cmath )
+if( ALGEBRA_PLUGIN_INCLUDE_EIGEN )
+   add_subdirectory( eigen )
+endif()

@@ -8,6 +8,7 @@
 add_subdirectory( array_cmath )
 if( ALGEBRA_PLUGIN_INCLUDE_EIGEN )
    add_subdirectory( eigen_cmath )
+   add_subdirectory( eigen_eigen )
 endif()
 if( ALGEBRA_PLUGIN_INCLUDE_SMATRIX )
    add_subdirectory( smatrix_cmath )

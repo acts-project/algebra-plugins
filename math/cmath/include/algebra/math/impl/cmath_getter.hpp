@@ -15,8 +15,7 @@
 #include <cstddef>
 #include <type_traits>
 
-namespace algebra {
-namespace cmath {
+namespace algebra::cmath {
 
 /** This method retrieves phi from a vector, vector base with rows >= 2
  *
@@ -85,5 +84,4 @@ ALGEBRA_HOST_DEVICE inline scalar_t eta(
   return std::atanh(v[2] / norm<array_t>(v));
 }
 
-}  // namespace cmath
-}  // namespace algebra
+}  // namespace algebra::cmath

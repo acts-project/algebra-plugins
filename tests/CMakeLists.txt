@@ -20,6 +20,9 @@ if( ALGEBRA_PLUGIN_INCLUDE_EIGEN )
    algebra_add_test( eigen_cmath "eigen/eigen_cmath.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                      algebra::eigen_cmath )
+   algebra_add_test( eigen_eigen "eigen/eigen_eigen.cpp"
+      LINK_LIBRARIES GTest::gtest_main algebra::tests_common
+                     algebra::eigen_eigen )
 endif()
 
 if( ALGEBRA_PLUGIN_INCLUDE_SMATRIX )

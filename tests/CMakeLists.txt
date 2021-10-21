@@ -6,9 +6,7 @@
 
 # Add all the (appropriate) subdirectories.
 add_subdirectory( common )
-if( ALGEBRA_PLUGIN_INCLUDE_ARRAY )
-   add_subdirectory( array )
-endif()
+add_subdirectory( array )
 if( ALGEBRA_PLUGIN_INCLUDE_EIGEN )
    add_subdirectory( eigen )
 endif()

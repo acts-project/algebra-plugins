@@ -16,10 +16,59 @@
 namespace algebra {
 namespace cmath {
 
+namespace internal {
+
+template<template <typename, std::size_t> class array_t, typename scalar_t>
+struct element_getter {
+
+  template<std::size_t ROWS, std::size_t COLS>
+  using matrix_type = array_t<array_t<scalar_t, ROWS>, COLS>;
+
+  template<std::size_t ROWS, std::size_t COLS>
+  ALGEBRA_HOST_DEVICE inline scalar_t&
+  operator()(matrix_type<ROWS, COLS> &m, std::size_t row, std::size_t col) const {
+
+    return m[col][row];
+  }
+
+  template<std::size_t ROWS, std::size_t COLS>
+  ALGEBRA_HOST_DEVICE inline scalar
+  operator()(const matrix_type<ROWS, COLS> &m, std::size_t row, std::size_t col) const {
+
+    return m[col][row];
+  }
+};
+
+template<template <typename, std::size_t> class array_t, typename scalar_t>
+struct block_getter {
+
+  template<std::size_t ROWS, std::size_t COLS>
+  using matrix_type = array_t<array_t<scalar_t, ROWS>, COLS>;
+
+  template <std::size_t ROWS, std::size_t COLS, class input_matrix_type>
+  ALGEBRA_HOST_DEVICE
+  matrix_type<ROWS, COLS> operator()(const input_matrix_type &m,
+                                     std::size_t row, std::size_t col) const {
+
+    matrix_type< ROWS, COLS> submatrix;
+    for (std::size_t icol = col; icol < col + COLS; ++icol) {
+      for (std::size_t irow = row; irow < row + ROWS; ++irow) {
+        submatrix[icol - col][irow - row] = m[icol][irow];
+      }
+    }
+    return submatrix;
+  }
+};  // struct block_getter
+
+}  // namespace internal
+
+
 /** Transform wrapper class to ensure standard API within differnt plugins
  **/
-template<template <typename,std::size_t> class array_t,
-         typename scalar_t>
+template<template <typename, std::size_t> class array_t, typename scalar_t,
+         typename matrix44_t = array_t<array_t<scalar_t, 4>, 4>,
+         class element_getter_t = internal::element_getter<array_t, scalar_t>,
+         class block_getter_t = internal::block_getter<array_t, scalar_t> >
 struct transform3 {
 
   /// @name Type definitions for the struct
@@ -39,7 +88,12 @@ struct transform3 {
   using point2 = array_type<scalar_type, 2>;
 
   /// 4x4 matrix type
-  using matrix44 = array_type<array_type<scalar_type, 4>, 4>;
+  using matrix44 = matrix44_t;
+
+  /// Function (object) used for accessing a matrix element
+  using element_getter = element_getter_t;
+  /// Function (object) used for accessing a sub-matrix of a matrix
+  using block_getter = block_getter_t;
 
   /// @}
 
@@ -58,23 +112,23 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &z, const vector3 &x) {
 
-    auto y = vector::cross(z, x);
-    _data[0][0] = x[0];
-    _data[0][1] = x[1];
-    _data[0][2] = x[2];
-    _data[0][3] = 0.;
-    _data[1][0] = y[0];
-    _data[1][1] = y[1];
-    _data[1][2] = y[2];
-    _data[1][3] = 0.;
-    _data[2][0] = z[0];
-    _data[2][1] = z[1];
-    _data[2][2] = z[2];
-    _data[2][3] = 0.;
-    _data[3][0] = t[0];
-    _data[3][1] = t[1];
-    _data[3][2] = t[2];
-    _data[3][3] = 1.;
+    auto y = cross<array_type>(z, x);
+    element_getter()(_data, 0, 0) = x[0];
+    element_getter()(_data, 1, 0) = x[1];
+    element_getter()(_data, 2, 0) = x[2];
+    element_getter()(_data, 3, 0) = 0.;
+    element_getter()(_data, 0, 1) = y[0];
+    element_getter()(_data, 1, 1) = y[1];
+    element_getter()(_data, 2, 1) = y[2];
+    element_getter()(_data, 3, 1) = 0.;
+    element_getter()(_data, 0, 2) = z[0];
+    element_getter()(_data, 1, 2) = z[1];
+    element_getter()(_data, 2, 2) = z[2];
+    element_getter()(_data, 3, 2) = 0.;
+    element_getter()(_data, 0, 3) = t[0];
+    element_getter()(_data, 1, 3) = t[1];
+    element_getter()(_data, 2, 3) = t[2];
+    element_getter()(_data, 3, 3) = 1.;
 
     _data_inv = invert(_data);
   }
@@ -86,22 +140,22 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t) {
 
-    _data[0][0] = 1.;
-    _data[0][1] = 0.;
-    _data[0][2] = 0.;
-    _data[0][3] = 0.;
-    _data[1][0] = 0.;
-    _data[1][1] = 1.;
-    _data[1][2] = 0.;
-    _data[1][3] = 0.;
-    _data[2][0] = 0.;
-    _data[2][1] = 0.;
-    _data[2][2] = 1.;
-    _data[2][3] = 0.;
-    _data[3][0] = t[0];
-    _data[3][1] = t[1];
-    _data[3][2] = t[2];
-    _data[3][3] = 1.;
+    element_getter()(_data, 0, 0) = 1.;
+    element_getter()(_data, 1, 0) = 0.;
+    element_getter()(_data, 2, 0) = 0.;
+    element_getter()(_data, 3, 0) = 0.;
+    element_getter()(_data, 0, 1) = 0.;
+    element_getter()(_data, 1, 1) = 1.;
+    element_getter()(_data, 2, 1) = 0.;
+    element_getter()(_data, 3, 1) = 0.;
+    element_getter()(_data, 0, 2) = 0.;
+    element_getter()(_data, 1, 2) = 0.;
+    element_getter()(_data, 2, 2) = 1.;
+    element_getter()(_data, 3, 2) = 0.;
+    element_getter()(_data, 0, 3) = t[0];
+    element_getter()(_data, 1, 3) = t[1];
+    element_getter()(_data, 2, 3) = t[2];
+    element_getter()(_data, 3, 3) = 1.;
 
     _data_inv = invert(_data);
   }
@@ -111,7 +165,11 @@ struct transform3 {
    * @param m is the full 4x4 matrix
    **/
   ALGEBRA_HOST_DEVICE
-  transform3(const matrix44 &m) { _data = m; }
+  transform3(const matrix44 &m) {
+
+    _data = m;
+    _data_inv = invert(_data);
+  }
 
   /** Constructor with arguments: matrix as std::aray of scalar
    *
@@ -120,22 +178,22 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const array_type<scalar, 16> &ma) {
 
-    _data[0][0] = ma[0];
-    _data[0][1] = ma[4];
-    _data[0][2] = ma[8];
-    _data[0][3] = ma[12];
-    _data[1][0] = ma[1];
-    _data[1][1] = ma[5];
-    _data[1][2] = ma[9];
-    _data[1][3] = ma[13];
-    _data[2][0] = ma[2];
-    _data[2][1] = ma[6];
-    _data[2][2] = ma[10];
-    _data[2][3] = ma[14];
-    _data[3][0] = ma[3];
-    _data[3][1] = ma[7];
-    _data[3][2] = ma[11];
-    _data[3][3] = ma[15];
+    element_getter()(_data, 0, 0) = ma[0];
+    element_getter()(_data, 1, 0) = ma[4];
+    element_getter()(_data, 2, 0) = ma[8];
+    element_getter()(_data, 3, 0) = ma[12];
+    element_getter()(_data, 0, 1) = ma[1];
+    element_getter()(_data, 1, 1) = ma[5];
+    element_getter()(_data, 2, 1) = ma[9];
+    element_getter()(_data, 3, 1) = ma[13];
+    element_getter()(_data, 0, 2) = ma[2];
+    element_getter()(_data, 1, 2) = ma[6];
+    element_getter()(_data, 2, 2) = ma[10];
+    element_getter()(_data, 3, 2) = ma[14];
+    element_getter()(_data, 0, 3) = ma[3];
+    element_getter()(_data, 1, 3) = ma[7];
+    element_getter()(_data, 2, 3) = ma[11];
+    element_getter()(_data, 3, 3) = ma[15];
 
     _data_inv = invert(_data);
   }
@@ -146,22 +204,22 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3() {
 
-    _data[0][0] = 1.;
-    _data[0][1] = 0.;
-    _data[0][2] = 0.;
-    _data[0][3] = 0.;
-    _data[1][0] = 0.;
-    _data[1][1] = 1.;
-    _data[1][2] = 0.;
-    _data[1][3] = 0.;
-    _data[2][0] = 0.;
-    _data[2][1] = 0.;
-    _data[2][2] = 1.;
-    _data[2][3] = 0.;
-    _data[3][0] = 0.;
-    _data[3][1] = 0.;
-    _data[3][2] = 0.;
-    _data[3][3] = 1.;
+    element_getter()(_data, 0, 0) = 1.;
+    element_getter()(_data, 0, 1) = 0.;
+    element_getter()(_data, 0, 2) = 0.;
+    element_getter()(_data, 0, 3) = 0.;
+    element_getter()(_data, 1, 0) = 0.;
+    element_getter()(_data, 1, 1) = 1.;
+    element_getter()(_data, 1, 2) = 0.;
+    element_getter()(_data, 1, 3) = 0.;
+    element_getter()(_data, 2, 0) = 0.;
+    element_getter()(_data, 2, 1) = 0.;
+    element_getter()(_data, 2, 2) = 1.;
+    element_getter()(_data, 2, 3) = 0.;
+    element_getter()(_data, 3, 0) = 0.;
+    element_getter()(_data, 3, 1) = 0.;
+    element_getter()(_data, 3, 2) = 0.;
+    element_getter()(_data, 3, 3) = 1.;
 
     _data_inv = _data;
   }
@@ -175,7 +233,7 @@ struct transform3 {
 
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
-        if (_data[i][j] != rhs._data[i][j]) {
+        if (element_getter()(_data, i, j) != element_getter()(rhs._data, i, j)) {
           return false;
         }
       }
@@ -193,30 +251,30 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   static inline scalar determinant(const matrix44 &m) {
 
-    return m[3][0] * m[2][1] * m[1][2] * m[0][3] -
-           m[2][0] * m[3][1] * m[1][2] * m[0][3] -
-           m[3][0] * m[1][1] * m[2][2] * m[0][3] +
-           m[1][0] * m[3][1] * m[2][2] * m[0][3] +
-           m[2][0] * m[1][1] * m[3][2] * m[0][3] -
-           m[1][0] * m[2][1] * m[3][2] * m[0][3] -
-           m[3][0] * m[2][1] * m[0][2] * m[1][3] +
-           m[2][0] * m[3][1] * m[0][2] * m[1][3] +
-           m[3][0] * m[0][1] * m[2][2] * m[1][3] -
-           m[0][0] * m[3][1] * m[2][2] * m[1][3] -
-           m[2][0] * m[0][1] * m[3][2] * m[1][3] +
-           m[0][0] * m[2][1] * m[3][2] * m[1][3] +
-           m[3][0] * m[1][1] * m[0][2] * m[2][3] -
-           m[1][0] * m[3][1] * m[0][2] * m[2][3] -
-           m[3][0] * m[0][1] * m[1][2] * m[2][3] +
-           m[0][0] * m[3][1] * m[1][2] * m[2][3] +
-           m[1][0] * m[0][1] * m[3][2] * m[2][3] -
-           m[0][0] * m[1][1] * m[3][2] * m[2][3] -
-           m[2][0] * m[1][1] * m[0][2] * m[3][3] +
-           m[1][0] * m[2][1] * m[0][2] * m[3][3] +
-           m[2][0] * m[0][1] * m[1][2] * m[3][3] -
-           m[0][0] * m[2][1] * m[1][2] * m[3][3] -
-           m[1][0] * m[0][1] * m[2][2] * m[3][3] +
-           m[0][0] * m[1][1] * m[2][2] * m[3][3];
+    return element_getter()(m, 0, 3) * element_getter()(m, 1, 2) * element_getter()(m, 2, 1) * element_getter()(m, 3, 0) -
+           element_getter()(m, 0, 2) * element_getter()(m, 1, 3) * element_getter()(m, 2, 1) * element_getter()(m, 3, 0) -
+           element_getter()(m, 0, 3) * element_getter()(m, 1, 1) * element_getter()(m, 2, 2) * element_getter()(m, 3, 0) +
+           element_getter()(m, 0, 1) * element_getter()(m, 1, 3) * element_getter()(m, 2, 2) * element_getter()(m, 3, 0) +
+           element_getter()(m, 0, 2) * element_getter()(m, 1, 1) * element_getter()(m, 2, 3) * element_getter()(m, 3, 0) -
+           element_getter()(m, 0, 1) * element_getter()(m, 1, 2) * element_getter()(m, 2, 3) * element_getter()(m, 3, 0) -
+           element_getter()(m, 0, 3) * element_getter()(m, 1, 2) * element_getter()(m, 2, 0) * element_getter()(m, 3, 1) +
+           element_getter()(m, 0, 2) * element_getter()(m, 1, 3) * element_getter()(m, 2, 0) * element_getter()(m, 3, 1) +
+           element_getter()(m, 0, 3) * element_getter()(m, 1, 0) * element_getter()(m, 2, 2) * element_getter()(m, 3, 1) -
+           element_getter()(m, 0, 0) * element_getter()(m, 1, 3) * element_getter()(m, 2, 2) * element_getter()(m, 3, 1) -
+           element_getter()(m, 0, 2) * element_getter()(m, 1, 0) * element_getter()(m, 2, 3) * element_getter()(m, 3, 1) +
+           element_getter()(m, 0, 0) * element_getter()(m, 1, 2) * element_getter()(m, 2, 3) * element_getter()(m, 3, 1) +
+           element_getter()(m, 0, 3) * element_getter()(m, 1, 1) * element_getter()(m, 2, 0) * element_getter()(m, 3, 2) -
+           element_getter()(m, 0, 1) * element_getter()(m, 1, 3) * element_getter()(m, 2, 0) * element_getter()(m, 3, 2) -
+           element_getter()(m, 0, 3) * element_getter()(m, 1, 0) * element_getter()(m, 2, 1) * element_getter()(m, 3, 2) +
+           element_getter()(m, 0, 0) * element_getter()(m, 1, 3) * element_getter()(m, 2, 1) * element_getter()(m, 3, 2) +
+           element_getter()(m, 0, 1) * element_getter()(m, 1, 0) * element_getter()(m, 2, 3) * element_getter()(m, 3, 2) -
+           element_getter()(m, 0, 0) * element_getter()(m, 1, 1) * element_getter()(m, 2, 3) * element_getter()(m, 3, 2) -
+           element_getter()(m, 0, 2) * element_getter()(m, 1, 1) * element_getter()(m, 2, 0) * element_getter()(m, 3, 3) +
+           element_getter()(m, 0, 1) * element_getter()(m, 1, 2) * element_getter()(m, 2, 0) * element_getter()(m, 3, 3) +
+           element_getter()(m, 0, 2) * element_getter()(m, 1, 0) * element_getter()(m, 2, 1) * element_getter()(m, 3, 3) -
+           element_getter()(m, 0, 0) * element_getter()(m, 1, 2) * element_getter()(m, 2, 1) * element_getter()(m, 3, 3) -
+           element_getter()(m, 0, 1) * element_getter()(m, 1, 0) * element_getter()(m, 2, 2) * element_getter()(m, 3, 3) +
+           element_getter()(m, 0, 0) * element_getter()(m, 1, 1) * element_getter()(m, 2, 2) * element_getter()(m, 3, 3);
   }
 
   /** The inverse of a 4x4 matrix
@@ -229,58 +287,58 @@ struct transform3 {
   static inline matrix44 invert(const matrix44 &m) {
 
     matrix44 i;
-    i[0][0] = m[2][1] * m[3][2] * m[1][3] - m[3][1] * m[2][2] * m[1][3] +
-              m[3][1] * m[1][2] * m[2][3] - m[1][1] * m[3][2] * m[2][3] -
-              m[2][1] * m[1][2] * m[3][3] + m[1][1] * m[2][2] * m[3][3];
-    i[1][0] = m[3][0] * m[2][2] * m[1][3] - m[2][0] * m[3][2] * m[1][3] -
-              m[3][0] * m[1][2] * m[2][3] + m[1][0] * m[3][2] * m[2][3] +
-              m[2][0] * m[1][2] * m[3][3] - m[1][0] * m[2][2] * m[3][3];
-    i[2][0] = m[2][0] * m[3][1] * m[1][3] - m[3][0] * m[2][1] * m[1][3] +
-              m[3][0] * m[1][1] * m[2][3] - m[1][0] * m[3][1] * m[2][3] -
-              m[2][0] * m[1][1] * m[3][3] + m[1][0] * m[2][1] * m[3][3];
-    i[3][0] = m[3][0] * m[2][1] * m[1][2] - m[2][0] * m[3][1] * m[1][2] -
-              m[3][0] * m[1][1] * m[2][2] + m[1][0] * m[3][1] * m[2][2] +
-              m[2][0] * m[1][1] * m[3][2] - m[1][0] * m[2][1] * m[3][2];
-    i[0][1] = m[3][1] * m[2][2] * m[0][3] - m[2][1] * m[3][2] * m[0][3] -
-              m[3][1] * m[0][2] * m[2][3] + m[0][1] * m[3][2] * m[2][3] +
-              m[2][1] * m[0][2] * m[3][3] - m[0][1] * m[2][2] * m[3][3];
-    i[1][1] = m[2][0] * m[3][2] * m[0][3] - m[3][0] * m[2][2] * m[0][3] +
-              m[3][0] * m[0][2] * m[2][3] - m[0][0] * m[3][2] * m[2][3] -
-              m[2][0] * m[0][2] * m[3][3] + m[0][0] * m[2][2] * m[3][3];
-    i[2][1] = m[3][0] * m[2][1] * m[0][3] - m[2][0] * m[3][1] * m[0][3] -
-              m[3][0] * m[0][1] * m[2][3] + m[0][0] * m[3][1] * m[2][3] +
-              m[2][0] * m[0][1] * m[3][3] - m[0][0] * m[2][1] * m[3][3];
-    i[3][1] = m[2][0] * m[3][1] * m[0][2] - m[3][0] * m[2][1] * m[0][2] +
-              m[3][0] * m[0][1] * m[2][2] - m[0][0] * m[3][1] * m[2][2] -
-              m[2][0] * m[0][1] * m[3][2] + m[0][0] * m[2][1] * m[3][2];
-    i[0][2] = m[1][1] * m[3][2] * m[0][3] - m[3][1] * m[1][2] * m[0][3] +
-              m[3][1] * m[0][2] * m[1][3] - m[0][1] * m[3][2] * m[1][3] -
-              m[1][1] * m[0][2] * m[3][3] + m[0][1] * m[1][2] * m[3][3];
-    i[1][2] = m[3][0] * m[1][2] * m[0][3] - m[1][0] * m[3][2] * m[0][3] -
-              m[3][0] * m[0][2] * m[1][3] + m[0][0] * m[3][2] * m[1][3] +
-              m[1][0] * m[0][2] * m[3][3] - m[0][0] * m[1][2] * m[3][3];
-    i[2][2] = m[1][0] * m[3][1] * m[0][3] - m[3][0] * m[1][1] * m[0][3] +
-              m[3][0] * m[0][1] * m[1][3] - m[0][0] * m[3][1] * m[1][3] -
-              m[1][0] * m[0][1] * m[3][3] + m[0][0] * m[1][1] * m[3][3];
-    i[3][2] = m[3][0] * m[1][1] * m[0][2] - m[1][0] * m[3][1] * m[0][2] -
-              m[3][0] * m[0][1] * m[1][2] + m[0][0] * m[3][1] * m[1][2] +
-              m[1][0] * m[0][1] * m[3][2] - m[0][0] * m[1][1] * m[3][2];
-    i[0][3] = m[2][1] * m[1][2] * m[0][3] - m[1][1] * m[2][2] * m[0][3] -
-              m[2][1] * m[0][2] * m[1][3] + m[0][1] * m[2][2] * m[1][3] +
-              m[1][1] * m[0][2] * m[2][3] - m[0][1] * m[1][2] * m[2][3];
-    i[1][3] = m[1][0] * m[2][2] * m[0][3] - m[2][0] * m[1][2] * m[0][3] +
-              m[2][0] * m[0][2] * m[1][3] - m[0][0] * m[2][2] * m[1][3] -
-              m[1][0] * m[0][2] * m[2][3] + m[0][0] * m[1][2] * m[2][3];
-    i[2][3] = m[2][0] * m[1][1] * m[0][3] - m[1][0] * m[2][1] * m[0][3] -
-              m[2][0] * m[0][1] * m[1][3] + m[0][0] * m[2][1] * m[1][3] +
-              m[1][0] * m[0][1] * m[2][3] - m[0][0] * m[1][1] * m[2][3];
-    i[3][3] = m[1][0] * m[2][1] * m[0][2] - m[2][0] * m[1][1] * m[0][2] +
-              m[2][0] * m[0][1] * m[1][2] - m[0][0] * m[2][1] * m[1][2] -
-              m[1][0] * m[0][1] * m[2][2] + m[0][0] * m[1][1] * m[2][2];
+    element_getter()(i, 0, 0) = element_getter()(m, 1, 2) * element_getter()(m, 2, 3) * element_getter()(m, 3, 1) - element_getter()(m, 1, 3) * element_getter()(m, 2, 2) * element_getter()(m, 3, 1) +
+              element_getter()(m, 1, 3) * element_getter()(m, 2, 1) * element_getter()(m, 3, 2) - element_getter()(m, 1, 1) * element_getter()(m, 2, 3) * element_getter()(m, 3, 2) -
+              element_getter()(m, 1, 2) * element_getter()(m, 2, 1) * element_getter()(m, 3, 3) + element_getter()(m, 1, 1) * element_getter()(m, 2, 2) * element_getter()(m, 3, 3);
+    element_getter()(i, 0, 1) = element_getter()(m, 0, 3) * element_getter()(m, 2, 2) * element_getter()(m, 3, 1) - element_getter()(m, 0, 2) * element_getter()(m, 2, 3) * element_getter()(m, 3, 1) -
+              element_getter()(m, 0, 3) * element_getter()(m, 2, 1) * element_getter()(m, 3, 2) + element_getter()(m, 0, 1) * element_getter()(m, 2, 3) * element_getter()(m, 3, 2) +
+              element_getter()(m, 0, 2) * element_getter()(m, 2, 1) * element_getter()(m, 3, 3) - element_getter()(m, 0, 1) * element_getter()(m, 2, 2) * element_getter()(m, 3, 3);
+    element_getter()(i, 0, 2) = element_getter()(m, 0, 2) * element_getter()(m, 1, 3) * element_getter()(m, 3, 1) - element_getter()(m, 0, 3) * element_getter()(m, 1, 2) * element_getter()(m, 3, 1) +
+              element_getter()(m, 0, 3) * element_getter()(m, 1, 1) * element_getter()(m, 3, 2) - element_getter()(m, 0, 1) * element_getter()(m, 1, 3) * element_getter()(m, 3, 2) -
+              element_getter()(m, 0, 2) * element_getter()(m, 1, 1) * element_getter()(m, 3, 3) + element_getter()(m, 0, 1) * element_getter()(m, 1, 2) * element_getter()(m, 3, 3);
+    element_getter()(i, 0, 3) = element_getter()(m, 0, 3) * element_getter()(m, 1, 2) * element_getter()(m, 2, 1) - element_getter()(m, 0, 2) * element_getter()(m, 1, 3) * element_getter()(m, 2, 1) -
+              element_getter()(m, 0, 3) * element_getter()(m, 1, 1) * element_getter()(m, 2, 2) + element_getter()(m, 0, 1) * element_getter()(m, 1, 3) * element_getter()(m, 2, 2) +
+              element_getter()(m, 0, 2) * element_getter()(m, 1, 1) * element_getter()(m, 2, 3) - element_getter()(m, 0, 1) * element_getter()(m, 1, 2) * element_getter()(m, 2, 3);
+    element_getter()(i, 1, 0) = element_getter()(m, 1, 3) * element_getter()(m, 2, 2) * element_getter()(m, 3, 0) - element_getter()(m, 1, 2) * element_getter()(m, 2, 3) * element_getter()(m, 3, 0) -
+              element_getter()(m, 1, 3) * element_getter()(m, 2, 0) * element_getter()(m, 3, 2) + element_getter()(m, 1, 0) * element_getter()(m, 2, 3) * element_getter()(m, 3, 2) +
+              element_getter()(m, 1, 2) * element_getter()(m, 2, 0) * element_getter()(m, 3, 3) - element_getter()(m, 1, 0) * element_getter()(m, 2, 2) * element_getter()(m, 3, 3);
+    element_getter()(i, 1, 1) = element_getter()(m, 0, 2) * element_getter()(m, 2, 3) * element_getter()(m, 3, 0) - element_getter()(m, 0, 3) * element_getter()(m, 2, 2) * element_getter()(m, 3, 0) +
+              element_getter()(m, 0, 3) * element_getter()(m, 2, 0) * element_getter()(m, 3, 2) - element_getter()(m, 0, 0) * element_getter()(m, 2, 3) * element_getter()(m, 3, 2) -
+              element_getter()(m, 0, 2) * element_getter()(m, 2, 0) * element_getter()(m, 3, 3) + element_getter()(m, 0, 0) * element_getter()(m, 2, 2) * element_getter()(m, 3, 3);
+    element_getter()(i, 1, 2) = element_getter()(m, 0, 3) * element_getter()(m, 1, 2) * element_getter()(m, 3, 0) - element_getter()(m, 0, 2) * element_getter()(m, 1, 3) * element_getter()(m, 3, 0) -
+              element_getter()(m, 0, 3) * element_getter()(m, 1, 0) * element_getter()(m, 3, 2) + element_getter()(m, 0, 0) * element_getter()(m, 1, 3) * element_getter()(m, 3, 2) +
+              element_getter()(m, 0, 2) * element_getter()(m, 1, 0) * element_getter()(m, 3, 3) - element_getter()(m, 0, 0) * element_getter()(m, 1, 2) * element_getter()(m, 3, 3);
+    element_getter()(i, 1, 3) = element_getter()(m, 0, 2) * element_getter()(m, 1, 3) * element_getter()(m, 2, 0) - element_getter()(m, 0, 3) * element_getter()(m, 1, 2) * element_getter()(m, 2, 0) +
+              element_getter()(m, 0, 3) * element_getter()(m, 1, 0) * element_getter()(m, 2, 2) - element_getter()(m, 0, 0) * element_getter()(m, 1, 3) * element_getter()(m, 2, 2) -
+              element_getter()(m, 0, 2) * element_getter()(m, 1, 0) * element_getter()(m, 2, 3) + element_getter()(m, 0, 0) * element_getter()(m, 1, 2) * element_getter()(m, 2, 3);
+    element_getter()(i, 2, 0) = element_getter()(m, 1, 1) * element_getter()(m, 2, 3) * element_getter()(m, 3, 0) - element_getter()(m, 1, 3) * element_getter()(m, 2, 1) * element_getter()(m, 3, 0) +
+              element_getter()(m, 1, 3) * element_getter()(m, 2, 0) * element_getter()(m, 3, 1) - element_getter()(m, 1, 0) * element_getter()(m, 2, 3) * element_getter()(m, 3, 1) -
+              element_getter()(m, 1, 1) * element_getter()(m, 2, 0) * element_getter()(m, 3, 3) + element_getter()(m, 1, 0) * element_getter()(m, 2, 1) * element_getter()(m, 3, 3);
+    element_getter()(i, 2, 1) = element_getter()(m, 0, 3) * element_getter()(m, 2, 1) * element_getter()(m, 3, 0) - element_getter()(m, 0, 1) * element_getter()(m, 2, 3) * element_getter()(m, 3, 0) -
+              element_getter()(m, 0, 3) * element_getter()(m, 2, 0) * element_getter()(m, 3, 1) + element_getter()(m, 0, 0) * element_getter()(m, 2, 3) * element_getter()(m, 3, 1) +
+              element_getter()(m, 0, 1) * element_getter()(m, 2, 0) * element_getter()(m, 3, 3) - element_getter()(m, 0, 0) * element_getter()(m, 2, 1) * element_getter()(m, 3, 3);
+    element_getter()(i, 2, 2) = element_getter()(m, 0, 1) * element_getter()(m, 1, 3) * element_getter()(m, 3, 0) - element_getter()(m, 0, 3) * element_getter()(m, 1, 1) * element_getter()(m, 3, 0) +
+              element_getter()(m, 0, 3) * element_getter()(m, 1, 0) * element_getter()(m, 3, 1) - element_getter()(m, 0, 0) * element_getter()(m, 1, 3) * element_getter()(m, 3, 1) -
+              element_getter()(m, 0, 1) * element_getter()(m, 1, 0) * element_getter()(m, 3, 3) + element_getter()(m, 0, 0) * element_getter()(m, 1, 1) * element_getter()(m, 3, 3);
+    element_getter()(i, 2, 3) = element_getter()(m, 0, 3) * element_getter()(m, 1, 1) * element_getter()(m, 2, 0) - element_getter()(m, 0, 1) * element_getter()(m, 1, 3) * element_getter()(m, 2, 0) -
+              element_getter()(m, 0, 3) * element_getter()(m, 1, 0) * element_getter()(m, 2, 1) + element_getter()(m, 0, 0) * element_getter()(m, 1, 3) * element_getter()(m, 2, 1) +
+              element_getter()(m, 0, 1) * element_getter()(m, 1, 0) * element_getter()(m, 2, 3) - element_getter()(m, 0, 0) * element_getter()(m, 1, 1) * element_getter()(m, 2, 3);
+    element_getter()(i, 3, 0) = element_getter()(m, 1, 2) * element_getter()(m, 2, 1) * element_getter()(m, 3, 0) - element_getter()(m, 1, 1) * element_getter()(m, 2, 2) * element_getter()(m, 3, 0) -
+              element_getter()(m, 1, 2) * element_getter()(m, 2, 0) * element_getter()(m, 3, 1) + element_getter()(m, 1, 0) * element_getter()(m, 2, 2) * element_getter()(m, 3, 1) +
+              element_getter()(m, 1, 1) * element_getter()(m, 2, 0) * element_getter()(m, 3, 2) - element_getter()(m, 1, 0) * element_getter()(m, 2, 1) * element_getter()(m, 3, 2);
+    element_getter()(i, 3, 1) = element_getter()(m, 0, 1) * element_getter()(m, 2, 2) * element_getter()(m, 3, 0) - element_getter()(m, 0, 2) * element_getter()(m, 2, 1) * element_getter()(m, 3, 0) +
+              element_getter()(m, 0, 2) * element_getter()(m, 2, 0) * element_getter()(m, 3, 1) - element_getter()(m, 0, 0) * element_getter()(m, 2, 2) * element_getter()(m, 3, 1) -
+              element_getter()(m, 0, 1) * element_getter()(m, 2, 0) * element_getter()(m, 3, 2) + element_getter()(m, 0, 0) * element_getter()(m, 2, 1) * element_getter()(m, 3, 2);
+    element_getter()(i, 3, 2) = element_getter()(m, 0, 2) * element_getter()(m, 1, 1) * element_getter()(m, 3, 0) - element_getter()(m, 0, 1) * element_getter()(m, 1, 2) * element_getter()(m, 3, 0) -
+              element_getter()(m, 0, 2) * element_getter()(m, 1, 0) * element_getter()(m, 3, 1) + element_getter()(m, 0, 0) * element_getter()(m, 1, 2) * element_getter()(m, 3, 1) +
+              element_getter()(m, 0, 1) * element_getter()(m, 1, 0) * element_getter()(m, 3, 2) - element_getter()(m, 0, 0) * element_getter()(m, 1, 1) * element_getter()(m, 3, 2);
+    element_getter()(i, 3, 3) = element_getter()(m, 0, 1) * element_getter()(m, 1, 2) * element_getter()(m, 2, 0) - element_getter()(m, 0, 2) * element_getter()(m, 1, 1) * element_getter()(m, 2, 0) +
+              element_getter()(m, 0, 2) * element_getter()(m, 1, 0) * element_getter()(m, 2, 1) - element_getter()(m, 0, 0) * element_getter()(m, 1, 2) * element_getter()(m, 2, 1) -
+              element_getter()(m, 0, 1) * element_getter()(m, 1, 0) * element_getter()(m, 2, 2) + element_getter()(m, 0, 0) * element_getter()(m, 1, 1) * element_getter()(m, 2, 2);
     scalar idet = 1. / determinant(i);
     for (unsigned int c = 0; c < 4; ++c) {
       for (unsigned int r = 0; r < 4; ++r) {
-        i[c][r] *= idet;
+        element_getter()(i, c, r) *= idet;
       }
     }
     return i;
@@ -294,19 +352,19 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   static inline vector3 rotate(const matrix44 &m, const vector3 &v) {
 
-    return vector3{m[0][0] * v[0] + m[1][0] * v[1] + m[2][0] * v[2],
-                   m[0][1] * v[0] + m[1][1] * v[1] + m[2][1] * v[2],
-                   m[0][2] * v[0] + m[1][2] * v[1] + m[2][2] * v[2]};
+    return vector3{element_getter()(m, 0, 0) * v[0] + element_getter()(m, 0, 1) * v[1] + element_getter()(m, 0, 2) * v[2],
+                   element_getter()(m, 1, 0) * v[0] + element_getter()(m, 1, 1) * v[1] + element_getter()(m, 1, 2) * v[2],
+                   element_getter()(m, 2, 0) * v[0] + element_getter()(m, 2, 1) * v[1] + element_getter()(m, 2, 2) * v[2]};
   }
 
   /** This method retrieves the rotation of a transform */
   ALGEBRA_HOST_DEVICE
-  auto inline rotation() const { return getter::block<3, 3>(_data, 0, 0); }
+  auto inline rotation() const { return block_getter().template operator()<3, 3>(_data, 0, 0); }
 
   /** This method retrieves the translation of a transform */
   ALGEBRA_HOST_DEVICE
   inline point3 translation() const {
-    return point3{_data[3][0], _data[3][1], _data[3][2]};
+    return point3{element_getter()(_data, 0, 3), element_getter()(_data, 1, 3), element_getter()(_data, 2, 3)};
   }
 
   /** This method retrieves the 4x4 matrix of a transform */
@@ -319,8 +377,8 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE inline const point_type point_to_global(
       const point_type &v) const {
     vector3 rg = rotate(_data, v);
-    return point3{rg[0] + _data[3][0], rg[1] + _data[3][1],
-                  rg[2] + _data[3][2]};
+    return point3{rg[0] + element_getter()(_data, 0, 3), rg[1] + element_getter()(_data, 1, 3),
+                  rg[2] + element_getter()(_data, 2, 3)};
   }
 
   /** This method transform from a vector from the global 3D cartesian frame
@@ -329,8 +387,8 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE inline const point_type point_to_local(
       const point_type &v) const {
     vector3 rg = rotate(_data_inv, v);
-    return point3{rg[0] + _data_inv[3][0], rg[1] + _data_inv[3][1],
-                  rg[2] + _data_inv[3][2]};
+    return point3{rg[0] + element_getter()(_data_inv, 0, 3), rg[1] + element_getter()(_data_inv, 1, 3),
+                  rg[2] + element_getter()(_data_inv, 2, 3)};
   }
 
   /** This method transform from a vector from the local 3D cartesian frame to

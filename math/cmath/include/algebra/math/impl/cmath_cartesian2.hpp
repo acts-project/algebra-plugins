@@ -19,15 +19,15 @@ namespace cmath {
 
 /** Frame projection into a cartesian coordinate frame
  */
-template<template <typename,std::size_t> class array_t,
-         typename scalar_t>
+template<template <typename,std::size_t> class array_t, typename scalar_t,
+         typename transform3_t = transform3<array_t, scalar_t> >
 struct cartesian2 {
 
   /// @name Type definitions for the struct
   /// @{
 
   /// Transformation matching this struct
-  using transform3_type = transform3<array_t, scalar_t>;
+  using transform3_type = transform3_t;
 
   /// Point in 2D space
   using point2 = typename transform3_type::point2;

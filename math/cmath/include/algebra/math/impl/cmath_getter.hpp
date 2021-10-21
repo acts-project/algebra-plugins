@@ -16,14 +16,14 @@
 #include <type_traits>
 
 namespace algebra {
-namespace getter {
+namespace cmath {
 
-/** This method retrieves phi from a vector, vector base with rows > 2
+/** This method retrieves phi from a vector, vector base with rows >= 2
  *
  * @param v the input vector
  **/
-template<template <typename,std::size_t> class array_t, typename scalar_t,
-         std::size_t N, std::enable_if_t<N>=2, bool> = true>
+template<template <typename, auto> class array_t, typename scalar_t,
+         auto N, std::enable_if_t<N>=2, bool> = true>
 ALGEBRA_HOST_DEVICE
 inline scalar_t phi(const array_t<scalar_t, N> &v) noexcept {
 
@@ -34,7 +34,7 @@ inline scalar_t phi(const array_t<scalar_t, N> &v) noexcept {
  *
  * @param v the input vector
  **/
-template<template <typename,std::size_t> class array_t, typename scalar_t>
+template<template <typename, auto> class array_t, typename scalar_t>
 ALGEBRA_HOST_DEVICE
 inline scalar_t theta(const array_t<scalar_t, 3> &v) noexcept {
 
@@ -45,8 +45,8 @@ inline scalar_t theta(const array_t<scalar_t, 3> &v) noexcept {
  *
  * @param v the input vector
  **/
-template<template <typename,std::size_t> class array_t, typename scalar_t,
-         std::size_t N, std::enable_if_t<N>=2, bool> = true>
+template<template <typename, auto> class array_t, typename scalar_t,
+         auto N, std::enable_if_t<N>=2, bool> = true>
 ALGEBRA_HOST_DEVICE
 inline scalar_t perp(const array_t<scalar_t, N> &v) noexcept {
 
@@ -57,18 +57,18 @@ inline scalar_t perp(const array_t<scalar_t, N> &v) noexcept {
  *
  * @param v the input vector
  **/
-template<template <typename,std::size_t> class array_t, typename scalar_t>
+template<template <typename, auto> class array_t, typename scalar_t>
 ALGEBRA_HOST_DEVICE
 inline scalar_t norm(const array_t<scalar_t, 2> &v) {
 
-  return perp(v);
+  return perp<array_t>(v);
 }
 
 /** This method retrieves the norm of a vector, no dimension restriction
  *
  * @param v the input vector
  **/
-template<template <typename,std::size_t> class array_t, typename scalar_t>
+template<template <typename, auto> class array_t, typename scalar_t>
 ALGEBRA_HOST_DEVICE
 inline scalar_t norm(const array_t<scalar_t, 3> &v) {
 
@@ -80,12 +80,12 @@ inline scalar_t norm(const array_t<scalar_t, 3> &v) {
  *
  * @param v the input vector
  **/
-template<template <typename,std::size_t> class array_t, typename scalar_t>
+template<template <typename, auto> class array_t, typename scalar_t>
 ALGEBRA_HOST_DEVICE
 inline scalar_t eta(const array_t<scalar_t, 3> &v) noexcept {
 
-  return std::atanh(v[2] / norm(v));
+  return std::atanh(v[2] / norm<array_t>(v));
 }
 
-}  // namespace getter
+}  // namespace cmath
 }  // namespace algebra

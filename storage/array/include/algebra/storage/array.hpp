@@ -17,7 +17,7 @@
 /// Main algebra namespace
 namespace algebra {
 /// @c std::array algebra definitions
-namespace std_array {
+namespace array {
 
 /// Array type used in this storage model
 template <typename T, std::size_t N>
@@ -30,7 +30,7 @@ using point3 = vector3;
 /// Point in 2D space, using @c std::array
 using point2 = storage_type<scalar, 2>;
 
-}  // namespace std_array
+}  // namespace array
 
 namespace getter {
 
@@ -40,10 +40,10 @@ namespace getter {
  **/
 template <unsigned int kROWS, typename matrix_type>
 ALGEBRA_HOST_DEVICE
-inline std_array::storage_type<scalar, kROWS> vector(const matrix_type &m, unsigned int row,
+inline array::storage_type<scalar, kROWS> vector(const matrix_type &m, unsigned int row,
                                                      unsigned int col) noexcept {
 
-  std_array::storage_type<scalar, kROWS> subvector;
+  array::storage_type<scalar, kROWS> subvector;
   for (unsigned int irow = row; irow < row + kROWS; ++irow) {
     subvector[irow - row] = m[col][irow];
   }
@@ -55,10 +55,10 @@ inline std_array::storage_type<scalar, kROWS> vector(const matrix_type &m, unsig
  * @param m the input matrix
  **/
 template <unsigned int kROWS, unsigned int kCOLS, typename matrix_type>
-ALGEBRA_HOST_DEVICE inline std_array::storage_type<std_array::storage_type<scalar, kROWS>, kCOLS>
+ALGEBRA_HOST_DEVICE inline array::storage_type<array::storage_type<scalar, kROWS>, kCOLS>
 block(const matrix_type &m, unsigned int row, unsigned int col) noexcept {
 
-  std_array::storage_type<std_array::storage_type<scalar, kROWS>, kCOLS> submatrix;
+  array::storage_type<array::storage_type<scalar, kROWS>, kCOLS> submatrix;
   for (unsigned int icol = col; icol < col + kCOLS; ++icol) {
     for (unsigned int irow = row; irow < row + kROWS; ++irow) {
       submatrix[icol - col][irow - row] = m[icol][irow];

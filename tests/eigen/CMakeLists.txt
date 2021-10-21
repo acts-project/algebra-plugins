@@ -6,4 +6,5 @@
 
 # Set up the test(s).
 algebra_add_test( eigen "eigen_algebra_plugin.cpp"
-   LINK_LIBRARIES GTest::gtest_main algebra::tests_common algebra::eigen )
+   LINK_LIBRARIES GTest::gtest_main algebra::tests_common algebra::eigen_storage
+                  algebra::cmath_math Eigen3::Eigen )

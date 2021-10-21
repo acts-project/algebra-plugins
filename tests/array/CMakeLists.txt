@@ -6,4 +6,5 @@
 
 # Set up the test(s).
 algebra_add_test( array "array_algebra_plugin.cpp"
-   LINK_LIBRARIES GTest::gtest_main algebra::tests_common algebra::array )
+   LINK_LIBRARIES GTest::gtest_main algebra::tests_common algebra::array_storage
+                  algebra::cmath_math )

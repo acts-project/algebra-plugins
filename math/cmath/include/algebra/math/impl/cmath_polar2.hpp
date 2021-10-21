@@ -19,15 +19,15 @@ namespace cmath {
 
 /** Local frame projection into a polar coordinate frame
  */
-template<template <typename,std::size_t> class array_t,
-         typename scalar_t>
+template<template <typename,std::size_t> class array_t, typename scalar_t,
+         typename transform3_t = transform3<array_t, scalar_t> >
 struct polar2 {
 
   /// @name Type definitions for the struct
   /// @{
 
   /// Transformation matching this struct
-  using transform3_type = transform3<array_t, scalar_t>;
+  using transform3_type = transform3_t;
 
   /// Point in 2D space
   using point2 = typename transform3_type::point2;
@@ -53,7 +53,7 @@ struct polar2 {
    * polar point */
   template <typename point_type>
   ALGEBRA_HOST_DEVICE inline point2 operator()(const point_type &v) const {
-    return point2{getter::perp(v), getter::phi(v)};
+    return point2{perp<array_t>(v), phi<array_t>(v)};
   }
 
 };  // struct polar2

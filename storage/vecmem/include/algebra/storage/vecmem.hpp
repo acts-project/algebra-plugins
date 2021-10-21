@@ -8,19 +8,20 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/storage/scalar.hpp"
+#include "algebra/common/algebra_qualifiers.hpp"
+#include "algebra/common/scalar.hpp"
 
 // VecMem include(s).
-#include <vecmem/container/static_array.hpp>
+#include <vecmem/containers/static_array.hpp>
 
 /// Main algebra namespace
 namespace algebra {
 /// @c vecmem::static_array algebra definitions
-namespace vecmem_array {
+namespace vecmem {
 
 /// Array type used in this storage model
 template <typename T, std::size_t N>
-using storage_type = vecmem::static_array<T, N>;
+using storage_type = ::vecmem::static_array<T, N>;
 
 /// 3-element "vector" type, using @c std::array
 using vector3 = storage_type<scalar, 3>;
@@ -29,7 +30,7 @@ using point3 = vector3;
 /// Point in 2D space, using @c std::array
 using point2 = storage_type<scalar, 2>;
 
-}  // namespace vecmem_array
+}  // namespace vecmem
 
 namespace getter {
 
@@ -39,10 +40,10 @@ namespace getter {
  **/
 template <unsigned int kROWS, typename matrix_type>
 ALGEBRA_HOST_DEVICE
-inline vecmem_array::storage_type<scalar, kROWS> vector(const matrix_type &m, unsigned int row,
+inline vecmem::storage_type<scalar, kROWS> vector(const matrix_type &m, unsigned int row,
                                                      unsigned int col) noexcept {
 
-  vecmem_array::storage_type<scalar, kROWS> subvector;
+  vecmem::storage_type<scalar, kROWS> subvector;
   for (unsigned int irow = row; irow < row + kROWS; ++irow) {
     subvector[irow - row] = m[col][irow];
   }
@@ -54,10 +55,10 @@ inline vecmem_array::storage_type<scalar, kROWS> vector(const matrix_type &m, un
  * @param m the input matrix
  **/
 template <unsigned int kROWS, unsigned int kCOLS, typename matrix_type>
-ALGEBRA_HOST_DEVICE inline vecmem_array::storage_type<vecmem_array::storage_type<scalar, kROWS>, kCOLS>
+ALGEBRA_HOST_DEVICE inline vecmem::storage_type<vecmem::storage_type<scalar, kROWS>, kCOLS>
 block(const matrix_type &m, unsigned int row, unsigned int col) noexcept {
 
-  vecmem_array::storage_type<vecmem_array::storage_type<scalar, kROWS>, kCOLS> submatrix;
+  vecmem::storage_type<vecmem::storage_type<scalar, kROWS>, kCOLS> submatrix;
   for (unsigned int icol = col; icol < col + kCOLS; ++icol) {
     for (unsigned int irow = row; irow < row + kROWS; ++irow) {
       submatrix[icol - col][irow - row] = m[icol][irow];

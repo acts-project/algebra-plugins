@@ -5,7 +5,7 @@
 # Mozilla Public License Version 2.0
 
 # Set up the library.
-algebra_add_library( algebra_std_array std_array
-   "include/algebra/storage/std_array.hpp" )
-target_link_libraries( algebra_std_array
-   INTERFACE algebra::common )
+algebra_add_library( algebra_vc_storage vc_storage
+   "include/algebra/storage/vc.hpp" )
+target_link_libraries( algebra_vc_storage
+   INTERFACE algebra::common Vc )

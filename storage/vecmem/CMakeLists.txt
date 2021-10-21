@@ -5,7 +5,7 @@
 # Mozilla Public License Version 2.0
 
 # Set up the library.
-algebra_add_library( algebra_vecmem_array vecmem_array
-   "include/algebra/storage/vecmem_array.hpp" )
-target_link_libraries( algebra_vecmem_array
+algebra_add_library( algebra_vecmem_storage vecmem_storage
+   "include/algebra/storage/vecmem.hpp" )
+target_link_libraries( algebra_vecmem_storage
    INTERFACE algebra::common vecmem::core )

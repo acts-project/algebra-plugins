@@ -7,4 +7,4 @@
 # Set up the test(s).
 algebra_add_test( vecmem_array "vecmem_array_algebra_plugin.cpp"
    LINK_LIBRARIES GTest::gtest_main algebra::tests_common
-                  algebra::vecmem_array )
+                  algebra::vecmem_storage algebra::cmath_math )

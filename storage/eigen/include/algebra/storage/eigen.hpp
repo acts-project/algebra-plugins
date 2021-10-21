@@ -16,10 +16,9 @@
 // System include(s).
 #include <cstddef>
 
-namespace algebra {
-namespace eigen {
+namespace algebra::eigen {
 
-/// Array type used in this storage model
+/// Array type used in the Eigen storage model
 template <typename T, std::size_t N>
 using storage_type = Eigen::Matrix<T, N, 1>;
 
@@ -27,8 +26,9 @@ using storage_type = Eigen::Matrix<T, N, 1>;
 using vector3 = storage_type<scalar, 3>;
 /// Point in 3D space, using @c Eigen::Matrix
 using point3 = vector3;
+/// 2-element "vector" type, using @c Eigen::Matrix
+using vector2 = storage_type<scalar, 2>;
 /// Point in 2D space, using @c Eigen::Matrix
-using point2 = storage_type<scalar, 2>;
+using point2 = vector2;
 
-}  // namespace eigen
-}  // namespace algebra
+}  // namespace algebra::eigen

@@ -12,6 +12,11 @@
 #include "algebra/math/cmath.hpp"
 
 namespace algebra {
+
+using cmath::operator*;
+using cmath::operator-;
+using cmath::operator+;
+
 namespace vecmem {
 
 using transform3 = cmath::transform3<storage_type, scalar>;

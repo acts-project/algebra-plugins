@@ -13,7 +13,7 @@
 // System include(s).
 #include <cstddef>
 
-namespace algebra {
+namespace algebra::cmath {
 
 /// @name Operators on 2-element arrays
 /// @{
@@ -85,4 +85,4 @@ inline array_t<scalar_t, 3> operator+(const array_t<scalar_t, 3> &a,
 
 /// @}
 
-}  // namespace algebra
+}  // namespace algebra::cmath

@@ -22,6 +22,12 @@ if( ALGEBRA_PLUGIN_INCLUDE_EIGEN )
                      algebra::eigen_cmath )
 endif()
 
+if( ALGEBRA_PLUGIN_INCLUDE_SMATRIX )
+   algebra_add_test( smatrix_cmath "smatrix/smatrix_cmath.cpp"
+      LINK_LIBRARIES GTest::gtest_main algebra::tests_common
+                     algebra::smatrix_cmath )
+endif()
+
 if( ALGEBRA_PLUGIN_INCLUDE_VC )
    algebra_add_test( vc_cmath "vc/vc_cmath.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common algebra::vc_cmath )

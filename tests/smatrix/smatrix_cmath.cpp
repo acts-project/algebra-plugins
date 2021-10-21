@@ -6,7 +6,8 @@
  */
 
 // Project include(s).
-#include "algebra/definitions/smatrix.hpp"
+#include "algebra/smatrix_cmath.hpp"
 
 // Test include(s).
+#define __plugin algebra::smatrix
 #include "test_plugin.inl"

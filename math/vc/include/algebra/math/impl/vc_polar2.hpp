@@ -10,12 +10,11 @@
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/math/impl/cmath_getter.hpp"
-#include "algebra/storage/vc.hpp"
 
 namespace algebra::vc::math {
 
 /** Local frame projection into a polar coordinate frame */
-template <typename transform3_t>
+template <template <typename, auto> class array_t, typename transform3_t>
 struct polar2 {
 
   /// @name Type definitions for the struct
@@ -50,8 +49,7 @@ struct polar2 {
   template <typename point_type>
   ALGEBRA_HOST_DEVICE inline point2 operator()(const point_type &v) const {
 
-    return point2{cmath::perp<vc::storage_type>(v),
-                  cmath::phi<vc::storage_type>(v)};
+    return point2{cmath::perp<array_t>(v), cmath::phi<array_t>(v)};
   }
 
 };  // struct polar2

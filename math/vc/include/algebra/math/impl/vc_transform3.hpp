@@ -39,11 +39,11 @@ struct matrix44 {
 };  // struct matrix44
 
 /// Functor used to access elements of Vc matrices
-template <typename scalar_t>
+template <template <typename, std::size_t> class array_t, typename scalar_t>
 struct element_getter {
 
   /// Get const access to a matrix element
-  ALGEBRA_HOST inline scalar_t operator()(const storage_type<scalar_t, 16> &m,
+  ALGEBRA_HOST inline scalar_t operator()(const array_t<scalar_t, 16> &m,
                                           unsigned int row,
                                           unsigned int col) const {
 
@@ -85,7 +85,7 @@ struct element_getter {
 
 /** Transform wrapper class to ensure standard API within differnt plugins
  **/
-template <typename scalar_t>
+template <template <typename, std::size_t> class array_t, typename scalar_t>
 struct transform3 {
 
   /// @name Type definitions for the struct
@@ -93,7 +93,7 @@ struct transform3 {
 
   /// Array type used by the transform
   template <typename T, std::size_t N>
-  using array_type = storage_type<T, N>;
+  using array_type = array_t<T, N>;
   /// Scalar type used by the transform
   using scalar_type = scalar_t;
 
@@ -108,7 +108,7 @@ struct transform3 {
   using matrix44 = internal::matrix44<scalar_type>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = internal::element_getter<scalar_type>;
+  using element_getter = internal::element_getter<array_type, scalar_type>;
 
   /// @}
 
@@ -132,7 +132,7 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &z, const vector3 &x) {
 
-    auto y = cross(z, x);
+    auto y = cross<array_type>(z, x);
     _data.x = {x[0], x[1], x[2], 0.};
     _data.y = {y[0], y[1], y[2], 0.};
     _data.z = {z[0], z[1], z[2], 0.};

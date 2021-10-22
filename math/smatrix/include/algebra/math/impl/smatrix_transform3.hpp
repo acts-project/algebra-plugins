@@ -19,7 +19,7 @@ namespace algebra::smatrix::math {
 
 namespace internal {
 
-/// Functor used to access elements of Vc matrices
+/// Functor used to access elements of SMatrix matrices
 template <typename scalar_t>
 struct element_getter {
   /// The matrix type used by this struct

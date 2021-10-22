@@ -37,6 +37,8 @@ endif()
 if( ALGEBRA_PLUGIN_INCLUDE_VC )
    algebra_add_test( vc_cmath "vc/vc_cmath.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common algebra::vc_cmath )
+   algebra_add_test( vc_vc "vc/vc_vc.cpp"
+      LINK_LIBRARIES GTest::gtest_main algebra::tests_common algebra::vc_vc )
 endif()
 
 if( ALGEBRA_PLUGIN_INCLUDE_VECMEM )

@@ -1,14 +1,11 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
 
 #pragma once
-
-// Project include(s).
-#include "algebra/common/types.hpp"
 
 // GoogleTest include(s).
 #include <gtest/gtest.h>

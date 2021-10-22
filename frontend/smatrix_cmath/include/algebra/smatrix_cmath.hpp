@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/common/scalar.hpp"
 #include "algebra/math/cmath.hpp"
 #include "algebra/storage/smatrix.hpp"
 

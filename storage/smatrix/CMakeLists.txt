@@ -5,7 +5,7 @@
 # Mozilla Public License Version 2.0
 
 # Find Smatrix.
-find_package( ROOT COMPONENTS Smatrix REQUIRED)
+find_package( ROOT COMPONENTS Smatrix REQUIRED )
 
 # Set up the library.
 algebra_add_library( algebra_smatrix_storage smatrix_storage

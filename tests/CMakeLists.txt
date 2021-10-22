@@ -29,6 +29,9 @@ if( ALGEBRA_PLUGIN_INCLUDE_SMATRIX )
    algebra_add_test( smatrix_cmath "smatrix/smatrix_cmath.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                      algebra::smatrix_cmath )
+   algebra_add_test( smatrix_smatrix "smatrix/smatrix_smatrix.cpp"
+      LINK_LIBRARIES GTest::gtest_main algebra::tests_common
+                     algebra::smatrix_smatrix )
 endif()
 
 if( ALGEBRA_PLUGIN_INCLUDE_VC )

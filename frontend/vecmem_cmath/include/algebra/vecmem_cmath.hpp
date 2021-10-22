@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/common/scalar.hpp"
 #include "algebra/math/cmath.hpp"
 #include "algebra/storage/vecmem.hpp"
 
@@ -19,10 +20,10 @@ using cmath::operator+;
 
 namespace vecmem {
 
-using transform3 = cmath::transform3<storage_type, scalar>;
-using cartesian2 = cmath::cartesian2<storage_type, scalar>;
-using polar2 = cmath::polar2<storage_type, scalar>;
-using cylindrical2 = cmath::cylindrical2<storage_type, scalar>;
+using transform3 = cmath::transform3<vecmem::storage_type, scalar>;
+using cartesian2 = cmath::cartesian2<transform3>;
+using polar2 = cmath::polar2<vecmem::storage_type, scalar, transform3>;
+using cylindrical2 = cmath::cylindrical2<vecmem::storage_type, transform3>;
 
 }  // namespace vecmem
 

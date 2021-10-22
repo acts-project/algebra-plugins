@@ -15,13 +15,12 @@
 // System include(s).
 #include <cstddef>
 
-namespace algebra {
-namespace cmath {
+namespace algebra::cmath {
 
 /** Local frame projection into a polar coordinate frame
  */
-template <template <typename, std::size_t> class array_t, typename scalar_t,
-          typename transform3_t = transform3<array_t, scalar_t> >
+template <template <typename, auto> class array_t, typename scalar_t,
+          typename transform3_t>
 struct polar2 {
 
   /// @name Type definitions for the struct
@@ -52,12 +51,12 @@ struct polar2 {
 
   /** This method transform from a point from 2D or 3D cartesian frame to a 2D
    * polar point */
-  template <typename point_type>
-  ALGEBRA_HOST_DEVICE inline point2 operator()(const point_type &v) const {
-    return point2{perp<array_t>(v), phi<array_t>(v)};
+  template <auto N, std::enable_if_t<N >= 2, bool> = true>
+  ALGEBRA_HOST_DEVICE inline point2 operator()(
+      const array_t<scalar_t, N> &v) const {
+    return {perp<array_t>(v), phi<array_t>(v)};
   }
 
 };  // struct polar2
 
-}  // namespace cmath
-}  // namespace algebra
+}  // namespace algebra::cmath

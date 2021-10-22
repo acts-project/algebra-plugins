@@ -58,12 +58,12 @@ struct block_getter {
   }
 };  // struct block_getter
 
-using transform3 =
-    cmath::transform3<storage_type, scalar, Vc::array<Vc::array<scalar, 4>, 4>,
-                      element_getter, block_getter>;
-using cartesian2 = cmath::cartesian2<storage_type, scalar, transform3>;
-using polar2 = cmath::polar2<storage_type, scalar, transform3>;
-using cylindrical2 = cmath::cylindrical2<storage_type, scalar, transform3>;
+using transform3 = cmath::transform3<vc::storage_type, scalar,
+                                     Vc::array<Vc::array<scalar, 4>, 4>,
+                                     element_getter, block_getter>;
+using cartesian2 = cmath::cartesian2<transform3>;
+using polar2 = cmath::polar2<vc::storage_type, scalar, transform3>;
+using cylindrical2 = cmath::cylindrical2<vc::storage_type, transform3>;
 
 }  // namespace vc
 

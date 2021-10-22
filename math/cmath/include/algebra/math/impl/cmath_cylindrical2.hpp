@@ -15,13 +15,11 @@
 // System include(s).
 #include <cstddef>
 
-namespace algebra {
-namespace cmath {
+namespace algebra::cmath {
 
 /** Local frame projection into a polar coordinate frame
  */
-template <template <typename, std::size_t> class array_t, typename scalar_t,
-          typename transform3_t = transform3<array_t, scalar_t>>
+template <template <typename, std::size_t> class array_t, typename transform3_t>
 struct cylindrical2 {
 
   /// @name Type definitions for the struct
@@ -50,14 +48,13 @@ struct cylindrical2 {
     return operator()(trf.point_to_local(p));
   }
 
-  /** This method transform from a point from 2 3D cartesian frame to a 2D
+  /** This method transform from a point from 3D cartesian frame to a 2D
    * cylindrical point */
   ALGEBRA_HOST_DEVICE
   inline point2 operator()(const point3 &v) const {
-    return point2{perp<array_t>(v) * phi<array_t>(v), v[2]};
+    return {perp<array_t>(v) * phi<array_t>(v), v[2]};
   }
 
-};  // struct cylindrical2_impl
+};  // struct cylindrical2
 
-}  // namespace cmath
-}  // namespace algebra
+}  // namespace algebra::cmath

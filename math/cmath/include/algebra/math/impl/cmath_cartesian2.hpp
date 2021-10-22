@@ -14,13 +14,11 @@
 // System include(s).
 #include <cstddef>
 
-namespace algebra {
-namespace cmath {
+namespace algebra::cmath {
 
 /** Frame projection into a cartesian coordinate frame
  */
-template <template <typename, std::size_t> class array_t, typename scalar_t,
-          typename transform3_t = transform3<array_t, scalar_t> >
+template <typename transform3_t>
 struct cartesian2 {
 
   /// @name Type definitions for the struct
@@ -61,5 +59,4 @@ struct cartesian2 {
 
 };  // struct cartesian2
 
-}  // namespace cmath
-}  // namespace algebra
+}  // namespace algebra::cmath

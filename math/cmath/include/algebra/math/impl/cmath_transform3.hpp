@@ -14,11 +14,11 @@
 // System include(s).
 #include <cstddef>
 
-namespace algebra {
-namespace cmath {
+namespace algebra::cmath {
 
 namespace internal {
 
+/// Default "element getter", assuming a simple 2D array access
 template <template <typename, std::size_t> class array_t, typename scalar_t>
 struct element_getter {
 
@@ -42,6 +42,7 @@ struct element_getter {
   }
 };
 
+/// Default "block getter", assuming a simple 2D array access
 template <template <typename, std::size_t> class array_t, typename scalar_t>
 struct block_getter {
 
@@ -609,5 +610,4 @@ struct transform3 {
 
 };  // struct transform3
 
-}  // namespace cmath
-}  // namespace algebra
+}  // namespace algebra::cmath

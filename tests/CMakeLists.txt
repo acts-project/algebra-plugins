@@ -48,3 +48,9 @@ if( ALGEBRA_PLUGIN_INCLUDE_VECMEM )
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                      algebra::vecmem_cmath )
 endif()
+
+if( ALGEBRA_PLUGIN_INCLUDE_VECMEM AND ALGEBRA_PLUGIN_INCLUDE_VC )
+   algebra_add_test( vecmem_vc "vecmem/vecmem_vc.cpp"
+      LINK_LIBRARIES GTest::gtest_main algebra::tests_common
+                     algebra::vecmem_vc )
+endif()

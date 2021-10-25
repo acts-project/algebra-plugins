@@ -21,11 +21,18 @@ using cylindrical2 = math::cylindrical2<transform3>;
 
 namespace getter {
 
-auto phi = [](const auto& a) { return cmath::phi<eigen::storage_type>(a); };
-auto theta = [](const auto& a) { return cmath::theta<eigen::storage_type>(a); };
-auto perp = [](const auto& a) { return cmath::perp<eigen::storage_type>(a); };
-auto norm = [](const auto& a) { return cmath::norm<eigen::storage_type>(a); };
-auto eta = [](const auto& a) { return cmath::eta<eigen::storage_type>(a); };
+auto phi = [](const auto& a) { return eigen::math::phi(a); };
+auto theta = [](const auto& a) { return eigen::math::theta(a); };
+auto perp = [](const auto& a) { return eigen::math::perp(a); };
+auto norm = [](const auto& a) { return eigen::math::norm(a); };
+auto eta = [](const auto& a) { return eigen::math::eta(a); };
+
+template <unsigned int SIZE, typename derived_type>
+ALGEBRA_HOST_DEVICE inline auto vector(const Eigen::MatrixBase<derived_type>& m,
+                                       std::size_t row, std::size_t col) {
+
+  return m.template block<SIZE, 1>(row, col);
+}
 
 }  // namespace getter
 

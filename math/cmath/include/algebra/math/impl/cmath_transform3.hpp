@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
+#include "algebra/math/impl/cmath_getter.hpp"
 #include "algebra/math/impl/cmath_vector.hpp"
 
 // System include(s).
@@ -16,61 +17,12 @@
 
 namespace algebra::cmath {
 
-namespace internal {
-
-/// Default "element getter", assuming a simple 2D array access
-template <template <typename, std::size_t> class array_t, typename scalar_t>
-struct element_getter {
-
-  template <std::size_t ROWS, std::size_t COLS>
-  using matrix_type = array_t<array_t<scalar_t, ROWS>, COLS>;
-
-  template <std::size_t ROWS, std::size_t COLS>
-  ALGEBRA_HOST_DEVICE inline scalar_t &operator()(matrix_type<ROWS, COLS> &m,
-                                                  std::size_t row,
-                                                  std::size_t col) const {
-
-    return m[col][row];
-  }
-
-  template <std::size_t ROWS, std::size_t COLS>
-  ALGEBRA_HOST_DEVICE inline scalar_t operator()(
-      const matrix_type<ROWS, COLS> &m, std::size_t row,
-      std::size_t col) const {
-
-    return m[col][row];
-  }
-};
-
-/// Default "block getter", assuming a simple 2D array access
-template <template <typename, std::size_t> class array_t, typename scalar_t>
-struct block_getter {
-
-  template <std::size_t ROWS, std::size_t COLS>
-  using matrix_type = array_t<array_t<scalar_t, ROWS>, COLS>;
-
-  template <std::size_t ROWS, std::size_t COLS, class input_matrix_type>
-  ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> operator()(
-      const input_matrix_type &m, std::size_t row, std::size_t col) const {
-
-    matrix_type<ROWS, COLS> submatrix;
-    for (std::size_t icol = col; icol < col + COLS; ++icol) {
-      for (std::size_t irow = row; irow < row + ROWS; ++irow) {
-        submatrix[icol - col][irow - row] = m[icol][irow];
-      }
-    }
-    return submatrix;
-  }
-};  // struct block_getter
-
-}  // namespace internal
-
 /** Transform wrapper class to ensure standard API within differnt plugins
  **/
 template <template <typename, std::size_t> class array_t, typename scalar_t,
           typename matrix44_t = array_t<array_t<scalar_t, 4>, 4>,
-          class element_getter_t = internal::element_getter<array_t, scalar_t>,
-          class block_getter_t = internal::block_getter<array_t, scalar_t> >
+          class element_getter_t = element_getter<array_t, scalar_t>,
+          class block_getter_t = block_getter<array_t, scalar_t> >
 struct transform3 {
 
   /// @name Type definitions for the struct

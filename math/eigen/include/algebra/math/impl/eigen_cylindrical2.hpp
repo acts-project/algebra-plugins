@@ -9,7 +9,7 @@
 
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
-#include "algebra/math/impl/cmath_getter.hpp"
+#include "algebra/math/impl/eigen_getter.hpp"
 #include "algebra/math/impl/eigen_transform3.hpp"
 #include "algebra/storage/eigen.hpp"
 
@@ -47,9 +47,7 @@ struct cylindrical2 {
   ALGEBRA_HOST_DEVICE inline point2 operator()(
       const eigen::storage_type<scalar_type, 3> &v) const {
 
-    return point2{cmath::perp<eigen::storage_type>(v) *
-                      cmath::phi<eigen::storage_type>(v),
-                  v[2]};
+    return point2{perp(v) * phi(v), v[2]};
   }
 
   /** This method transform from a point from the global 3D cartesian frame to

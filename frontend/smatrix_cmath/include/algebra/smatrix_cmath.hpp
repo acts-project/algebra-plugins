@@ -74,6 +74,14 @@ auto perp = [](const auto& a) { return cmath::perp<smatrix::storage_type>(a); };
 auto norm = [](const auto& a) { return cmath::norm<smatrix::storage_type>(a); };
 auto eta = [](const auto& a) { return cmath::eta<smatrix::storage_type>(a); };
 
+template <unsigned int SIZE, unsigned int ROWS, unsigned int COLS>
+ALGEBRA_HOST_DEVICE inline auto vector(
+    const ROOT::Math::SMatrix<scalar, ROWS, COLS>& m, unsigned int row,
+    unsigned int col) {
+
+  return m.template SubCol<smatrix::storage_type<scalar, SIZE> >(col, row);
+}
+
 }  // namespace getter
 
 namespace vector {

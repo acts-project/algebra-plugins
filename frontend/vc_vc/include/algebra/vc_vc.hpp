@@ -30,6 +30,24 @@ auto perp = [](const auto& a) { return cmath::perp<vc::storage_type>(a); };
 auto norm = [](const auto& a) { return cmath::norm<vc::storage_type>(a); };
 auto eta = [](const auto& a) { return cmath::eta<vc::storage_type>(a); };
 
+template <auto SIZE, typename input_matrix_type>
+ALGEBRA_HOST_DEVICE inline vc::storage_type<scalar, 4> vector(
+    const input_matrix_type& m, std::size_t row, std::size_t col) {
+
+  switch (row) {
+    case 0:
+      return m.x;
+    case 1:
+      return m.y;
+    case 2:
+      return m.z;
+    case 3:
+      return m.t;
+    default:
+      return {};
+  }
+}
+
 }  // namespace getter
 
 namespace vector {

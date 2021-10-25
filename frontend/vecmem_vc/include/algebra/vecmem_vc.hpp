@@ -37,6 +37,24 @@ auto perp = [](const auto& a) { return cmath::perp<vecmem::storage_type>(a); };
 auto norm = [](const auto& a) { return cmath::norm<vecmem::storage_type>(a); };
 auto eta = [](const auto& a) { return cmath::eta<vecmem::storage_type>(a); };
 
+template <auto SIZE, typename input_matrix_type>
+ALGEBRA_HOST_DEVICE inline vecmem::storage_type<scalar, 4> vector(
+    const input_matrix_type& m, std::size_t row, std::size_t col) {
+
+  switch (row) {
+    case 0:
+      return m.x;
+    case 1:
+      return m.y;
+    case 2:
+      return m.z;
+    case 3:
+      return m.t;
+    default:
+      return vecmem::storage_type<scalar, 4>();
+  }
+}
+
 }  // namespace getter
 
 namespace vector {

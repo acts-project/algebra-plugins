@@ -30,6 +30,14 @@ auto perp = [](const auto& a) { return smatrix::math::perp(a); };
 auto norm = [](const auto& a) { return smatrix::math::norm(a); };
 auto eta = [](const auto& a) { return smatrix::math::eta(a); };
 
+template <unsigned int SIZE, unsigned int ROWS, unsigned int COLS>
+ALGEBRA_HOST_DEVICE inline auto vector(
+    const ROOT::Math::SMatrix<scalar, ROWS, COLS>& m, unsigned int row,
+    unsigned int col) {
+
+  return m.template SubCol<smatrix::storage_type<scalar, SIZE> >(col, row);
+}
+
 }  // namespace getter
 
 namespace vector {

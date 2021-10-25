@@ -84,4 +84,78 @@ ALGEBRA_HOST_DEVICE inline scalar_t eta(
   return std::atanh(v[2] / norm<array_t>(v));
 }
 
+/// "Element getter", assuming a simple 2D array access
+template <template <typename, auto> class array_t, typename scalar_t>
+struct element_getter {
+
+  /// 2D matrix type
+  template <auto ROWS, auto COLS>
+  using matrix_type = array_t<array_t<scalar_t, ROWS>, COLS>;
+
+  /// Operator getting a reference to one element of a non-const matrix
+  template <auto ROWS, auto COLS>
+  ALGEBRA_HOST_DEVICE inline scalar_t &operator()(matrix_type<ROWS, COLS> &m,
+                                                  std::size_t row,
+                                                  std::size_t col) const {
+
+    return m[col][row];
+  }
+
+  /// Operator getting one value of a const matrix
+  template <auto ROWS, auto COLS>
+  ALGEBRA_HOST_DEVICE inline scalar_t operator()(
+      const matrix_type<ROWS, COLS> &m, std::size_t row,
+      std::size_t col) const {
+
+    return m[col][row];
+  }
+};  // struct element_getter
+
+/// "Vector getter", assuming a simple 2D array access
+template <template <typename, auto> class array_t, typename scalar_t>
+struct vector_getter {
+
+  /// 1D vector type
+  template <auto SIZE>
+  using vector_type = array_t<scalar_t, SIZE>;
+  /// 2D matrix type
+  template <auto ROWS, auto COLS>
+  using matrix_type = array_t<array_t<scalar_t, ROWS>, COLS>;
+
+  /// Operator producing a vector out of a const matrix
+  template <auto SIZE, auto ROWS, auto COLS>
+  ALGEBRA_HOST_DEVICE inline vector_type<SIZE> operator()(
+      const matrix_type<ROWS, COLS> &m, std::size_t row, std::size_t col) {
+
+    vector_type<SIZE> subvector;
+    for (std::size_t irow = row; irow < row + SIZE; ++irow) {
+      subvector[irow - row] = m[col][irow];
+    }
+    return subvector;
+  }
+};  // struct vector_getter
+
+/// "Block getter", assuming a simple 2D array access
+template <template <typename, auto> class array_t, typename scalar_t>
+struct block_getter {
+
+  /// 2D matrix type
+  template <auto ROWS, auto COLS>
+  using matrix_type = array_t<array_t<scalar_t, ROWS>, COLS>;
+
+  /// Operator producing a sub-matrix from a const matrix
+  template <auto ROWS, auto COLS, class input_matrix_type>
+  ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> operator()(
+      const input_matrix_type &m, std::size_t row, std::size_t col) const {
+
+    matrix_type<ROWS, COLS> submatrix;
+    for (std::size_t icol = col; icol < col + COLS; ++icol) {
+      for (std::size_t irow = row; irow < row + ROWS; ++irow) {
+        submatrix[icol - col][irow - row] = m[icol][irow];
+      }
+    }
+    return submatrix;
+  }
+};  // struct block_getter
+
 }  // namespace algebra::cmath

@@ -40,7 +40,7 @@ template <auto SIZE, typename input_matrix_type>
 ALGEBRA_HOST_DEVICE inline vc::storage_type<scalar, SIZE> vector(
     const input_matrix_type& m, std::size_t row, std::size_t col) {
 
-  switch (row) {
+  switch (col) {
     case 0:
       return m.x;
     case 1:

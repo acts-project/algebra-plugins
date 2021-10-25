@@ -40,8 +40,7 @@ ALGEBRA_HOST_DEVICE inline array::storage_type<scalar, SIZE> vector(
     const array::storage_type<array::storage_type<scalar, ROWS>, COLS>& m,
     std::size_t row, std::size_t col) {
 
-  return cmath::vector_getter<array::storage_type, scalar>()
-      .template operator()<SIZE>(m, row, col);
+  return cmath::vector_getter<array::storage_type, scalar, SIZE>()(m, row, col);
 }
 
 }  // namespace getter

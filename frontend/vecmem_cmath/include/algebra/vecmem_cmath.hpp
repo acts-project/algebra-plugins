@@ -40,8 +40,8 @@ ALGEBRA_HOST_DEVICE inline vecmem::storage_type<scalar, SIZE> vector(
     const vecmem::storage_type<vecmem::storage_type<scalar, ROWS>, COLS>& m,
     std::size_t row, std::size_t col) {
 
-  return cmath::vector_getter<vecmem::storage_type, scalar>()
-      .template operator()<SIZE>(m, row, col);
+  return cmath::vector_getter<vecmem::storage_type, scalar, SIZE>()(m, row,
+                                                                    col);
 }
 
 }  // namespace getter

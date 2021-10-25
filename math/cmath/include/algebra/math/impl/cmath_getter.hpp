@@ -115,22 +115,22 @@ struct element_getter {
 };  // struct element_getter
 
 /// "Vector getter", assuming a simple 2D array access
-template <template <typename, auto> class array_t, typename scalar_t>
+template <template <typename, auto> class array_t, typename scalar_t, auto SIZE,
+          typename result_t = array_t<scalar_t, SIZE> >
 struct vector_getter {
 
-  /// 1D vector type
-  template <auto SIZE>
-  using vector_type = array_t<scalar_t, SIZE>;
+  /// Result type
+  using result_type = result_t;
   /// 2D matrix type
   template <auto ROWS, auto COLS>
   using matrix_type = array_t<array_t<scalar_t, ROWS>, COLS>;
 
   /// Operator producing a vector out of a const matrix
-  template <auto SIZE, auto ROWS, auto COLS>
-  ALGEBRA_HOST_DEVICE inline vector_type<SIZE> operator()(
+  template <auto ROWS, auto COLS>
+  ALGEBRA_HOST_DEVICE inline result_type operator()(
       const matrix_type<ROWS, COLS> &m, std::size_t row, std::size_t col) {
 
-    vector_type<SIZE> subvector;
+    result_type subvector;
     for (std::size_t irow = row; irow < row + SIZE; ++irow) {
       subvector[irow - row] = m[col][irow];
     }

@@ -28,12 +28,9 @@ namespace algebra::vc::math {
  *
  * @return the scalar dot product value
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N,
-          std::enable_if_t<std::is_same<array_t<scalar_t, N>,
-                                        Vc::SimdArray<scalar_t, N> >::value,
-                           bool> = true>
-ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, N> &a,
-                                        const array_t<scalar_t, N> &b) {
+template <typename scalar_t, auto N>
+ALGEBRA_HOST_DEVICE inline scalar_t dot(const Vc::SimdArray<scalar_t, N> &a,
+                                        const Vc::SimdArray<scalar_t, N> &b) {
 
   return (a * b).sum();
 }
@@ -44,11 +41,11 @@ ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, N> &a,
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N>
-ALGEBRA_HOST_DEVICE inline array_t<scalar_t, N> normalize(
-    const array_t<scalar_t, N> &v) {
+template <typename scalar_t, auto N>
+ALGEBRA_HOST_DEVICE inline Vc::SimdArray<scalar_t, N> normalize(
+    const Vc::SimdArray<scalar_t, N> &v) {
 
-  return v / std::sqrt(dot<array_t>(v, v));
+  return v / std::sqrt(dot(v, v));
 }
 
 /** Cross product between two input vectors - 3 Dim
@@ -60,7 +57,8 @@ ALGEBRA_HOST_DEVICE inline array_t<scalar_t, N> normalize(
  *
  * @return a vector representing the cross product
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N>
+template <template <typename, auto> class array_t, typename scalar_t, auto N,
+          std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, N> cross(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) {
   return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0],

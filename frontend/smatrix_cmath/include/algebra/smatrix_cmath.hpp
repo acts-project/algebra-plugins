@@ -66,13 +66,11 @@ using cylindrical2 = cmath::cylindrical2<smatrix::storage_type, transform3>;
 
 namespace getter {
 
-auto phi = [](const auto& a) { return cmath::phi<smatrix::storage_type>(a); };
-auto theta = [](const auto& a) {
-  return cmath::theta<smatrix::storage_type>(a);
-};
-auto perp = [](const auto& a) { return cmath::perp<smatrix::storage_type>(a); };
-auto norm = [](const auto& a) { return cmath::norm<smatrix::storage_type>(a); };
-auto eta = [](const auto& a) { return cmath::eta<smatrix::storage_type>(a); };
+using cmath::eta;
+using cmath::norm;
+using cmath::perp;
+using cmath::phi;
+using cmath::theta;
 
 template <unsigned int SIZE, unsigned int ROWS, unsigned int COLS>
 ALGEBRA_HOST_DEVICE inline auto vector(
@@ -86,15 +84,9 @@ ALGEBRA_HOST_DEVICE inline auto vector(
 
 namespace vector {
 
-auto cross = [](const auto& a, const auto& b) {
-  return cmath::cross<smatrix::storage_type>(a, b);
-};
-auto dot = [](const auto& a, const auto& b) {
-  return cmath::dot<smatrix::storage_type>(a, b);
-};
-auto normalize = [](const auto& a) {
-  return cmath::normalize<smatrix::storage_type>(a);
-};
+using cmath::cross;
+using cmath::dot;
+using cmath::normalize;
 
 }  // namespace vector
 }  // namespace algebra

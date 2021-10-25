@@ -9,26 +9,28 @@
 
 // Project include(s).
 #include "algebra/common/scalar.hpp"
+#include "algebra/storage/impl/vc_array.hpp"
 
 // Vc include(s).
 #include <Vc/Vc>
 
 // System include(s).
+#include <array>
 #include <cstddef>
 
 namespace algebra::vc {
 
 /// Array type used in the Vc storage model
 template <typename T, std::size_t N>
-using storage_type = Vc::SimdArray<T, N>;
+using storage_type = array<T, N>;
 
-/// 3-element "vector" type, using @c Vc::SimdArray
+/// 3-element "vector" type, using @c algebra::vc::array
 using vector3 = storage_type<scalar, 3>;
-/// Point in 3D space, using @c Vc::SimdArray
+/// Point in 3D space, using @c algebra::vc::array
 using point3 = vector3;
-/// 2-element "vector" type, using @c Vc::SimdArray
-using vector2 = storage_type<scalar, 2>;
-/// Point in 2D space, using @c Vc::SimdArray
+/// 2-element "vector" type, using @c std::array
+using vector2 = std::array<scalar, 2>;
+/// Point in 2D space, using @c std::array
 using point2 = vector2;
 
 }  // namespace algebra::vc

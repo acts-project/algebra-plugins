@@ -21,11 +21,11 @@ using cylindrical2 = math::cylindrical2<transform3>;
 
 namespace getter {
 
-auto phi = [](const auto& a) { return eigen::math::phi(a); };
-auto theta = [](const auto& a) { return eigen::math::theta(a); };
-auto perp = [](const auto& a) { return eigen::math::perp(a); };
-auto norm = [](const auto& a) { return eigen::math::norm(a); };
-auto eta = [](const auto& a) { return eigen::math::eta(a); };
+using eigen::math::eta;
+using eigen::math::norm;
+using eigen::math::perp;
+using eigen::math::phi;
+using eigen::math::theta;
 
 template <unsigned int SIZE, typename derived_type>
 ALGEBRA_HOST_DEVICE inline auto vector(const Eigen::MatrixBase<derived_type>& m,
@@ -38,11 +38,9 @@ ALGEBRA_HOST_DEVICE inline auto vector(const Eigen::MatrixBase<derived_type>& m,
 
 namespace vector {
 
-auto cross = [](const auto& a, const auto& b) {
-  return eigen::math::cross(a, b);
-};
-auto dot = [](const auto& a, const auto& b) { return eigen::math::dot(a, b); };
-auto normalize = [](const auto& a) { return eigen::math::normalize(a); };
+using eigen::math::cross;
+using eigen::math::dot;
+using eigen::math::normalize;
 
 }  // namespace vector
 }  // namespace algebra

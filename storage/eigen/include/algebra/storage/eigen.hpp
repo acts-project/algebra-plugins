@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/common/scalar.hpp"
+#include "algebra/storage/impl/eigen_array.hpp"
 
 // Eigen include(s).
 #include <Eigen/Core>
@@ -20,15 +21,15 @@ namespace algebra::eigen {
 
 /// Array type used in the Eigen storage model
 template <typename T, std::size_t N>
-using storage_type = Eigen::Matrix<T, N, 1>;
+using storage_type = array<T, N>;
 
-/// 3-element "vector" type, using @c Eigen::Matrix
+/// 3-element "vector" type, using @c algebra::eigen::array
 using vector3 = storage_type<scalar, 3>;
-/// Point in 3D space, using @c Eigen::Matrix
+/// Point in 3D space, using @c algebra::eigen::array
 using point3 = vector3;
-/// 2-element "vector" type, using @c Eigen::Matrix
+/// 2-element "vector" type, using @c algebra::eigen::array
 using vector2 = storage_type<scalar, 2>;
-/// Point in 2D space, using @c Eigen::Matrix
+/// Point in 2D space, using @c algebra::eigen::array
 using point2 = vector2;
 
 }  // namespace algebra::eigen

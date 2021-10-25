@@ -6,6 +6,7 @@
 
 # Set up the library.
 algebra_add_library( algebra_eigen_storage eigen_storage
-   "include/algebra/storage/eigen.hpp" )
+   "include/algebra/storage/eigen.hpp"
+   "include/algebra/storage/impl/eigen_array.hpp" )
 target_link_libraries( algebra_eigen_storage
    INTERFACE algebra::common Eigen3::Eigen )

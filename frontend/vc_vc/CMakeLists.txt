@@ -8,4 +8,5 @@
 algebra_add_library( algebra_vc_vc vc_vc
    "include/algebra/vc_vc.hpp" )
 target_link_libraries( algebra_vc_vc
-   INTERFACE algebra::common algebra::vc_storage algebra::vc_math )
+   INTERFACE algebra::common algebra::vc_storage algebra::cmath_math
+             algebra::vc_math )

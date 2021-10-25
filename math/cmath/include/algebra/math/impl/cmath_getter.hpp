@@ -33,9 +33,10 @@ ALGEBRA_HOST_DEVICE inline scalar_t phi(
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t>
+template <template <typename, auto> class array_t, typename scalar_t, auto N,
+          std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t theta(
-    const array_t<scalar_t, 3> &v) noexcept {
+    const array_t<scalar_t, N> &v) noexcept {
 
   return std::atan2(std::sqrt(v[0] * v[0] + v[1] * v[1]), v[2]);
 }
@@ -66,8 +67,9 @@ ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, 2> &v) {
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t>
-ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, 3> &v) {
+template <template <typename, auto> class array_t, typename scalar_t, auto N,
+          std::enable_if_t<N >= 3, bool> = true>
+ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, N> &v) {
 
   return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
@@ -77,9 +79,10 @@ ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, 3> &v) {
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t>
+template <template <typename, auto> class array_t, typename scalar_t, auto N,
+          std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t eta(
-    const array_t<scalar_t, 3> &v) noexcept {
+    const array_t<scalar_t, N> &v) noexcept {
 
   return std::atanh(v[2] / norm<array_t>(v));
 }

@@ -24,11 +24,11 @@ using cylindrical2 = math::cylindrical2<transform3>;
 
 namespace getter {
 
-auto phi = [](const auto& a) { return smatrix::math::phi(a); };
-auto theta = [](const auto& a) { return smatrix::math::theta(a); };
-auto perp = [](const auto& a) { return smatrix::math::perp(a); };
-auto norm = [](const auto& a) { return smatrix::math::norm(a); };
-auto eta = [](const auto& a) { return smatrix::math::eta(a); };
+using smatrix::math::eta;
+using smatrix::math::norm;
+using smatrix::math::perp;
+using smatrix::math::phi;
+using smatrix::math::theta;
 
 template <unsigned int SIZE, unsigned int ROWS, unsigned int COLS>
 ALGEBRA_HOST_DEVICE inline auto vector(
@@ -42,13 +42,9 @@ ALGEBRA_HOST_DEVICE inline auto vector(
 
 namespace vector {
 
-auto cross = [](const auto& a, const auto& b) {
-  return smatrix::math::cross(a, b);
-};
-auto dot = [](const auto& a, const auto& b) {
-  return smatrix::math::dot(a, b);
-};
-auto normalize = [](const auto& a) { return smatrix::math::normalize(a); };
+using smatrix::math::cross;
+using smatrix::math::dot;
+using smatrix::math::normalize;
 
 }  // namespace vector
 }  // namespace algebra

@@ -22,7 +22,9 @@ namespace algebra::cmath {
 template <template <typename, std::size_t> class array_t, typename scalar_t,
           typename matrix44_t = array_t<array_t<scalar_t, 4>, 4>,
           class element_getter_t = element_getter<array_t, scalar_t>,
-          class block_getter_t = block_getter<array_t, scalar_t> >
+          class block_getter_t = block_getter<array_t, scalar_t>,
+          typename vector3_t = array_t<scalar_t, 3>,
+          typename point2_t = array_t<scalar_t, 2> >
 struct transform3 {
 
   /// @name Type definitions for the struct
@@ -35,11 +37,11 @@ struct transform3 {
   using scalar_type = scalar_t;
 
   /// 3-element "vector" type
-  using vector3 = array_type<scalar_type, 3>;
+  using vector3 = vector3_t;
   /// Point in 3D space
   using point3 = vector3;
   /// Point in 2D space
-  using point2 = array_type<scalar_type, 2>;
+  using point2 = point2_t;
 
   /// 4x4 matrix type
   using matrix44 = matrix44_t;
@@ -71,7 +73,7 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &z, const vector3 &x) {
 
-    auto y = cross<array_type>(z, x);
+    auto y = cross(z, x);
     element_getter()(_data, 0, 0) = x[0];
     element_getter()(_data, 1, 0) = x[1];
     element_getter()(_data, 2, 0) = x[2];

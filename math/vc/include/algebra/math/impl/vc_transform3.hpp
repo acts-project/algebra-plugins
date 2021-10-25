@@ -12,6 +12,9 @@
 #include "algebra/math/impl/vc_vector.hpp"
 #include "algebra/storage/vc.hpp"
 
+// Vc include(s).
+#include <Vc/Vc>
+
 // System include(s).
 #include <cassert>
 
@@ -34,7 +37,7 @@ struct matrix44 {
   }
 
   /// Data variables
-  storage_type<scalar_t, 4> x, y, z, t;
+  Vc::SimdArray<scalar_t, 4> x, y, z, t;
 
 };  // struct matrix44
 
@@ -85,7 +88,9 @@ struct element_getter {
 
 /** Transform wrapper class to ensure standard API within differnt plugins
  **/
-template <template <typename, std::size_t> class array_t, typename scalar_t>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          typename vector3_t = array_t<scalar_t, 3>,
+          typename point2_t = array_t<scalar_t, 2>>
 struct transform3 {
 
   /// @name Type definitions for the struct
@@ -98,11 +103,11 @@ struct transform3 {
   using scalar_type = scalar_t;
 
   /// 3-element "vector" type
-  using vector3 = array_type<scalar_type, 3>;
+  using vector3 = vector3_t;
   /// Point in 3D space
   using point3 = vector3;
   /// Point in 2D space
-  using point2 = array_type<scalar_type, 2>;
+  using point2 = point2_t;
 
   /// 4x4 matrix type
   using matrix44 = internal::matrix44<scalar_type>;
@@ -132,7 +137,7 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &z, const vector3 &x) {
 
-    auto y = cross<array_type>(z, x);
+    auto y = cross(z, x);
     _data.x = {x[0], x[1], x[2], 0.};
     _data.y = {y[0], y[1], y[2], 0.};
     _data.z = {z[0], z[1], z[2], 0.};

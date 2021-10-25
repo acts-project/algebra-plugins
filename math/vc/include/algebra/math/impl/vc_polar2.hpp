@@ -49,7 +49,7 @@ struct polar2 {
   template <typename point_type>
   ALGEBRA_HOST_DEVICE inline point2 operator()(const point_type &v) const {
 
-    return point2{cmath::perp<array_t>(v), cmath::phi<array_t>(v)};
+    return point2{cmath::perp(v), cmath::phi(v)};
   }
 
 };  // struct polar2

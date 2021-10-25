@@ -19,8 +19,7 @@ namespace algebra::cmath {
 
 /** Local frame projection into a polar coordinate frame
  */
-template <template <typename, auto> class array_t, typename scalar_t,
-          typename transform3_t>
+template <typename transform3_t>
 struct polar2 {
 
   /// @name Type definitions for the struct
@@ -51,10 +50,12 @@ struct polar2 {
 
   /** This method transform from a point from 2D or 3D cartesian frame to a 2D
    * polar point */
-  template <auto N, std::enable_if_t<N >= 2, bool> = true>
-  ALGEBRA_HOST_DEVICE inline point2 operator()(
-      const array_t<scalar_t, N> &v) const {
-    return {perp<array_t>(v), phi<array_t>(v)};
+  ALGEBRA_HOST_DEVICE inline point2 operator()(const point2 &v) const {
+    return {perp(v), phi(v)};
+  }
+
+  ALGEBRA_HOST_DEVICE inline point2 operator()(const point3 &v) const {
+    return {perp(v), phi(v)};
   }
 
 };  // struct polar2

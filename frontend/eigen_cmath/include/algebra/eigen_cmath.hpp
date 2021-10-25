@@ -60,18 +60,18 @@ using transform3 =
                       algebra::eigen::element_getter,
                       algebra::eigen::block_getter>;
 using cartesian2 = cmath::cartesian2<transform3>;
-using polar2 = cmath::polar2<eigen::storage_type, scalar, transform3>;
-using cylindrical2 = cmath::cylindrical2<eigen::storage_type, transform3>;
+using polar2 = cmath::polar2<transform3>;
+using cylindrical2 = cmath::cylindrical2<transform3>;
 
 }  // namespace eigen
 
 namespace getter {
 
-auto phi = [](const auto& a) { return cmath::phi<eigen::storage_type>(a); };
-auto theta = [](const auto& a) { return cmath::theta<eigen::storage_type>(a); };
-auto perp = [](const auto& a) { return cmath::perp<eigen::storage_type>(a); };
-auto norm = [](const auto& a) { return cmath::norm<eigen::storage_type>(a); };
-auto eta = [](const auto& a) { return cmath::eta<eigen::storage_type>(a); };
+using cmath::eta;
+using cmath::norm;
+using cmath::perp;
+using cmath::phi;
+using cmath::theta;
 
 template <unsigned int SIZE, typename derived_type>
 ALGEBRA_HOST_DEVICE inline auto vector(const Eigen::MatrixBase<derived_type>& m,
@@ -84,15 +84,9 @@ ALGEBRA_HOST_DEVICE inline auto vector(const Eigen::MatrixBase<derived_type>& m,
 
 namespace vector {
 
-auto cross = [](const auto& a, const auto& b) {
-  return cmath::cross<eigen::storage_type>(a, b);
-};
-auto dot = [](const auto& a, const auto& b) {
-  return cmath::dot<eigen::storage_type>(a, b);
-};
-auto normalize = [](const auto& a) {
-  return cmath::normalize<eigen::storage_type>(a);
-};
+using cmath::cross;
+using cmath::dot;
+using cmath::normalize;
 
 }  // namespace vector
 }  // namespace algebra

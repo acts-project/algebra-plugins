@@ -19,7 +19,7 @@ namespace algebra::cmath {
 
 /** Local frame projection into a polar coordinate frame
  */
-template <template <typename, std::size_t> class array_t, typename transform3_t>
+template <typename transform3_t>
 struct cylindrical2 {
 
   /// @name Type definitions for the struct
@@ -52,7 +52,7 @@ struct cylindrical2 {
    * cylindrical point */
   ALGEBRA_HOST_DEVICE
   inline point2 operator()(const point3 &v) const {
-    return {perp<array_t>(v) * phi<array_t>(v), v[2]};
+    return {perp(v) * phi(v), v[2]};
   }
 
 };  // struct cylindrical2

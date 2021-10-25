@@ -13,6 +13,11 @@
 #include "algebra/storage/vc.hpp"
 
 namespace algebra {
+
+using cmath::operator*;
+using cmath::operator-;
+using cmath::operator+;
+
 namespace vc {
 
 /// Functor used to access elements of Vc matrices
@@ -58,22 +63,23 @@ struct block_getter {
   }
 };  // struct block_getter
 
-using transform3 = cmath::transform3<vc::storage_type, scalar,
-                                     Vc::array<Vc::array<scalar, 4>, 4>,
-                                     element_getter, block_getter>;
+using transform3 =
+    cmath::transform3<vc::storage_type, scalar,
+                      Vc::array<Vc::array<scalar, 4>, 4>, element_getter,
+                      block_getter, vc::vector3, vc::point2>;
 using cartesian2 = cmath::cartesian2<transform3>;
-using polar2 = cmath::polar2<vc::storage_type, scalar, transform3>;
-using cylindrical2 = cmath::cylindrical2<vc::storage_type, transform3>;
+using polar2 = cmath::polar2<transform3>;
+using cylindrical2 = cmath::cylindrical2<transform3>;
 
 }  // namespace vc
 
 namespace getter {
 
-auto phi = [](const auto& a) { return cmath::phi<vc::storage_type>(a); };
-auto theta = [](const auto& a) { return cmath::theta<vc::storage_type>(a); };
-auto perp = [](const auto& a) { return cmath::perp<vc::storage_type>(a); };
-auto norm = [](const auto& a) { return cmath::norm<vc::storage_type>(a); };
-auto eta = [](const auto& a) { return cmath::eta<vc::storage_type>(a); };
+using cmath::eta;
+using cmath::norm;
+using cmath::perp;
+using cmath::phi;
+using cmath::theta;
 
 template <auto SIZE, auto ROWS, auto COLS>
 ALGEBRA_HOST_DEVICE inline vc::storage_type<scalar, SIZE> vector(
@@ -88,15 +94,9 @@ ALGEBRA_HOST_DEVICE inline vc::storage_type<scalar, SIZE> vector(
 
 namespace vector {
 
-auto cross = [](const auto& a, const auto& b) {
-  return cmath::cross<vc::storage_type>(a, b);
-};
-auto dot = [](const auto& a, const auto& b) {
-  return cmath::dot<vc::storage_type>(a, b);
-};
-auto normalize = [](const auto& a) {
-  return cmath::normalize<vc::storage_type>(a);
-};
+using cmath::cross;
+using cmath::dot;
+using cmath::normalize;
 
 }  // namespace vector
 }  // namespace algebra

@@ -7,6 +7,7 @@
 
 // Project include(s).
 #include "algebra/common/scalar.hpp"
+#include "algebra/math/cmath.hpp"
 #include "algebra/math/eigen.hpp"
 #include "algebra/storage/eigen.hpp"
 
@@ -20,7 +21,7 @@ namespace eigen {
 /// @{
 
 using transform3 = math::transform3<scalar>;
-using cartesian2 = math::cartesian2<transform3>;
+using cartesian2 = cmath::cartesian2<transform3>;
 using polar2 = math::polar2<transform3>;
 using cylindrical2 = math::cylindrical2<transform3>;
 

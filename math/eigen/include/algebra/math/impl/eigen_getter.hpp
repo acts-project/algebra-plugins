@@ -9,14 +9,12 @@
 
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
-#include "algebra/storage/eigen.hpp"
 
 // Eigen include(s).
 #include <Eigen/Core>
 
 // System include(s).
 #include <cmath>
-#include <cstddef>
 #include <type_traits>
 
 namespace algebra::eigen::math {

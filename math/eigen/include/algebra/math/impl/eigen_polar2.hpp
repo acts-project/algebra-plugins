@@ -1,6 +1,6 @@
-/** Algebra plugins, part of the ACTS project
+/** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -10,11 +10,6 @@
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/math/impl/eigen_getter.hpp"
-#include "algebra/math/impl/eigen_transform3.hpp"
-#include "algebra/storage/eigen.hpp"
-
-// Eigen include(s).
-#include <Eigen/Core>
 
 namespace algebra::eigen::math {
 
@@ -37,18 +32,27 @@ struct polar2 {
 
   /// @}
 
-  /** This method transform from a point from 2D or 3D cartesian frame to a 2D
+  /** This method transform from a point from 2D cartesian frame to a 2D
    * polar point
    *
    * @param v the point in local frame
    *
    * @return a local point2
    */
-  template <auto N, std::enable_if_t<N >= 2, bool> = true>
-  ALGEBRA_HOST_DEVICE inline point2 operator()(
-      const eigen::storage_type<scalar_type, N> &v) const {
+  ALGEBRA_HOST_DEVICE inline point2 operator()(const point2 &v) const {
 
-    return point2{perp(v), phi(v)};
+    return {perp(v), phi(v)};
+  }
+  /** This method transform from a point from 3D cartesian frame to a 2D
+   * polar point
+   *
+   * @param v the point in local frame
+   *
+   * @return a local point2
+   */
+  ALGEBRA_HOST_DEVICE inline point2 operator()(const point3 &v) const {
+
+    return {perp(v), phi(v)};
   }
 
   /** This method transform from a point from the global 3D cartesian frame to
@@ -61,6 +65,7 @@ struct polar2 {
    **/
   ALGEBRA_HOST_DEVICE
   inline point2 operator()(const transform3_type &trf, const point3 &p) const {
+
     return operator()(trf.point_to_local(p));
   }
 };  // struct polar2

@@ -1,6 +1,6 @@
-/** Algebra plugins, part of the ACTS project
+/** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -31,20 +31,15 @@ template <typename T>
 class array<T, 3> : public Vc::SimdArray<T, 4> {
 
  public:
-  /// Default constructor
-  array() = default;
+  /// Inherit all constructors from the base class
+  using Vc::SimdArray<T, 4>::SimdArray;
 
-  /// Define a constructor that could receive 3 elements
+  /// Define a constructor that could receive just 3 elements
   array(const std::initializer_list<T>& init)
       : Vc::SimdArray<T, 4>(
             {*(init.begin()), *(init.begin() + 1), *(init.begin() + 2), 0}) {
     assert(init.size() == 3);
   }
-
-  /// Copy constructor
-  array(const array&) = default;
-  /// Copy constructor
-  array(const Vc::SimdArray<T, 4>& parent) : Vc::SimdArray<T, 4>(parent) {}
 
 };  // class array
 

@@ -1,6 +1,6 @@
-/** Algebra plugins, part of the ACTS project
+/** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -10,9 +10,6 @@
 // Project include(s).
 #include "algebra/common/scalar.hpp"
 #include "algebra/storage/impl/eigen_array.hpp"
-
-// Eigen include(s).
-#include <Eigen/Core>
 
 // System include(s).
 #include <cstddef>

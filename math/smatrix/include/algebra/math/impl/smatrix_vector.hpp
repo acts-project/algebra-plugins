@@ -9,10 +9,12 @@
 
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
-#include "algebra/storage/smatrix.hpp"
 
 // ROOT/Smatrix include(s).
+#include <Math/Expression.h>
 #include <Math/Functions.h>
+#include <Math/SVector.h>
+#include <TMath.h>
 
 namespace algebra::smatrix::math {
 
@@ -23,8 +25,15 @@ namespace algebra::smatrix::math {
  * @param v the input vector
  **/
 template <typename scalar_t, auto N>
-ALGEBRA_HOST inline storage_type<scalar_t, N> normalize(
-    const storage_type<scalar_t, N> &v) {
+ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, N> normalize(
+    const ROOT::Math::SVector<scalar_t, N> &v) {
+
+  return ROOT::Math::Unit(v);
+}
+
+template <typename scalar_t, class A, auto N>
+ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, N> normalize(
+    const ROOT::Math::VecExpr<A, scalar_t, N> &v) {
 
   return ROOT::Math::Unit(v);
 }
@@ -40,8 +49,29 @@ ALGEBRA_HOST inline storage_type<scalar_t, N> normalize(
  * @return the scalar dot product value
  **/
 template <typename scalar_t, auto N>
-ALGEBRA_HOST inline scalar_t dot(const storage_type<scalar_t, N> &a,
-                                 const storage_type<scalar_t, N> &b) {
+ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SVector<scalar_t, N> &a,
+                                 const ROOT::Math::SVector<scalar_t, N> &b) {
+
+  return ROOT::Math::Dot(a, b);
+}
+
+template <typename scalar_t, class A, auto N>
+ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SVector<scalar_t, N> &a,
+                                 const ROOT::Math::VecExpr<A, scalar_t, N> &b) {
+
+  return ROOT::Math::Dot(a, b);
+}
+
+template <typename scalar_t, class A, auto N>
+ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::VecExpr<A, scalar_t, N> &a,
+                                 const ROOT::Math::SVector<scalar_t, N> &b) {
+
+  return ROOT::Math::Dot(a, b);
+}
+
+template <typename scalar_t, class A, auto N>
+ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::VecExpr<A, scalar_t, N> &a,
+                                 const ROOT::Math::VecExpr<A, scalar_t, N> &b) {
 
   return ROOT::Math::Dot(a, b);
 }
@@ -56,9 +86,34 @@ ALGEBRA_HOST inline scalar_t dot(const storage_type<scalar_t, N> &a,
  *
  * @return a vector (expression) representing the cross product
  **/
-template <typename scalar_t, auto N>
-ALGEBRA_HOST inline storage_type<scalar_t, N> cross(
-    const storage_type<scalar_t, N> &a, const storage_type<scalar_t, N> &b) {
+template <typename scalar_t>
+ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
+    const ROOT::Math::SVector<scalar_t, 3> &a,
+    const ROOT::Math::SVector<scalar_t, 3> &b) {
+
+  return ROOT::Math::Cross(a, b);
+}
+
+template <typename scalar_t, class A>
+ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
+    const ROOT::Math::SVector<scalar_t, 3> &a,
+    const ROOT::Math::VecExpr<A, scalar_t, 3> &b) {
+
+  return ROOT::Math::Cross(a, b);
+}
+
+template <typename scalar_t, class A>
+ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
+    const ROOT::Math::VecExpr<A, scalar_t, 3> &a,
+    const ROOT::Math::SVector<scalar_t, 3> &b) {
+
+  return ROOT::Math::Cross(a, b);
+}
+
+template <typename scalar_t, class A>
+ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
+    const ROOT::Math::VecExpr<A, scalar_t, 3> &a,
+    const ROOT::Math::VecExpr<A, scalar_t, 3> &b) {
 
   return ROOT::Math::Cross(a, b);
 }

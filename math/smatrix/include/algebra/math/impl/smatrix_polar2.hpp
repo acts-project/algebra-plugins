@@ -45,7 +45,7 @@ struct polar2 {
   ALGEBRA_HOST inline point2 operator()(
       const smatrix::storage_type<scalar_type, N> &v) const {
 
-    return point2{perp(v), phi(v)};
+    return {perp(v), phi(v)};
   }
 
   /** This method transform from a point from the global 3D cartesian frame to

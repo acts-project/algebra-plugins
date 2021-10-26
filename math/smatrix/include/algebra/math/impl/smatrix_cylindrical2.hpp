@@ -43,7 +43,7 @@ struct cylindrical2 {
    */
   ALGEBRA_HOST inline point2 operator()(const point3 &v) const {
 
-    return point2{perp(v) * phi(v), v[2]};
+    return {perp(v) * phi(v), v[2]};
   }
 
   /** This method transform from a point from the global 3D cartesian frame to

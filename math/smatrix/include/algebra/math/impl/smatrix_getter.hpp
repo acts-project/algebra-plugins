@@ -9,13 +9,12 @@
 
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
-#include "algebra/storage/smatrix.hpp"
 
 // ROOT/Smatrix include(s).
+#include <Math/Expression.h>
 #include <Math/Functions.h>
-
-// System include(s).
-#include <cmath>
+#include <Math/SVector.h>
+#include <TMath.h>
 
 namespace algebra::smatrix::math {
 
@@ -24,11 +23,18 @@ namespace algebra::smatrix::math {
  * @param v the input vector
  **/
 template <typename scalar_t, auto N, std::enable_if_t<N >= 2, bool> = true>
-ALGEBRA_HOST inline scalar_t phi(const storage_type<scalar_t, N> &v) noexcept {
+ALGEBRA_HOST inline scalar_t phi(
+    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
-  scalar_t element0 = v.apply(0);
-  scalar_t element1 = v.apply(1);
-  return std::atan2(element1, element0);
+  return TMath::ATan2(v[1], v[0]);
+}
+
+template <typename scalar_t, class A, auto N,
+          std::enable_if_t<N >= 2, bool> = true>
+ALGEBRA_HOST inline scalar_t phi(
+    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+
+  return TMath::ATan2(v.apply(1), v.apply(0));
 }
 
 /** This method retrieves theta from a vector, vector base with rows >= 3
@@ -37,9 +43,19 @@ ALGEBRA_HOST inline scalar_t phi(const storage_type<scalar_t, N> &v) noexcept {
  **/
 template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST inline scalar_t theta(
-    const storage_type<scalar_t, N> &v) noexcept {
+    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
-  return std::atan2(std::sqrt(v[0] * v[0] + v[1] * v[1]), v[2]);
+  return TMath::ATan2(TMath::Sqrt(v[0] * v[0] + v[1] * v[1]), v[2]);
+}
+
+template <typename scalar_t, class A, auto N,
+          std::enable_if_t<N >= 3, bool> = true>
+ALGEBRA_HOST inline scalar_t theta(
+    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+
+  return TMath::ATan2(
+      TMath::Sqrt(v.apply(0) * v.apply(0) + v.apply(1) * v.apply(1)),
+      v.apply(2));
 }
 
 /** This method retrieves the norm of a vector, no dimension restriction
@@ -47,9 +63,16 @@ ALGEBRA_HOST inline scalar_t theta(
  * @param v the input vector
  **/
 template <typename scalar_t, auto N>
-ALGEBRA_HOST inline scalar_t norm(const storage_type<scalar_t, N> &v) {
+ALGEBRA_HOST inline scalar_t norm(const ROOT::Math::SVector<scalar_t, N> &v) {
 
-  return std::sqrt(ROOT::Math::Dot(v, v));
+  return TMath::Sqrt(ROOT::Math::Dot(v, v));
+}
+
+template <typename scalar_t, class A, auto N>
+ALGEBRA_HOST inline scalar_t norm(
+    const ROOT::Math::VecExpr<A, scalar_t, N> &v) {
+
+  return TMath::Sqrt(ROOT::Math::Dot(v, v));
 }
 
 /** This method retrieves the pseudo-rapidity from a vector or vector base with
@@ -58,9 +81,18 @@ ALGEBRA_HOST inline scalar_t norm(const storage_type<scalar_t, N> &v) {
  * @param v the input vector
  **/
 template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
-ALGEBRA_HOST inline scalar_t eta(const storage_type<scalar_t, N> &v) noexcept {
+ALGEBRA_HOST inline scalar_t eta(
+    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
-  return std::atanh(v[2] / norm(v));
+  return TMath::ATanH(v[2] / norm(v));
+}
+
+template <typename scalar_t, class A, auto N,
+          std::enable_if_t<N >= 3, bool> = true>
+ALGEBRA_HOST inline scalar_t eta(
+    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+
+  return TMath::ATanH(v.apply(2) / norm(v));
 }
 
 /** This method retrieves the perpenticular magnitude of a vector with rows >= 2
@@ -68,11 +100,18 @@ ALGEBRA_HOST inline scalar_t eta(const storage_type<scalar_t, N> &v) noexcept {
  * @param v the input vector
  **/
 template <typename scalar_t, auto N, std::enable_if_t<N >= 2, bool> = true>
-ALGEBRA_HOST inline scalar_t perp(const storage_type<scalar_t, N> &v) noexcept {
+ALGEBRA_HOST inline scalar_t perp(
+    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
-  scalar element0 = v.apply(0);
-  scalar element1 = v.apply(1);
-  return std::sqrt(element0 * element0 + element1 * element1);
+  return TMath::Sqrt(v[0] * v[0] + v[1] * v[1]);
+}
+
+template <typename scalar_t, class A, auto N,
+          std::enable_if_t<N >= 2, bool> = true>
+ALGEBRA_HOST inline scalar_t perp(
+    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+
+  return TMath::Sqrt(v.apply(0) * v.apply(0) + v.apply(1) * v.apply(1));
 }
 
 }  // namespace algebra::smatrix::math

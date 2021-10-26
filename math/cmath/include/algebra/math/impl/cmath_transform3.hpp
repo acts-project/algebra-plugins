@@ -1,6 +1,6 @@
-/** Algebra plugins, part of the ACTS project
+/** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -12,14 +12,11 @@
 #include "algebra/math/impl/cmath_getter.hpp"
 #include "algebra/math/impl/cmath_vector.hpp"
 
-// System include(s).
-#include <cstddef>
-
 namespace algebra::cmath {
 
 /** Transform wrapper class to ensure standard API within differnt plugins
  **/
-template <template <typename, std::size_t> class array_t, typename scalar_t,
+template <template <typename, auto> class array_t, typename scalar_t,
           typename matrix44_t = array_t<array_t<scalar_t, 4>, 4>,
           class element_getter_t = element_getter<array_t, scalar_t>,
           class block_getter_t = block_getter<array_t, scalar_t>,
@@ -31,7 +28,7 @@ struct transform3 {
   /// @{
 
   /// Array type used by the transform
-  template <typename T, std::size_t N>
+  template <typename T, auto N>
   using array_type = array_t<T, N>;
   /// Scalar type used by the transform
   using scalar_type = scalar_t;
@@ -132,7 +129,7 @@ struct transform3 {
     _data_inv = invert(_data);
   }
 
-  /** Constructor with arguments: matrix as std::aray of scalar
+  /** Constructor with arguments: matrix as array of scalar
    *
    * @param ma is the full 4x4 matrix 16 array
    **/
@@ -498,7 +495,7 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   static inline vector3 rotate(const matrix44 &m, const vector3 &v) {
 
-    return vector3{
+    return {
         element_getter()(m, 0, 0) * v[0] + element_getter()(m, 0, 1) * v[1] +
             element_getter()(m, 0, 2) * v[2],
         element_getter()(m, 1, 0) * v[0] + element_getter()(m, 1, 1) * v[1] +
@@ -510,14 +507,16 @@ struct transform3 {
   /** This method retrieves the rotation of a transform */
   ALGEBRA_HOST_DEVICE
   auto inline rotation() const {
+
     return block_getter().template operator()<3, 3>(_data, 0, 0);
   }
 
   /** This method retrieves the translation of a transform */
   ALGEBRA_HOST_DEVICE
   inline point3 translation() const {
-    return point3{element_getter()(_data, 0, 3), element_getter()(_data, 1, 3),
-                  element_getter()(_data, 2, 3)};
+
+    return {element_getter()(_data, 0, 3), element_getter()(_data, 1, 3),
+            element_getter()(_data, 2, 3)};
   }
 
   /** This method retrieves the 4x4 matrix of a transform */
@@ -526,39 +525,36 @@ struct transform3 {
 
   /** This method transform from a point from the local 3D cartesian frame to
    * the global 3D cartesian frame */
-  template <typename point_type>
-  ALGEBRA_HOST_DEVICE inline const point_type point_to_global(
-      const point_type &v) const {
-    vector3 rg = rotate(_data, v);
-    return point3{rg[0] + element_getter()(_data, 0, 3),
-                  rg[1] + element_getter()(_data, 1, 3),
-                  rg[2] + element_getter()(_data, 2, 3)};
+  ALGEBRA_HOST_DEVICE inline point3 point_to_global(const point3 &v) const {
+
+    const vector3 rg = rotate(_data, v);
+    return {rg[0] + element_getter()(_data, 0, 3),
+            rg[1] + element_getter()(_data, 1, 3),
+            rg[2] + element_getter()(_data, 2, 3)};
   }
 
   /** This method transform from a vector from the global 3D cartesian frame
    * into the local 3D cartesian frame */
-  template <typename point_type>
-  ALGEBRA_HOST_DEVICE inline const point_type point_to_local(
-      const point_type &v) const {
-    vector3 rg = rotate(_data_inv, v);
-    return point3{rg[0] + element_getter()(_data_inv, 0, 3),
-                  rg[1] + element_getter()(_data_inv, 1, 3),
-                  rg[2] + element_getter()(_data_inv, 2, 3)};
+
+  ALGEBRA_HOST_DEVICE inline point3 point_to_local(const point3 &v) const {
+
+    const vector3 rg = rotate(_data_inv, v);
+    return {rg[0] + element_getter()(_data_inv, 0, 3),
+            rg[1] + element_getter()(_data_inv, 1, 3),
+            rg[2] + element_getter()(_data_inv, 2, 3)};
   }
 
   /** This method transform from a vector from the local 3D cartesian frame to
    * the global 3D cartesian frame */
-  template <typename vector_type>
-  ALGEBRA_HOST_DEVICE inline const vector_type vector_to_global(
-      const vector_type &v) const {
+  ALGEBRA_HOST_DEVICE inline vector3 vector_to_global(const vector3 &v) const {
+
     return rotate(_data, v);
   }
 
   /** This method transform from a vector from the global 3D cartesian frame
    * into the local 3D cartesian frame */
-  template <typename vector_type>
-  ALGEBRA_HOST_DEVICE inline const auto vector_to_local(
-      const vector_type &v) const {
+  ALGEBRA_HOST_DEVICE inline vector3 vector_to_local(const vector3 &v) const {
+
     return rotate(_data_inv, v);
   }
 

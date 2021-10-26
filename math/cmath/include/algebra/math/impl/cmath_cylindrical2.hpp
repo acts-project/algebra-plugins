@@ -1,6 +1,6 @@
-/** Algebra plugins, part of the ACTS project
+/** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -10,10 +10,6 @@
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/math/impl/cmath_getter.hpp"
-#include "algebra/math/impl/cmath_transform3.hpp"
-
-// System include(s).
-#include <cstddef>
 
 namespace algebra::cmath {
 
@@ -45,6 +41,7 @@ struct cylindrical2 {
    **/
   ALGEBRA_HOST_DEVICE
   inline point2 operator()(const transform3_type &trf, const point3 &p) const {
+
     return operator()(trf.point_to_local(p));
   }
 
@@ -52,6 +49,7 @@ struct cylindrical2 {
    * cylindrical point */
   ALGEBRA_HOST_DEVICE
   inline point2 operator()(const point3 &v) const {
+
     return {perp(v) * phi(v), v[2]};
   }
 

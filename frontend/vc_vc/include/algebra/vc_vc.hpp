@@ -33,9 +33,9 @@ namespace vc {
 /// @{
 
 using transform3 = math::transform3<storage_type, scalar, vector3, point2>;
-using cartesian2 = math::cartesian2<transform3>;
-using polar2 = math::polar2<storage_type, transform3>;
-using cylindrical2 = math::cylindrical2<storage_type, transform3>;
+using cartesian2 = cmath::cartesian2<transform3>;
+using polar2 = cmath::polar2<transform3>;
+using cylindrical2 = cmath::cylindrical2<transform3>;
 
 /// @}
 

@@ -1,6 +1,6 @@
-/** Algebra plugins, part of the ACTS project
+/** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -10,7 +10,6 @@
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/math/impl/vc_vector.hpp"
-#include "algebra/storage/vc.hpp"
 
 // Vc include(s).
 #include <Vc/Vc>
@@ -218,7 +217,7 @@ struct transform3 {
    * @return a sacalar determinant - no checking done
    */
   ALGEBRA_HOST_DEVICE
-  static inline scalar determinant(const matrix44 &m) {
+  static inline scalar_type determinant(const matrix44 &m) {
     return m.t[0] * m.z[1] * m.y[2] * m.x[3] -
            m.z[0] * m.t[1] * m.y[2] * m.x[3] -
            m.t[0] * m.y[1] * m.z[2] * m.x[3] +
@@ -302,7 +301,7 @@ struct transform3 {
     i.t[3] = m.y[0] * m.z[1] * m.x[2] - m.z[0] * m.y[1] * m.x[2] +
              m.z[0] * m.x[1] * m.y[2] - m.x[0] * m.z[1] * m.y[2] -
              m.y[0] * m.x[1] * m.z[2] + m.x[0] * m.y[1] * m.z[2];
-    scalar idet = 1. / determinant(i);
+    scalar_type idet = 1. / determinant(i);
 
     i.x *= idet;
     i.y *= idet;
@@ -321,7 +320,7 @@ struct transform3 {
   static inline vector3 rotate(const matrix44 &m, const vector3 &v) {
 
     auto result = m.x * v[0] + m.y * v[1] + m.z * v[2];
-    return vector3{result[0], result[1], result[2]};
+    return {result[0], result[1], result[2]};
   }
 
   /** This method retrieves the rotation of a transform */
@@ -340,7 +339,8 @@ struct transform3 {
   /** This method retrieves the translation of a transform */
   ALGEBRA_HOST_DEVICE
   inline point3 translation() const {
-    return point3{_data.t[0], _data.t[1], _data.t[2]};
+
+    return {_data.t[0], _data.t[1], _data.t[2]};
   }
 
   /** This method retrieves the 4x4 matrix of a transform */
@@ -359,7 +359,7 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE inline point3 point_to_global(const point3 &v) const {
 
     auto result = _data.x * v[0] + _data.y * v[1] + _data.z * v[2] + _data.t;
-    return point3{result[0], result[1], result[2]};
+    return {result[0], result[1], result[2]};
   }
 
   /** This method transform from a vector from the global 3D cartesian frame
@@ -375,7 +375,7 @@ struct transform3 {
 
     auto result = _data_inv.x * v[0] + _data_inv.y * v[1] + _data_inv.z * v[2] +
                   _data_inv.t;
-    return point3{result[0], result[1], result[2]};
+    return {result[0], result[1], result[2]};
   }
 
   /** This method transform from a vector from the local 3D cartesian frame

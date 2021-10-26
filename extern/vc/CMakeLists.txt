@@ -33,3 +33,7 @@ if( DEFINED _buildTestingValue )
 else()
    unset( BUILD_TESTING CACHE )
 endif()
+
+# Set up an alias for the Vc target, with the same name that it will have
+# when "finding it".
+add_library( Vc::Vc ALIAS Vc )

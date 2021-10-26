@@ -9,4 +9,4 @@ algebra_add_library( algebra_vc_storage vc_storage
    "include/algebra/storage/vc.hpp"
    "include/algebra/storage/impl/vc_array.hpp" )
 target_link_libraries( algebra_vc_storage
-   INTERFACE algebra::common Vc )
+   INTERFACE algebra::common Vc::Vc )

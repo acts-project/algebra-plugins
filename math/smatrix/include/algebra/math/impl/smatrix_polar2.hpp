@@ -1,6 +1,6 @@
-/** Algebra plugins, part of the ACTS project
+/** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -10,7 +10,6 @@
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/math/impl/smatrix_getter.hpp"
-#include "algebra/storage/smatrix.hpp"
 
 namespace algebra::smatrix::math {
 
@@ -24,8 +23,6 @@ struct polar2 {
 
   /// Transformation matching this struct
   using transform3_type = transform3_t;
-  /// Scalar type used by the transform
-  using scalar_type = typename transform3_type::scalar_type;
 
   /// Point in 2D space
   using point2 = typename transform3_type::point2;
@@ -34,6 +31,17 @@ struct polar2 {
 
   /// @}
 
+  /** This method transform from a point from the global 2D cartesian frame to
+   * the local 2D cartesian frame
+   *
+   * @param v the point in local frame
+   *
+   * @return a local point2
+   */
+  ALGEBRA_HOST inline point2 operator()(const point2 &v) const {
+
+    return {perp(v), phi(v)};
+  }
   /** This method transform from a point from the global 3D cartesian frame to
    * the local 2D cartesian frame
    *
@@ -41,9 +49,7 @@ struct polar2 {
    *
    * @return a local point2
    */
-  template <auto N, std::enable_if_t<N >= 2, bool> = true>
-  ALGEBRA_HOST inline point2 operator()(
-      const smatrix::storage_type<scalar_type, N> &v) const {
+  ALGEBRA_HOST inline point2 operator()(const point3 &v) const {
 
     return {perp(v), phi(v)};
   }

@@ -1,6 +1,6 @@
-/** Algebra plugins, part of the ACTS project
+/** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -171,18 +171,21 @@ struct transform3 {
   /** Equality operator */
   ALGEBRA_HOST
   inline bool operator==(const transform3 &rhs) const {
+
     return _data == rhs._data;
   }
 
   /** This method retrieves the rotation of a transform */
   ALGEBRA_HOST
   inline auto rotation() const {
+
     return (_data.template Sub<ROOT::Math::SMatrix<scalar_type, 3, 3> >(0, 0));
   }
 
   /** This method retrieves the translation of a transform */
   ALGEBRA_HOST
   inline vector3 translation() const {
+
     return (_data.template SubCol<vector3>(3, 0));
   }
 
@@ -194,6 +197,7 @@ struct transform3 {
    * the global 3D cartesian frame */
   ALGEBRA_HOST
   inline const point3 point_to_global(const point3 &v) const {
+
     ROOT::Math::SVector<scalar, 4> vector_4 =
         ROOT::Math::SVector<scalar_type, 4>();
     vector_4.Place_at(v, 0);
@@ -206,6 +210,7 @@ struct transform3 {
    * into the local 3D cartesian frame */
   ALGEBRA_HOST
   inline const point3 point_to_local(const point3 &v) const {
+
     ROOT::Math::SVector<scalar, 4> vector_4 =
         ROOT::Math::SVector<scalar_type, 4>();
     vector_4.Place_at(v, 0);
@@ -218,6 +223,7 @@ struct transform3 {
    * the global 3D cartesian frame */
   ALGEBRA_HOST
   inline const point3 vector_to_global(const vector3 &v) const {
+
     ROOT::Math::SVector<scalar, 4> vector_4 =
         ROOT::Math::SVector<scalar_type, 4>();
     vector_4.Place_at(v, 0);
@@ -229,6 +235,7 @@ struct transform3 {
    * into the local 3D cartesian frame */
   ALGEBRA_HOST
   inline const point3 vector_to_local(const vector3 &v) const {
+
     ROOT::Math::SVector<scalar, 4> vector_4 =
         ROOT::Math::SVector<scalar_type, 4>();
     vector_4.Place_at(v, 0);

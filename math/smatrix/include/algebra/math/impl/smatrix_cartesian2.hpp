@@ -1,6 +1,6 @@
-/** Algebra plugins, part of the ACTS project
+/** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -37,6 +37,7 @@ struct cartesian2 {
    * @return a local point2
    */
   ALGEBRA_HOST inline point2 operator()(const point3 &v) const {
+
     return v.template Sub<point2>(0);
   }
 
@@ -50,6 +51,7 @@ struct cartesian2 {
    **/
   ALGEBRA_HOST
   inline point2 operator()(const transform3_type &trf, const point3 &p) const {
+
     return operator()(trf.point_to_local(p));
   }
 

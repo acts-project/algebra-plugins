@@ -8,4 +8,5 @@
 algebra_add_library( algebra_eigen_eigen eigen_eigen
    "include/algebra/eigen_eigen.hpp" )
 target_link_libraries( algebra_eigen_eigen
-   INTERFACE algebra::common algebra::eigen_storage algebra::eigen_math )
+   INTERFACE algebra::common algebra::eigen_storage algebra::eigen_math
+             Eigen3::Eigen )

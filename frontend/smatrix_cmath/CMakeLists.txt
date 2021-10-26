@@ -12,4 +12,4 @@ algebra_add_library( algebra_smatrix_cmath smatrix_cmath
    "include/algebra/smatrix_cmath.hpp" )
 target_link_libraries( algebra_smatrix_cmath
    INTERFACE algebra::common algebra::smatrix_storage algebra::cmath_math
-             ROOT::Smatrix )
+             algebra::smatrix_math ROOT::Smatrix )

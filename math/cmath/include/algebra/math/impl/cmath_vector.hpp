@@ -68,10 +68,11 @@ ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 2> normalize(
  *
  * @return the scalar dot product value
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N,
-          std::enable_if_t<N >= 3, bool> = true>
-ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, N> &a,
-                                        const array_t<scalar_t, N> &b) {
+template <template <typename, auto> class array_t, typename scalar_t, auto N1,
+          auto N2, std::enable_if_t<N1 >= 3, bool> = true,
+          std::enable_if_t<N2 >= 3, bool> = true>
+ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, N1> &a,
+                                        const array_t<scalar_t, N2> &b) {
 
   return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 }

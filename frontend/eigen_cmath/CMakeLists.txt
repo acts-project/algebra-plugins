@@ -9,4 +9,4 @@ algebra_add_library( algebra_eigen_cmath eigen_cmath
    "include/algebra/eigen_cmath.hpp" )
 target_link_libraries( algebra_eigen_cmath
    INTERFACE algebra::common algebra::eigen_storage algebra::cmath_math
-             Eigen3::Eigen )
+             algebra::eigen_math Eigen3::Eigen )

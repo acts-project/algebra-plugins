@@ -1,6 +1,6 @@
-/** Algebra plugins, part of the ACTS project
+/** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -14,9 +14,14 @@
 
 namespace algebra {
 
+/// @name Operators on @c algebra::vc::storage_type and @c Vc::array
+/// @{
+
 using cmath::operator*;
 using cmath::operator-;
 using cmath::operator+;
+
+/// @}
 
 namespace vc {
 
@@ -63,6 +68,9 @@ struct block_getter {
   }
 };  // struct block_getter
 
+/// @name cmath based transforms on @c algebra::vc::storage_type
+/// @{
+
 using transform3 =
     cmath::transform3<vc::storage_type, scalar,
                       Vc::array<Vc::array<scalar, 4>, 4>, element_getter,
@@ -71,9 +79,14 @@ using cartesian2 = cmath::cartesian2<transform3>;
 using polar2 = cmath::polar2<transform3>;
 using cylindrical2 = cmath::cylindrical2<transform3>;
 
+/// @}
+
 }  // namespace vc
 
 namespace getter {
+
+/// @name Getter functions on @c algebra::vc::storage_type
+/// @{
 
 using cmath::eta;
 using cmath::norm;
@@ -81,6 +94,10 @@ using cmath::perp;
 using cmath::phi;
 using cmath::theta;
 
+/// @|
+
+/// Function extracting a slice from the matrix used by
+/// @c algebra::vc::transform3
 template <auto SIZE, auto ROWS, auto COLS>
 ALGEBRA_HOST_DEVICE inline vc::storage_type<scalar, SIZE> vector(
     const Vc::array<Vc::array<scalar, ROWS>, COLS>& m, std::size_t row,
@@ -94,9 +111,14 @@ ALGEBRA_HOST_DEVICE inline vc::storage_type<scalar, SIZE> vector(
 
 namespace vector {
 
+/// @name Vector functions on @c algebra::vc::storage_type
+/// @{
+
 using cmath::cross;
 using cmath::dot;
 using cmath::normalize;
+
+/// @}
 
 }  // namespace vector
 }  // namespace algebra

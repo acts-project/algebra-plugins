@@ -1,6 +1,6 @@
-/** Algebra plugins, part of the ACTS project
+/** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -14,20 +14,33 @@
 
 namespace algebra {
 
+/// @name Operators on @c algebra::vecmem::storage_type
+/// @{
+
 using cmath::operator*;
 using cmath::operator-;
 using cmath::operator+;
 
+/// @}
+
 namespace vecmem {
+
+/// @name cmath based transforms on @c algebra::vecmem::storage_type
+/// @{
 
 using transform3 = cmath::transform3<vecmem::storage_type, scalar>;
 using cartesian2 = cmath::cartesian2<transform3>;
 using polar2 = cmath::polar2<transform3>;
 using cylindrical2 = cmath::cylindrical2<transform3>;
 
+/// @}
+
 }  // namespace vecmem
 
 namespace getter {
+
+/// @name Getter functions on @c algebra::vecmem::storage_type
+/// @{
 
 using cmath::eta;
 using cmath::norm;
@@ -35,6 +48,10 @@ using cmath::perp;
 using cmath::phi;
 using cmath::theta;
 
+/// @}
+
+/// Function extracting a slice from the matrix used by
+/// @c algebra::vecmem::transform3
 template <auto SIZE, auto ROWS, auto COLS>
 ALGEBRA_HOST_DEVICE inline vecmem::storage_type<scalar, SIZE> vector(
     const vecmem::storage_type<vecmem::storage_type<scalar, ROWS>, COLS>& m,
@@ -48,9 +65,14 @@ ALGEBRA_HOST_DEVICE inline vecmem::storage_type<scalar, SIZE> vector(
 
 namespace vector {
 
+/// @name Vector functions on @c algebra::vecmem::storage_type
+/// @{
+
 using cmath::cross;
 using cmath::dot;
 using cmath::normalize;
+
+/// @}
 
 }  // namespace vector
 }  // namespace algebra

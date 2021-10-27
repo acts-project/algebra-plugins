@@ -18,15 +18,10 @@ if( ALGEBRA_PLUGIN_INCLUDE_SMATRIX )
 endif()
 
 if( ALGEBRA_PLUGIN_INCLUDE_VC )
-   add_subdirectory( array_vc )
    add_subdirectory( vc_cmath )
    add_subdirectory( vc_vc )
 endif()
 
 if( ALGEBRA_PLUGIN_INCLUDE_VECMEM )
    add_subdirectory( vecmem_cmath )
-endif()
-
-if( ALGEBRA_PLUGIN_INCLUDE_VECMEM AND ALGEBRA_PLUGIN_INCLUDE_VC )
-   add_subdirectory( vecmem_vc )
 endif()

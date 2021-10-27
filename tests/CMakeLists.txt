@@ -35,8 +35,6 @@ if( ALGEBRA_PLUGIN_INCLUDE_SMATRIX )
 endif()
 
 if( ALGEBRA_PLUGIN_INCLUDE_VC )
-   algebra_add_test( array_vc "array/array_vc.cpp"
-      LINK_LIBRARIES GTest::gtest_main algebra::tests_common algebra::array_vc )
    algebra_add_test( vc_cmath "vc/vc_cmath.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common algebra::vc_cmath )
    algebra_add_test( vc_vc "vc/vc_vc.cpp"
@@ -47,10 +45,4 @@ if( ALGEBRA_PLUGIN_INCLUDE_VECMEM )
    algebra_add_test( vecmem_cmath "vecmem/vecmem_cmath.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                      algebra::vecmem_cmath )
-endif()
-
-if( ALGEBRA_PLUGIN_INCLUDE_VECMEM AND ALGEBRA_PLUGIN_INCLUDE_VC )
-   algebra_add_test( vecmem_vc "vecmem/vecmem_vc.cpp"
-      LINK_LIBRARIES GTest::gtest_main algebra::tests_common
-                     algebra::vecmem_vc )
 endif()

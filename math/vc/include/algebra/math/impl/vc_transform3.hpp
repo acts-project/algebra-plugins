@@ -317,10 +317,9 @@ struct transform3 {
    * @param v is the vector to be rotated
    */
   ALGEBRA_HOST_DEVICE
-  static inline vector3 rotate(const matrix44 &m, const vector3 &v) {
+  static inline auto rotate(const matrix44 &m, const vector3 &v) {
 
-    auto result = m.x * v[0] + m.y * v[1] + m.z * v[2];
-    return {result[0], result[1], result[2]};
+    return m.x * v[0] + m.y * v[1] + m.z * v[2];
   }
 
   /** This method retrieves the rotation of a transform */
@@ -338,10 +337,7 @@ struct transform3 {
 
   /** This method retrieves the translation of a transform */
   ALGEBRA_HOST_DEVICE
-  inline point3 translation() const {
-
-    return {_data.t[0], _data.t[1], _data.t[2]};
-  }
+  inline point3 translation() const { return _data.t; }
 
   /** This method retrieves the 4x4 matrix of a transform */
   ALGEBRA_HOST_DEVICE
@@ -356,10 +352,10 @@ struct transform3 {
    *
    * @return a global point
    */
-  ALGEBRA_HOST_DEVICE inline point3 point_to_global(const point3 &v) const {
+  template <typename point3_type>
+  ALGEBRA_HOST_DEVICE inline auto point_to_global(const point3_type &v) const {
 
-    auto result = _data.x * v[0] + _data.y * v[1] + _data.z * v[2] + _data.t;
-    return {result[0], result[1], result[2]};
+    return _data.x * v[0] + _data.y * v[1] + _data.z * v[2] + _data.t;
   }
 
   /** This method transform from a vector from the global 3D cartesian frame
@@ -371,11 +367,11 @@ struct transform3 {
    *
    * @return a local point
    */
-  ALGEBRA_HOST_DEVICE inline point3 point_to_local(const point3 &v) const {
+  template <typename point3_type>
+  ALGEBRA_HOST_DEVICE inline auto point_to_local(const point3_type &v) const {
 
-    auto result = _data_inv.x * v[0] + _data_inv.y * v[1] + _data_inv.z * v[2] +
-                  _data_inv.t;
-    return {result[0], result[1], result[2]};
+    return _data_inv.x * v[0] + _data_inv.y * v[1] + _data_inv.z * v[2] +
+           _data_inv.t;
   }
 
   /** This method transform from a vector from the local 3D cartesian frame
@@ -387,7 +383,9 @@ struct transform3 {
    *
    * @return a vector in global coordinates
    */
-  ALGEBRA_HOST_DEVICE inline vector3 vector_to_global(const vector3 &v) const {
+  template <typename vector3_type>
+  ALGEBRA_HOST_DEVICE inline auto vector_to_global(
+      const vector3_type &v) const {
 
     return rotate(_data, v);
   }
@@ -401,7 +399,8 @@ struct transform3 {
    *
    * @return a vector in global coordinates
    */
-  ALGEBRA_HOST_DEVICE inline vector3 vector_to_local(const vector3 &v) const {
+  template <typename vector3_type>
+  ALGEBRA_HOST_DEVICE inline auto vector_to_local(const vector3_type &v) const {
 
     return rotate(_data_inv, v);
   }

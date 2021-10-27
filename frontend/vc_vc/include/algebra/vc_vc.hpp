@@ -14,11 +14,12 @@
 #include "algebra/storage/vc.hpp"
 
 // System include(s).
+#include <cassert>
 #include <type_traits>
 
 namespace algebra {
 
-/// @name Operators on @c algebra::vc::storage_type
+/// @name Operators on @c algebra::vc types
 /// @{
 
 using cmath::operator*;
@@ -32,6 +33,10 @@ namespace vc {
 /// @name Vc based transforms on @c algebra::vc::storage_type
 /// @{
 
+// Pull in the definitions needed by the cmath transforms, into this namespace.
+using math::perp;
+using math::phi;
+
 using transform3 = math::transform3<storage_type, scalar, vector3, point2>;
 using cartesian2 = cmath::cartesian2<transform3>;
 using polar2 = cmath::polar2<transform3>;
@@ -43,7 +48,7 @@ using cylindrical2 = cmath::cylindrical2<transform3>;
 
 namespace getter {
 
-/// @name Getter functions on @c algebra::array::storage_type
+/// @name Getter functions on @c algebra::vc types
 /// @{
 
 using cmath::eta;
@@ -52,43 +57,41 @@ using cmath::perp;
 using cmath::phi;
 using cmath::theta;
 
+using vc::math::eta;
+using vc::math::norm;
+using vc::math::perp;
+using vc::math::phi;
+using vc::math::theta;
+
 /// @}
 
 /// Function extracting a slice from the matrix used by
 /// @c algebra::array::transform3
 template <auto SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline vc::storage_type<scalar, SIZE> vector(
-    const vc::transform3::matrix44& m, std::size_t row, std::size_t col) {
+ALGEBRA_HOST_DEVICE inline auto vector(const vc::transform3::matrix44& m,
+                                       std::size_t row, std::size_t col) {
 
-  vc::storage_type<scalar, SIZE> result;
-  const Vc::SimdArray<scalar, 4>* a = nullptr;
+  assert(row == 0);
+  assert(col < 4);
   switch (col) {
     case 0:
-      a = &(m.x);
-      break;
+      return m.x;
     case 1:
-      a = &(m.y);
-      break;
+      return m.y;
     case 2:
-      a = &(m.z);
-      break;
+      return m.z;
     case 3:
-      a = &(m.t);
-      break;
+      return m.t;
     default:
-      return result;
+      return m.x;
   }
-  for (std::size_t irow = row; irow < row + SIZE; ++irow) {
-    result[irow - row] = (*a)[irow];
-  }
-  return result;
 }
 
 }  // namespace getter
 
 namespace vector {
 
-/// @name Vector functions on @c algebra::vc::storage_type
+/// @name Vector functions on @c algebra::vc types
 /// @{
 
 using cmath::dot;

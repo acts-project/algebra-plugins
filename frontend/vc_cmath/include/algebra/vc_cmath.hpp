@@ -10,11 +10,12 @@
 // Project include(s).
 #include "algebra/common/scalar.hpp"
 #include "algebra/math/cmath.hpp"
+#include "algebra/math/vc.hpp"
 #include "algebra/storage/vc.hpp"
 
 namespace algebra {
 
-/// @name Operators on @c algebra::vc::storage_type and @c Vc::array
+/// @name Operators on @c algebra::vc types
 /// @{
 
 using cmath::operator*;
@@ -68,8 +69,13 @@ struct block_getter {
   }
 };  // struct block_getter
 
-/// @name cmath based transforms on @c algebra::vc::storage_type
+/// @name cmath based transforms on @c algebra::vc types
 /// @{
+
+// Pull in the definitions needed by the cmath transforms, into this namespace.
+using math::cross;
+using math::perp;
+using math::phi;
 
 using transform3 =
     cmath::transform3<vc::storage_type, scalar,
@@ -85,7 +91,7 @@ using cylindrical2 = cmath::cylindrical2<transform3>;
 
 namespace getter {
 
-/// @name Getter functions on @c algebra::vc::storage_type
+/// @name Getter functions on @c algebra::vc types
 /// @{
 
 using cmath::eta;
@@ -93,6 +99,12 @@ using cmath::norm;
 using cmath::perp;
 using cmath::phi;
 using cmath::theta;
+
+using vc::math::eta;
+using vc::math::norm;
+using vc::math::perp;
+using vc::math::phi;
+using vc::math::theta;
 
 /// @|
 
@@ -117,6 +129,10 @@ namespace vector {
 using cmath::cross;
 using cmath::dot;
 using cmath::normalize;
+
+using vc::math::cross;
+using vc::math::dot;
+using vc::math::normalize;
 
 /// @}
 

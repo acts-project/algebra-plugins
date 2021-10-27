@@ -10,12 +10,10 @@
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
 
-// Vc include(s).
-#include <Vc/Vc>
-
 // System include(s).
 #include <cmath>
 #include <type_traits>
+#include <utility>
 
 namespace algebra::vc::math {
 
@@ -28,9 +26,13 @@ namespace algebra::vc::math {
  *
  * @return the scalar dot product value
  **/
-template <typename scalar_t, auto N>
-ALGEBRA_HOST_DEVICE inline scalar_t dot(const Vc::SimdArray<scalar_t, N> &a,
-                                        const Vc::SimdArray<scalar_t, N> &b) {
+template <typename vector_type1, typename vector_type2,
+          std::enable_if_t<
+              std::is_class<decltype(std::declval<vector_type1>() *
+                                     std::declval<vector_type2>())>::value,
+              bool> = true>
+ALGEBRA_HOST_DEVICE inline auto dot(const vector_type1 &a,
+                                    const vector_type2 &b) {
 
   return (a * b).sum();
 }
@@ -41,9 +43,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t dot(const Vc::SimdArray<scalar_t, N> &a,
  *
  * @param v the input vector
  **/
-template <typename scalar_t, auto N>
-ALGEBRA_HOST_DEVICE inline Vc::SimdArray<scalar_t, N> normalize(
-    const Vc::SimdArray<scalar_t, N> &v) {
+template <typename vector_type>
+ALGEBRA_HOST_DEVICE inline auto normalize(const vector_type &v) {
 
   return v / std::sqrt(dot(v, v));
 }
@@ -57,13 +58,17 @@ ALGEBRA_HOST_DEVICE inline Vc::SimdArray<scalar_t, N> normalize(
  *
  * @return a vector representing the cross product
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N,
-          std::enable_if_t<N >= 3, bool> = true>
-ALGEBRA_HOST_DEVICE inline array_t<scalar_t, N> cross(
-    const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) {
+template <typename vector_type1, typename vector_type2,
+          std::enable_if_t<std::is_fundamental<decltype(
+                               std::declval<vector_type1>()[0] *
+                               std::declval<vector_type2>()[0])>::value,
+                           bool> = true>
+ALGEBRA_HOST_DEVICE inline auto cross(const vector_type1 &a,
+                                      const vector_type2 &b)
+    -> decltype(a * b - a * b) {
 
   return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0],
-          a[0] * b[1] - b[0] * a[1]};
+          a[0] * b[1] - b[0] * a[1], 0};
 }
 
 }  // namespace algebra::vc::math

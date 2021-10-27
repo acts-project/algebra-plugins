@@ -8,5 +8,6 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/impl/vc_getter.hpp"
 #include "algebra/math/impl/vc_transform3.hpp"
 #include "algebra/math/impl/vc_vector.hpp"

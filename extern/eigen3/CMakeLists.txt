@@ -14,7 +14,7 @@ message( STATUS "Building Eigen3 as part of the Algebra Plugins project" )
 # Declare where to get Eigen3 from.
 FetchContent_Declare( Eigen3
   URL "https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2"
-  URL_MD5 "80a43aa9b64030639d1b1bd0c01fae801ab722f537ed" )
+  URL_MD5 "132dde48fe2b563211675626d29f1707" )
 
 # Turn off the unit tests for Eigen3.
 if( DEFINED CACHE{BUILD_TESTING} )

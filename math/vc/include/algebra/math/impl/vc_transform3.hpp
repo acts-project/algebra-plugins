@@ -27,12 +27,8 @@ struct matrix44 {
 
   /// Equality operator between two matrices
   bool operator==(const matrix44 &rhs) const {
-    return ((x[0] == rhs.x[0]) && (x[1] == rhs.x[1]) && (x[2] == rhs.x[2]) &&
-            (x[3] == rhs.x[3]) && (y[0] == rhs.y[0]) && (y[1] == rhs.y[1]) &&
-            (y[2] == rhs.y[2]) && (y[3] == rhs.y[3]) && (z[0] == rhs.z[0]) &&
-            (z[1] == rhs.z[1]) && (z[2] == rhs.z[2]) && (z[3] == rhs.z[3]) &&
-            (t[0] == rhs.t[0]) && (t[1] == rhs.t[1]) && (t[2] == rhs.t[2]) &&
-            (t[3] == rhs.t[3]));
+    return ((x == rhs.x).isFull() && (y == rhs.y).isFull() &&
+            (z == rhs.z).isFull() && (t == rhs.t).isFull());
   }
 
   /// Data variables

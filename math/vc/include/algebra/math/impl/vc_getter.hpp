@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/common/algebra_qualifiers.hpp"
+#include "algebra/math/impl/vc_vector.hpp"
 
 // System include(s).
 #include <cmath>
@@ -52,7 +53,7 @@ ALGEBRA_HOST_DEVICE inline auto perp(const vector_type &v) noexcept {
 template <typename vector_type>
 ALGEBRA_HOST_DEVICE inline auto norm(const vector_type &v) {
 
-  return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  return std::sqrt(dot(v, v));
 }
 
 /** This method retrieves the pseudo-rapidity from a vector or vector base with

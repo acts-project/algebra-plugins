@@ -1,14 +1,11 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2021 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
 
 #pragma once
-
-// Project include(s).
-#include "algebra/common/types.hpp"
 
 // GoogleTest include(s).
 #include <gtest/gtest.h>
@@ -153,17 +150,15 @@ TEST(ALGEBRA_PLUGIN, transform3) {
   ASSERT_TRUE(trf == trf);
 
   const auto rot = trf.rotation();
-#ifndef __plugin_without_matrix_element_accessor
-  ASSERT_NEAR(rot(0, 0), x[0], epsilon);
-  ASSERT_NEAR(rot(1, 0), x[1], epsilon);
-  ASSERT_NEAR(rot(2, 0), x[2], epsilon);
-  ASSERT_NEAR(rot(0, 1), y[0], epsilon);
-  ASSERT_NEAR(rot(1, 1), y[1], epsilon);
-  ASSERT_NEAR(rot(2, 1), y[2], epsilon);
-  ASSERT_NEAR(rot(0, 2), z[0], epsilon);
-  ASSERT_NEAR(rot(1, 2), z[1], epsilon);
-  ASSERT_NEAR(rot(2, 2), z[2], epsilon);
-#endif
+  ASSERT_NEAR(transform3::element_getter()(rot, 0, 0), x[0], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rot, 1, 0), x[1], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rot, 2, 0), x[2], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rot, 0, 1), y[0], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rot, 1, 1), y[1], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rot, 2, 1), y[2], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rot, 0, 2), z[0], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rot, 1, 2), z[1], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rot, 2, 2), z[2], epsilon);
 
   auto trn = trf.translation();
   ASSERT_NEAR(trn[0], 2., epsilon);
@@ -176,17 +171,15 @@ TEST(ALGEBRA_PLUGIN, transform3) {
 
   // Re-evaluate rot and trn
   auto rotm = trfm.rotation();
-#ifndef __plugin_without_matrix_element_accessor
-  ASSERT_NEAR(rotm(0, 0), x[0], epsilon);
-  ASSERT_NEAR(rotm(1, 0), x[1], epsilon);
-  ASSERT_NEAR(rotm(2, 0), x[2], epsilon);
-  ASSERT_NEAR(rotm(0, 1), y[0], epsilon);
-  ASSERT_NEAR(rotm(1, 1), y[1], epsilon);
-  ASSERT_NEAR(rotm(2, 1), y[2], epsilon);
-  ASSERT_NEAR(rotm(0, 2), z[0], epsilon);
-  ASSERT_NEAR(rotm(1, 2), z[1], epsilon);
-  ASSERT_NEAR(rotm(2, 2), z[2], epsilon);
-#endif
+  ASSERT_NEAR(transform3::element_getter()(rotm, 0, 0), x[0], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotm, 1, 0), x[1], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotm, 2, 0), x[2], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotm, 0, 1), y[0], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotm, 1, 1), y[1], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotm, 2, 1), y[2], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotm, 0, 2), z[0], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotm, 1, 2), z[1], epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotm, 2, 2), z[2], epsilon);
 
   auto trnm = trfm.translation();
   ASSERT_NEAR(trnm[0], 2., epsilon);
@@ -194,22 +187,25 @@ TEST(ALGEBRA_PLUGIN, transform3) {
   ASSERT_NEAR(trnm[2], 4., epsilon);
 
   // Check a contruction from an array[16]
-  array_s<scalar, 16> matray = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0};
+  std::array<scalar, 16> matray_helper = {1, 0, 0, 0, 0, 1, 0, 0,
+                                          0, 0, 1, 0, 0, 0, 0, 0};
+  __plugin::storage_type<scalar, 16> matray;
+  for (int i = 0; i < 16; ++i) {
+    matray[i] = matray_helper[i];
+  }
   transform3 trfma(matray);
 
-// Re-evaluate rot and trn
-#ifndef __plugin_without_matrix_element_accessor
+  // Re-evaluate rot and trn
   auto rotma = trfma.rotation();
-  ASSERT_NEAR(rotma(0, 0), 1., epsilon);
-  ASSERT_NEAR(rotma(1, 0), 0., epsilon);
-  ASSERT_NEAR(rotma(2, 0), 0., epsilon);
-  ASSERT_NEAR(rotma(0, 1), 0., epsilon);
-  ASSERT_NEAR(rotma(1, 1), 1., epsilon);
-  ASSERT_NEAR(rotma(2, 1), 0., epsilon);
-  ASSERT_NEAR(rotma(0, 2), 0., epsilon);
-  ASSERT_NEAR(rotma(1, 2), 0., epsilon);
-  ASSERT_NEAR(rotma(2, 2), 1., epsilon);
-#endif
+  ASSERT_NEAR(transform3::element_getter()(rotma, 0, 0), 1., epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotma, 1, 0), 0., epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotma, 2, 0), 0., epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotma, 0, 1), 0., epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotma, 1, 1), 1., epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotma, 2, 1), 0., epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotma, 0, 2), 0., epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotma, 1, 2), 0., epsilon);
+  ASSERT_NEAR(transform3::element_getter()(rotma, 2, 2), 1., epsilon);
 
   auto trnma = trfma.translation();
   ASSERT_NEAR(trnma[0], 0., epsilon);

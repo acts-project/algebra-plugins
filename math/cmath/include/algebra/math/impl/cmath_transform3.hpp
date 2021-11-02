@@ -16,7 +16,7 @@ namespace algebra::cmath {
 
 /** Transform wrapper class to ensure standard API within differnt plugins
  **/
-template <template <typename, auto> class array_t, typename scalar_t,
+template <template <typename, std::size_t> class array_t, typename scalar_t,
           typename matrix44_t = array_t<array_t<scalar_t, 4>, 4>,
           class element_getter_t = element_getter<array_t, scalar_t>,
           class block_getter_t = block_getter<array_t, scalar_t>,
@@ -28,7 +28,7 @@ struct transform3 {
   /// @{
 
   /// Array type used by the transform
-  template <typename T, auto N>
+  template <typename T, std::size_t N>
   using array_type = array_t<T, N>;
   /// Scalar type used by the transform
   using scalar_type = scalar_t;

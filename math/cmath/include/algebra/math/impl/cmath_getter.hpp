@@ -21,8 +21,8 @@ namespace algebra::cmath {
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N,
-          std::enable_if_t<N >= 2, bool> = true>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N, std::enable_if_t<N >= 2, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t phi(
     const array_t<scalar_t, N> &v) noexcept {
 
@@ -33,8 +33,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t phi(
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N,
-          std::enable_if_t<N >= 3, bool> = true>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N, std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t theta(
     const array_t<scalar_t, N> &v) noexcept {
 
@@ -45,8 +45,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t theta(
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N,
-          std::enable_if_t<N >= 2, bool> = true>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N, std::enable_if_t<N >= 2, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t perp(
     const array_t<scalar_t, N> &v) noexcept {
 
@@ -57,7 +57,7 @@ ALGEBRA_HOST_DEVICE inline scalar_t perp(
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t>
+template <template <typename, std::size_t> class array_t, typename scalar_t>
 ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, 2> &v) {
 
   return perp<array_t>(v);
@@ -67,8 +67,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, 2> &v) {
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N,
-          std::enable_if_t<N >= 3, bool> = true>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N, std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, N> &v) {
 
   return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
@@ -79,8 +79,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, N> &v) {
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N,
-          std::enable_if_t<N >= 3, bool> = true>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N, std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t eta(
     const array_t<scalar_t, N> &v) noexcept {
 
@@ -88,15 +88,15 @@ ALGEBRA_HOST_DEVICE inline scalar_t eta(
 }
 
 /// "Element getter", assuming a simple 2D array access
-template <template <typename, auto> class array_t, typename scalar_t>
+template <template <typename, std::size_t> class array_t, typename scalar_t>
 struct element_getter {
 
   /// 2D matrix type
-  template <auto ROWS, auto COLS>
+  template <std::size_t ROWS, std::size_t COLS>
   using matrix_type = array_t<array_t<scalar_t, ROWS>, COLS>;
 
   /// Operator getting a reference to one element of a non-const matrix
-  template <auto ROWS, auto COLS>
+  template <std::size_t ROWS, std::size_t COLS>
   ALGEBRA_HOST_DEVICE inline scalar_t &operator()(matrix_type<ROWS, COLS> &m,
                                                   std::size_t row,
                                                   std::size_t col) const {
@@ -105,7 +105,7 @@ struct element_getter {
   }
 
   /// Operator getting one value of a const matrix
-  template <auto ROWS, auto COLS>
+  template <std::size_t ROWS, std::size_t COLS>
   ALGEBRA_HOST_DEVICE inline scalar_t operator()(
       const matrix_type<ROWS, COLS> &m, std::size_t row,
       std::size_t col) const {
@@ -115,18 +115,18 @@ struct element_getter {
 };  // struct element_getter
 
 /// "Vector getter", assuming a simple 2D array access
-template <template <typename, auto> class array_t, typename scalar_t, auto SIZE,
-          typename result_t = array_t<scalar_t, SIZE> >
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t SIZE, typename result_t = array_t<scalar_t, SIZE> >
 struct vector_getter {
 
   /// Result type
   using result_type = result_t;
   /// 2D matrix type
-  template <auto ROWS, auto COLS>
+  template <std::size_t ROWS, std::size_t COLS>
   using matrix_type = array_t<array_t<scalar_t, ROWS>, COLS>;
 
   /// Operator producing a vector out of a const matrix
-  template <auto ROWS, auto COLS>
+  template <std::size_t ROWS, std::size_t COLS>
   ALGEBRA_HOST_DEVICE inline result_type operator()(
       const matrix_type<ROWS, COLS> &m, std::size_t row, std::size_t col) {
 
@@ -139,15 +139,15 @@ struct vector_getter {
 };  // struct vector_getter
 
 /// "Block getter", assuming a simple 2D array access
-template <template <typename, auto> class array_t, typename scalar_t>
+template <template <typename, std::size_t> class array_t, typename scalar_t>
 struct block_getter {
 
   /// 2D matrix type
-  template <auto ROWS, auto COLS>
+  template <std::size_t ROWS, std::size_t COLS>
   using matrix_type = array_t<array_t<scalar_t, ROWS>, COLS>;
 
   /// Operator producing a sub-matrix from a const matrix
-  template <auto ROWS, auto COLS, class input_matrix_type>
+  template <std::size_t ROWS, std::size_t COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> operator()(
       const input_matrix_type &m, std::size_t row, std::size_t col) const {
 

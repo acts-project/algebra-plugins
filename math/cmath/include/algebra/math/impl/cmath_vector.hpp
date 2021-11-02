@@ -25,8 +25,8 @@ namespace algebra::cmath {
  *
  * @return a vector (expression) representing the cross product
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N,
-          std::enable_if_t<N >= 3, bool> = true>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N, std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, N> cross(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) {
 
@@ -41,7 +41,7 @@ ALGEBRA_HOST_DEVICE inline array_t<scalar_t, N> cross(
  *
  * @return the scalar dot product value
  **/
-template <template <typename, auto> class array_t, typename scalar_t>
+template <template <typename, std::size_t> class array_t, typename scalar_t>
 ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, 2> &a,
                                         const array_t<scalar_t, 2> &b) {
 
@@ -52,7 +52,7 @@ ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, 2> &a,
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t>
+template <template <typename, std::size_t> class array_t, typename scalar_t>
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 2> normalize(
     const array_t<scalar_t, 2> &v) {
 
@@ -67,8 +67,9 @@ ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 2> normalize(
  *
  * @return the scalar dot product value
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N1,
-          auto N2, std::enable_if_t<N1 >= 3, bool> = true,
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N1, std::size_t N2,
+          std::enable_if_t<N1 >= 3, bool> = true,
           std::enable_if_t<N2 >= 3, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, N1> &a,
                                         const array_t<scalar_t, N2> &b) {
@@ -80,8 +81,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, N1> &a,
  *
  * @param v the input vector
  **/
-template <template <typename, auto> class array_t, typename scalar_t, auto N,
-          std::enable_if_t<N >= 3, bool> = true>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N, std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 3> normalize(
     const array_t<scalar_t, N> &v) {
 

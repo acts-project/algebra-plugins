@@ -52,7 +52,7 @@ using cmath::theta;
 
 /// Function extracting a slice from the matrix used by
 /// @c algebra::array::transform3
-template <auto SIZE, auto ROWS, auto COLS>
+template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS>
 ALGEBRA_HOST_DEVICE inline array::storage_type<scalar, SIZE> vector(
     const array::storage_type<array::storage_type<scalar, ROWS>, COLS>& m,
     std::size_t row, std::size_t col) {

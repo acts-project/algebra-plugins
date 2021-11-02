@@ -59,7 +59,7 @@ struct block_getter {
 /// @{
 
 using transform3 =
-    cmath::transform3<eigen::storage_type, scalar,
+    cmath::transform3<std::size_t, eigen::storage_type, scalar,
                       Eigen::Transform<scalar, 3, Eigen::Affine>::MatrixType,
                       algebra::eigen::element_getter,
                       algebra::eigen::block_getter>;

@@ -78,7 +78,7 @@ using math::perp;
 using math::phi;
 
 using transform3 =
-    cmath::transform3<vc::storage_type, scalar,
+    cmath::transform3<std::size_t, vc::storage_type, scalar,
                       Vc::array<Vc::array<scalar, 4>, 4>, element_getter,
                       block_getter, vc::vector3, vc::point2>;
 using cartesian2 = cmath::cartesian2<transform3>;

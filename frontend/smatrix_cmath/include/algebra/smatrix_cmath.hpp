@@ -59,8 +59,8 @@ struct block_getter {
 /// @name cmath based transforms on @c algebra::smatrix::storage_type
 /// @{
 
-using transform3 = cmath::transform3<smatrix::storage_type, scalar,
-                                     ROOT::Math::SMatrix<scalar, 4, 4>,
+using transform3 = cmath::transform3<unsigned int, smatrix::storage_type,
+                                     scalar, ROOT::Math::SMatrix<scalar, 4, 4>,
                                      element_getter, block_getter>;
 using cartesian2 = cmath::cartesian2<transform3>;
 using polar2 = cmath::polar2<transform3>;

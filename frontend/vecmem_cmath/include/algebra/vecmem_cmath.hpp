@@ -28,7 +28,7 @@ namespace vecmem {
 /// @name cmath based transforms on @c algebra::vecmem::storage_type
 /// @{
 
-using transform3 = cmath::transform3<vecmem::storage_type, scalar>;
+using transform3 = cmath::transform3<std::size_t, vecmem::storage_type, scalar>;
 using cartesian2 = cmath::cartesian2<transform3>;
 using polar2 = cmath::polar2<transform3>;
 using cylindrical2 = cmath::cylindrical2<transform3>;

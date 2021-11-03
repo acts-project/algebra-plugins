@@ -12,17 +12,16 @@
 #include "algebra/math/cmath.hpp"
 #include "algebra/storage/array.hpp"
 
-namespace algebra {
-
 /// @name Operators on @c algebra::array::storage_type
 /// @{
 
-using cmath::operator*;
-using cmath::operator-;
-using cmath::operator+;
+using algebra::cmath::operator*;
+using algebra::cmath::operator-;
+using algebra::cmath::operator+;
 
 /// @}
 
+namespace algebra {
 namespace array {
 
 /// @name cmath based transforms on @c algebra::array::storage_type

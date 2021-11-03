@@ -25,10 +25,6 @@ struct test_specialisation_name {
   }
 };
 
-// This test needs the algebra operators.
-using algebra::operator+;
-using algebra::operator*;
-
 // Instantiate the test(s).
 typedef testing::Types<test_types<
     algebra::scalar, algebra::vc::point2, algebra::vc::point3,

@@ -9,5 +9,28 @@
 #include "algebra/eigen_eigen.hpp"
 
 // Test include(s).
-#define __plugin algebra::eigen
-#include "test_plugin.inl"
+#include "test_basics.hpp"
+
+// GoogleTest include(s).
+#include <gtest/gtest.h>
+
+// System include(s).
+#include <string>
+
+/// Struct providing a readable name for the test
+struct test_specialisation_name {
+  template <typename T>
+  static std::string GetName(int) {
+    return "eigen_eigen";
+  }
+};
+
+// Instantiate the test(s).
+typedef testing::Types<
+    test_types<algebra::scalar, algebra::eigen::point2, algebra::eigen::point3,
+               algebra::eigen::vector2, algebra::eigen::vector3,
+               algebra::eigen::transform3, algebra::eigen::cartesian2,
+               algebra::eigen::polar2, algebra::eigen::cylindrical2> >
+    eigen_eigen_types;
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_basics, eigen_eigen_types,
+                               test_specialisation_name);

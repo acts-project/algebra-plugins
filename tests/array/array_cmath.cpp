@@ -9,5 +9,32 @@
 #include "algebra/array_cmath.hpp"
 
 // Test include(s).
-#define __plugin algebra::array
-#include "test_plugin.inl"
+#include "test_basics.hpp"
+
+// GoogleTest include(s).
+#include <gtest/gtest.h>
+
+// System include(s).
+#include <string>
+
+/// Struct providing a readable name for the test
+struct test_specialisation_name {
+  template <typename T>
+  static std::string GetName(int) {
+    return "array_cmath";
+  }
+};
+
+// This test needs the algebra operators.
+using algebra::operator+;
+using algebra::operator*;
+
+// Instantiate the test(s).
+typedef testing::Types<
+    test_types<algebra::scalar, algebra::array::point2, algebra::array::point3,
+               algebra::array::vector2, algebra::array::vector3,
+               algebra::array::transform3, algebra::array::cartesian2,
+               algebra::array::polar2, algebra::array::cylindrical2> >
+    array_cmath_types;
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_basics, array_cmath_types,
+                               test_specialisation_name);

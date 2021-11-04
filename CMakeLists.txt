@@ -6,7 +6,7 @@
 
 # Set up the project.
 cmake_minimum_required( VERSION 3.14 )
-project( algebra-plugins VERSION 0.2 LANGUAGES CXX )
+project( algebra-plugins VERSION 0.3 LANGUAGES CXX )
 
 # Standard CMake include(s).
 include( GNUInstallDirs )

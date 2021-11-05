@@ -16,28 +16,28 @@ algebra_add_test( array
    LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                   algebra::array_cmath )
 
-if( ALGEBRA_PLUGIN_INCLUDE_EIGEN )
+if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
    algebra_add_test( eigen
       "eigen/eigen_cmath.cpp" "eigen/eigen_eigen.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                      algebra::eigen_cmath algebra::eigen_eigen )
 endif()
 
-if( ALGEBRA_PLUGIN_INCLUDE_SMATRIX )
+if( ALGEBRA_PLUGINS_INCLUDE_SMATRIX )
    algebra_add_test( smatrix
       "smatrix/smatrix_cmath.cpp" "smatrix/smatrix_smatrix.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                      algebra::smatrix_cmath algebra::smatrix_smatrix )
 endif()
 
-if( ALGEBRA_PLUGIN_INCLUDE_VC )
+if( ALGEBRA_PLUGINS_INCLUDE_VC )
    algebra_add_test( vc
       "vc/vc_cmath.cpp" "vc/vc_vc.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                      algebra::vc_cmath algebra::vc_vc )
 endif()
 
-if( ALGEBRA_PLUGIN_INCLUDE_VECMEM )
+if( ALGEBRA_PLUGINS_INCLUDE_VECMEM )
    algebra_add_test( vecmem
       "vecmem/vecmem_cmath.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common

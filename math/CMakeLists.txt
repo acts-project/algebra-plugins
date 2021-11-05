@@ -6,12 +6,12 @@
 
 # Set up all enabled libraries.
 add_subdirectory( cmath )
-if( ALGEBRA_PLUGIN_INCLUDE_EIGEN )
+if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
    add_subdirectory( eigen )
 endif()
-if( ALGEBRA_PLUGIN_INCLUDE_SMATRIX )
+if( ALGEBRA_PLUGINS_INCLUDE_SMATRIX )
    add_subdirectory( smatrix )
 endif()
-if( ALGEBRA_PLUGIN_INCLUDE_VC )
+if( ALGEBRA_PLUGINS_INCLUDE_VC )
    add_subdirectory( vc )
 endif()

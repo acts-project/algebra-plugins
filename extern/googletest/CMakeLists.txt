@@ -12,9 +12,11 @@ include( FetchContent )
 message( STATUS "Building GoogleTest as part of the Algebra Plugins project" )
 
 # Declare where to get GoogleTest from.
-FetchContent_Declare( GoogleTest
-   URL "https://github.com/google/googletest/archive/release-1.11.0.tar.gz"
-   URL_MD5 "e8a8df240b6938bb6384155d4c37d937" )
+set( ALGEBRA_PLUGINS_GOOGLETEST_SOURCE
+   "URL;https://github.com/google/googletest/archive/release-1.11.0.tar.gz;URL_MD5;e8a8df240b6938bb6384155d4c37d937"
+   CACHE STRING "Source for GoogleTest, when built as part of this project" )
+mark_as_advanced( ALGEBRA_PLUGINS_GOOGLETEST_SOURCE )
+FetchContent_Declare( GoogleTest ${ALGEBRA_PLUGINS_GOOGLETEST_SOURCE} )
 
 # Options used in the build of GoogleTest.
 set( BUILD_GMOCK TRUE CACHE BOOL "Turn off the build of GMock" )

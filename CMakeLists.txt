@@ -30,17 +30,17 @@ include( algebra-plugins-compiler-options )
 include( algebra-plugins-functions )
 
 # Flags controlling how the Algebra Plugins code should behave.
-set( ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE "double" CACHE STRING
+set( ALGEBRA_PLUGINS_CUSTOM_SCALARTYPE "double" CACHE STRING
    "Scalar type to use in Algebra Plugins" )
-option( ALGEBRA_PLUGIN_INCLUDE_EIGEN
+option( ALGEBRA_PLUGINS_INCLUDE_EIGEN
    "Include Eigen types in Algebra Plugins" FALSE )
-option( ALGEBRA_PLUGIN_INCLUDE_SMATRIX
+option( ALGEBRA_PLUGINS_INCLUDE_SMATRIX
    "Include Smatrix types in Algebra Plugins" FALSE )
-option( ALGEBRA_PLUGIN_INCLUDE_VC
+option( ALGEBRA_PLUGINS_INCLUDE_VC
    "Include Vc types in Algebra Plugins" FALSE )
-option( ALGEBRA_PLUGIN_INCLUDE_VECMEM
+option( ALGEBRA_PLUGINS_INCLUDE_VECMEM
    "Include VecMem types in Algebra Plugins" FALSE )
-option( ALGEBRA_PLUGIN_BUILD_TESTING "Build the unit tests of Algebra Plugins"
+option( ALGEBRA_PLUGINS_BUILD_TESTING "Build the unit tests of Algebra Plugins"
    TRUE )
 
 # Suppress developer warnings for all of the externals by default.
@@ -51,13 +51,13 @@ if( NOT DEFINED CMAKE_SUPPRESS_DEVELOPER_WARNINGS )
 endif()
 
 # Set up VecMem.
-option( ALGEBRA_PLUGIN_SETUP_VECMEM
+option( ALGEBRA_PLUGINS_SETUP_VECMEM
    "Set up the VecMem target(s) explicitly" FALSE )
-option( ALGEBRA_PLUGIN_USE_SYSTEM_VECMEM
+option( ALGEBRA_PLUGINS_USE_SYSTEM_VECMEM
    "Pick up an existing installation of VecMem from the build environment"
    TRUE )
-if( ALGEBRA_PLUGIN_SETUP_VECMEM )
-   if( ALGEBRA_PLUGIN_USE_SYSTEM_VECMEM )
+if( ALGEBRA_PLUGINS_SETUP_VECMEM )
+   if( ALGEBRA_PLUGINS_USE_SYSTEM_VECMEM )
       find_package( vecmem REQUIRED )
    else()
       add_subdirectory( extern/vecmem )
@@ -65,13 +65,13 @@ if( ALGEBRA_PLUGIN_SETUP_VECMEM )
 endif()
 
 # Set up GoogleTest.
-option( ALGEBRA_PLUGIN_SETUP_GOOGLETEST
+option( ALGEBRA_PLUGINS_SETUP_GOOGLETEST
    "Set up the GoogleTest target(s) explicitly" TRUE )
-option( ALGEBRA_PLUGIN_USE_SYSTEM_GOOGLETEST
+option( ALGEBRA_PLUGINS_USE_SYSTEM_GOOGLETEST
    "Pick up an existing installation of GoogleTest from the build environment"
    FALSE )
-if( ALGEBRA_PLUGIN_SETUP_GOOGLETEST )
-   if( ALGEBRA_PLUGIN_USE_SYSTEM_GOOGLETEST )
+if( ALGEBRA_PLUGINS_SETUP_GOOGLETEST )
+   if( ALGEBRA_PLUGINS_USE_SYSTEM_GOOGLETEST )
       find_package( GTest REQUIRED )
    else()
       add_subdirectory( extern/googletest )
@@ -79,13 +79,13 @@ if( ALGEBRA_PLUGIN_SETUP_GOOGLETEST )
 endif()
 
 # Set up Eigen3.
-option( ALGEBRA_PLUGIN_SETUP_EIGEN3
+option( ALGEBRA_PLUGINS_SETUP_EIGEN3
    "Set up the Eigen3 target(s) explicitly" FALSE )
-option( ALGEBRA_PLUGIN_USE_SYSTEM_EIGEN3
+option( ALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3
    "Pick up an existing installation of Eigen3 from the build environment"
    TRUE )
-if( ALGEBRA_PLUGIN_SETUP_EIGEN3 )
-   if( ALGEBRA_PLUGIN_USE_SYSTEM_EIGEN3 )
+if( ALGEBRA_PLUGINS_SETUP_EIGEN3 )
+   if( ALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3 )
       find_package( Eigen3 REQUIRED )
    else()
       add_subdirectory( extern/eigen3 )
@@ -93,13 +93,13 @@ if( ALGEBRA_PLUGIN_SETUP_EIGEN3 )
 endif()
 
 # Set up Vc.
-option( ALGEBRA_PLUGIN_SETUP_VC
+option( ALGEBRA_PLUGINS_SETUP_VC
    "Set up the Vc target(s) explicitly" FALSE )
-option( ALGEBRA_PLUGIN_USE_SYSTEM_VC
+option( ALGEBRA_PLUGINS_USE_SYSTEM_VC
    "Pick up an existing installation of Vc from the build environment"
    TRUE )
-if( ALGEBRA_PLUGIN_SETUP_VC )
-   if( ALGEBRA_PLUGIN_USE_SYSTEM_VC )
+if( ALGEBRA_PLUGINS_SETUP_VC )
+   if( ALGEBRA_PLUGINS_USE_SYSTEM_VC )
       find_package( Vc 1.4.2 REQUIRED )
    else()
       add_subdirectory( extern/vc )
@@ -126,7 +126,7 @@ add_subdirectory( frontend )
 
 # Set up the test(s).
 include( CTest )
-if( BUILD_TESTING AND ALGEBRA_PLUGIN_BUILD_TESTING )
+if( BUILD_TESTING AND ALGEBRA_PLUGINS_BUILD_TESTING )
   add_subdirectory( tests )
 endif()
 

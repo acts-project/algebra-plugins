@@ -10,6 +10,6 @@
 namespace algebra {
 
 /// Scalar type to use, defined by the CMake configuration
-using scalar = ALGEBRA_PLUGIN_CUSTOM_SCALARTYPE;
+using scalar = ALGEBRA_PLUGINS_CUSTOM_SCALARTYPE;
 
 }  // namespace algebra

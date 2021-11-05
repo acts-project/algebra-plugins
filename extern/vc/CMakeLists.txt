@@ -12,9 +12,11 @@ include( FetchContent )
 message( STATUS "Building Vc as part of the Algebra Plugins project" )
 
 # Declare where to get Vc from.
-FetchContent_Declare( Vc
-   GIT_REPOSITORY "https://github.com/VcDevel/Vc.git"
-   GIT_TAG "b84dcd0a65d8dc5de6a2bd4d367882b3748f812c" )
+set( ALGEBRA_PLUGINS_VC_SOURCE
+   "GIT_REPOSITORY;https://github.com/VcDevel/Vc.git;GIT_TAG;b84dcd0"
+   CACHE STRING "Source for Vc, when built as part of this project" )
+mark_as_advanced( ALGEBRA_PLUGINS_VC_SOURCE )
+FetchContent_Declare( Vc ${ALGEBRA_PLUGINS_VC_SOURCE} )
 
 # Turn off the unit tests for Vc.
 if( DEFINED CACHE{BUILD_TESTING} )

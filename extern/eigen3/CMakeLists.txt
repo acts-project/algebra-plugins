@@ -12,9 +12,11 @@ include( FetchContent )
 message( STATUS "Building Eigen3 as part of the Algebra Plugins project" )
 
 # Declare where to get Eigen3 from.
-FetchContent_Declare( Eigen3
-  URL "https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2"
-  URL_MD5 "132dde48fe2b563211675626d29f1707" )
+set( ALGEBRA_PLUGINS_EIGEN_SOURCE
+   "URL;https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2;URL_MD5;132dde48fe2b563211675626d29f1707"
+   CACHE STRING "Source for Eigen, when built as part of this project" )
+mark_as_advanced( ALGEBRA_PLUGINS_EIGEN_SOURCE )
+FetchContent_Declare( Eigen3 ${ALGEBRA_PLUGINS_EIGEN_SOURCE} )
 
 # Turn off the unit tests for Eigen3.
 if( DEFINED CACHE{BUILD_TESTING} )

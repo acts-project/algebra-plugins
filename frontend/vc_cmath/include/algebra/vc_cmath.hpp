@@ -13,17 +13,16 @@
 #include "algebra/math/vc.hpp"
 #include "algebra/storage/vc.hpp"
 
-namespace algebra {
-
 /// @name Operators on @c algebra::vc types
 /// @{
 
-using cmath::operator*;
-using cmath::operator-;
-using cmath::operator+;
+using algebra::cmath::operator*;
+using algebra::cmath::operator-;
+using algebra::cmath::operator+;
 
 /// @}
 
+namespace algebra {
 namespace vc {
 
 /// Functor used to access elements of Vc matrices

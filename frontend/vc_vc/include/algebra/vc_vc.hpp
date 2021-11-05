@@ -17,17 +17,16 @@
 #include <cassert>
 #include <type_traits>
 
-namespace algebra {
-
 /// @name Operators on @c algebra::vc types
 /// @{
 
-using cmath::operator*;
-using cmath::operator-;
-using cmath::operator+;
+using algebra::cmath::operator*;
+using algebra::cmath::operator-;
+using algebra::cmath::operator+;
 
 /// @}
 
+namespace algebra {
 namespace vc {
 
 /// @name Vc based transforms on @c algebra::vc::storage_type

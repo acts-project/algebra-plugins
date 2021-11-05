@@ -12,17 +12,16 @@
 #include "algebra/math/cmath.hpp"
 #include "algebra/storage/vecmem.hpp"
 
-namespace algebra {
-
 /// @name Operators on @c algebra::vecmem::storage_type
 /// @{
 
-using cmath::operator*;
-using cmath::operator-;
-using cmath::operator+;
+using algebra::cmath::operator*;
+using algebra::cmath::operator-;
+using algebra::cmath::operator+;
 
 /// @}
 
+namespace algebra {
 namespace vecmem {
 
 /// @name cmath based transforms on @c algebra::vecmem::storage_type

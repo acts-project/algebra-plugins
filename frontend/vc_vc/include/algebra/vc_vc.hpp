@@ -66,7 +66,7 @@ using vc::math::theta;
 
 /// Function extracting a slice from the matrix used by
 /// @c algebra::array::transform3
-template <auto SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
+template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
 ALGEBRA_HOST_DEVICE inline auto vector(const vc::transform3::matrix44& m,
                                        std::size_t row, std::size_t col) {
 

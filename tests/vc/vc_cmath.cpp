@@ -9,7 +9,7 @@
 #include "algebra/vc_cmath.hpp"
 
 // Test include(s).
-#include "test_basics.hpp"
+#include "test_host_basics.hpp"
 
 // GoogleTest include(s).
 #include <gtest/gtest.h>
@@ -31,5 +31,5 @@ typedef testing::Types<test_types<
     algebra::vc::vector2, algebra::vc::vector3, algebra::vc::transform3,
     algebra::vc::cartesian2, algebra::vc::polar2, algebra::vc::cylindrical2> >
     vc_cmath_types;
-INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_basics, vc_cmath_types,
-                               test_specialisation_name);
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
+                               vc_cmath_types, test_specialisation_name);

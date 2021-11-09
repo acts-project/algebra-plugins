@@ -7,6 +7,9 @@
 
 #pragma once
 
+// Local include(s).
+#include "test_base.hpp"
+
 // GoogleTest include(s).
 #include <gtest/gtest.h>
 
@@ -14,39 +17,13 @@
 #include <climits>
 #include <cmath>
 
-/// Simple struct holding the types that describe a given plugin
-template <typename scalar_t, typename point2_t, typename point3_t,
-          typename vector2_t, typename vector3_t, typename transform3_t,
-          typename cartesian2_t, typename polar2_t, typename cylindrical2_t>
-struct test_types {
-
-  using scalar = scalar_t;
-  using point2 = point2_t;
-  using point3 = point3_t;
-  using vector2 = vector2_t;
-  using vector3 = vector3_t;
-  using transform3 = transform3_t;
-  using cartesian2 = cartesian2_t;
-  using polar2 = polar2_t;
-  using cylindrical2 = cylindrical2_t;
-
-};  // struct test_types
-
 /// Test case class, to be specialised for the different plugins
 template <typename T>
-class test_basics : public testing::Test {
-
- protected:
-  /// Epsilon parameter for the floating point comparisons
-  static constexpr typename T::scalar m_epsilon =
-      std::numeric_limits<typename T::scalar>::epsilon();
-  /// Variable defining when two floating point values are "close"
-  static constexpr typename T::scalar m_isclose = 1e-5;
-};
-TYPED_TEST_SUITE_P(test_basics);
+class test_host_basics : public testing::Test, public test_base<T> {};
+TYPED_TEST_SUITE_P(test_host_basics);
 
 // This defines the local frame test suite
-TYPED_TEST_P(test_basics, local_vectors) {
+TYPED_TEST_P(test_host_basics, local_vectors) {
 
   // Construction
   typename TypeParam::point2 vA{0., 1.};
@@ -85,7 +62,7 @@ TYPED_TEST_P(test_basics, local_vectors) {
 }
 
 // This defines the vector3 test suite
-TYPED_TEST_P(test_basics, vector3) {
+TYPED_TEST_P(test_host_basics, vector3) {
 
   // Construction
   typename TypeParam::vector3 vA{0., 1., 2.};
@@ -130,7 +107,7 @@ TYPED_TEST_P(test_basics, vector3) {
 }
 
 // This defines the vector operation test suite
-TYPED_TEST_P(test_basics, getter) {
+TYPED_TEST_P(test_host_basics, getter) {
 
   typename TypeParam::vector3 v3{1., 1., 1.};
 
@@ -154,7 +131,7 @@ TYPED_TEST_P(test_basics, getter) {
 }
 
 // This defines the transform3 test suite
-TYPED_TEST_P(test_basics, transform3) {
+TYPED_TEST_P(test_host_basics, transform3) {
 
   // Preparatioon work
   typename TypeParam::vector3 z =
@@ -238,7 +215,7 @@ TYPED_TEST_P(test_basics, transform3) {
 }
 
 // This test global coordinate transforms
-TYPED_TEST_P(test_basics, global_transformations) {
+TYPED_TEST_P(test_host_basics, global_transformations) {
 
   // Preparatioon work
   typename TypeParam::vector3 z =
@@ -285,7 +262,7 @@ TYPED_TEST_P(test_basics, global_transformations) {
 }
 
 // This test local coordinate transforms
-TYPED_TEST_P(test_basics, local_transformations) {
+TYPED_TEST_P(test_host_basics, local_transformations) {
 
   typename TypeParam::point2 p2 = {3., 3.};
   typename TypeParam::point3 p3 = {3., 3., 5.};
@@ -308,6 +285,6 @@ TYPED_TEST_P(test_basics, local_transformations) {
   ASSERT_NEAR(polfrom2[1], polfrom3[1], this->m_epsilon);
 }
 
-REGISTER_TYPED_TEST_SUITE_P(test_basics, local_vectors, vector3, getter,
+REGISTER_TYPED_TEST_SUITE_P(test_host_basics, local_vectors, vector3, getter,
                             transform3, global_transformations,
                             local_transformations);

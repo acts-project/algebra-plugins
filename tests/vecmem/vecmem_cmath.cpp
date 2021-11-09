@@ -9,7 +9,7 @@
 #include "algebra/vecmem_cmath.hpp"
 
 // Test include(s).
-#include "test_basics.hpp"
+#include "test_host_basics.hpp"
 
 // GoogleTest include(s).
 #include <gtest/gtest.h>
@@ -32,5 +32,5 @@ typedef testing::Types<test_types<
     algebra::vecmem::transform3, algebra::vecmem::cartesian2,
     algebra::vecmem::polar2, algebra::vecmem::cylindrical2> >
     vecmem_cmath_types;
-INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_basics, vecmem_cmath_types,
-                               test_specialisation_name);
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
+                               vecmem_cmath_types, test_specialisation_name);

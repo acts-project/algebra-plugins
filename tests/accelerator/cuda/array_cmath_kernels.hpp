@@ -13,9 +13,56 @@
 // VecMem include(s).
 #include <vecmem/containers/data/vector_view.hpp>
 
-/// Function performing vector operation tests
+/// Function performing 2D vector operation tests
 void array_cmath_2d_vector_ops(
     vecmem::data::vector_view<const algebra::array::point2> a,
     vecmem::data::vector_view<const algebra::array::point2> b,
+    vecmem::data::vector_view<algebra::scalar> output_host,
+    vecmem::data::vector_view<algebra::scalar> output_device);
+
+/// Function performing 3D vector operation tests
+void array_cmath_3d_vector_ops(
+    vecmem::data::vector_view<const algebra::array::vector3> a,
+    vecmem::data::vector_view<const algebra::array::vector3> b,
+    vecmem::data::vector_view<algebra::scalar> output_host,
+    vecmem::data::vector_view<algebra::scalar> output_device);
+
+/// Function performing tests using @c algebra::cmath::transform3
+void array_cmath_transform3_ops(
+    vecmem::data::vector_view<const algebra::array::vector3> t1,
+    vecmem::data::vector_view<const algebra::array::vector3> t2,
+    vecmem::data::vector_view<const algebra::array::vector3> t3,
+    vecmem::data::vector_view<const algebra::array::vector3> a,
+    vecmem::data::vector_view<const algebra::array::vector3> b,
+    vecmem::data::vector_view<algebra::scalar> output_host,
+    vecmem::data::vector_view<algebra::scalar> output_device);
+
+/// Function performing tests using @c algebra::cmath::cartesian2
+void array_cmath_cartesian2_ops(
+    vecmem::data::vector_view<const algebra::array::vector3> t1,
+    vecmem::data::vector_view<const algebra::array::vector3> t2,
+    vecmem::data::vector_view<const algebra::array::vector3> t3,
+    vecmem::data::vector_view<const algebra::array::vector3> a,
+    vecmem::data::vector_view<const algebra::array::vector3> b,
+    vecmem::data::vector_view<algebra::scalar> output_host,
+    vecmem::data::vector_view<algebra::scalar> output_device);
+
+/// Function performing tests using @c algebra::cmath::cylindrical2
+void array_cmath_cylindrical2_ops(
+    vecmem::data::vector_view<const algebra::array::vector3> t1,
+    vecmem::data::vector_view<const algebra::array::vector3> t2,
+    vecmem::data::vector_view<const algebra::array::vector3> t3,
+    vecmem::data::vector_view<const algebra::array::vector3> a,
+    vecmem::data::vector_view<const algebra::array::vector3> b,
+    vecmem::data::vector_view<algebra::scalar> output_host,
+    vecmem::data::vector_view<algebra::scalar> output_device);
+
+/// Function performing tests using @c algebra::cmath::polar2
+void array_cmath_polar2_ops(
+    vecmem::data::vector_view<const algebra::array::vector3> t1,
+    vecmem::data::vector_view<const algebra::array::vector3> t2,
+    vecmem::data::vector_view<const algebra::array::vector3> t3,
+    vecmem::data::vector_view<const algebra::array::vector3> a,
+    vecmem::data::vector_view<const algebra::array::vector3> b,
     vecmem::data::vector_view<algebra::scalar> output_host,
     vecmem::data::vector_view<algebra::scalar> output_device);

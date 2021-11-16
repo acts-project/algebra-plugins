@@ -10,8 +10,13 @@
 // Test include(s).
 #include "cuda_error_check.hpp"
 
+// System include(s).
+#include <cstddef>
+
+namespace {
+
 template <class FUNCTOR, typename... ARGS>
-__global__ void testKernel(std::size_t arraySizes, ARGS... args) {
+__global__ void cudaTestKernel(std::size_t arraySizes, ARGS... args) {
 
   // Find the current index that we need to process.
   const std::size_t i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -24,12 +29,15 @@ __global__ void testKernel(std::size_t arraySizes, ARGS... args) {
   return;
 }
 
+}  // namespace
+
 /// Execute a test functor on a device, on @c arraySizes threads
 template <class FUNCTOR, class... ARGS>
-void runOnDevice(std::size_t arraySizes, ARGS... args) {
+void execute_cuda_test(std::size_t arraySizes, ARGS... args) {
 
-  // Number of threads per execution block.
-  int nThreadsPerBlock = 1024;
+  // Number of threads per execution block. Less than 1024 to make debug tests
+  // possible.
+  int nThreadsPerBlock = 256;
 
   // If the arrays are not even this large, then reduce the value to the
   // size of the arrays.
@@ -39,22 +47,9 @@ void runOnDevice(std::size_t arraySizes, ARGS... args) {
 
   // Launch the test on the device.
   const int nBlocks = ((arraySizes + nThreadsPerBlock - 1) / nThreadsPerBlock);
-  testKernel<FUNCTOR><<<nBlocks, nThreadsPerBlock>>>(arraySizes, args...);
+  cudaTestKernel<FUNCTOR><<<nBlocks, nThreadsPerBlock>>>(arraySizes, args...);
 
   // Check whether it succeeded to run.
   CUDA_ERROR_CHECK(cudaGetLastError());
   CUDA_ERROR_CHECK(cudaDeviceSynchronize());
-}
-
-/// Execute a test functor on the host
-template <class FUNCTOR, class... ARGS>
-void runOnHost(std::size_t arraySizes, ARGS... args) {
-
-  // Instantiate the functor.
-  auto functor = FUNCTOR();
-
-  // Execute the functor on all elements of the array(s).
-  for (std::size_t i = 0; i < arraySizes; ++i) {
-    functor(i, args...);
-  }
 }

@@ -8,11 +8,38 @@
 enable_language( CUDA )
 find_package( CUDAToolkit REQUIRED )
 
-# Test(s) for algebra::array_cmath with CUDA.
-algebra_add_test( array_cuda
-   "array_cmath_kernels.hpp" "array_cmath_kernels.cu" "array_cmath.cpp"
-   "cuda_error_check.hpp" "cuda_error_check.cpp" "execute_cuda_test.cuh"
-   LINK_LIBRARIES CUDA::cudart GTest::gtest_main vecmem::core vecmem::cuda
-                  algebra::tests_common algebra::array_cmath )
+# Helper library for the CUDA tests.
+add_library( algebra_tests_cuda_common STATIC
+   "common/cuda_error_check.hpp" "common/cuda_error_check.cpp"
+   "common/execute_cuda_test.cuh" "common/test_cuda_basics.cuh"
+   "common/test_cuda_basics_functors.hpp" )
+target_include_directories( algebra_tests_cuda_common PUBLIC
+   "${CMAKE_CURRENT_SOURCE_DIR}/common" )
+target_link_libraries( algebra_tests_cuda_common
+   PUBLIC    CUDA::cudart
+   INTERFACE GTest::gtest algebra::common algebra::tests_common
+             vecmem::core vecmem::cuda )
+target_compile_options( algebra_tests_cuda_common INTERFACE
+   $<$<COMPILE_LANGUAGE:CUDA>:-Xcudafe --diag_suppress=177> )
+add_library( algebra::tests_cuda_common ALIAS algebra_tests_cuda_common )
+
+# Set up all of the (available) CUDA tests.
+algebra_add_test( array_cuda "array_cmath.cu"
+   LINK_LIBRARIES algebra::array_cmath
+                  algebra::tests_cuda_common GTest::gtest_main )
 target_compile_options( algebra_test_array_cuda
    PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )
+
+if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
+   algebra_add_test( eigen_cuda "eigen_cmath.cu" "eigen_eigen.cu"
+      LINK_LIBRARIES algebra::eigen_cmath algebra::eigen_eigen
+                     algebra::tests_cuda_common GTest::gtest_main )
+   target_compile_options( algebra_test_eigen_cuda
+      PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )
+endif()
+
+if( ALGEBRA_PLUGINS_INCLUDE_VECMEM )
+   algebra_add_test( vecmem_cuda "vecmem_cmath.cu"
+      LINK_LIBRARIES algebra::vecmem_cmath
+                     algebra::tests_cuda_common GTest::gtest_main )
+endif()

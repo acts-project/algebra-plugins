@@ -21,6 +21,7 @@
 template <typename T>
 class test_device_basics : public test_base<T> {
 
+ public:
   /// @name Type definitions
   /// @{
 
@@ -36,7 +37,6 @@ class test_device_basics : public test_base<T> {
 
   /// @}
 
- public:
   /// Perform various 2D vector operations, and produce a scalar output
   ALGEBRA_HOST_DEVICE
   scalar vector_2d_ops(point2 a, point2 b) const {

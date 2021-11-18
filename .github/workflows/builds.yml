@@ -13,79 +13,113 @@ on:
       - main
       - 'release/**'
 
+# All the different build/test jobs.
 jobs:
-  ubuntu:
+
+  # Native build jobs.
+  native:
+
+    # The different build modes to test.
+    strategy:
+      matrix:
+        BUILD:
+          - TYPE: "Release"
+            SCALAR: "double"
+          - TYPE: "Debug"
+            SCALAR: "float"
+        PLATFORM:
+          - OS: "ubuntu-latest"
+            GENERATOR: "Unix Makefiles"
+          - OS: "macos-latest"
+            GENERATOR: "Xcode"
+
+    # The system to run on.
+    runs-on: ${{ matrix.PLATFORM.OS }}
+
+    # The build/test steps to execute.
+    steps:
+    # Use a standard checkout of the code.
+    - uses: actions/checkout@v2
+    # Run the CMake configuration.
+    - name: Configure
+      run: cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD.TYPE }}
+                 -DALGEBRA_PLUGINS_CUSTOM_SCALARTYPE=${{ matrix.BUILD.SCALAR }}
+                 -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE
+                 -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE
+                 -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=FALSE
+                 -DALGEBRA_PLUGINS_INCLUDE_VC=TRUE
+                 -DALGEBRA_PLUGINS_SETUP_VC=TRUE
+                 -DALGEBRA_PLUGINS_USE_SYSTEM_VC=FALSE
+                 -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE
+                 -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE
+                 -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
+                 -S ${{ github.workspace }} -B build
+                 -G "${{ matrix.PLATFORM.GENERATOR }}"
+    # Perform the build.
+    - name: Build
+      run: cmake --build build --config ${{ matrix.BUILD.TYPE }}
+    # Run the unit test(s).
+    - name: Test
+      run: |
+        cd build
+        ctest --output-on-failure -C ${{ matrix.BUILD.TYPE }}
+
+  # Containerised build jobs.
+  container:
+
+    # The different build modes to test.
+    strategy:
+      matrix:
+        BUILD:
+          - TYPE: "Release"
+            SCALAR: "float"
+          - TYPE: "Debug"
+            SCALAR: "double"
+        PLATFORM:
+          - NAME: "HOST"
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v13"
+            OPTIONS: -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=TRUE
+          - NAME: "HOST"
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v13"
+            OPTIONS: -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=FALSE
+          - NAME: "HOST"
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v13"
+            OPTIONS: -DALGEBRA_PLUGINS_INCLUDE_SMATRIX=TRUE
+          - NAME: "HOST"
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v13"
+            OPTIONS: -DALGEBRA_PLUGINS_INCLUDE_VC=TRUE -DALGEBRA_PLUGINS_SETUP_VC=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VC=FALSE
+          - NAME: "HOST"
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v13"
+            OPTIONS: -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
+          - NAME: "CUDA"
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004_cuda:v13"
+            OPTIONS: -DALGEBRA_PLUGINS_TEST_CUDA=TRUE -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=FALSE -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
+
+    # The system to run on.
     runs-on: ubuntu-latest
+    container: ${{ matrix.PLATFORM.CONTAINER }}
 
-    # The different build modes to test.
-    strategy:
-      matrix:
-        BUILD_TYPE: [ "Release", "Debug" ]
-        SCALAR_TYPE: [ "double", "float" ]
-        CMAKE_OPTIONS:
-          - -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=TRUE
-          - -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=FALSE
-          - -DALGEBRA_PLUGINS_INCLUDE_VC=TRUE -DALGEBRA_PLUGINS_SETUP_VC=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VC=FALSE
-          - -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
-          - -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=TRUE -DALGEBRA_PLUGINS_INCLUDE_VC=TRUE -DALGEBRA_PLUGINS_SETUP_VC=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VC=FALSE -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
+    # Use BASH as the shell from the image.
+    defaults:
+      run:
+        shell: bash
 
+    # The build/test steps to execute.
     steps:
+    # Use a standard checkout of the code.
     - uses: actions/checkout@v2
-
-    - name: Install Dependencies
-      run: sudo apt-get install libeigen3-dev
-
-    - name: Configure CMake
-      shell: bash
-      run: cmake -S ${{ github.workspace }} -B ${{runner.workspace}}/build
-             -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }}
-             -DALGEBRA_PLUGINS_CUSTOM_SCALARTYPE=${{ matrix.SCALAR_TYPE }}
-             ${{ matrix.CMAKE_OPTIONS }}
-
+    # Run the CMake configuration.
+    - name: Configure
+      run: cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD.TYPE }}
+                 -DALGEBRA_PLUGINS_CUSTOM_SCALARTYPE=${{ matrix.BUILD.SCALAR }}
+                 ${{ matrix.PLATFORM.OPTIONS }}
+                 -S ${GITHUB_WORKSPACE} -B build
+    # Perform the build.
     - name: Build
-      shell: bash
-      run: cmake --build ${{runner.workspace}}/build
-                 --config ${{ matrix.BUILD_TYPE }}
-
-    - name: Unit Tests
-      working-directory: ${{runner.workspace}}/build
-      shell: bash
-      run: ctest -C ${{ matrix.BUILD_TYPE }}
-
-  macos:
-    runs-on: macos-latest
-
-    # The different build modes to test.
-    strategy:
-      matrix:
-        BUILD_TYPE: [ "Release", "Debug" ]
-        SCALAR_TYPE: [ "double", "float" ]
-        CMAKE_OPTIONS:
-          - -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=TRUE
-          - -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=FALSE
-          - -DALGEBRA_PLUGINS_INCLUDE_VC=TRUE -DALGEBRA_PLUGINS_SETUP_VC=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VC=FALSE
-          - -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
-          - -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=TRUE -DALGEBRA_PLUGINS_INCLUDE_VC=TRUE -DALGEBRA_PLUGINS_SETUP_VC=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VC=FALSE -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Install Dependencies
-      run: brew install cmake eigen ninja
-
-    - name: Configure CMake
-      shell: bash
-      run: cmake -S ${{ github.workspace }} -B ${{runner.workspace}}/build
-             -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }}
-             -DALGEBRA_PLUGINS_CUSTOM_SCALARTYPE=${{ matrix.SCALAR_TYPE }}
-             ${{ matrix.CMAKE_OPTIONS }}
-
-    - name: Build
-      shell: bash
-      run: cmake --build ${{runner.workspace}}/build
-                 --config ${{ matrix.BUILD_TYPE }}
-
-    - name: Unit Tests
-      working-directory: ${{runner.workspace}}/build
-      shell: bash
-      run: ctest -C ${{ matrix.BUILD_TYPE }}
+      run: cmake --build build
+    # Run the unit test(s).
+    - name: Test
+      if: "matrix.PLATFORM.NAME == 'HOST'"
+      run: |
+        cd build
+        ctest --output-on-failure

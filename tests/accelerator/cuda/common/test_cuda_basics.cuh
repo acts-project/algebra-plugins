@@ -37,15 +37,27 @@ class test_cuda_basics : public testing::Test, public test_base<T> {
     // Initialise the input vectors with some dummy values.
     for (std::size_t i = 0; i < s_arraySize; ++i) {
 
-      m_t1[i] = {1., 2., 3.};
-      m_t2[i] = {4., 5., 6.};
-      m_t3[i] = {7., 8., 9.};
+      m_t1[i] = {static_cast<typename T::scalar>(1.),
+                 static_cast<typename T::scalar>(2.),
+                 static_cast<typename T::scalar>(3.)};
+      m_t2[i] = {static_cast<typename T::scalar>(4.),
+                 static_cast<typename T::scalar>(5.),
+                 static_cast<typename T::scalar>(6.)};
+      m_t3[i] = {static_cast<typename T::scalar>(7.),
+                 static_cast<typename T::scalar>(8.),
+                 static_cast<typename T::scalar>(9.)};
 
-      m_p1[i] = {i * 0.5, (i + 1) * 1.0};
-      m_p2[i] = {(i - 1) * 1.2, i * 0.6};
+      m_p1[i] = {static_cast<typename T::scalar>(i * 0.5),
+                 static_cast<typename T::scalar>((i + 1) * 1.0)};
+      m_p2[i] = {static_cast<typename T::scalar>((i - 1) * 1.2),
+                 static_cast<typename T::scalar>(i * 0.6)};
 
-      m_v1[i] = {i * 0.6, (i + 1) * 1.2, (i + 2) * 1.3};
-      m_v2[i] = {(i - 1) * 1.8, i * 2.3, (i - 2) * 3.4};
+      m_v1[i] = {static_cast<typename T::scalar>(i * 0.6),
+                 static_cast<typename T::scalar>((i + 1) * 1.2),
+                 static_cast<typename T::scalar>((i + 2) * 1.3)};
+      m_v2[i] = {static_cast<typename T::scalar>((i - 1) * 1.8),
+                 static_cast<typename T::scalar>(i * 2.3),
+                 static_cast<typename T::scalar>((i - 2) * 3.4)};
     }
   }
 

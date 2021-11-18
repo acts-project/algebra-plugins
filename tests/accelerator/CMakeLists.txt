@@ -4,8 +4,16 @@
 #
 # Mozilla Public License Version 2.0
 
-# Run the CUDA test(s), if CUDA is available.
+# Run the CUDA test(s) by default, if CUDA is available.
 vecmem_check_language( CUDA )
+set( _cudaEnabledDefault FALSE )
 if( CMAKE_CUDA_COMPILER )
+   set( _cudaEnabledDefault TRUE )
+endif()
+option( ALGEBRA_PLUGINS_TEST_CUDA "Test the code in CUDA device code"
+   ${_cudaEnabledDefault} )
+unset( _cudaEnabledDefault )
+
+if( ALGEBRA_PLUGINS_TEST_CUDA )
    add_subdirectory( cuda )
 endif()

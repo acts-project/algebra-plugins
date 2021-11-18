@@ -9,7 +9,7 @@
 #include "algebra/eigen_eigen.hpp"
 
 // Test include(s).
-#include "test_basics.hpp"
+#include "test_host_basics.hpp"
 
 // GoogleTest include(s).
 #include <gtest/gtest.h>
@@ -32,5 +32,5 @@ typedef testing::Types<
                algebra::eigen::transform3, algebra::eigen::cartesian2,
                algebra::eigen::polar2, algebra::eigen::cylindrical2> >
     eigen_eigen_types;
-INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_basics, eigen_eigen_types,
-                               test_specialisation_name);
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
+                               eigen_eigen_types, test_specialisation_name);

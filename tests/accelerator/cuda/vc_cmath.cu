@@ -6,10 +6,10 @@
  */
 
 // Project include(s).
-#include "algebra/vc_vc.hpp"
+#include "algebra/vc_cmath.hpp"
 
-// Test include(s).
-#include "test_host_basics.hpp"
+// Local include(s).
+#include "test_cuda_basics.cuh"
 
 // GoogleTest include(s).
 #include <gtest/gtest.h>
@@ -21,7 +21,7 @@
 struct test_specialisation_name {
   template <typename T>
   static std::string GetName(int) {
-    return "vc_vc";
+    return "cuda_vc_cmath";
   }
 };
 
@@ -30,6 +30,6 @@ typedef testing::Types<test_types<
     algebra::scalar, algebra::vc::point2, algebra::vc::point3,
     algebra::vc::vector2, algebra::vc::vector3, algebra::vc::transform3,
     algebra::vc::cartesian2, algebra::vc::polar2, algebra::vc::cylindrical2> >
-    vc_vc_types;
-INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics, vc_vc_types,
-                               test_specialisation_name);
+    vc_cmath_types;
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_cuda_basics,
+                               vc_cmath_types, test_specialisation_name);

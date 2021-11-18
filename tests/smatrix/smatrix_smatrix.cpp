@@ -9,7 +9,7 @@
 #include "algebra/smatrix_smatrix.hpp"
 
 // Test include(s).
-#include "test_basics.hpp"
+#include "test_host_basics.hpp"
 
 // GoogleTest include(s).
 #include <gtest/gtest.h>
@@ -32,5 +32,5 @@ typedef testing::Types<test_types<
     algebra::smatrix::transform3, algebra::smatrix::cartesian2,
     algebra::smatrix::polar2, algebra::smatrix::cylindrical2> >
     smatrix_smatrix_types;
-INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_basics,
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
                                smatrix_smatrix_types, test_specialisation_name);

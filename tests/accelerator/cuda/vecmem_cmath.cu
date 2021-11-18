@@ -8,8 +8,8 @@
 // Project include(s).
 #include "algebra/vecmem_cmath.hpp"
 
-// Test include(s).
-#include "test_host_basics.hpp"
+// Local include(s).
+#include "test_cuda_basics.cuh"
 
 // GoogleTest include(s).
 #include <gtest/gtest.h>
@@ -21,7 +21,7 @@
 struct test_specialisation_name {
   template <typename T>
   static std::string GetName(int) {
-    return "vecmem_cmath";
+    return "cuda_vecmem_cmath";
   }
 };
 
@@ -32,5 +32,5 @@ typedef testing::Types<test_types<
     algebra::vecmem::transform3, algebra::vecmem::cartesian2,
     algebra::vecmem::polar2, algebra::vecmem::cylindrical2> >
     vecmem_cmath_types;
-INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_cuda_basics,
                                vecmem_cmath_types, test_specialisation_name);

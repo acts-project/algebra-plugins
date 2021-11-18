@@ -109,12 +109,12 @@ using vc::math::theta;
 
 /// Function extracting a slice from the matrix used by
 /// @c algebra::vc::transform3
-template <auto SIZE, auto ROWS, auto COLS>
+template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS>
 ALGEBRA_HOST_DEVICE inline vc::storage_type<scalar, SIZE> vector(
     const Vc::array<Vc::array<scalar, ROWS>, COLS>& m, std::size_t row,
     std::size_t col) {
 
-  return cmath::vector_getter<Vc::array, scalar, SIZE,
+  return cmath::vector_getter<std::size_t, Vc::array, scalar, SIZE,
                               vc::storage_type<scalar, SIZE> >()(m, row, col);
 }
 

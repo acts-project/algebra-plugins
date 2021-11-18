@@ -10,7 +10,7 @@ target_include_directories( algebra_tests_common INTERFACE
    "${CMAKE_CURRENT_SOURCE_DIR}/common" )
 add_library( algebra::tests_common ALIAS algebra_tests_common )
 
-# Set up all of the (available) tests.
+# Set up all of the (available) "host" tests.
 algebra_add_test( array
    "array/array_cmath.cpp"
    LINK_LIBRARIES GTest::gtest_main algebra::tests_common
@@ -43,3 +43,6 @@ if( ALGEBRA_PLUGINS_INCLUDE_VECMEM )
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                      algebra::vecmem_cmath )
 endif()
+
+# Set up all of the (available) "device" tests.
+add_subdirectory( accelerator )

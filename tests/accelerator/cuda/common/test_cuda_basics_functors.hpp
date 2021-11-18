@@ -43,7 +43,8 @@ class vector_2d_ops_functor : public functor_base<T> {
     vecmem::device_vector<typename T::scalar> vec_output(output);
 
     // Perform the operation.
-    vec_output[i] = this->m_tester.vector_2d_ops(vec_a[i], vec_b[i]);
+    auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
+    vec_output[ii] = this->m_tester.vector_2d_ops(vec_a[ii], vec_b[ii]);
   }
 };
 
@@ -62,7 +63,8 @@ class vector_3d_ops_functor : public functor_base<T> {
     vecmem::device_vector<typename T::scalar> vec_output(output);
 
     // Perform the operation.
-    vec_output[i] = this->m_tester.vector_3d_ops(vec_a[i], vec_b[i]);
+    auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
+    vec_output[ii] = this->m_tester.vector_3d_ops(vec_a[ii], vec_b[ii]);
   }
 };
 
@@ -85,8 +87,9 @@ class transform3_ops_functor : public functor_base<T> {
     vecmem::device_vector<typename T::scalar> vec_output(output);
 
     // Perform the operation.
-    vec_output[i] = this->m_tester.transform3_ops(
-        vec_t1[i], vec_t2[i], vec_t3[i], vec_a[i], vec_b[i]);
+    auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
+    vec_output[ii] = this->m_tester.transform3_ops(
+        vec_t1[ii], vec_t2[ii], vec_t3[ii], vec_a[ii], vec_b[ii]);
   }
 };
 
@@ -109,8 +112,9 @@ class cartesian2_ops_functor : public functor_base<T> {
     vecmem::device_vector<typename T::scalar> vec_output(output);
 
     // Perform the operation.
-    vec_output[i] = this->m_tester.cartesian2_ops(
-        vec_t1[i], vec_t2[i], vec_t3[i], vec_a[i], vec_b[i]);
+    auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
+    vec_output[ii] = this->m_tester.cartesian2_ops(
+        vec_t1[ii], vec_t2[ii], vec_t3[ii], vec_a[ii], vec_b[ii]);
   }
 };
 
@@ -133,8 +137,9 @@ class cylindrical2_ops_functor : public functor_base<T> {
     vecmem::device_vector<typename T::scalar> vec_output(output);
 
     // Perform the operation.
-    vec_output[i] = this->m_tester.cylindrical2_ops(
-        vec_t1[i], vec_t2[i], vec_t3[i], vec_a[i], vec_b[i]);
+    auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
+    vec_output[ii] = this->m_tester.cylindrical2_ops(
+        vec_t1[ii], vec_t2[ii], vec_t3[ii], vec_a[ii], vec_b[ii]);
   }
 };
 
@@ -157,8 +162,9 @@ class polar2_ops_functor : public functor_base<T> {
     vecmem::device_vector<typename T::scalar> vec_output(output);
 
     // Perform the operation.
-    vec_output[i] = this->m_tester.polar2_ops(vec_t1[i], vec_t2[i], vec_t3[i],
-                                              vec_a[i], vec_b[i]);
+    auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
+    vec_output[ii] = this->m_tester.polar2_ops(
+        vec_t1[ii], vec_t2[ii], vec_t3[ii], vec_a[ii], vec_b[ii]);
   }
 };
 

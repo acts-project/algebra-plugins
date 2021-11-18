@@ -14,6 +14,7 @@
 #include <gtest/gtest.h>
 
 // System include(s).
+#include <array>
 #include <climits>
 #include <cmath>
 

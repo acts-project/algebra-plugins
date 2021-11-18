@@ -42,11 +42,12 @@ void execute_cuda_test(std::size_t arraySizes, ARGS... args) {
   // If the arrays are not even this large, then reduce the value to the
   // size of the arrays.
   if (arraySizes < nThreadsPerBlock) {
-    nThreadsPerBlock = arraySizes;
+    nThreadsPerBlock = static_cast<int>(arraySizes);
   }
 
   // Launch the test on the device.
-  const int nBlocks = ((arraySizes + nThreadsPerBlock - 1) / nThreadsPerBlock);
+  const int nBlocks =
+      static_cast<int>((arraySizes + nThreadsPerBlock - 1) / nThreadsPerBlock);
   cudaTestKernel<FUNCTOR><<<nBlocks, nThreadsPerBlock>>>(arraySizes, args...);
 
   // Check whether it succeeded to run.

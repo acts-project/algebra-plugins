@@ -8,6 +8,10 @@
 add_library( algebra_tests_common INTERFACE )
 target_include_directories( algebra_tests_common INTERFACE
    "${CMAKE_CURRENT_SOURCE_DIR}/common" )
+if( "${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC" )
+   target_compile_definitions( algebra_tests_common INTERFACE
+      -D_USE_MATH_DEFINES )
+endif()
 add_library( algebra::tests_common ALIAS algebra_tests_common )
 
 # Set up all of the (available) "host" tests.

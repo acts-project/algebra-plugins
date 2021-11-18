@@ -106,12 +106,14 @@ if( ALGEBRA_PLUGINS_SETUP_VC )
    else()
       add_subdirectory( extern/vc )
    endif()
-   # Use the preferred compiler flags from Vc for the entire project. Do not
-   # set them on the libraries individually, as the clients of the libraries
-   # may want to use a different optimisation.
-   vc_set_preferred_compiler_flags()
-   add_compile_definitions( ${Vc_DEFINITIONS} )
-   add_compile_options( ${Vc_COMPILE_FLAGS} ${Vc_ARCHITECTURE_FLAGS} )
+   if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC" )
+      # Use the preferred compiler flags from Vc for the entire project. Do not
+      # set them on the libraries individually, as the clients of the libraries
+      # may want to use a different optimisation.
+      vc_set_preferred_compiler_flags()
+      add_compile_definitions( ${Vc_DEFINITIONS} )
+      add_compile_options( ${Vc_COMPILE_FLAGS} ${Vc_ARCHITECTURE_FLAGS} )
+   endif()
 endif()
 
 # Undo the developer flag suppression.

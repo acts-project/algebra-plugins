@@ -8,9 +8,9 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/math/impl/cmath_getter.hpp"
 #include "algebra/math/impl/cmath_vector.hpp"
+#include "algebra/qualifiers.hpp"
 
 namespace algebra::cmath {
 

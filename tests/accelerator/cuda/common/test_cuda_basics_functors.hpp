@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/algebra_qualifiers.hpp"
+#include "algebra/qualifiers.hpp"
 
 // Local include(s).
 #include "test_device_basics.hpp"

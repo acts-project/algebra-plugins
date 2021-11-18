@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/algebra_qualifiers.hpp"
+#include "algebra/qualifiers.hpp"
 
 // ROOT/Smatrix include(s).
 #include <Math/Expression.h>

@@ -20,17 +20,30 @@
 /// Struct providing a readable name for the test
 struct test_specialisation_name {
   template <typename T>
-  static std::string GetName(int) {
-    return "cuda_eigen_cmath";
+  static std::string GetName(int i) {
+    switch (i) {
+      case 0:
+        return "cuda_eigen_cmath<float>";
+      case 1:
+        return "cuda_eigen_cmath<double>";
+      default:
+        return "unknown";
+    }
   }
 };
 
 // Instantiate the test(s).
 typedef testing::Types<
-    test_types<algebra::scalar, algebra::eigen::point2, algebra::eigen::point3,
-               algebra::eigen::vector2, algebra::eigen::vector3,
-               algebra::eigen::transform3, algebra::eigen::cartesian2,
-               algebra::eigen::polar2, algebra::eigen::cylindrical2> >
+    test_types<
+        float, algebra::eigen::point2<float>, algebra::eigen::point3<float>,
+        algebra::eigen::vector2<float>, algebra::eigen::vector3<float>,
+        algebra::eigen::transform3<float>, algebra::eigen::cartesian2<float>,
+        algebra::eigen::polar2<float>, algebra::eigen::cylindrical2<float> >,
+    test_types<
+        double, algebra::eigen::point2<double>, algebra::eigen::point3<double>,
+        algebra::eigen::vector2<double>, algebra::eigen::vector3<double>,
+        algebra::eigen::transform3<double>, algebra::eigen::cartesian2<double>,
+        algebra::eigen::polar2<double>, algebra::eigen::cylindrical2<double> > >
     eigen_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_cuda_basics,
                                eigen_cmath_types, test_specialisation_name);

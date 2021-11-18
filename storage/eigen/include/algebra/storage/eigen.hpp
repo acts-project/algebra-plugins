@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/scalar.hpp"
 #include "algebra/storage/impl/eigen_array.hpp"
 
 // System include(s).
@@ -21,12 +20,16 @@ template <typename T, std::size_t N>
 using storage_type = array<T, N>;
 
 /// 3-element "vector" type, using @c algebra::eigen::array
-using vector3 = storage_type<scalar, 3>;
+template <typename T>
+using vector3 = storage_type<T, 3>;
 /// Point in 3D space, using @c algebra::eigen::array
-using point3 = vector3;
+template <typename T>
+using point3 = vector3<T>;
 /// 2-element "vector" type, using @c algebra::eigen::array
-using vector2 = storage_type<scalar, 2>;
+template <typename T>
+using vector2 = storage_type<T, 2>;
 /// Point in 2D space, using @c algebra::eigen::array
-using point2 = vector2;
+template <typename T>
+using point2 = vector2<T>;
 
 }  // namespace algebra::eigen

@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/math/impl/eigen_getter.hpp"
+#include "algebra/qualifiers.hpp"
 
 namespace algebra::eigen::math {
 
@@ -22,8 +22,6 @@ struct polar2 {
 
   /// Transformation matching this struct
   using transform3_type = transform3_t;
-  /// Scalar type used by the transform
-  using scalar_type = typename transform3_type::scalar_type;
 
   /// Point in 2D space
   using point2 = typename transform3_type::point2;

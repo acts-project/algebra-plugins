@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/math/impl/smatrix_getter.hpp"
+#include "algebra/qualifiers.hpp"
 
 namespace algebra::smatrix::math {
 
@@ -23,8 +23,6 @@ struct cylindrical2 {
 
   /// Transformation matching this struct
   using transform3_type = transform3_t;
-  /// Scalar type used by the transform
-  using scalar_type = typename transform3_type::scalar_type;
 
   /// Point in 2D space
   using point2 = typename transform3_type::point2;

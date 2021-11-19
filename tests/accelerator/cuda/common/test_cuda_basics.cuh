@@ -72,6 +72,14 @@ class test_cuda_basics : public testing::Test, public test_base<T> {
     }
   }
 
+  /// Compare the outputs, after the data processing is finished.
+  void compareOutputs() const {
+    for (std::size_t i = 0; i < this->s_arraySize; ++i) {
+      EXPECT_FLOAT_EQ(static_cast<float>(m_output_host[i]),
+                      static_cast<float>(m_output_device[i]));
+    }
+  }
+
   /// Memory resource for all of the tests.
   vecmem::cuda::managed_memory_resource m_resource;
 
@@ -115,9 +123,7 @@ TYPED_TEST_P(test_cuda_basics, vector_2d_ops) {
       vecmem::get_data(this->m_p2), vecmem::get_data(this->m_output_device));
 
   // Compare the outputs.
-  for (std::size_t i = 0; i < this->s_arraySize; ++i) {
-    EXPECT_FLOAT_EQ(this->m_output_host[i], this->m_output_device[i]);
-  }
+  this->compareOutputs();
 }
 
 /// Test for some basic 3D "vector operations"
@@ -132,9 +138,7 @@ TYPED_TEST_P(test_cuda_basics, vector_3d_ops) {
       vecmem::get_data(this->m_v2), vecmem::get_data(this->m_output_device));
 
   // Compare the outputs.
-  for (std::size_t i = 0; i < this->s_arraySize; ++i) {
-    EXPECT_FLOAT_EQ(this->m_output_host[i], this->m_output_device[i]);
-  }
+  this->compareOutputs();
 }
 
 /// Test for some operations with @c transform3
@@ -153,9 +157,7 @@ TYPED_TEST_P(test_cuda_basics, transform3) {
       vecmem::get_data(this->m_output_device));
 
   // Compare the outputs.
-  for (std::size_t i = 0; i < this->s_arraySize; ++i) {
-    EXPECT_FLOAT_EQ(this->m_output_host[i], this->m_output_device[i]);
-  }
+  this->compareOutputs();
 }
 
 /// Test for some operations with @c cartesian2
@@ -174,9 +176,7 @@ TYPED_TEST_P(test_cuda_basics, cartesian2) {
       vecmem::get_data(this->m_output_device));
 
   // Compare the outputs.
-  for (std::size_t i = 0; i < this->s_arraySize; ++i) {
-    EXPECT_FLOAT_EQ(this->m_output_host[i], this->m_output_device[i]);
-  }
+  this->compareOutputs();
 }
 
 /// Test for some operations with @c cylindrical2
@@ -195,9 +195,7 @@ TYPED_TEST_P(test_cuda_basics, cylindrical2) {
       vecmem::get_data(this->m_output_device));
 
   // Compare the outputs.
-  for (std::size_t i = 0; i < this->s_arraySize; ++i) {
-    EXPECT_FLOAT_EQ(this->m_output_host[i], this->m_output_device[i]);
-  }
+  this->compareOutputs();
 }
 
 /// Test for some operations with @c polar2
@@ -216,9 +214,7 @@ TYPED_TEST_P(test_cuda_basics, polar2) {
       vecmem::get_data(this->m_output_device));
 
   // Compare the outputs.
-  for (std::size_t i = 0; i < this->s_arraySize; ++i) {
-    EXPECT_FLOAT_EQ(this->m_output_host[i], this->m_output_device[i]);
-  }
+  this->compareOutputs();
 }
 
 REGISTER_TYPED_TEST_SUITE_P(test_cuda_basics, vector_2d_ops, vector_3d_ops,

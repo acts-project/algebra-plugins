@@ -32,6 +32,8 @@ jobs:
             GENERATOR: "Unix Makefiles"
           - OS: "macos-latest"
             GENERATOR: "Xcode"
+          - OS: "windows-latest"
+            GENERATOR: "Visual Studio 16 2019"
 
     # The system to run on.
     runs-on: ${{ matrix.PLATFORM.OS }}

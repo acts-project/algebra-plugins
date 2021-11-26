@@ -133,7 +133,7 @@ TYPED_TEST_P(test_cuda_basics, vector_3d_ops) {
   // This test is just not numerically stable at float precision in optimized
   // mode for some reason. :-(
 #ifdef NDEBUG
-  if(typeid(typename TypeParam::scalar) == typeid(float)) {
+  if (typeid(typename TypeParam::scalar) == typeid(float)) {
     GTEST_SKIP();
   }
 #endif  // NDEBUG

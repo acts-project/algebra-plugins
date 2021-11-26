@@ -30,8 +30,6 @@ include( algebra-plugins-compiler-options )
 include( algebra-plugins-functions )
 
 # Flags controlling how the Algebra Plugins code should behave.
-set( ALGEBRA_PLUGINS_CUSTOM_SCALARTYPE "double" CACHE STRING
-   "Scalar type to use in Algebra Plugins" )
 option( ALGEBRA_PLUGINS_INCLUDE_EIGEN
    "Include Eigen types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_INCLUDE_SMATRIX

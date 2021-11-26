@@ -23,10 +23,7 @@ jobs:
     strategy:
       matrix:
         BUILD:
-          - TYPE: "Release"
-            SCALAR: "double"
-          - TYPE: "Debug"
-            SCALAR: "float"
+          - TYPE: ["Release", "Debug"]
         PLATFORM:
           - OS: "ubuntu-latest"
             GENERATOR: "Unix Makefiles"
@@ -45,7 +42,6 @@ jobs:
     # Run the CMake configuration.
     - name: Configure
       run: cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD.TYPE }}
-                 -DALGEBRA_PLUGINS_CUSTOM_SCALARTYPE=${{ matrix.BUILD.SCALAR }}
                  -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE
                  -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE
                  -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=FALSE
@@ -73,10 +69,7 @@ jobs:
     strategy:
       matrix:
         BUILD:
-          - TYPE: "Release"
-            SCALAR: "float"
-          - TYPE: "Debug"
-            SCALAR: "double"
+          - TYPE: ["Release", "Debug"]
         PLATFORM:
           - NAME: "HOST"
             CONTAINER: "ghcr.io/acts-project/ubuntu2004:v13"
@@ -113,7 +106,6 @@ jobs:
     # Run the CMake configuration.
     - name: Configure
       run: cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD.TYPE }}
-                 -DALGEBRA_PLUGINS_CUSTOM_SCALARTYPE=${{ matrix.BUILD.SCALAR }}
                  ${{ matrix.PLATFORM.OPTIONS }}
                  -S ${GITHUB_WORKSPACE} -B build
     # Perform the build.

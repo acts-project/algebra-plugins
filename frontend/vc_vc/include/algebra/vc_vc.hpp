@@ -68,11 +68,32 @@ using vc::math::theta;
 /// @}
 
 /// Function extracting a slice from the matrix used by
-/// @c algebra::array::transform3
-template <std::size_t SIZE, typename scalar_t,
-          std::enable_if_t<SIZE <= 4, bool> = true>
+/// @c algebra::vc::transform3<float>
+template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
+ALGEBRA_HOST_DEVICE inline auto vector(const vc::transform3<float>::matrix44& m,
+                                       std::size_t row, std::size_t col) {
+
+  assert(row == 0);
+  assert(col < 4);
+  switch (col) {
+    case 0:
+      return m.x;
+    case 1:
+      return m.y;
+    case 2:
+      return m.z;
+    case 3:
+      return m.t;
+    default:
+      return m.x;
+  }
+}
+
+/// Function extracting a slice from the matrix used by
+/// @c algebra::vc::transform3<double>
+template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
 ALGEBRA_HOST_DEVICE inline auto vector(
-    const typename vc::transform3<scalar_t>::matrix44& m, std::size_t row,
+    const vc::transform3<double>::matrix44& m, std::size_t row,
     std::size_t col) {
 
   assert(row == 0);

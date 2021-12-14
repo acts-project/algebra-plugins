@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/scalar.hpp"
 #include "algebra/math/smatrix.hpp"
 #include "algebra/storage/smatrix.hpp"
 
@@ -18,10 +17,14 @@ namespace smatrix {
 /// @name SMatrix based transforms on @c algebra::smatrix::storage_type
 /// @{
 
-using transform3 = math::transform3<scalar>;
-using cartesian2 = math::cartesian2<transform3>;
-using polar2 = math::polar2<transform3>;
-using cylindrical2 = math::cylindrical2<transform3>;
+template <typename T>
+using transform3 = math::transform3<T>;
+template <typename T>
+using cartesian2 = math::cartesian2<transform3<T> >;
+template <typename T>
+using polar2 = math::polar2<transform3<T> >;
+template <typename T>
+using cylindrical2 = math::cylindrical2<transform3<T> >;
 
 /// @}
 
@@ -42,12 +45,13 @@ using smatrix::math::theta;
 
 /// Function extracting a slice from the matrix used by
 /// @c algebra::smatrix::transform3
-template <unsigned int SIZE, unsigned int ROWS, unsigned int COLS>
+template <unsigned int SIZE, unsigned int ROWS, unsigned int COLS,
+          typename scalar_t>
 ALGEBRA_HOST_DEVICE inline auto vector(
-    const ROOT::Math::SMatrix<scalar, ROWS, COLS>& m, unsigned int row,
+    const ROOT::Math::SMatrix<scalar_t, ROWS, COLS>& m, unsigned int row,
     unsigned int col) {
 
-  return m.template SubCol<smatrix::storage_type<scalar, SIZE> >(col, row);
+  return m.template SubCol<smatrix::storage_type<scalar_t, SIZE> >(col, row);
 }
 
 }  // namespace getter

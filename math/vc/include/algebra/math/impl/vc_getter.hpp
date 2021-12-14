@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/math/impl/vc_vector.hpp"
+#include "algebra/qualifiers.hpp"
 
 // System include(s).
 #include <cmath>

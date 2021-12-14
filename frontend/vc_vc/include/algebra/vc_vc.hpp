@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/scalar.hpp"
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/vc.hpp"
 #include "algebra/storage/vc.hpp"
@@ -36,10 +35,14 @@ namespace vc {
 using math::perp;
 using math::phi;
 
-using transform3 = math::transform3<storage_type, scalar, vector3, point2>;
-using cartesian2 = cmath::cartesian2<transform3>;
-using polar2 = cmath::polar2<transform3>;
-using cylindrical2 = cmath::cylindrical2<transform3>;
+template <typename T>
+using transform3 = math::transform3<storage_type, T, vector3<T>, point2<T> >;
+template <typename T>
+using cartesian2 = cmath::cartesian2<transform3<T> >;
+template <typename T>
+using polar2 = cmath::polar2<transform3<T> >;
+template <typename T>
+using cylindrical2 = cmath::cylindrical2<transform3<T> >;
 
 /// @}
 
@@ -65,10 +68,33 @@ using vc::math::theta;
 /// @}
 
 /// Function extracting a slice from the matrix used by
-/// @c algebra::array::transform3
+/// @c algebra::vc::transform3<float>
 template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline auto vector(const vc::transform3::matrix44& m,
+ALGEBRA_HOST_DEVICE inline auto vector(const vc::transform3<float>::matrix44& m,
                                        std::size_t row, std::size_t col) {
+
+  assert(row == 0);
+  assert(col < 4);
+  switch (col) {
+    case 0:
+      return m.x;
+    case 1:
+      return m.y;
+    case 2:
+      return m.z;
+    case 3:
+      return m.t;
+    default:
+      return m.x;
+  }
+}
+
+/// Function extracting a slice from the matrix used by
+/// @c algebra::vc::transform3<double>
+template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
+ALGEBRA_HOST_DEVICE inline auto vector(
+    const vc::transform3<double>::matrix44& m, std::size_t row,
+    std::size_t col) {
 
   assert(row == 0);
   assert(col < 4);

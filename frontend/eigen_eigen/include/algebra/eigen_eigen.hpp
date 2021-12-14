@@ -6,7 +6,6 @@
  */
 
 // Project include(s).
-#include "algebra/common/scalar.hpp"
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/eigen.hpp"
 #include "algebra/storage/eigen.hpp"
@@ -20,10 +19,14 @@ namespace eigen {
 /// @name Eigen based transforms on @c algebra::eigen::storage_type
 /// @{
 
-using transform3 = math::transform3<scalar>;
-using cartesian2 = cmath::cartesian2<transform3>;
-using polar2 = math::polar2<transform3>;
-using cylindrical2 = math::cylindrical2<transform3>;
+template <typename T>
+using transform3 = math::transform3<T>;
+template <typename T>
+using cartesian2 = cmath::cartesian2<transform3<T> >;
+template <typename T>
+using polar2 = math::polar2<transform3<T> >;
+template <typename T>
+using cylindrical2 = math::cylindrical2<transform3<T> >;
 
 /// @}
 

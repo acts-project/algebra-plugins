@@ -23,7 +23,9 @@ target_link_libraries( algebra_tests_cuda_common
    INTERFACE GTest::gtest algebra::common algebra::tests_common
              vecmem::core vecmem::cuda )
 target_compile_options( algebra_tests_cuda_common INTERFACE
-   $<$<COMPILE_LANGUAGE:CUDA>:-Xcudafe --diag_suppress=177> )
+   $<$<COMPILE_LANGUAGE:CUDA>:-Xcudafe --diag_suppress=177>
+   $<$<COMPILE_LANGUAGE:CUDA>:--ftz=false --prec-div=true>
+   $<$<COMPILE_LANGUAGE:CUDA>:--prec-sqrt=true --fmad=false> )
 if( "${CUDAToolkit_VERSION}" VERSION_GREATER_EQUAL "11.5" )
    # Replace all "#pragma diag_suppress" calls in the Eigen code with
    # "#pragma nv_diag_suppress" calls. To be removed once the Eigen

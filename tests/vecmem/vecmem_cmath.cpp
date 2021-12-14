@@ -20,17 +20,31 @@
 /// Struct providing a readable name for the test
 struct test_specialisation_name {
   template <typename T>
-  static std::string GetName(int) {
-    return "vecmem_cmath";
+  static std::string GetName(int i) {
+    switch (i) {
+      case 0:
+        return "vecmem_cmath<float>";
+      case 1:
+        return "vecmem_cmath<double>";
+      default:
+        return "unknown";
+    }
   }
 };
 
 // Instantiate the test(s).
-typedef testing::Types<test_types<
-    algebra::scalar, algebra::vecmem::point2, algebra::vecmem::point3,
-    algebra::vecmem::vector2, algebra::vecmem::vector3,
-    algebra::vecmem::transform3, algebra::vecmem::cartesian2,
-    algebra::vecmem::polar2, algebra::vecmem::cylindrical2> >
+typedef testing::Types<
+    test_types<
+        float, algebra::vecmem::point2<float>, algebra::vecmem::point3<float>,
+        algebra::vecmem::vector2<float>, algebra::vecmem::vector3<float>,
+        algebra::vecmem::transform3<float>, algebra::vecmem::cartesian2<float>,
+        algebra::vecmem::polar2<float>, algebra::vecmem::cylindrical2<float> >,
+    test_types<
+        double, algebra::vecmem::point2<double>,
+        algebra::vecmem::point3<double>, algebra::vecmem::vector2<double>,
+        algebra::vecmem::vector3<double>, algebra::vecmem::transform3<double>,
+        algebra::vecmem::cartesian2<double>, algebra::vecmem::polar2<double>,
+        algebra::vecmem::cylindrical2<double> > >
     vecmem_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
                                vecmem_cmath_types, test_specialisation_name);

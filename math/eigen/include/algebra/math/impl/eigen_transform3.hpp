@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/algebra_qualifiers.hpp"
+#include "algebra/qualifiers.hpp"
 
 // Eigen include(s).
 #include <Eigen/Core>

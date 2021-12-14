@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/scalar.hpp"
 #include "algebra/storage/impl/vc_array4.hpp"
 
 // System include(s).
@@ -25,12 +24,16 @@ template <typename T, std::size_t N>
 using storage_type = Vc::SimdArray<T, N>;
 
 /// 3-element "vector" type, using @c algebra::vc::array4
-using vector3 = array4<scalar>;
+template <typename T>
+using vector3 = array4<T>;
 /// Point in 3D space, using @c algebra::vc::array4
-using point3 = vector3;
+template <typename T>
+using point3 = vector3<T>;
 /// 2-element "vector" type, using @c std::array
-using vector2 = std::array<scalar, 2>;
+template <typename T>
+using vector2 = std::array<T, 2>;
 /// Point in 2D space, using @c std::array
-using point2 = vector2;
+template <typename T>
+using point2 = vector2<T>;
 
 }  // namespace algebra::vc

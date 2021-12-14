@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/math/impl/eigen_getter.hpp"
+#include "algebra/qualifiers.hpp"
 
 namespace algebra::eigen::math {
 

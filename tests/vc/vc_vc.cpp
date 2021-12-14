@@ -20,16 +20,29 @@
 /// Struct providing a readable name for the test
 struct test_specialisation_name {
   template <typename T>
-  static std::string GetName(int) {
-    return "vc_vc";
+  static std::string GetName(int i) {
+    switch (i) {
+      case 0:
+        return "vc_vc<float>";
+      case 1:
+        return "vc_vc<double>";
+      default:
+        return "unknown";
+    }
   }
 };
 
 // Instantiate the test(s).
-typedef testing::Types<test_types<
-    algebra::scalar, algebra::vc::point2, algebra::vc::point3,
-    algebra::vc::vector2, algebra::vc::vector3, algebra::vc::transform3,
-    algebra::vc::cartesian2, algebra::vc::polar2, algebra::vc::cylindrical2> >
+typedef testing::Types<
+    test_types<float, algebra::vc::point2<float>, algebra::vc::point3<float>,
+               algebra::vc::vector2<float>, algebra::vc::vector3<float>,
+               algebra::vc::transform3<float>, algebra::vc::cartesian2<float>,
+               algebra::vc::polar2<float>, algebra::vc::cylindrical2<float> >,
+    test_types<double, algebra::vc::point2<double>, algebra::vc::point3<double>,
+               algebra::vc::vector2<double>, algebra::vc::vector3<double>,
+               algebra::vc::transform3<double>, algebra::vc::cartesian2<double>,
+               algebra::vc::polar2<double>,
+               algebra::vc::cylindrical2<double> > >
     vc_vc_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics, vc_vc_types,
                                test_specialisation_name);

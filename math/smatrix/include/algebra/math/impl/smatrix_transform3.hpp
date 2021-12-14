@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/common/algebra_qualifiers.hpp"
 #include "algebra/math/impl/smatrix_errorcheck.hpp"
+#include "algebra/qualifiers.hpp"
 
 // ROOT/Smatrix include(s).
 #include "Math/SMatrix.h"
@@ -198,8 +198,7 @@ struct transform3 {
   ALGEBRA_HOST
   inline const point3 point_to_global(const point3 &v) const {
 
-    ROOT::Math::SVector<scalar, 4> vector_4 =
-        ROOT::Math::SVector<scalar_type, 4>();
+    ROOT::Math::SVector<scalar_type, 4> vector_4;
     vector_4.Place_at(v, 0);
     vector_4[3] = static_cast<scalar_type>(1);
     return ROOT::Math::SVector<scalar_type, 4>(_data * vector_4)
@@ -211,8 +210,7 @@ struct transform3 {
   ALGEBRA_HOST
   inline const point3 point_to_local(const point3 &v) const {
 
-    ROOT::Math::SVector<scalar, 4> vector_4 =
-        ROOT::Math::SVector<scalar_type, 4>();
+    ROOT::Math::SVector<scalar_type, 4> vector_4;
     vector_4.Place_at(v, 0);
     vector_4[3] = static_cast<scalar_type>(1);
     return ROOT::Math::SVector<scalar_type, 4>(_data_inv * vector_4)
@@ -224,8 +222,7 @@ struct transform3 {
   ALGEBRA_HOST
   inline const point3 vector_to_global(const vector3 &v) const {
 
-    ROOT::Math::SVector<scalar, 4> vector_4 =
-        ROOT::Math::SVector<scalar_type, 4>();
+    ROOT::Math::SVector<scalar_type, 4> vector_4;
     vector_4.Place_at(v, 0);
     return ROOT::Math::SVector<scalar_type, 4>(_data * vector_4)
         .template Sub<point3>(0);
@@ -236,8 +233,7 @@ struct transform3 {
   ALGEBRA_HOST
   inline const point3 vector_to_local(const vector3 &v) const {
 
-    ROOT::Math::SVector<scalar, 4> vector_4 =
-        ROOT::Math::SVector<scalar_type, 4>();
+    ROOT::Math::SVector<scalar_type, 4> vector_4;
     vector_4.Place_at(v, 0);
     return ROOT::Math::SVector<scalar_type, 4>(_data_inv * vector_4)
         .template Sub<point3>(0);

@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,10 +8,10 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
 // System include(s).
-#include <cmath>
 #include <cstddef>
 #include <type_traits>
 
@@ -26,7 +26,7 @@ template <typename size_type, template <typename, size_type> class array_t,
 ALGEBRA_HOST_DEVICE inline scalar_t phi(
     const array_t<scalar_t, N> &v) noexcept {
 
-  return std::atan2(v[1], v[0]);
+  return algebra::math::atan2(v[1], v[0]);
 }
 
 /** This method retrieves theta from a vector, vector base with rows >= 3
@@ -38,7 +38,8 @@ template <typename size_type, template <typename, size_type> class array_t,
 ALGEBRA_HOST_DEVICE inline scalar_t theta(
     const array_t<scalar_t, N> &v) noexcept {
 
-  return std::atan2(std::sqrt(v[0] * v[0] + v[1] * v[1]), v[2]);
+  return algebra::math::atan2(algebra::math::sqrt(v[0] * v[0] + v[1] * v[1]),
+                              v[2]);
 }
 
 /** This method retrieves the perpenticular magnitude of a vector with rows >= 2
@@ -50,7 +51,7 @@ template <typename size_type, template <typename, size_type> class array_t,
 ALGEBRA_HOST_DEVICE inline scalar_t perp(
     const array_t<scalar_t, N> &v) noexcept {
 
-  return std::sqrt(v[0] * v[0] + v[1] * v[1]);
+  return algebra::math::sqrt(v[0] * v[0] + v[1] * v[1]);
 }
 
 /** This method retrieves the norm of a vector, no dimension restriction
@@ -72,7 +73,7 @@ template <typename size_type, template <typename, size_type> class array_t,
           typename scalar_t, size_type N, std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, N> &v) {
 
-  return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  return algebra::math::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
 
 /** This method retrieves the pseudo-rapidity from a vector or vector base with
@@ -85,7 +86,7 @@ template <typename size_type, template <typename, size_type> class array_t,
 ALGEBRA_HOST_DEVICE inline scalar_t eta(
     const array_t<scalar_t, N> &v) noexcept {
 
-  return std::atanh(v[2] / norm(v));
+  return algebra::math::atanh(v[2] / norm(v));
 }
 
 /// "Element getter", assuming a simple 2D array access

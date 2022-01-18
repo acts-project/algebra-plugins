@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,10 +8,10 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
 // System include(s).
-#include <cmath>
 #include <type_traits>
 #include <utility>
 
@@ -46,7 +46,7 @@ ALGEBRA_HOST_DEVICE inline auto dot(const vector_type1 &a,
 template <typename vector_type>
 ALGEBRA_HOST_DEVICE inline auto normalize(const vector_type &v) {
 
-  return v / std::sqrt(dot(v, v));
+  return v / algebra::math::sqrt(dot(v, v));
 }
 
 /** Cross product between two input vectors - 3 Dim

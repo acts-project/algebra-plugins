@@ -8,42 +8,47 @@
 #pragma once
 
 // Test include(s).
-#include "execute_cuda_test.cuh"
 #include "execute_host_test.hpp"
+#include "execute_sycl_test.hpp"
 #include "test_basics_base.hpp"
 #include "test_basics_functors.hpp"
 
 // VecMem include(s).
 #include <vecmem/containers/vector.hpp>
-#include <vecmem/memory/cuda/managed_memory_resource.hpp>
+#include <vecmem/memory/sycl/shared_memory_resource.hpp>
 
 // GoogleTest include(s).
 #include <gtest/gtest.h>
 
+// SYCL include(s).
+#include <CL/sycl.hpp>
+
 /// Test case class, to be specialised for the different plugins
 template <typename T>
-class test_cuda_basics : public test_basics_base<T> {
+class test_sycl_basics : public test_basics_base<T> {
 
  public:
   /// Constructor, setting up the inputs for all of the tests
-  test_cuda_basics() : test_basics_base<T>(m_resource) {}
+  test_sycl_basics() : test_basics_base<T>(m_resource) {}
 
  protected:
+  /// Queue to be used by all of the tests.
+  cl::sycl::queue m_queue;
   /// Memory resource for all of the tests.
-  vecmem::cuda::managed_memory_resource m_resource;
+  vecmem::sycl::shared_memory_resource m_resource{&m_queue};
 };
-TYPED_TEST_SUITE_P(test_cuda_basics);
+TYPED_TEST_SUITE_P(test_sycl_basics);
 
 /// Test for some basic 2D "vector operations"
-TYPED_TEST_P(test_cuda_basics, vector_2d_ops) {
+TYPED_TEST_P(test_sycl_basics, vector_2d_ops) {
 
   // Run the test on the host, and on the/a device.
   execute_host_test<vector_2d_ops_functor<TypeParam> >(
       this->m_p1->size(), vecmem::get_data(*(this->m_p1)),
       vecmem::get_data(*(this->m_p2)),
       vecmem::get_data(*(this->m_output_host)));
-  execute_cuda_test<vector_2d_ops_functor<TypeParam> >(
-      this->m_p1->size(), vecmem::get_data(*(this->m_p1)),
+  execute_sycl_test<vector_2d_ops_functor<TypeParam> >(
+      this->m_queue, this->m_p1->size(), vecmem::get_data(*(this->m_p1)),
       vecmem::get_data(*(this->m_p2)),
       vecmem::get_data(*(this->m_output_device)));
 
@@ -52,10 +57,10 @@ TYPED_TEST_P(test_cuda_basics, vector_2d_ops) {
 }
 
 /// Test for some basic 3D "vector operations"
-TYPED_TEST_P(test_cuda_basics, vector_3d_ops) {
+TYPED_TEST_P(test_sycl_basics, vector_3d_ops) {
 
   // This test is just not numerically stable at float precision in optimized
-  // mode for some reason. :-(
+  // mode on some backends. :-( (Cough... HIP... cough...)
 #ifdef NDEBUG
   if (typeid(typename TypeParam::scalar) == typeid(float)) {
     GTEST_SKIP();
@@ -67,8 +72,8 @@ TYPED_TEST_P(test_cuda_basics, vector_3d_ops) {
       this->m_v1->size(), vecmem::get_data(*(this->m_v1)),
       vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_host)));
-  execute_cuda_test<vector_3d_ops_functor<TypeParam> >(
-      this->m_v1->size(), vecmem::get_data(*(this->m_v1)),
+  execute_sycl_test<vector_3d_ops_functor<TypeParam> >(
+      this->m_queue, this->m_v1->size(), vecmem::get_data(*(this->m_v1)),
       vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_device)));
 
@@ -77,7 +82,7 @@ TYPED_TEST_P(test_cuda_basics, vector_3d_ops) {
 }
 
 /// Test for some operations with @c transform3
-TYPED_TEST_P(test_cuda_basics, transform3) {
+TYPED_TEST_P(test_sycl_basics, transform3) {
 
   // Run the test on the host, and on the/a device.
   execute_host_test<transform3_ops_functor<TypeParam> >(
@@ -85,8 +90,8 @@ TYPED_TEST_P(test_cuda_basics, transform3) {
       vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
       vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_host)));
-  execute_cuda_test<transform3_ops_functor<TypeParam> >(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+  execute_sycl_test<transform3_ops_functor<TypeParam> >(
+      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
       vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
       vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_device)));
@@ -96,7 +101,7 @@ TYPED_TEST_P(test_cuda_basics, transform3) {
 }
 
 /// Test for some operations with @c cartesian2
-TYPED_TEST_P(test_cuda_basics, cartesian2) {
+TYPED_TEST_P(test_sycl_basics, cartesian2) {
 
   // Run the test on the host, and on the/a device.
   execute_host_test<cartesian2_ops_functor<TypeParam> >(
@@ -104,8 +109,8 @@ TYPED_TEST_P(test_cuda_basics, cartesian2) {
       vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
       vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_host)));
-  execute_cuda_test<cartesian2_ops_functor<TypeParam> >(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+  execute_sycl_test<cartesian2_ops_functor<TypeParam> >(
+      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
       vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
       vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_device)));
@@ -115,7 +120,7 @@ TYPED_TEST_P(test_cuda_basics, cartesian2) {
 }
 
 /// Test for some operations with @c cylindrical2
-TYPED_TEST_P(test_cuda_basics, cylindrical2) {
+TYPED_TEST_P(test_sycl_basics, cylindrical2) {
 
   // Run the test on the host, and on the/a device.
   execute_host_test<cylindrical2_ops_functor<TypeParam> >(
@@ -123,8 +128,8 @@ TYPED_TEST_P(test_cuda_basics, cylindrical2) {
       vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
       vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_host)));
-  execute_cuda_test<cylindrical2_ops_functor<TypeParam> >(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+  execute_sycl_test<cylindrical2_ops_functor<TypeParam> >(
+      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
       vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
       vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_device)));
@@ -134,7 +139,7 @@ TYPED_TEST_P(test_cuda_basics, cylindrical2) {
 }
 
 /// Test for some operations with @c polar2
-TYPED_TEST_P(test_cuda_basics, polar2) {
+TYPED_TEST_P(test_sycl_basics, polar2) {
 
   // Run the test on the host, and on the/a device.
   execute_host_test<polar2_ops_functor<TypeParam> >(
@@ -142,8 +147,8 @@ TYPED_TEST_P(test_cuda_basics, polar2) {
       vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
       vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_host)));
-  execute_cuda_test<polar2_ops_functor<TypeParam> >(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+  execute_sycl_test<polar2_ops_functor<TypeParam> >(
+      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
       vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
       vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_device)));
@@ -152,5 +157,5 @@ TYPED_TEST_P(test_cuda_basics, polar2) {
   this->compareOutputs();
 }
 
-REGISTER_TYPED_TEST_SUITE_P(test_cuda_basics, vector_2d_ops, vector_3d_ops,
+REGISTER_TYPED_TEST_SUITE_P(test_sycl_basics, vector_2d_ops, vector_3d_ops,
                             transform3, cartesian2, cylindrical2, polar2);

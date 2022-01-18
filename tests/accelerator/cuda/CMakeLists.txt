@@ -14,14 +14,13 @@ find_package( CUDAToolkit REQUIRED )
 # Helper library for the CUDA tests.
 add_library( algebra_tests_cuda_common STATIC
    "common/cuda_error_check.hpp" "common/cuda_error_check.cpp"
-   "common/execute_cuda_test.cuh" "common/test_cuda_basics.cuh"
-   "common/test_cuda_basics_functors.hpp" )
+   "common/execute_cuda_test.cuh" "common/test_cuda_basics.cuh" )
 target_include_directories( algebra_tests_cuda_common PUBLIC
    "${CMAKE_CURRENT_SOURCE_DIR}/common" )
 target_link_libraries( algebra_tests_cuda_common
    PUBLIC    CUDA::cudart
    INTERFACE GTest::gtest algebra::common algebra::tests_common
-             vecmem::core vecmem::cuda )
+             algebra::tests_accel_common vecmem::core vecmem::cuda )
 target_compile_options( algebra_tests_cuda_common INTERFACE
    $<$<COMPILE_LANGUAGE:CUDA>:-Xcudafe --diag_suppress=177>
    $<$<COMPILE_LANGUAGE:CUDA>:--ftz=false --prec-div=true>

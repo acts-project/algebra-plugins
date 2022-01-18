@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -16,8 +16,6 @@
 // VecMem include(s).
 #include <vecmem/containers/data/vector_view.hpp>
 #include <vecmem/containers/device_vector.hpp>
-
-namespace cuda {
 
 /// Base class for all of the functors
 template <typename T>
@@ -36,7 +34,7 @@ class vector_2d_ops_functor : public functor_base<T> {
   ALGEBRA_HOST_DEVICE void operator()(
       std::size_t i, vecmem::data::vector_view<const typename T::point2> a,
       vecmem::data::vector_view<const typename T::point2> b,
-      vecmem::data::vector_view<typename T::scalar>& output) {
+      vecmem::data::vector_view<typename T::scalar> output) const {
 
     // Create the VecMem vector(s).
     vecmem::device_vector<const typename T::point2> vec_a(a), vec_b(b);
@@ -56,7 +54,7 @@ class vector_3d_ops_functor : public functor_base<T> {
   ALGEBRA_HOST_DEVICE void operator()(
       std::size_t i, vecmem::data::vector_view<const typename T::vector3> a,
       vecmem::data::vector_view<const typename T::vector3> b,
-      vecmem::data::vector_view<typename T::scalar>& output) {
+      vecmem::data::vector_view<typename T::scalar> output) const {
 
     // Create the VecMem vector(s).
     vecmem::device_vector<const typename T::vector3> vec_a(a), vec_b(b);
@@ -79,7 +77,7 @@ class transform3_ops_functor : public functor_base<T> {
       vecmem::data::vector_view<const typename T::vector3> t3,
       vecmem::data::vector_view<const typename T::vector3> a,
       vecmem::data::vector_view<const typename T::vector3> b,
-      vecmem::data::vector_view<typename T::scalar>& output) {
+      vecmem::data::vector_view<typename T::scalar> output) const {
 
     // Create the VecMem vector(s).
     vecmem::device_vector<const typename T::vector3> vec_t1(t1), vec_t2(t2),
@@ -104,7 +102,7 @@ class cartesian2_ops_functor : public functor_base<T> {
       vecmem::data::vector_view<const typename T::vector3> t3,
       vecmem::data::vector_view<const typename T::vector3> a,
       vecmem::data::vector_view<const typename T::vector3> b,
-      vecmem::data::vector_view<typename T::scalar>& output) {
+      vecmem::data::vector_view<typename T::scalar> output) const {
 
     // Create the VecMem vector(s).
     vecmem::device_vector<const typename T::vector3> vec_t1(t1), vec_t2(t2),
@@ -129,7 +127,7 @@ class cylindrical2_ops_functor : public functor_base<T> {
       vecmem::data::vector_view<const typename T::vector3> t3,
       vecmem::data::vector_view<const typename T::vector3> a,
       vecmem::data::vector_view<const typename T::vector3> b,
-      vecmem::data::vector_view<typename T::scalar>& output) {
+      vecmem::data::vector_view<typename T::scalar> output) const {
 
     // Create the VecMem vector(s).
     vecmem::device_vector<const typename T::vector3> vec_t1(t1), vec_t2(t2),
@@ -154,7 +152,7 @@ class polar2_ops_functor : public functor_base<T> {
       vecmem::data::vector_view<const typename T::vector3> t3,
       vecmem::data::vector_view<const typename T::vector3> a,
       vecmem::data::vector_view<const typename T::vector3> b,
-      vecmem::data::vector_view<typename T::scalar>& output) {
+      vecmem::data::vector_view<typename T::scalar> output) const {
 
     // Create the VecMem vector(s).
     vecmem::device_vector<const typename T::vector3> vec_t1(t1), vec_t2(t2),
@@ -167,5 +165,3 @@ class polar2_ops_functor : public functor_base<T> {
         vec_t1[ii], vec_t2[ii], vec_t3[ii], vec_a[ii], vec_b[ii]);
   }
 };
-
-}  // namespace cuda

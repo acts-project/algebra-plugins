@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -16,7 +16,7 @@
 namespace algebra::smatrix {
 
 /// Array type used in the Smatrix storage model
-template <typename T, std::size_t N>
+template <typename T, unsigned int N>
 using storage_type = ROOT::Math::SVector<T, N>;
 
 /// 3-element "vector" type, using @c ROOT::Math::SVector

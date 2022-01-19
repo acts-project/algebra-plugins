@@ -1,6 +1,6 @@
 /** Algebra plugins, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,13 +8,13 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
 // Eigen include(s).
 #include <Eigen/Core>
 
 // System include(s).
-#include <cmath>
 #include <type_traits>
 
 namespace algebra::eigen::math {
@@ -30,7 +30,7 @@ template <
 ALGEBRA_HOST_DEVICE inline auto phi(
     const Eigen::MatrixBase<derived_type> &v) noexcept {
 
-  return std::atan2(v[1], v[0]);
+  return algebra::math::atan2(v[1], v[0]);
 }
 
 /** This method retrieves theta from a vector, vector base with rows >= 3
@@ -44,7 +44,8 @@ template <
 ALGEBRA_HOST_DEVICE inline auto theta(
     const Eigen::MatrixBase<derived_type> &v) noexcept {
 
-  return std::atan2(std::sqrt(v[0] * v[0] + v[1] * v[1]), v[2]);
+  return algebra::math::atan2(algebra::math::sqrt(v[0] * v[0] + v[1] * v[1]),
+                              v[2]);
 }
 
 /** This method retrieves the perpenticular magnitude of a vector with rows >= 2
@@ -58,7 +59,7 @@ template <
 ALGEBRA_HOST_DEVICE inline auto perp(
     const Eigen::MatrixBase<derived_type> &v) noexcept {
 
-  return std::sqrt(v[0] * v[0] + v[1] * v[1]);
+  return algebra::math::sqrt(v[0] * v[0] + v[1] * v[1]);
 }
 
 /** This method retrieves the norm of a vector, no dimension restriction
@@ -83,7 +84,7 @@ template <
 ALGEBRA_HOST_DEVICE inline auto eta(
     const Eigen::MatrixBase<derived_type> &v) noexcept {
 
-  return std::atanh(v[2] / v.norm());
+  return algebra::math::atanh(v[2] / v.norm());
 }
 
 }  // namespace algebra::eigen::math

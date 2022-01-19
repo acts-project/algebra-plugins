@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,10 +8,8 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
-
-// System include(s).
-#include <cmath>
 
 namespace algebra::cmath {
 
@@ -58,7 +56,7 @@ template <typename size_type, template <typename, size_type> class array_t,
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, N> normalize(
     const array_t<scalar_t, N> &v) {
 
-  scalar_t oon = 1. / std::sqrt(dot(v, v));
+  const scalar_t oon = 1. / algebra::math::sqrt(dot(v, v));
   return {v[0] * oon, v[1] * oon};
 }
 
@@ -88,7 +86,7 @@ template <typename size_type, template <typename, size_type> class array_t,
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, 3> normalize(
     const array_t<scalar_t, N> &v) {
 
-  scalar_t oon = 1. / std::sqrt(dot(v, v));
+  const scalar_t oon = 1. / algebra::math::sqrt(dot(v, v));
   return {v[0] * oon, v[1] * oon, v[2] * oon};
 }
 

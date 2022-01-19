@@ -1,6 +1,6 @@
 # Algebra plugins library, part of the ACTS project (R&D line)
 #
-# (c) 2021 CERN for the benefit of the ACTS project
+# (c) 2021-2022 CERN for the benefit of the ACTS project
 #
 # Mozilla Public License Version 2.0
 
@@ -87,6 +87,9 @@ jobs:
           - NAME: "CUDA"
             CONTAINER: "ghcr.io/acts-project/ubuntu2004_cuda:v13"
             OPTIONS: -DALGEBRA_PLUGINS_TEST_CUDA=TRUE -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=FALSE -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
+          - NAME: "SYCL"
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004_oneapi:v13"
+            OPTIONS: -DALGEBRA_PLUGINS_TEST_SYCL=TRUE -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
 
     # The system to run on.
     runs-on: ubuntu-latest
@@ -103,15 +106,18 @@ jobs:
     - uses: actions/checkout@v2
     # Run the CMake configuration.
     - name: Configure
-      run: cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }}
-                 ${{ matrix.PLATFORM.OPTIONS }}
-                 -S ${GITHUB_WORKSPACE} -B build
+      run: |
+        source ${GITHUB_WORKSPACE}/.github/ci_setup.sh ${{ matrix.PLATFORM.NAME }}
+        cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }} ${{ matrix.PLATFORM.OPTIONS }} -S ${GITHUB_WORKSPACE} -B build
     # Perform the build.
     - name: Build
-      run: cmake --build build
+      run: |
+        source ${GITHUB_WORKSPACE}/.github/ci_setup.sh ${{ matrix.PLATFORM.NAME }}
+        cmake --build build
     # Run the unit test(s).
     - name: Test
-      if: "matrix.PLATFORM.NAME == 'HOST'"
+      if: "matrix.PLATFORM.NAME != 'CUDA'"
       run: |
         cd build
+        source ${GITHUB_WORKSPACE}/.github/ci_setup.sh ${{ matrix.PLATFORM.NAME }}
         ctest --output-on-failure

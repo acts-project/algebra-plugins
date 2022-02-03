@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -182,9 +182,6 @@ struct transform3 {
 
     _data_inv = _data;
   }
-
-  /** Default contructors */
-  transform3(const transform3 &rhs) = default;
 
   /** Equality operator */
   ALGEBRA_HOST_DEVICE

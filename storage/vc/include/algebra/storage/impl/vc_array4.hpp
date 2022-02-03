@@ -1,13 +1,19 @@
 /** Algebra plugins, part of the ACTS project
  *
- * (c) 2020 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
 #pragma once
 
 // Vc include(s).
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif  // MSVC
 #include <Vc/Vc>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif  // MSVC
 
 // System include(s).
 #include <cstddef>

@@ -156,7 +156,7 @@ struct block_getter {
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> operator()(
       const input_matrix_type &m, std::size_t row, std::size_t col) const {
 
-    matrix_type<ROWS, COLS> submatrix;
+    matrix_type<ROWS, COLS> submatrix{};
     for (std::size_t icol = col; icol < col + COLS; ++icol) {
       for (std::size_t irow = row; irow < row + ROWS; ++irow) {
         submatrix[icol - col][irow - row] = m[icol][irow];

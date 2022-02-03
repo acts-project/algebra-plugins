@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -45,6 +45,6 @@ class test_base<
   /// Epsilon parameter for the floating point comparisons
   static constexpr scalar m_epsilon = std::numeric_limits<scalar>::epsilon();
   /// Variable defining when two floating point values are "close"
-  static constexpr scalar m_isclose = 1e-5;
+  static constexpr scalar m_isclose = static_cast<scalar>(1e-5);
 
 };  // class test_base

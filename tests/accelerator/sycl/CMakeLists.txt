@@ -7,6 +7,9 @@
 # Enable SYCL as a language.
 enable_language( SYCL )
 
+# Set the default SYCL compiler flags.
+include( algebra-plugins-compiler-options-sycl )
+
 # Helper library for the SYCL tests.
 add_library( algebra_tests_sycl_common INTERFACE )
 target_include_directories( algebra_tests_sycl_common INTERFACE

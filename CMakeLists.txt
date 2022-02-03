@@ -8,6 +8,13 @@
 cmake_minimum_required( VERSION 3.14 )
 project( algebra-plugins VERSION 0.6 LANGUAGES CXX )
 
+# Set up the used C++ standard.
+set( CMAKE_CXX_STANDARD 17 CACHE STRING "The (host) C++ standard to use" )
+set( CMAKE_CXX_EXTENSIONS FALSE CACHE BOOL "Disable (host) C++ extensions" )
+set( CMAKE_CUDA_STANDARD 17 CACHE STRING "The (CUDA) C++ standard to use" )
+set( CMAKE_CUDA_EXTENSIONS FALSE CACHE BOOL "Disable (CUDA) C++ extensions" )
+set( CMAKE_SYCL_STANDARD 17 CACHE STRING "The (SYCL) C++ standard to use" )
+
 # Standard CMake include(s).
 include( GNUInstallDirs )
 
@@ -26,7 +33,6 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 
 # Include the Algebra Plugins CMake code.
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
-include( algebra-plugins-compiler-options )
 include( algebra-plugins-functions )
 
 # Flags controlling how the Algebra Plugins code should behave.

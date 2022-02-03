@@ -4,6 +4,9 @@
 #
 # Mozilla Public License Version 2.0
 
+# Set the default C++ compiler flags.
+include( algebra-plugins-compiler-options-cpp )
+
 # Set up an INTERFACE library for the common header(s).
 add_library( algebra_tests_common INTERFACE )
 target_include_directories( algebra_tests_common INTERFACE

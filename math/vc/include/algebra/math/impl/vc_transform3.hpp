@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -12,7 +12,13 @@
 #include "algebra/qualifiers.hpp"
 
 // Vc include(s).
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif  // MSVC
 #include <Vc/Vc>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif  // MSVC
 
 // System include(s).
 #include <cassert>
@@ -297,7 +303,7 @@ struct transform3 {
     i.t[3] = m.y[0] * m.z[1] * m.x[2] - m.z[0] * m.y[1] * m.x[2] +
              m.z[0] * m.x[1] * m.y[2] - m.x[0] * m.z[1] * m.y[2] -
              m.y[0] * m.x[1] * m.z[2] + m.x[0] * m.y[1] * m.z[2];
-    scalar_type idet = 1. / determinant(i);
+    scalar_type idet = static_cast<scalar_type>(1.) / determinant(i);
 
     i.x *= idet;
     i.y *= idet;

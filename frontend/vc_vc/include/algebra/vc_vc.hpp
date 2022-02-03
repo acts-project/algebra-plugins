@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -71,7 +71,12 @@ using vc::math::theta;
 /// @c algebra::vc::transform3<float>
 template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
 ALGEBRA_HOST_DEVICE inline auto vector(const vc::transform3<float>::matrix44& m,
-                                       std::size_t row, std::size_t col) {
+                                       std::size_t
+#ifndef NDEBUG
+                                           row
+#endif  // not NDEBUG
+                                       ,
+                                       std::size_t col) {
 
   assert(row == 0);
   assert(col < 4);
@@ -93,7 +98,12 @@ ALGEBRA_HOST_DEVICE inline auto vector(const vc::transform3<float>::matrix44& m,
 /// @c algebra::vc::transform3<double>
 template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
 ALGEBRA_HOST_DEVICE inline auto vector(
-    const vc::transform3<double>::matrix44& m, std::size_t row,
+    const vc::transform3<double>::matrix44& m,
+    std::size_t
+#ifndef NDEBUG
+        row
+#endif  // not NDEBUG
+    ,
     std::size_t col) {
 
   assert(row == 0);

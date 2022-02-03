@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -182,9 +182,6 @@ struct transform3 {
 
     _data_inv = _data;
   }
-
-  /** Default contructors */
-  transform3(const transform3 &rhs) = default;
 
   /** Equality operator */
   ALGEBRA_HOST_DEVICE
@@ -479,7 +476,7 @@ struct transform3 {
             element_getter()(m, 2, 2) +
         element_getter()(m, 0, 0) * element_getter()(m, 1, 1) *
             element_getter()(m, 2, 2);
-    scalar_type idet = 1. / determinant(i);
+    scalar_type idet = static_cast<scalar_type>(1.) / determinant(i);
     for (unsigned int c = 0; c < 4; ++c) {
       for (unsigned int r = 0; r < 4; ++r) {
         element_getter()(i, c, r) *= idet;

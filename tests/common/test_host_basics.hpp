@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -143,13 +143,15 @@ TYPED_TEST_P(test_host_basics, transform3) {
   typename TypeParam::point3 t = {2., 3., 4.};
 
   // Test constructor from t, z, x
-  typename TypeParam::transform3 trf(t, z, x);
-  ASSERT_TRUE(trf == trf);
+  typename TypeParam::transform3 trf1(t, z, x);
+  ASSERT_TRUE(trf1 == trf1);
+  typename TypeParam::transform3 trf2;
+  trf2 = trf1;
 
   // Helper object for the matrix checks.
   auto element_getter = typename TypeParam::transform3::element_getter();
 
-  const auto rot = trf.rotation();
+  const auto rot = trf2.rotation();
   ASSERT_NEAR(element_getter(rot, 0, 0), x[0], this->m_epsilon);
   ASSERT_NEAR(element_getter(rot, 1, 0), x[1], this->m_epsilon);
   ASSERT_NEAR(element_getter(rot, 2, 0), x[2], this->m_epsilon);
@@ -160,13 +162,13 @@ TYPED_TEST_P(test_host_basics, transform3) {
   ASSERT_NEAR(element_getter(rot, 1, 2), z[1], this->m_epsilon);
   ASSERT_NEAR(element_getter(rot, 2, 2), z[2], this->m_epsilon);
 
-  auto trn = trf.translation();
+  auto trn = trf2.translation();
   ASSERT_NEAR(trn[0], 2., this->m_epsilon);
   ASSERT_NEAR(trn[1], 3., this->m_epsilon);
   ASSERT_NEAR(trn[2], 4., this->m_epsilon);
 
   // Test constructor from matrix
-  auto m44 = trf.matrix();
+  auto m44 = trf2.matrix();
   typename TypeParam::transform3 trfm(m44);
 
   // Re-evaluate rot and trn
@@ -224,6 +226,7 @@ TYPED_TEST_P(test_host_basics, global_transformations) {
   typename TypeParam::vector3 x =
       algebra::vector::normalize(typename TypeParam::vector3{2., -3., 0.});
   typename TypeParam::vector3 y = algebra::vector::cross(z, x);
+  (void)y;
   typename TypeParam::point3 t = {2., 3., 4.};
   typename TypeParam::transform3 trf(t, z, x);
 
@@ -244,7 +247,6 @@ TYPED_TEST_P(test_host_basics, global_transformations) {
 
   // Check a point versus vector transform
   // vector should not change if transformed by a pure translation
-  typename TypeParam::point3 tt = {2., 3., 4.};
   typename TypeParam::transform3 ttrf(t);
 
   typename TypeParam::vector3 gvector = {1., 1., 1};
@@ -268,17 +270,17 @@ TYPED_TEST_P(test_host_basics, local_transformations) {
   typename TypeParam::point2 p2 = {3., 3.};
   typename TypeParam::point3 p3 = {3., 3., 5.};
 
-  typename TypeParam::cartesian2 cartesian2;
-  auto cart2fromp3 = cartesian2(p3);
+  typename TypeParam::cartesian2 c2;
+  auto cart2fromp3 = c2(p3);
   ASSERT_NEAR(p2[0], cart2fromp3[0], this->m_epsilon);
   ASSERT_NEAR(p2[1], cart2fromp3[1], this->m_epsilon);
 
-  typename TypeParam::polar2 polar2;
-  auto polfrom2 = polar2(p2);
-  auto polfrom3 = polar2(p3);
+  typename TypeParam::polar2 pol2;
+  auto polfrom2 = pol2(p2);
+  auto polfrom3 = pol2(p3);
 
   // Check r-phi
-  ASSERT_NEAR(polfrom2[0], sqrt(18.), this->m_isclose);
+  ASSERT_NEAR(polfrom2[0], std::sqrt(18.), this->m_isclose);
   ASSERT_NEAR(polfrom2[1], M_PI_4, this->m_isclose);
 
   // Need to be identical

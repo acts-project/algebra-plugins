@@ -12,7 +12,13 @@
 #include "algebra/qualifiers.hpp"
 
 // Eigen include(s).
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif  // MSVC
 #include <Eigen/Core>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif  // MSVC
 
 // System include(s).
 #include <type_traits>

@@ -1,6 +1,6 @@
 # Algebra plugins library, part of the ACTS project (R&D line)
 #
-# (c) 2021 CERN for the benefit of the ACTS project
+# (c) 2021-2022 CERN for the benefit of the ACTS project
 #
 # Mozilla Public License Version 2.0
 
@@ -34,6 +34,16 @@ if( DEFINED _buildTestingValue )
    unset( _buildTestingValue )
 else()
    unset( BUILD_TESTING CACHE )
+endif()
+
+# Treat the Vc headers as "system headers", to avoid getting warnings from them.
+target_include_directories( Vc
+   SYSTEM INTERFACE $<TARGET_PROPERTY:Vc,INCLUDE_DIRECTORIES> )
+
+# Disable a warning for GCC which the Vc build turns on explicitly for that
+# compiler, just to then go and trigger it... :-/
+if( "${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" )
+   target_compile_options( Vc PRIVATE "-Wno-old-style-cast" )
 endif()
 
 # Set up an alias for the Vc target, with the same name that it will have

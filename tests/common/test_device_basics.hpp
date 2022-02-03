@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -80,15 +80,17 @@ class test_device_basics : public test_base<T> {
   scalar transform3_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
                         vector3 b) const {
 
-    transform3 tr(t1, t2, t3);
+    transform3 tr1(t1, t2, t3);
+    transform3 tr2;
+    tr2 = tr1;
 
-    point3 translation = tr.translation();
+    point3 translation = tr2.translation();
 
-    point3 gpoint = tr.point_to_global(a);
-    point3 lpoint = tr.point_to_local(b);
+    point3 gpoint = tr2.point_to_global(a);
+    point3 lpoint = tr2.point_to_local(b);
 
-    vector3 gvec = tr.vector_to_global(a);
-    vector3 lvec = tr.vector_to_local(b);
+    vector3 gvec = tr2.vector_to_global(a);
+    vector3 lvec = tr2.vector_to_local(b);
 
     return {algebra::getter::norm(translation) + algebra::getter::perp(gpoint) +
             algebra::getter::phi(lpoint) + algebra::vector::dot(gvec, lvec)};

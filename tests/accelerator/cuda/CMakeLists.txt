@@ -11,6 +11,9 @@ cmake_minimum_required( VERSION 3.17 )
 enable_language( CUDA )
 find_package( CUDAToolkit REQUIRED )
 
+# Set the default CUDA compiler flags.
+include( algebra-plugins-compiler-options-cuda )
+
 # Helper library for the CUDA tests.
 add_library( algebra_tests_cuda_common STATIC
    "common/cuda_error_check.hpp" "common/cuda_error_check.cpp"
@@ -25,13 +28,6 @@ target_compile_options( algebra_tests_cuda_common INTERFACE
    $<$<COMPILE_LANGUAGE:CUDA>:-Xcudafe --diag_suppress=177>
    $<$<COMPILE_LANGUAGE:CUDA>:--ftz=false --prec-div=true>
    $<$<COMPILE_LANGUAGE:CUDA>:--prec-sqrt=true --fmad=false> )
-if( "${CUDAToolkit_VERSION}" VERSION_GREATER_EQUAL "11.5" )
-   # Replace all "#pragma diag_suppress" calls in the Eigen code with
-   # "#pragma nv_diag_suppress" calls. To be removed once the Eigen
-   # code starts behaving better.
-   target_compile_definitions( algebra_tests_cuda_common
-      INTERFACE diag_suppress=nv_diag_suppress )
-endif()
 add_library( algebra::tests_cuda_common ALIAS algebra_tests_cuda_common )
 
 # Set up all of the (available) CUDA tests.

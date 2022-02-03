@@ -38,5 +38,7 @@ endif()
 
 # Treat the Eigen headers as "system headers", to avoid getting warnings from
 # them.
+get_target_property( _incDirs eigen INTERFACE_INCLUDE_DIRECTORIES )
 target_include_directories( eigen
-   SYSTEM INTERFACE $<TARGET_PROPERTY:eigen,INCLUDE_DIRECTORIES> )
+   SYSTEM INTERFACE ${_incDirs} )
+unset( _incDirs )

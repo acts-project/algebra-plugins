@@ -171,6 +171,11 @@ TYPED_TEST_P(test_host_basics, transform3) {
   auto m44 = trf2.matrix();
   typename TypeParam::transform3 trfm(m44);
 
+  // Make sure that algebra::getter:vector can be called.
+  (void)algebra::getter::vector<3>(m44, 0, 0);
+  (void)algebra::getter::vector<3>(m44, 0, 1);
+  (void)algebra::getter::vector<3>(m44, 0, 2);
+
   // Re-evaluate rot and trn
   auto rotm = trfm.rotation();
   ASSERT_NEAR(element_getter(rotm, 0, 0), x[0], this->m_epsilon);

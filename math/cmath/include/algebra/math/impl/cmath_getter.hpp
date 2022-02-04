@@ -134,7 +134,7 @@ struct vector_getter {
   ALGEBRA_HOST_DEVICE inline result_type operator()(
       const matrix_type<ROWS, COLS> &m, std::size_t row, std::size_t col) {
 
-    result_type subvector;
+    result_type subvector{};
     for (std::size_t irow = row; irow < row + SIZE; ++irow) {
       subvector[irow - row] = m[col][irow];
     }

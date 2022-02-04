@@ -87,11 +87,9 @@ struct transform3 {
   /// @name Data objects
   /// @{
 
-  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data =
-      Eigen::Transform<scalar_type, 3, Eigen::Affine>::Identity();
+  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data;
 
-  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data_inv =
-      Eigen::Transform<scalar_type, 3, Eigen::Affine>::Identity();
+  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data_inv;
 
   /// @}
 
@@ -122,6 +120,8 @@ struct transform3 {
    **/
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t) {
+    _data.setIdentity();
+
     auto &matrix = _data.matrix();
     matrix.template block<3, 1>(0, 3) = t;
 
@@ -153,8 +153,14 @@ struct transform3 {
     _data_inv = _data.inverse();
   }
 
+  /** Default constructor: set contents to identity matrices */
+  ALGEBRA_HOST_DEVICE
+  transform3() {
+    _data.setIdentity();
+    _data_inv.setIdentity();
+  }
+
   /** Default contructors */
-  transform3() = default;
   transform3(const transform3 &rhs) = default;
   ~transform3() = default;
 

@@ -8,6 +8,7 @@
 algebra_add_library( algebra_vc_math vc_math
    "include/algebra/math/vc.hpp"
    "include/algebra/math/impl/vc_getter.hpp"
+   "include/algebra/math/impl/vc_matrix.hpp"
    "include/algebra/math/impl/vc_transform3.hpp"
    "include/algebra/math/impl/vc_vector.hpp" )
 target_link_libraries( algebra_vc_math

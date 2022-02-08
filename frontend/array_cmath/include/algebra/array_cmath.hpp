@@ -34,6 +34,8 @@ template <typename T>
 using polar2 = cmath::polar2<transform3<T> >;
 template <typename T>
 using cylindrical2 = cmath::cylindrical2<transform3<T> >;
+template <typename T, std::size_t ROWS, std::size_t COLS>
+using matrix = cmath::matrix<matrix_type, T, ROWS, COLS>;
 
 /// @}
 

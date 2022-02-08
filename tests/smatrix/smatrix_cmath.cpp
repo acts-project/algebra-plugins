@@ -39,13 +39,15 @@ typedef testing::Types<
         algebra::smatrix::vector2<float>, algebra::smatrix::vector3<float>,
         algebra::smatrix::transform3<float>,
         algebra::smatrix::cartesian2<float>, algebra::smatrix::polar2<float>,
-        algebra::smatrix::cylindrical2<float> >,
+        algebra::smatrix::cylindrical2<float>,
+        algebra::smatrix::matrix<float, 4, 4> >,
     test_types<
         double, algebra::smatrix::point2<double>,
         algebra::smatrix::point3<double>, algebra::smatrix::vector2<double>,
         algebra::smatrix::vector3<double>, algebra::smatrix::transform3<double>,
         algebra::smatrix::cartesian2<double>, algebra::smatrix::polar2<double>,
-        algebra::smatrix::cylindrical2<double> > >
+        algebra::smatrix::cylindrical2<double>,
+        algebra::smatrix::matrix<double, 4, 4> > >
     smatrix_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
                                smatrix_cmath_types, test_specialisation_name);

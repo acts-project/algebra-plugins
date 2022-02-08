@@ -31,5 +31,8 @@ using vector2 = storage_type<T, 2>;
 /// Point in 2D space, using @c ROOT::Math::SVector
 template <typename T>
 using point2 = vector2<T>;
+/// Matrix, using @c ROOT::Math::SMatrix
+template <typename T, std::size_t ROWS, std::size_t COLS>
+using matrix_type = ROOT::Math::SMatrix<T, ROWS, COLS>;
 
 }  // namespace algebra::smatrix

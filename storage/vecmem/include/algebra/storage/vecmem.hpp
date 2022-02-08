@@ -31,5 +31,9 @@ using vector2 = storage_type<T, 2>;
 /// Point in 2D space, using @c vecmem::static_array
 template <typename T>
 using point2 = vector2<T>;
+/// Matrix, using @c vecmem::static_array
+template <typename T, std::size_t ROWS, std::size_t COLS>
+using matrix_type =
+    ::vecmem::static_array< ::vecmem::static_array<T, ROWS>, COLS>;
 
 }  // namespace algebra::vecmem

@@ -34,6 +34,7 @@ class test_device_basics : public test_base<T> {
   using cartesian2 = typename test_base<T>::cartesian2;
   using polar2 = typename test_base<T>::polar2;
   using cylindrical2 = typename test_base<T>::cylindrical2;
+  using matrix = typename test_base<T>::matrix;
 
   /// @}
 

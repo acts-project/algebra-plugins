@@ -11,6 +11,7 @@
 #include "algebra/math/impl/cmath_cartesian2.hpp"
 #include "algebra/math/impl/cmath_cylindrical2.hpp"
 #include "algebra/math/impl/cmath_getter.hpp"
+#include "algebra/math/impl/cmath_matrix.hpp"
 #include "algebra/math/impl/cmath_operator.hpp"
 #include "algebra/math/impl/cmath_polar2.hpp"
 #include "algebra/math/impl/cmath_transform3.hpp"

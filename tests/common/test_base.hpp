@@ -20,10 +20,11 @@ class test_base {};
 /// Test base class, using a @c test_types type argument
 template <typename scalar_t, typename point2_t, typename point3_t,
           typename vector2_t, typename vector3_t, typename transform3_t,
-          typename cartesian2_t, typename polar2_t, typename cylindrical2_t>
+          typename cartesian2_t, typename polar2_t, typename cylindrical2_t,
+          typename matrix_t>
 class test_base<
     test_types<scalar_t, point2_t, point3_t, vector2_t, vector3_t, transform3_t,
-               cartesian2_t, polar2_t, cylindrical2_t> > {
+               cartesian2_t, polar2_t, cylindrical2_t, matrix_t> > {
 
  public:
   /// @name Type definitions
@@ -38,6 +39,7 @@ class test_base<
   using cartesian2 = cartesian2_t;
   using polar2 = polar2_t;
   using cylindrical2 = cylindrical2_t;
+  using matrix = matrix_t;
 
   /// @}
 

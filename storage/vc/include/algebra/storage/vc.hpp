@@ -41,5 +41,8 @@ using vector2 = std::array<T, 2>;
 /// Point in 2D space, using @c std::array
 template <typename T>
 using point2 = vector2<T>;
+/// Matrix, using @c Vc::array
+template <typename T, std::size_t ROWS, std::size_t COLS>
+using matrix_type = Vc::array<Vc::array<T, ROWS>, COLS>;
 
 }  // namespace algebra::vc

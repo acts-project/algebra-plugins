@@ -288,6 +288,34 @@ TYPED_TEST_P(test_host_basics, local_transformations) {
   ASSERT_NEAR(polfrom2[1], polfrom3[1], this->m_epsilon);
 }
 
+// This tests matrix
+TYPED_TEST_P(test_host_basics, matrix) {
+
+  typename TypeParam::matrix m;
+  m(0, 0) = 0.;
+  m(0, 1) = 1.;
+  m(0, 2) = 2.;
+  m(0, 3) = 3.;
+  m(1, 0) = 4.;
+  m(1, 1) = 5.;
+  m(1, 2) = 6.;
+  m(1, 3) = 7.;
+  m(2, 0) = 8.;
+  m(2, 1) = 9.;
+  m(2, 2) = 10.;
+  m(2, 3) = 11.;
+  m(3, 0) = 12.;
+  m(3, 1) = 13.;
+  m(3, 2) = 14.;
+  m(3, 3) = 15.;
+
+  for (unsigned int i = 0; i < 4; i++) {
+    for (unsigned int j = 0; j < 4; j++) {
+      ASSERT_NEAR(m(i, j), i * 4 + j, this->m_epsilon);
+    }
+  }
+}
+
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics, local_vectors, vector3, getter,
                             transform3, global_transformations,
-                            local_transformations);
+                            local_transformations, matrix);

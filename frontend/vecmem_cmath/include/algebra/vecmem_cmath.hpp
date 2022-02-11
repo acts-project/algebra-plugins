@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -62,6 +62,26 @@ ALGEBRA_HOST_DEVICE inline vecmem::storage_type<scalar_t, SIZE> vector(
 
   return cmath::vector_getter<std::size_t, vecmem::storage_type, scalar_t,
                               SIZE>()(m, row, col);
+}
+
+/// Function extracting an element from a matrix (const)
+template <typename scalar_t, std::size_t ROWS, std::size_t COLS>
+ALGEBRA_HOST_DEVICE inline scalar_t element(
+    const vecmem::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
+    std::size_t col) {
+
+  return cmath::element_getter<std::size_t, vecmem::storage_type, scalar_t>()(
+      m, row, col);
+}
+
+/// Function extracting an element from a matrix (non-const)
+template <typename scalar_t, std::size_t ROWS, std::size_t COLS>
+ALGEBRA_HOST_DEVICE inline scalar_t& element(
+    vecmem::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
+    std::size_t col) {
+
+  return cmath::element_getter<std::size_t, vecmem::storage_type, scalar_t>()(
+      m, row, col);
 }
 
 }  // namespace getter

@@ -25,36 +25,6 @@
 
 namespace algebra::eigen::math {
 
-namespace internal {
-
-/// Functor used to access elements of Eigen matrices
-template <typename scalar_t>
-struct element_getter {
-  /// Get non-const access to a matrix element
-  template <
-      typename derived_type,
-      std::enable_if_t<std::is_base_of<Eigen::DenseCoeffsBase<
-                                           derived_type, Eigen::WriteAccessors>,
-                                       Eigen::MatrixBase<derived_type> >::value,
-                       bool> = true>
-  ALGEBRA_HOST_DEVICE inline scalar_t &operator()(
-      Eigen::MatrixBase<derived_type> &m, unsigned int row,
-      unsigned int col) const {
-
-    return m(row, col);
-  }
-  /// Get const access to a matrix element
-  template <typename derived_type>
-  ALGEBRA_HOST_DEVICE inline scalar_t operator()(
-      const Eigen::MatrixBase<derived_type> &m, unsigned int row,
-      unsigned int col) const {
-
-    return m(row, col);
-  }
-};  // struct element_getter
-
-}  // namespace internal
-
 /** Transform wrapper class to ensure standard API within differnt plugins */
 template <typename scalar_t>
 struct transform3 {
@@ -80,7 +50,7 @@ struct transform3 {
       typename Eigen::Transform<scalar_type, 3, Eigen::Affine>::MatrixType;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = internal::element_getter<scalar_type>;
+  using element_getter = algebra::eigen::math::element_getter;
 
   /// @}
 

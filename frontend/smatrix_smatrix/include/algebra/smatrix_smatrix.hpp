@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -52,6 +52,24 @@ ALGEBRA_HOST_DEVICE inline auto vector(
     unsigned int col) {
 
   return m.template SubCol<smatrix::storage_type<scalar_t, SIZE> >(col, row);
+}
+
+/// Function extracting an element from a matrix (const)
+template <typename scalar_t, unsigned int ROWS, unsigned int COLS>
+ALGEBRA_HOST_DEVICE inline scalar_t element(
+    const smatrix::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
+    std::size_t col) {
+
+  return smatrix::math::element_getter<scalar_t>()(m, row, col);
+}
+
+/// Function extracting an element from a matrix (non-const)
+template <typename scalar_t, unsigned int ROWS, unsigned int COLS>
+ALGEBRA_HOST_DEVICE inline scalar_t& element(
+    smatrix::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
+    std::size_t col) {
+
+  return smatrix::math::element_getter<scalar_t>()(m, row, col);
 }
 
 }  // namespace getter

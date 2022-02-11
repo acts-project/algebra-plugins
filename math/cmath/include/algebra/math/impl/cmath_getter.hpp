@@ -12,6 +12,7 @@
 #include "algebra/qualifiers.hpp"
 
 // System include(s).
+#include <cassert>
 #include <cstddef>
 #include <type_traits>
 
@@ -104,6 +105,8 @@ struct element_getter {
                                                   std::size_t row,
                                                   std::size_t col) const {
 
+    assert(row < ROWS);
+    assert(col < COLS);
     return m[col][row];
   }
 
@@ -113,6 +116,8 @@ struct element_getter {
       const matrix_type<ROWS, COLS> &m, std::size_t row,
       std::size_t col) const {
 
+    assert(row < ROWS);
+    assert(col < COLS);
     return m[col][row];
   }
 };  // struct element_getter
@@ -134,6 +139,8 @@ struct vector_getter {
   ALGEBRA_HOST_DEVICE inline result_type operator()(
       const matrix_type<ROWS, COLS> &m, std::size_t row, std::size_t col) {
 
+    assert(col < COLS);
+    assert(row + SIZE < ROWS);
     result_type subvector{};
     for (std::size_t irow = row; irow < row + SIZE; ++irow) {
       subvector[irow - row] = m[col][irow];

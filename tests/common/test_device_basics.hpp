@@ -92,8 +92,8 @@ class test_device_basics : public test_base<T> {
     scalar result = 0.;
     for (size_type i = 0; i < 6; ++i) {
       for (size_type j = 0; j < 4; ++j) {
-        result += 0.6 * algebra::getter::element(m, i, j) +
-                  0.7 * algebra::getter::element(m2, i, j);
+        result += 0.6f * algebra::getter::element(m, i, j) +
+                  0.7f * algebra::getter::element(m2, i, j);
       }
     }
     return result;

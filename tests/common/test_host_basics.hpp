@@ -129,8 +129,9 @@ TYPED_TEST_P(test_host_basics, matrix64) {
     for (typename TypeParam::size_type j = 0; j < COLS; ++j) {
       const typename TypeParam::scalar ref =
           static_cast<typename TypeParam::scalar>(0.5 * i + j);
-      EXPECT_FLOAT_EQ(algebra::getter::element(m, i, j), ref);
-      EXPECT_FLOAT_EQ(algebra::getter::element(m_const_ref, i, j), ref);
+      ASSERT_NEAR(algebra::getter::element(m, i, j), ref, this->m_epsilon);
+      ASSERT_NEAR(algebra::getter::element(m_const_ref, i, j), ref,
+                  this->m_epsilon);
     }
   }
 }

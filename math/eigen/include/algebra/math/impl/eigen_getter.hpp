@@ -103,16 +103,16 @@ struct element_getter {
                                        Eigen::MatrixBase<derived_type> >::value,
                        bool> = true>
   ALGEBRA_HOST_DEVICE inline auto &operator()(
-      Eigen::MatrixBase<derived_type> &m, unsigned int row,
-      unsigned int col) const {
+      Eigen::MatrixBase<derived_type> &m, std::size_t row,
+      std::size_t col) const {
 
     return m(row, col);
   }
   /// Get const access to a matrix element
   template <typename derived_type>
   ALGEBRA_HOST_DEVICE inline auto operator()(
-      const Eigen::MatrixBase<derived_type> &m, unsigned int row,
-      unsigned int col) const {
+      const Eigen::MatrixBase<derived_type> &m, std::size_t row,
+      std::size_t col) const {
 
     return m(row, col);
   }

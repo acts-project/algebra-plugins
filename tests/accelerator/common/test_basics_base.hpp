@@ -51,6 +51,10 @@ class test_basics_base : public testing::Test, public test_base<T> {
     m_v2 = std::make_unique<vecmem::vector<typename T::vector3> >(s_arraySize,
                                                                   &m_resource);
 
+    m_m1 =
+        std::make_unique<vecmem::vector<typename T::template matrix<6, 4> > >(
+            s_arraySize, &m_resource);
+
     m_output_host = std::make_unique<vecmem::vector<typename T::scalar> >(
         s_arraySize, &m_resource);
     m_output_device = std::make_unique<vecmem::vector<typename T::scalar> >(
@@ -80,6 +84,13 @@ class test_basics_base : public testing::Test, public test_base<T> {
       m_v2->at(i) = {static_cast<typename T::scalar>((i + 1) * 1.8),
                      static_cast<typename T::scalar>(i * 2.3),
                      static_cast<typename T::scalar>((i + 2) * 3.4)};
+
+      for (typename T::size_type j = 0; j < 6; ++j) {
+        for (typename T::size_type k = 0; k < 4; ++k) {
+          algebra::getter::element(m_m1->at(i), j, k) =
+              static_cast<typename T::scalar>(j * 20.3 + k * 10.5);
+        }
+      }
 
       m_output_host->at(i) = 0;
       m_output_device->at(i) = 0;
@@ -122,6 +133,7 @@ class test_basics_base : public testing::Test, public test_base<T> {
   std::unique_ptr<vecmem::vector<typename T::vector3> > m_t1, m_t2, m_t3;
   std::unique_ptr<vecmem::vector<typename T::point2> > m_p1, m_p2;
   std::unique_ptr<vecmem::vector<typename T::vector3> > m_v1, m_v2;
+  std::unique_ptr<vecmem::vector<typename T::template matrix<6, 4> > > m_m1;
 
   /// @}
 

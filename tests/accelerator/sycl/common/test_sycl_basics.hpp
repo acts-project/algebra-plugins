@@ -81,6 +81,21 @@ TYPED_TEST_P(test_sycl_basics, vector_3d_ops) {
   this->compareOutputs();
 }
 
+/// Test for handling matrices
+TYPED_TEST_P(test_sycl_basics, matrix64_ops) {
+
+  // Run the test on the host, and on the/a device.
+  execute_host_test<matrix64_ops_functor<TypeParam> >(
+      this->m_m1->size(), vecmem::get_data(*(this->m_m1)),
+      vecmem::get_data(*(this->m_output_host)));
+  execute_sycl_test<matrix64_ops_functor<TypeParam> >(
+      this->m_queue, this->m_m1->size(), vecmem::get_data(*(this->m_m1)),
+      vecmem::get_data(*(this->m_output_device)));
+
+  // Compare the outputs.
+  this->compareOutputs();
+}
+
 /// Test for some operations with @c transform3
 TYPED_TEST_P(test_sycl_basics, transform3) {
 
@@ -158,4 +173,5 @@ TYPED_TEST_P(test_sycl_basics, polar2) {
 }
 
 REGISTER_TYPED_TEST_SUITE_P(test_sycl_basics, vector_2d_ops, vector_3d_ops,
-                            transform3, cartesian2, cylindrical2, polar2);
+                            matrix64_ops, transform3, cartesian2, cylindrical2,
+                            polar2);

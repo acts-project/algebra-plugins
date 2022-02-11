@@ -107,6 +107,34 @@ TYPED_TEST_P(test_host_basics, vector3) {
   ASSERT_NEAR(norm, std::sqrt(3.), this->m_epsilon);
 }
 
+// Test generic access to a 6x4 matrix
+TYPED_TEST_P(test_host_basics, matrix64) {
+
+  // Create the matrix.
+  static constexpr typename TypeParam::size_type ROWS = 6;
+  static constexpr typename TypeParam::size_type COLS = 4;
+  typename TypeParam::template matrix<ROWS, COLS> m;
+
+  // Fill it.
+  for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
+    for (typename TypeParam::size_type j = 0; j < COLS; ++j) {
+      algebra::getter::element(m, i, j) =
+          static_cast<typename TypeParam::scalar>(0.5 * i + j);
+    }
+  }
+
+  // Check its content.
+  const typename TypeParam::template matrix<ROWS, COLS>& m_const_ref = m;
+  for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
+    for (typename TypeParam::size_type j = 0; j < COLS; ++j) {
+      const typename TypeParam::scalar ref =
+          static_cast<typename TypeParam::scalar>(0.5 * i + j);
+      EXPECT_FLOAT_EQ(algebra::getter::element(m, i, j), ref);
+      EXPECT_FLOAT_EQ(algebra::getter::element(m_const_ref, i, j), ref);
+    }
+  }
+}
+
 // This defines the vector operation test suite
 TYPED_TEST_P(test_host_basics, getter) {
 
@@ -293,6 +321,6 @@ TYPED_TEST_P(test_host_basics, local_transformations) {
   ASSERT_NEAR(polfrom2[1], polfrom3[1], this->m_epsilon);
 }
 
-REGISTER_TYPED_TEST_SUITE_P(test_host_basics, local_vectors, vector3, getter,
-                            transform3, global_transformations,
+REGISTER_TYPED_TEST_SUITE_P(test_host_basics, local_vectors, vector3, matrix64,
+                            getter, transform3, global_transformations,
                             local_transformations);

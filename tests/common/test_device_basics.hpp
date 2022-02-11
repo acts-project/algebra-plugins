@@ -34,6 +34,9 @@ class test_device_basics : public test_base<T> {
   using cartesian2 = typename test_base<T>::cartesian2;
   using polar2 = typename test_base<T>::polar2;
   using cylindrical2 = typename test_base<T>::cylindrical2;
+  using size_type = typename test_base<T>::size_type;
+  template <size_type ROWS, size_type COLS>
+  using matrix = typename test_base<T>::template matrix<ROWS, COLS>;
 
   /// @}
 
@@ -73,6 +76,27 @@ class test_device_basics : public test_base<T> {
     scalar norm3 = algebra::getter::norm(norm2);
 
     return (phi + perp + norm1 + dot + norm3);
+  }
+
+  /// Perform some trivial operations on an asymmetrix matrix
+  ALGEBRA_HOST_DEVICE
+  scalar matrix64_ops(const matrix<6, 4>& m) const {
+
+    matrix<6, 4> m2;
+    for (size_type i = 0; i < 6; ++i) {
+      for (size_type j = 0; j < 4; ++j) {
+        algebra::getter::element(m2, i, j) = algebra::getter::element(m, i, j);
+      }
+    }
+
+    scalar result = 0.;
+    for (size_type i = 0; i < 6; ++i) {
+      for (size_type j = 0; j < 4; ++j) {
+        result += 0.6 * algebra::getter::element(m, i, j) +
+                  0.7 * algebra::getter::element(m2, i, j);
+      }
+    }
+    return result;
   }
 
   /// Perform various operations using the @c transform3 type

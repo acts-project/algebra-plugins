@@ -66,6 +66,26 @@ class vector_3d_ops_functor : public functor_base<T> {
   }
 };
 
+/// Functor running @c test_device_basics::matrix64_ops
+template <typename T>
+class matrix64_ops_functor : public functor_base<T> {
+
+ public:
+  ALGEBRA_HOST_DEVICE void operator()(
+      std::size_t i,
+      vecmem::data::vector_view<const typename T::template matrix<6, 4> > m,
+      vecmem::data::vector_view<typename T::scalar> output) const {
+
+    // Create the VecMem vector(s).
+    vecmem::device_vector<const typename T::template matrix<6, 4> > vec_m(m);
+    vecmem::device_vector<typename T::scalar> vec_output(output);
+
+    // Perform the operation.
+    auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
+    vec_output[ii] = this->m_tester.matrix64_ops(vec_m[ii]);
+  }
+};
+
 /// Functor running @c test_device_basics::transform3_ops
 template <typename T>
 class transform3_ops_functor : public functor_base<T> {

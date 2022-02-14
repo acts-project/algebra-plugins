@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -16,25 +16,6 @@
 #include "Math/SVector.h"
 
 namespace algebra::smatrix::math {
-
-namespace internal {
-
-/// Functor used to access elements of SMatrix matrices
-template <typename scalar_t>
-struct element_getter {
-  /// The matrix type used by this struct
-  template <unsigned int ROWS, unsigned int COLS>
-  using matrix_type = ROOT::Math::SMatrix<scalar_t, ROWS, COLS>;
-  /// Get const access to a matrix element
-  template <unsigned int ROWS, unsigned int COLS>
-  ALGEBRA_HOST inline scalar_t operator()(const matrix_type<ROWS, COLS> &m,
-                                          unsigned int row,
-                                          unsigned int col) const {
-    return m(row, col);
-  }
-};  // element_getter
-
-}  // namespace internal
 
 /** Transform wrapper class to ensure standard API within differnt plugins
  *
@@ -62,7 +43,7 @@ struct transform3 {
   using matrix44 = ROOT::Math::SMatrix<scalar_type, 4, 4>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = internal::element_getter<scalar_type>;
+  using element_getter = algebra::smatrix::math::element_getter<scalar_t>;
 
   /// @}
 

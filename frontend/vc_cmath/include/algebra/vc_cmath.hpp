@@ -24,51 +24,6 @@ using algebra::cmath::operator+;
 namespace algebra {
 namespace vc {
 
-/// Functor used to access elements of Vc matrices
-template <typename scalar_t>
-struct element_getter {
-
-  template <std::size_t ROWS, std::size_t COLS>
-  using matrix_type = Vc::array<Vc::array<scalar_t, ROWS>, COLS>;
-
-  template <std::size_t ROWS, std::size_t COLS>
-  ALGEBRA_HOST_DEVICE inline scalar_t& operator()(matrix_type<ROWS, COLS>& m,
-                                                  std::size_t row,
-                                                  std::size_t col) const {
-
-    return m[col][row];
-  }
-
-  template <std::size_t ROWS, std::size_t COLS>
-  ALGEBRA_HOST_DEVICE inline scalar_t operator()(
-      const matrix_type<ROWS, COLS>& m, std::size_t row,
-      std::size_t col) const {
-
-    return m[col][row];
-  }
-};  // element_getter
-
-/// Functor used to extract a block from Vc matrices
-template <typename scalar_t>
-struct block_getter {
-
-  template <std::size_t ROWS, std::size_t COLS>
-  using matrix_type = Vc::array<Vc::array<scalar_t, ROWS>, COLS>;
-
-  template <std::size_t ROWS, std::size_t COLS, class input_matrix_type>
-  ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> operator()(
-      const input_matrix_type& m, std::size_t row, std::size_t col) const {
-
-    matrix_type<ROWS, COLS> submatrix{};
-    for (std::size_t icol = col; icol < col + COLS; ++icol) {
-      for (std::size_t irow = row; irow < row + ROWS; ++irow) {
-        submatrix[icol - col][irow - row] = m[icol][irow];
-      }
-    }
-    return submatrix;
-  }
-};  // struct block_getter
-
 /// @name cmath based transforms on @c algebra::vc types
 /// @{
 
@@ -80,8 +35,10 @@ using math::phi;
 template <typename T>
 using transform3 =
     cmath::transform3<std::size_t, vc::storage_type, T,
-                      Vc::array<Vc::array<T, 4>, 4>, element_getter<T>,
-                      block_getter<T>, vc::vector3<T>, vc::point2<T> >;
+                      Vc::array<Vc::array<T, 4>, 4>,
+                      cmath::element_getter<std::size_t, Vc::array, T>,
+                      cmath::block_getter<std::size_t, Vc::array, T>,
+                      vc::vector3<T>, vc::point2<T> >;
 template <typename T>
 using cartesian2 = cmath::cartesian2<transform3<T> >;
 template <typename T>
@@ -117,12 +74,19 @@ using vc::math::theta;
 template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
           typename scalar_t>
 ALGEBRA_HOST_DEVICE inline vc::storage_type<scalar_t, SIZE> vector(
-    const Vc::array<Vc::array<scalar_t, ROWS>, COLS>& m, std::size_t row,
+    const vc::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
     std::size_t col) {
 
   return cmath::vector_getter<std::size_t, Vc::array, scalar_t, SIZE,
                               vc::storage_type<scalar_t, SIZE> >()(m, row, col);
 }
+
+/// @name Getter functions on @c algebra::vc::matrix_type
+/// @{
+
+using cmath::element;
+
+/// @}
 
 }  // namespace getter
 

@@ -25,41 +25,6 @@
 namespace algebra {
 namespace eigen {
 
-/// Functor used to access elements of Eigen matrices
-struct element_getter {
-  /// Get non-const access to a matrix element
-  template <
-      typename derived_type,
-      std::enable_if_t<std::is_base_of<Eigen::DenseCoeffsBase<
-                                           derived_type, Eigen::WriteAccessors>,
-                                       Eigen::MatrixBase<derived_type> >::value,
-                       bool> = true>
-  ALGEBRA_HOST_DEVICE inline auto& operator()(
-      Eigen::MatrixBase<derived_type>& m, unsigned int row,
-      unsigned int col) const {
-
-    return m(row, col);
-  }
-  /// Get const access to a matrix element
-  template <typename derived_type>
-  ALGEBRA_HOST_DEVICE inline auto operator()(
-      const Eigen::MatrixBase<derived_type>& m, unsigned int row,
-      unsigned int col) const {
-
-    return m(row, col);
-  }
-};  // struct element_getter
-
-/// Functor used to extract a block from Eigen matrices
-struct block_getter {
-  template <std::size_t kROWS, std::size_t kCOLS, typename matrix_type>
-  ALGEBRA_HOST_DEVICE auto operator()(const matrix_type& m, std::size_t row,
-                                      std::size_t col) const {
-
-    return m.template block<kROWS, kCOLS>(row, col);
-  }
-};  // struct block_getter
-
 /// @name cmath based transforms on @c algebra::eigen::storage_type
 /// @{
 
@@ -67,7 +32,7 @@ template <typename T>
 using transform3 = cmath::transform3<
     std::size_t, eigen::storage_type, T,
     typename Eigen::Transform<T, 3, Eigen::Affine>::MatrixType,
-    algebra::eigen::element_getter, algebra::eigen::block_getter>;
+    math::element_getter, math::block_getter>;
 template <typename T>
 using cartesian2 = cmath::cartesian2<transform3<T> >;
 template <typename T>
@@ -100,6 +65,13 @@ ALGEBRA_HOST_DEVICE inline auto vector(const Eigen::MatrixBase<derived_type>& m,
 
   return m.template block<SIZE, 1>(row, col);
 }
+
+/// @name Getter functions on @c algebra::eigen::matrix_type
+/// @{
+
+using eigen::math::element;
+
+/// @}
 
 }  // namespace getter
 

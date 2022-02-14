@@ -122,6 +122,13 @@ ALGEBRA_HOST_DEVICE inline auto vector(
   }
 }
 
+/// @name Getter functions on @c algebra::vc::matrix_type
+/// @{
+
+using cmath::element;
+
+/// @}
+
 }  // namespace getter
 
 namespace vector {

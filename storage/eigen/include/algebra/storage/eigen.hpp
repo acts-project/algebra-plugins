@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -18,6 +18,9 @@ namespace algebra::eigen {
 /// Array type used in the Eigen storage model
 template <typename T, std::size_t N>
 using storage_type = array<T, N>;
+/// Matrix type used in the Eigen storage model
+template <typename T, std::size_t ROWS, std::size_t COLS>
+using matrix_type = Eigen::Matrix<T, ROWS, COLS>;
 
 /// 3-element "vector" type, using @c algebra::eigen::array
 template <typename T>

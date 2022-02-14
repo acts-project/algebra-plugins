@@ -8,6 +8,7 @@
 #pragma once
 
 // ROOT/Smatrix include(s).
+#include <Math/SMatrix.h>
 #include <Math/SVector.h>
 
 // System include(s).
@@ -15,9 +16,12 @@
 
 namespace algebra::smatrix {
 
-/// Array type used in the Smatrix storage model
+/// Array type used in the SMatrix storage model
 template <typename T, unsigned int N>
 using storage_type = ROOT::Math::SVector<T, N>;
+/// Matrix type used in the SMatrix storage model
+template <typename T, unsigned int ROWS, unsigned int COLS>
+using matrix_type = ROOT::Math::SMatrix<T, ROWS, COLS>;
 
 /// 3-element "vector" type, using @c ROOT::Math::SVector
 template <typename T>

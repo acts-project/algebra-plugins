@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -53,6 +53,13 @@ ALGEBRA_HOST_DEVICE inline auto vector(
 
   return m.template SubCol<smatrix::storage_type<scalar_t, SIZE> >(col, row);
 }
+
+/// @name Getter functions on @c algebra::smatrix::matrix_type
+/// @{
+
+using smatrix::math::element;
+
+/// @}
 
 }  // namespace getter
 

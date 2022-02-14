@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -52,17 +52,23 @@ using cmath::theta;
 
 /// @}
 
-/// Function extracting a slice from the matrix used by
-/// @c algebra::array::transform3
+/// Function extracting a slice from a matrix
 template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
           typename scalar_t>
 ALGEBRA_HOST_DEVICE inline array::storage_type<scalar_t, SIZE> vector(
-    const array::storage_type<array::storage_type<scalar_t, ROWS>, COLS>& m,
-    std::size_t row, std::size_t col) {
+    const array::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
+    std::size_t col) {
 
   return cmath::vector_getter<std::size_t, array::storage_type, scalar_t,
                               SIZE>()(m, row, col);
 }
+
+/// @name Getter functions on @c algebra::array::matrix_type
+/// @{
+
+using cmath::element;
+
+/// @}
 
 }  // namespace getter
 

@@ -60,6 +60,13 @@ ALGEBRA_HOST_DEVICE inline auto vector(const Eigen::MatrixBase<derived_type>& m,
   return m.template block<SIZE, 1>(row, col);
 }
 
+/// @name Getter functions on @c algebra::eigen::matrix_type
+/// @{
+
+using eigen::math::element;
+
+/// @}
+
 }  // namespace getter
 
 namespace vector {

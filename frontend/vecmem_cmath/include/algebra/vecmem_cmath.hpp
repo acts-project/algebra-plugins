@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -63,6 +63,13 @@ ALGEBRA_HOST_DEVICE inline vecmem::storage_type<scalar_t, SIZE> vector(
   return cmath::vector_getter<std::size_t, vecmem::storage_type, scalar_t,
                               SIZE>()(m, row, col);
 }
+
+/// @name Getter functions on @c algebra::vecmem::matrix_type
+/// @{
+
+using cmath::element;
+
+/// @}
 
 }  // namespace getter
 

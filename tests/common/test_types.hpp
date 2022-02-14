@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2021 CERN for the benefit of the ACTS project
+ * (c) 2020-2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -10,7 +10,9 @@
 /// Simple struct holding the types that describe a given plugin
 template <typename scalar_t, typename point2_t, typename point3_t,
           typename vector2_t, typename vector3_t, typename transform3_t,
-          typename cartesian2_t, typename polar2_t, typename cylindrical2_t>
+          typename cartesian2_t, typename polar2_t, typename cylindrical2_t,
+          typename size_ty,
+          template <typename, size_ty, size_ty> class matrix_t>
 struct test_types {
 
   using scalar = scalar_t;
@@ -22,5 +24,8 @@ struct test_types {
   using cartesian2 = cartesian2_t;
   using polar2 = polar2_t;
   using cylindrical2 = cylindrical2_t;
+  using size_type = size_ty;
+  template <size_type ROWS, size_type COLS>
+  using matrix = matrix_t<scalar, ROWS, COLS>;
 
 };  // struct test_types

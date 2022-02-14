@@ -118,6 +118,28 @@ struct element_getter {
   }
 };  // struct element_getter
 
+/// Function extracting an element from a matrix (const)
+template <typename derived_type>
+ALGEBRA_HOST_DEVICE inline auto element(
+    const Eigen::MatrixBase<derived_type> &m, std::size_t row,
+    std::size_t col) {
+
+  return element_getter()(m, row, col);
+}
+
+/// Function extracting an element from a matrix (non-const)
+template <
+    typename derived_type,
+    std::enable_if_t<std::is_base_of<Eigen::DenseCoeffsBase<
+                                         derived_type, Eigen::WriteAccessors>,
+                                     Eigen::MatrixBase<derived_type> >::value,
+                     bool> = true>
+ALGEBRA_HOST_DEVICE inline auto &element(Eigen::MatrixBase<derived_type> &m,
+                                         std::size_t row, std::size_t col) {
+
+  return element_getter()(m, row, col);
+}
+
 /// Functor used to extract a block from Eigen matrices
 struct block_getter {
   template <std::size_t kROWS, std::size_t kCOLS, typename matrix_type>

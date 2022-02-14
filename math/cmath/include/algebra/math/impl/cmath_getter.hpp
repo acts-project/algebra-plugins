@@ -122,6 +122,26 @@ struct element_getter {
   }
 };  // struct element_getter
 
+/// Function extracting an element from a matrix (const)
+template <typename size_type, template <typename, size_type> class array_t,
+          typename scalar_t, size_type ROWS, size_type COLS>
+ALGEBRA_HOST_DEVICE inline scalar_t element(
+    const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
+    std::size_t col) {
+
+  return element_getter<size_type, array_t, scalar_t>()(m, row, col);
+}
+
+/// Function extracting an element from a matrix (non-const)
+template <typename size_type, template <typename, size_type> class array_t,
+          typename scalar_t, size_type ROWS, size_type COLS>
+ALGEBRA_HOST_DEVICE inline scalar_t &element(
+    array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
+    std::size_t col) {
+
+  return element_getter<size_type, array_t, scalar_t>()(m, row, col);
+}
+
 /// "Vector getter", assuming a simple 2D array access
 template <typename size_type, template <typename, size_type> class array_t,
           typename scalar_t, size_type SIZE,

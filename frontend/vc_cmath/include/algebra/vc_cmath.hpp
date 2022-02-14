@@ -81,23 +81,12 @@ ALGEBRA_HOST_DEVICE inline vc::storage_type<scalar_t, SIZE> vector(
                               vc::storage_type<scalar_t, SIZE> >()(m, row, col);
 }
 
-/// Function extracting an element from a matrix (const)
-template <typename scalar_t, std::size_t ROWS, std::size_t COLS>
-ALGEBRA_HOST_DEVICE inline scalar_t element(
-    const vc::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
-    std::size_t col) {
+/// @name Getter functions on @c algebra::vc::matrix_type
+/// @{
 
-  return cmath::element_getter<std::size_t, Vc::array, scalar_t>()(m, row, col);
-}
+using cmath::element;
 
-/// Function extracting an element from a matrix (non-const)
-template <typename scalar_t, std::size_t ROWS, std::size_t COLS>
-ALGEBRA_HOST_DEVICE inline scalar_t& element(
-    vc::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
-    std::size_t col) {
-
-  return cmath::element_getter<std::size_t, Vc::array, scalar_t>()(m, row, col);
-}
+/// @}
 
 }  // namespace getter
 

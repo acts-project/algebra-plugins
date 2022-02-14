@@ -60,22 +60,12 @@ ALGEBRA_HOST_DEVICE inline auto vector(const Eigen::MatrixBase<derived_type>& m,
   return m.template block<SIZE, 1>(row, col);
 }
 
-/// Function extracting an element from a matrix (const)
-template <typename derived_type>
-ALGEBRA_HOST_DEVICE inline auto element(
-    const Eigen::MatrixBase<derived_type>& m, std::size_t row,
-    std::size_t col) {
+/// @name Getter functions on @c algebra::eigen::matrix_type
+/// @{
 
-  return eigen::math::element_getter()(m, row, col);
-}
+using eigen::math::element;
 
-/// Function extracting an element from a matrix (non-const)
-template <typename derived_type>
-ALGEBRA_HOST_DEVICE inline auto& element(Eigen::MatrixBase<derived_type>& m,
-                                         std::size_t row, std::size_t col) {
-
-  return eigen::math::element_getter()(m, row, col);
-}
+/// @}
 
 }  // namespace getter
 

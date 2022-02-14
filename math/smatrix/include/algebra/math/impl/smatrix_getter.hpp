@@ -146,6 +146,24 @@ struct element_getter {
   }
 };  // element_getter
 
+/// Function extracting an element from a matrix (const)
+template <typename scalar_t, unsigned int ROWS, unsigned int COLS>
+ALGEBRA_HOST_DEVICE inline scalar_t element(
+    const ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m, std::size_t row,
+    std::size_t col) {
+
+  return element_getter<scalar_t>()(m, row, col);
+}
+
+/// Function extracting an element from a matrix (non-const)
+template <typename scalar_t, unsigned int ROWS, unsigned int COLS>
+ALGEBRA_HOST_DEVICE inline scalar_t &element(
+    ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m, std::size_t row,
+    std::size_t col) {
+
+  return element_getter<scalar_t>()(m, row, col);
+}
+
 /// Functor used to extract a block from SMatrix matrices
 template <typename scalar_t>
 struct block_getter {

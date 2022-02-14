@@ -54,23 +54,12 @@ ALGEBRA_HOST_DEVICE inline auto vector(
   return m.template SubCol<smatrix::storage_type<scalar_t, SIZE> >(col, row);
 }
 
-/// Function extracting an element from a matrix (const)
-template <typename scalar_t, unsigned int ROWS, unsigned int COLS>
-ALGEBRA_HOST_DEVICE inline scalar_t element(
-    const smatrix::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
-    std::size_t col) {
+/// @name Getter functions on @c algebra::smatrix::matrix_type
+/// @{
 
-  return smatrix::math::element_getter<scalar_t>()(m, row, col);
-}
+using smatrix::math::element;
 
-/// Function extracting an element from a matrix (non-const)
-template <typename scalar_t, unsigned int ROWS, unsigned int COLS>
-ALGEBRA_HOST_DEVICE inline scalar_t& element(
-    smatrix::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
-    std::size_t col) {
-
-  return smatrix::math::element_getter<scalar_t>()(m, row, col);
-}
+/// @}
 
 }  // namespace getter
 

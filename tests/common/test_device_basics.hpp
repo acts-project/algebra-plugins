@@ -37,6 +37,7 @@ class test_device_basics : public test_base<T> {
   using size_type = typename test_base<T>::size_type;
   template <size_type ROWS, size_type COLS>
   using matrix = typename test_base<T>::template matrix<ROWS, COLS>;
+  using matrix_actor = typename test_base<T>::matrix_actor;
 
   /// @}
 
@@ -96,6 +97,68 @@ class test_device_basics : public test_base<T> {
                   0.7f * algebra::getter::element(m2, i, j);
       }
     }
+    return result;
+  }
+
+  /// Perform some trivial operations on an asymmetrix matrix
+  ALGEBRA_HOST_DEVICE
+  scalar matrix22_ops(const matrix<2, 2>& m22) const {
+
+    // Test 2 X 2 matrix determinant
+    auto m22_det = matrix_actor().determinant(m22);
+
+    // Test 2 X 2 matrix inverse
+    auto m22_inv = matrix_actor().inverse(m22);
+
+    matrix<3, 3> m33;
+    algebra::getter::element(m33, 0, 0) = 1;
+    algebra::getter::element(m33, 0, 1) = 5;
+    algebra::getter::element(m33, 0, 2) = 7;
+    algebra::getter::element(m33, 1, 0) = 3;
+    algebra::getter::element(m33, 1, 1) = 5;
+    algebra::getter::element(m33, 1, 2) = 6;
+    algebra::getter::element(m33, 2, 0) = 2;
+    algebra::getter::element(m33, 2, 1) = 8;
+    algebra::getter::element(m33, 2, 2) = 9;
+
+    // Test 3 X 3 matrix determinant
+    auto m33_det = matrix_actor().determinant(m33);
+
+    // Test 3 X 3 matrix inverse
+    auto m33_inv = matrix_actor().inverse(m33);
+
+    // Test Zero
+    auto m23 = matrix_actor().template zero<2, 3>();
+    algebra::getter::element(m23, 0, 0) += 2;
+    algebra::getter::element(m23, 0, 1) += 3;
+    algebra::getter::element(m23, 0, 2) += 4;
+    algebra::getter::element(m23, 1, 0) += 5;
+    algebra::getter::element(m23, 1, 1) += 6;
+    algebra::getter::element(m23, 1, 2) += 7;
+
+    // Test scalar X Matrix
+    m23 = 2. * m23;
+
+    // Test Transpose
+    auto m32 = matrix_actor().transpose(m23);
+
+    // Test Identity and (Matrix + Matrix)
+    m32 = m32 + matrix_actor().template identity<3, 2>();
+
+    // Test Matrix X scalar
+    m32 = m32 * 2.;
+
+    // Test Matrix multiplication
+    auto new_m22 = m22_inv * m23 * m33_inv * m32;
+
+    scalar result = 0;
+    result += m22_det;
+    result += m33_det;
+    result += algebra::getter::element(new_m22, 0, 0);
+    result += algebra::getter::element(new_m22, 0, 1);
+    result += algebra::getter::element(new_m22, 1, 0);
+    result += algebra::getter::element(new_m22, 1, 1);
+
     return result;
   }
 

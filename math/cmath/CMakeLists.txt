@@ -6,13 +6,21 @@
 
 # Set up the library.
 algebra_add_library( algebra_cmath_math cmath_math
+   # impl include
    "include/algebra/math/cmath.hpp"
    "include/algebra/math/impl/cmath_cartesian2.hpp"
    "include/algebra/math/impl/cmath_cylindrical2.hpp"
    "include/algebra/math/impl/cmath_getter.hpp"
+   "include/algebra/math/impl/cmath_matrix.hpp"
    "include/algebra/math/impl/cmath_operator.hpp"
    "include/algebra/math/impl/cmath_polar2.hpp"
    "include/algebra/math/impl/cmath_transform3.hpp"
-   "include/algebra/math/impl/cmath_vector.hpp" )
+   "include/algebra/math/impl/cmath_vector.hpp"
+   # algorithms include
+   "include/algebra/math/algorithms/matrix/determinant/cofactor.hpp"
+   "include/algebra/math/algorithms/matrix/determinant/hard_coded.hpp"
+   "include/algebra/math/algorithms/matrix/inverse/cofactor.hpp"
+   "include/algebra/math/algorithms/matrix/inverse/hard_coded.hpp"
+   "include/algebra/math/algorithms/utils/algorithm_finder.hpp" )
 target_link_libraries( algebra_cmath_math
    INTERFACE algebra::common algebra::common_math )

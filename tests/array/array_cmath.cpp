@@ -39,13 +39,21 @@ typedef testing::Types<
         algebra::array::vector2<float>, algebra::array::vector3<float>,
         algebra::array::transform3<float>, algebra::array::cartesian2<float>,
         algebra::array::polar2<float>, algebra::array::cylindrical2<float>,
-        std::size_t, algebra::array::matrix_type>,
+        std::size_t, algebra::array::matrix_type,
+        algebra::matrix::actor<
+            std::size_t, float,
+            algebra::matrix::determinant::preset0<std::size_t, float>,
+            algebra::matrix::inverse::preset0<std::size_t, float>>>,
     test_types<
         double, algebra::array::point2<double>, algebra::array::point3<double>,
         algebra::array::vector2<double>, algebra::array::vector3<double>,
         algebra::array::transform3<double>, algebra::array::cartesian2<double>,
         algebra::array::polar2<double>, algebra::array::cylindrical2<double>,
-        std::size_t, algebra::array::matrix_type> >
+        std::size_t, algebra::array::matrix_type,
+        algebra::matrix::actor<
+            std::size_t, double,
+            algebra::matrix::determinant::preset0<std::size_t, double>,
+            algebra::matrix::inverse::preset0<std::size_t, double>>>>
     array_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
                                array_cmath_types, test_specialisation_name);

@@ -120,7 +120,7 @@ using hard_coded =
     cmath::matrix::determinant::hard_coded<size_type, matrix_type, scalar_t,
                                            element_getter_type, Ds...>;
 
-// preset0
+// preset(s) as standard option(s) for user's convenience
 template <typename size_type, typename scalar_t>
 using preset0 = actor<size_type, scalar_t, cofactor<size_type, scalar_t>,
                       hard_coded<size_type, scalar_t, 2>>;
@@ -146,7 +146,7 @@ using hard_coded =
     cmath::matrix::inverse::hard_coded<size_type, matrix_type, scalar_t,
                                        element_getter_type, Ds...>;
 
-// preset0
+// preset(s) as standard option(s) for user's convenience
 template <typename size_type, typename scalar_t>
 using preset0 = actor<size_type, scalar_t, cofactor<size_type, scalar_t>,
                       hard_coded<size_type, scalar_t, 2>>;

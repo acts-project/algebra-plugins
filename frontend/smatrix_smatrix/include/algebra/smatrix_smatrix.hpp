@@ -75,4 +75,12 @@ using smatrix::math::normalize;
 /// @}
 
 }  // namespace vector
+
+namespace matrix {
+
+template <typename scalar_t>
+using actor = smatrix::matrix::actor<scalar_t>;
+
+}  // namespace matrix
+
 }  // namespace algebra

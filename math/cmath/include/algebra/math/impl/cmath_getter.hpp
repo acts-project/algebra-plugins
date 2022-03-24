@@ -145,7 +145,7 @@ ALGEBRA_HOST_DEVICE inline scalar_t &element(
 /// "Vector getter", assuming a simple 2D array access
 template <typename size_type, template <typename, size_type> class array_t,
           typename scalar_t, size_type SIZE,
-          typename result_t = array_t<scalar_t, SIZE> >
+          typename result_t = array_t<scalar_t, SIZE>>
 struct vector_getter {
 
   /// Result type

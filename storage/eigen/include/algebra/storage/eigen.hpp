@@ -16,11 +16,11 @@
 namespace algebra::eigen {
 
 /// Array type used in the Eigen storage model
-template <typename T, std::size_t N>
+template <typename T, int N>
 using storage_type = array<T, N>;
 /// Matrix type used in the Eigen storage model
-template <typename T, std::size_t ROWS, std::size_t COLS>
-using matrix_type = Eigen::Matrix<T, ROWS, COLS>;
+template <typename T, int ROWS, int COLS>
+using matrix_type = Eigen::Matrix<T, ROWS, COLS, 0, ROWS, COLS>;
 
 /// 3-element "vector" type, using @c algebra::eigen::array
 template <typename T>

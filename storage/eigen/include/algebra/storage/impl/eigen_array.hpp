@@ -22,7 +22,7 @@
 namespace algebra::eigen {
 
 /// Eigen array type
-template <typename T, std::size_t N>
+template <typename T, int N>
 class array : public Eigen::Matrix<T, N, 1> {
 
  public:

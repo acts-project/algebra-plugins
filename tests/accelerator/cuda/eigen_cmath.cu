@@ -38,14 +38,20 @@ typedef testing::Types<
         float, algebra::eigen::point2<float>, algebra::eigen::point3<float>,
         algebra::eigen::vector2<float>, algebra::eigen::vector3<float>,
         algebra::eigen::transform3<float>, algebra::eigen::cartesian2<float>,
-        algebra::eigen::polar2<float>, algebra::eigen::cylindrical2<float>,
-        std::size_t, algebra::eigen::matrix_type>,
+        algebra::eigen::polar2<float>, algebra::eigen::cylindrical2<float>, int,
+        algebra::eigen::matrix_type,
+        algebra::matrix::actor<
+            int, float, algebra::matrix::determinant::preset0<int, float>,
+            algebra::matrix::inverse::preset0<int, float>>>,
     test_types<
         double, algebra::eigen::point2<double>, algebra::eigen::point3<double>,
         algebra::eigen::vector2<double>, algebra::eigen::vector3<double>,
         algebra::eigen::transform3<double>, algebra::eigen::cartesian2<double>,
         algebra::eigen::polar2<double>, algebra::eigen::cylindrical2<double>,
-        std::size_t, algebra::eigen::matrix_type> >
+        int, algebra::eigen::matrix_type,
+        algebra::matrix::actor<
+            int, double, algebra::matrix::determinant::preset0<int, double>,
+            algebra::matrix::inverse::preset0<int, double>>>>
     eigen_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_cuda_basics,
                                eigen_cmath_types, test_specialisation_name);

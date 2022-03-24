@@ -30,15 +30,15 @@ namespace eigen {
 
 template <typename T>
 using transform3 = cmath::transform3<
-    std::size_t, eigen::storage_type, T,
+    int, eigen::storage_type, T,
     typename Eigen::Transform<T, 3, Eigen::Affine>::MatrixType,
     math::element_getter, math::block_getter>;
 template <typename T>
-using cartesian2 = cmath::cartesian2<transform3<T> >;
+using cartesian2 = cmath::cartesian2<transform3<T>>;
 template <typename T>
-using polar2 = cmath::polar2<transform3<T> >;
+using polar2 = cmath::polar2<transform3<T>>;
 template <typename T>
-using cylindrical2 = cmath::cylindrical2<transform3<T> >;
+using cylindrical2 = cmath::cylindrical2<transform3<T>>;
 
 /// @}
 
@@ -87,4 +87,72 @@ using eigen::math::normalize;
 /// @}
 
 }  // namespace vector
+
+namespace matrix {
+
+template <typename T, int ROWS, int COLS>
+using matrix_type = eigen::matrix_type<T, ROWS, COLS>;
+using element_getter_type = eigen::math::element_getter;
+
+// matrix actor
+template <typename size_type, typename scalar_t, typename determinant_actor_t,
+          typename inverse_actor_t>
+using actor =
+    cmath::matrix::actor<size_type, matrix_type, scalar_t, determinant_actor_t,
+                         inverse_actor_t, element_getter_type>;
+
+namespace determinant {
+
+// determinant aggregation
+template <typename size_type, typename scalar_t, class... As>
+using actor =
+    cmath::matrix::determinant::actor<size_type, matrix_type, scalar_t, As...>;
+
+// determinant::cofactor
+template <typename size_type, typename scalar_t, size_type... Ds>
+using cofactor =
+    cmath::matrix::determinant::cofactor<size_type, matrix_type, scalar_t,
+                                         element_getter_type, Ds...>;
+
+// determinant::hard_coded
+template <typename size_type, typename scalar_t, size_type... Ds>
+using hard_coded =
+    cmath::matrix::determinant::hard_coded<size_type, matrix_type, scalar_t,
+                                           element_getter_type, Ds...>;
+
+// preset0
+template <typename size_type, typename scalar_t>
+using preset0 = actor<size_type, scalar_t, cofactor<size_type, scalar_t>,
+                      hard_coded<size_type, scalar_t, 2>>;
+
+}  // namespace determinant
+
+namespace inverse {
+
+// inverion aggregation
+template <typename size_type, typename scalar_t, class... As>
+using actor =
+    cmath::matrix::inverse::actor<size_type, matrix_type, scalar_t, As...>;
+
+// inverse::cofactor
+template <typename size_type, typename scalar_t, size_type... Ds>
+using cofactor =
+    cmath::matrix::inverse::cofactor<size_type, matrix_type, scalar_t,
+                                     element_getter_type, Ds...>;
+
+// inverse::hard_coded
+template <typename size_type, typename scalar_t, size_type... Ds>
+using hard_coded =
+    cmath::matrix::inverse::hard_coded<size_type, matrix_type, scalar_t,
+                                       element_getter_type, Ds...>;
+
+// preset0
+template <typename size_type, typename scalar_t>
+using preset0 = actor<size_type, scalar_t, cofactor<size_type, scalar_t>,
+                      hard_coded<size_type, scalar_t, 2>>;
+
+}  // namespace inverse
+
+}  // namespace matrix
+
 }  // namespace algebra

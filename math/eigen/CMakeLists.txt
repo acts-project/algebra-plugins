@@ -10,6 +10,7 @@ algebra_add_library( algebra_eigen_math eigen_math
    "include/algebra/math/impl/eigen_cartesian2.hpp"
    "include/algebra/math/impl/eigen_cylindrical2.hpp"
    "include/algebra/math/impl/eigen_getter.hpp"
+   "include/algebra/math/impl/eigen_matrix.hpp"
    "include/algebra/math/impl/eigen_polar2.hpp"
    "include/algebra/math/impl/eigen_transform3.hpp"
    "include/algebra/math/impl/eigen_vector.hpp" )

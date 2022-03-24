@@ -81,4 +81,12 @@ using eigen::math::normalize;
 /// @}
 
 }  // namespace vector
+
+namespace matrix {
+
+template <typename scalar_t>
+using actor = eigen::matrix::actor<scalar_t>;
+
+}  // namespace matrix
+
 }  // namespace algebra

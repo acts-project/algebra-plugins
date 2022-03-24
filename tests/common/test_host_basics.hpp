@@ -136,6 +136,110 @@ TYPED_TEST_P(test_host_basics, matrix64) {
   }
 }
 
+// Test matrix operations with 3x3 matrix
+TYPED_TEST_P(test_host_basics, matrix22) {
+
+  typename TypeParam::template matrix<2, 2> m22;
+  algebra::getter::element(m22, 0, 0) = 4;
+  algebra::getter::element(m22, 0, 1) = 3;
+  algebra::getter::element(m22, 1, 0) = 12;
+  algebra::getter::element(m22, 1, 1) = 13;
+
+  // Test 2 X 2 matrix determinant
+  auto m22_det = typename TypeParam::matrix_actor().determinant(m22);
+  ASSERT_NEAR(m22_det, 16., this->m_isclose);
+
+  // Test 2 X 2 matrix inverse
+  auto m22_inv = typename TypeParam::matrix_actor().inverse(m22);
+  ASSERT_NEAR(algebra::getter::element(m22_inv, 0, 0), 13 / 16.,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m22_inv, 0, 1), -3 / 16.,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m22_inv, 1, 0), -12 / 16.,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m22_inv, 1, 1), 4 / 16.,
+              this->m_isclose);
+
+  typename TypeParam::template matrix<3, 3> m33;
+  algebra::getter::element(m33, 0, 0) = 1;
+  algebra::getter::element(m33, 0, 1) = 5;
+  algebra::getter::element(m33, 0, 2) = 7;
+  algebra::getter::element(m33, 1, 0) = 3;
+  algebra::getter::element(m33, 1, 1) = 5;
+  algebra::getter::element(m33, 1, 2) = 6;
+  algebra::getter::element(m33, 2, 0) = 2;
+  algebra::getter::element(m33, 2, 1) = 8;
+  algebra::getter::element(m33, 2, 2) = 9;
+
+  // Test 3 X 3 matrix determinant
+  auto m33_det = typename TypeParam::matrix_actor().determinant(m33);
+  ASSERT_NEAR(m33_det, 20., this->m_isclose);
+
+  // Test 3 X 3 matrix inverse
+  auto m33_inv = typename TypeParam::matrix_actor().inverse(m33);
+  ASSERT_NEAR(algebra::getter::element(m33_inv, 0, 0), -3 / 20.,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m33_inv, 0, 1), 11 / 20.,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m33_inv, 0, 2), -5 / 20.,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m33_inv, 1, 0), -15 / 20.,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m33_inv, 1, 1), -5 / 20.,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m33_inv, 1, 2), 15 / 20.,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m33_inv, 2, 0), 14 / 20.,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m33_inv, 2, 1), 2 / 20.,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m33_inv, 2, 2), -10 / 20.,
+              this->m_isclose);
+
+  // Test Zero
+  typename TypeParam::template matrix<2, 3> m23 =
+      typename TypeParam::matrix_actor().template zero<2, 3>();
+  algebra::getter::element(m23, 0, 0) += 2;
+  algebra::getter::element(m23, 0, 1) += 3;
+  algebra::getter::element(m23, 0, 2) += 4;
+  algebra::getter::element(m23, 1, 0) += 5;
+  algebra::getter::element(m23, 1, 1) += 6;
+  algebra::getter::element(m23, 1, 2) += 7;
+
+  // Test scalar X Matrix
+  m23 = 2. * m23;
+  ASSERT_NEAR(algebra::getter::element(m23, 0, 0), 4., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m23, 0, 1), 6., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m23, 0, 2), 8., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m23, 1, 0), 10., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m23, 1, 1), 12., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m23, 1, 2), 14., this->m_epsilon);
+
+  // Test Transpose
+  auto m32 = typename TypeParam::matrix_actor().transpose(m23);
+
+  // Test Identity and (Matrix + Matrix)
+  m32 = m32 + typename TypeParam::matrix_actor().template identity<3, 2>();
+
+  // Test Matrix X scalar
+  m32 = m32 * 2.;
+
+  ASSERT_NEAR(algebra::getter::element(m32, 0, 0), 10., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m32, 0, 1), 20., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m32, 1, 0), 12., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m32, 1, 1), 26., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m32, 2, 0), 16., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m32, 2, 1), 28., this->m_epsilon);
+
+  // Test Matrix multiplication
+  m22 = m22_inv * m23 * m33_inv * m32;
+
+  ASSERT_NEAR(algebra::getter::element(m22, 0, 0), 6.225, this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m22, 0, 1), 14.675, this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m22, 1, 0), -3.3, this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m22, 1, 1), -7.9, this->m_isclose);
+}
+
 // This defines the vector operation test suite
 TYPED_TEST_P(test_host_basics, getter) {
 
@@ -323,5 +427,5 @@ TYPED_TEST_P(test_host_basics, local_transformations) {
 }
 
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics, local_vectors, vector3, matrix64,
-                            getter, transform3, global_transformations,
-                            local_transformations);
+                            matrix22, getter, transform3,
+                            global_transformations, local_transformations);

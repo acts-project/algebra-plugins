@@ -31,7 +31,7 @@ struct hard_coded {
   template <size_type ROWS, size_type COLS>
   using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
 
-  using determinant_getter_type =
+  using determinant_getter =
       determinant::hard_coded<size_type, matrix_t, scalar_t, element_getter_t>;
 
   // 2 X 2 matrix inverse
@@ -41,7 +41,7 @@ struct hard_coded {
 
     matrix_type<N, N> ret;
 
-    scalar_t det = determinant_getter_type()(m);
+    scalar_t det = determinant_getter()(m);
 
     element_getter()(ret, 0, 0) = element_getter()(m, 1, 1) / det;
     element_getter()(ret, 0, 1) = -1 * element_getter()(m, 0, 1) / det;
@@ -266,7 +266,7 @@ struct hard_coded {
         element_getter()(m, 0, 0) * element_getter()(m, 1, 1) *
             element_getter()(m, 2, 2);
 
-    scalar_t idet = static_cast<scalar_t>(1.) / determinant_getter_type()(ret);
+    scalar_t idet = static_cast<scalar_t>(1.) / determinant_getter()(ret);
     for (unsigned int c = 0; c < 4; ++c) {
       for (unsigned int r = 0; r < 4; ++r) {
         element_getter()(ret, c, r) *= idet;

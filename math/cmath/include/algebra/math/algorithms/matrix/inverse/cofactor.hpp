@@ -14,13 +14,15 @@
 // System include(s)
 #include <type_traits>
 
-namespace algebra::cmath::matrix::inverse {
+namespace algebra::cmath::matrix {
+
+namespace adjoint {
 
 /// "Adjoint getter", assuming a N X N matrix
 template <typename size_type,
           template <typename, size_type, size_type> class matrix_t,
           typename scalar_t, class element_getter_t>
-struct adjoint_getter {
+struct cofactor {
 
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
@@ -52,7 +54,7 @@ struct adjoint_getter {
   template <size_type N>
   struct adjoint_getter_helper<N, typename std::enable_if_t<N != 1>> {
 
-    using determinant_getter_type =
+    using determinant_getter =
         determinant::cofactor<size_type, matrix_t, scalar_t, element_getter_t>;
 
     ALGEBRA_HOST_DEVICE inline matrix_type<N, N> operator()(
@@ -69,8 +71,7 @@ struct adjoint_getter {
       for (size_type i = 0; i < N; i++) {
         for (size_type j = 0; j < N; j++) {
           // Get cofactor of m[i][j]
-          typename determinant_getter_type::template determinant_getter_helper<
-              N>()
+          typename determinant_getter::template determinant_getter_helper<N>()
               .get_cofactor(m, temp, i, j);
 
           // sign of adj[j][i] positive if sum of row
@@ -80,8 +81,9 @@ struct adjoint_getter {
           // Interchanging rows and columns to get the
           // transpose of the cofactor matrix
           element_getter()(adj, j, i) =
-              sign * typename determinant_getter_type::
-                         template determinant_getter_helper<N - 1>()(temp);
+              sign *
+              typename determinant_getter::template determinant_getter_helper<
+                  N - 1>()(temp);
         }
       }
 
@@ -89,6 +91,10 @@ struct adjoint_getter {
     }
   };
 };
+
+}  // namespace adjoint
+
+namespace inverse {
 
 /// "inverse getter", assuming a N X N matrix
 template <typename size_type,
@@ -105,11 +111,11 @@ struct cofactor {
   template <size_type ROWS, size_type COLS>
   using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
 
-  using determinant_getter_type =
+  using determinant_getter =
       determinant::cofactor<size_type, matrix_t, scalar_t, element_getter_t>;
 
-  using adjoint_getter_type =
-      adjoint_getter<size_type, matrix_t, scalar_t, element_getter_t>;
+  using adjoint_getter =
+      adjoint::cofactor<size_type, matrix_t, scalar_t, element_getter_t>;
 
   template <size_type N>
   ALGEBRA_HOST_DEVICE inline matrix_type<N, N> operator()(
@@ -118,14 +124,14 @@ struct cofactor {
     matrix_type<N, N> ret;
 
     // Find determinant of A
-    scalar_t det = determinant_getter_type()(m);
+    scalar_t det = determinant_getter()(m);
 
     // TODO: handle singular matrix error
     // if (det == 0) {
     // return ret;
     //}
 
-    auto adj = adjoint_getter_type()(m);
+    auto adj = adjoint_getter()(m);
 
     // Find Inverse using formula "inverse(A) = adj(A)/det(A)"
     for (size_type i = 0; i < N; i++) {
@@ -138,4 +144,6 @@ struct cofactor {
   }
 };
 
-}  // namespace algebra::cmath::matrix::inverse
+}  // namespace inverse
+
+}  // namespace algebra::cmath::matrix

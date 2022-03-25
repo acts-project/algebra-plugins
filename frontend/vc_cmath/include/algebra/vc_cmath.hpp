@@ -22,34 +22,6 @@ using algebra::cmath::operator+;
 /// @}
 
 namespace algebra {
-namespace vc {
-
-/// @name cmath based transforms on @c algebra::vc types
-/// @{
-
-// Pull in the definitions needed by the cmath transforms, into this namespace.
-using math::cross;
-using math::perp;
-using math::phi;
-
-template <typename T>
-using transform3 =
-    cmath::transform3<std::size_t, vc::storage_type, T,
-                      Vc::array<Vc::array<T, 4>, 4>,
-                      cmath::element_getter<std::size_t, Vc::array, T>,
-                      cmath::block_getter<std::size_t, Vc::array, T>,
-                      vc::vector3<T>, vc::point2<T>>;
-template <typename T>
-using cartesian2 = cmath::cartesian2<transform3<T>>;
-template <typename T>
-using polar2 = cmath::polar2<transform3<T>>;
-template <typename T>
-using cylindrical2 = cmath::cylindrical2<transform3<T>>;
-
-/// @}
-
-}  // namespace vc
-
 namespace getter {
 
 /// @name Getter functions on @c algebra::vc types
@@ -109,19 +81,26 @@ using vc::math::normalize;
 
 namespace matrix {
 
+template <typename T, std::size_t N>
+using array_type = Vc::array<T, N>;
+
 template <typename T, std::size_t ROWS, std::size_t COLS>
 using matrix_type = vc::matrix_type<T, ROWS, COLS>;
 
 template <typename size_type, typename scalar_t>
 using element_getter_type =
-    cmath::element_getter<size_type, Vc::array, scalar_t>;
+    cmath::element_getter<size_type, array_type, scalar_t>;
+
+template <typename size_type, typename scalar_t>
+using block_getter_type = cmath::block_getter<size_type, array_type, scalar_t>;
 
 // matrix actor
 template <typename size_type, typename scalar_t, typename determinant_actor_t,
           typename inverse_actor_t>
-using actor = cmath::matrix::actor<size_type, matrix_type, scalar_t,
+using actor = cmath::matrix::actor<size_type, array_type, matrix_type, scalar_t,
                                    determinant_actor_t, inverse_actor_t,
-                                   element_getter_type<size_type, scalar_t>>;
+                                   element_getter_type<size_type, scalar_t>,
+                                   block_getter_type<size_type, scalar_t>>;
 
 namespace determinant {
 
@@ -145,7 +124,7 @@ using hard_coded = cmath::matrix::determinant::hard_coded<
 // preset(s) as standard option(s) for user's convenience
 template <typename size_type, typename scalar_t>
 using preset0 = actor<size_type, scalar_t, cofactor<size_type, scalar_t>,
-                      hard_coded<size_type, scalar_t, 2>>;
+                      hard_coded<size_type, scalar_t, 2, 4>>;
 
 }  // namespace determinant
 
@@ -173,10 +152,33 @@ using hard_coded =
 // preset(s) as standard option(s) for user's convenience
 template <typename size_type, typename scalar_t>
 using preset0 = actor<size_type, scalar_t, cofactor<size_type, scalar_t>,
-                      hard_coded<size_type, scalar_t, 2>>;
+                      hard_coded<size_type, scalar_t, 2, 4>>;
 
 }  // namespace inverse
 
 }  // namespace matrix
+
+namespace vc {
+
+/// @name cmath based transforms on @c algebra::matrix::actor
+/// @{
+
+template <typename T>
+using transform3_actor =
+    matrix::actor<std::size_t, T, matrix::determinant::preset0<std::size_t, T>,
+                  matrix::inverse::preset0<std::size_t, T>>;
+
+template <typename T>
+using transform3 = cmath::transform3<transform3_actor<T>>;
+template <typename T>
+using cartesian2 = cmath::cartesian2<transform3<T>>;
+template <typename T>
+using polar2 = cmath::polar2<transform3<T>>;
+template <typename T>
+using cylindrical2 = cmath::cylindrical2<transform3<T>>;
+
+/// @}
+
+}  // namespace vc
 
 }  // namespace algebra

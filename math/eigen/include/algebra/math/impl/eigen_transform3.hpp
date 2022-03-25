@@ -33,17 +33,17 @@ struct transform3 {
   /// @{
 
   /// Array type used by the transform
-  template <typename T, std::size_t N>
-  using array_type = Eigen::Matrix<T, N, 1>;
+  template <int N>
+  using array_type = Eigen::Matrix<scalar_t, N, 1, 0, N, 1>;
   /// Scalar type used by the transform
   using scalar_type = scalar_t;
 
   /// 3-element "vector" type
-  using vector3 = array_type<scalar_type, 3>;
+  using vector3 = array_type<3>;
   /// Point in 3D space
   using point3 = vector3;
   /// Point in 2D space
-  using point2 = array_type<scalar_type, 2>;
+  using point2 = array_type<2>;
 
   /// 4x4 matrix type
   using matrix44 =
@@ -115,7 +115,7 @@ struct transform3 {
    * @param ma is the full 4x4 matrix as a 16 array
    **/
   ALGEBRA_HOST_DEVICE
-  transform3(const array_type<scalar_type, 16> &ma) {
+  transform3(const array_type<16> &ma) {
 
     _data.matrix() << ma[0], ma[1], ma[2], ma[3], ma[4], ma[5], ma[6], ma[7],
         ma[8], ma[9], ma[10], ma[11], ma[12], ma[13], ma[14], ma[15];

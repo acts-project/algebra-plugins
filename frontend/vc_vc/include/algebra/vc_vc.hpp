@@ -148,6 +148,9 @@ using vc::math::normalize;
 
 namespace matrix {
 
+template <typename T, std::size_t N>
+using array_type = vc::storage_type<T, N>;
+
 template <typename T, std::size_t ROWS, std::size_t COLS>
 using matrix_type = vc::matrix_type<T, ROWS, COLS>;
 
@@ -155,12 +158,16 @@ template <typename size_type, typename scalar_t>
 using element_getter_type =
     cmath::element_getter<size_type, Vc::array, scalar_t>;
 
+template <typename size_type, typename scalar_t>
+using block_getter_type = cmath::block_getter<size_type, Vc::array, scalar_t>;
+
 // matrix actor
 template <typename size_type, typename scalar_t, typename determinant_actor_t,
           typename inverse_actor_t>
-using actor = cmath::matrix::actor<size_type, matrix_type, scalar_t,
+using actor = cmath::matrix::actor<size_type, array_type, matrix_type, scalar_t,
                                    determinant_actor_t, inverse_actor_t,
-                                   element_getter_type<size_type, scalar_t>>;
+                                   element_getter_type<size_type, scalar_t>,
+                                   block_getter_type<size_type, scalar_t>>;
 
 namespace determinant {
 
@@ -184,7 +191,7 @@ using hard_coded = cmath::matrix::determinant::hard_coded<
 // preset(s) as standard option(s) for user's convenience
 template <typename size_type, typename scalar_t>
 using preset0 = actor<size_type, scalar_t, cofactor<size_type, scalar_t>,
-                      hard_coded<size_type, scalar_t, 2>>;
+                      hard_coded<size_type, scalar_t, 2, 4>>;
 
 }  // namespace determinant
 
@@ -212,10 +219,9 @@ using hard_coded =
 // preset(s) as standard option(s) for user's convenience
 template <typename size_type, typename scalar_t>
 using preset0 = actor<size_type, scalar_t, cofactor<size_type, scalar_t>,
-                      hard_coded<size_type, scalar_t, 2>>;
+                      hard_coded<size_type, scalar_t, 2, 4>>;
 
 }  // namespace inverse
 
 }  // namespace matrix
-
 }  // namespace algebra

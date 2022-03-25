@@ -149,8 +149,8 @@ struct element_getter {
 /// Function extracting an element from a matrix (const)
 template <typename scalar_t, unsigned int ROWS, unsigned int COLS>
 ALGEBRA_HOST_DEVICE inline scalar_t element(
-    const ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m, std::size_t row,
-    std::size_t col) {
+    const ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m, unsigned int row,
+    unsigned int col) {
 
   return element_getter<scalar_t>()(m, row, col);
 }
@@ -158,8 +158,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t element(
 /// Function extracting an element from a matrix (non-const)
 template <typename scalar_t, unsigned int ROWS, unsigned int COLS>
 ALGEBRA_HOST_DEVICE inline scalar_t &element(
-    ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m, std::size_t row,
-    std::size_t col) {
+    ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m, unsigned int row,
+    unsigned int col) {
 
   return element_getter<scalar_t>()(m, row, col);
 }

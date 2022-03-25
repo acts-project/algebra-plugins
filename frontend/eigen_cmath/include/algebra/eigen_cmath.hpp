@@ -23,26 +23,6 @@
 #include <type_traits>
 
 namespace algebra {
-namespace eigen {
-
-/// @name cmath based transforms on @c algebra::eigen::storage_type
-/// @{
-
-template <typename T>
-using transform3 = cmath::transform3<
-    int, eigen::storage_type, T,
-    typename Eigen::Transform<T, 3, Eigen::Affine>::MatrixType,
-    math::element_getter, math::block_getter>;
-template <typename T>
-using cartesian2 = cmath::cartesian2<transform3<T>>;
-template <typename T>
-using polar2 = cmath::polar2<transform3<T>>;
-template <typename T>
-using cylindrical2 = cmath::cylindrical2<transform3<T>>;
-
-/// @}
-
-}  // namespace eigen
 
 namespace getter {
 
@@ -90,16 +70,19 @@ using eigen::math::normalize;
 
 namespace matrix {
 
+template <typename T, int N>
+using array_type = eigen::storage_type<T, N>;
 template <typename T, int ROWS, int COLS>
 using matrix_type = eigen::matrix_type<T, ROWS, COLS>;
 using element_getter_type = eigen::math::element_getter;
+using block_getter_type = eigen::math::block_getter;
 
 // matrix actor
 template <typename size_type, typename scalar_t, typename determinant_actor_t,
           typename inverse_actor_t>
-using actor =
-    cmath::matrix::actor<size_type, matrix_type, scalar_t, determinant_actor_t,
-                         inverse_actor_t, element_getter_type>;
+using actor = cmath::matrix::actor<size_type, array_type, matrix_type, scalar_t,
+                                   determinant_actor_t, inverse_actor_t,
+                                   element_getter_type, block_getter_type>;
 
 namespace determinant {
 
@@ -123,7 +106,7 @@ using hard_coded =
 // preset(s) as standard option(s) for user's convenience
 template <typename size_type, typename scalar_t>
 using preset0 = actor<size_type, scalar_t, cofactor<size_type, scalar_t>,
-                      hard_coded<size_type, scalar_t, 2>>;
+                      hard_coded<size_type, scalar_t, 2, 4>>;
 
 }  // namespace determinant
 
@@ -149,10 +132,34 @@ using hard_coded =
 // preset(s) as standard option(s) for user's convenience
 template <typename size_type, typename scalar_t>
 using preset0 = actor<size_type, scalar_t, cofactor<size_type, scalar_t>,
-                      hard_coded<size_type, scalar_t, 2>>;
+                      hard_coded<size_type, scalar_t, 2, 4>>;
 
 }  // namespace inverse
 
 }  // namespace matrix
+
+namespace eigen {
+
+/// @name cmath based transforms on @c algebra::matrix::actor
+/// @{
+
+template <typename T>
+using transform3_actor =
+    algebra::matrix::actor<int, T,
+                           algebra::matrix::determinant::preset0<int, T>,
+                           algebra::matrix::inverse::preset0<int, T>>;
+
+template <typename T>
+using transform3 = cmath::transform3<transform3_actor<T>>;
+template <typename T>
+using cartesian2 = cmath::cartesian2<transform3<T>>;
+template <typename T>
+using polar2 = cmath::polar2<transform3<T>>;
+template <typename T>
+using cylindrical2 = cmath::cylindrical2<transform3<T>>;
+
+/// @}
+
+}  // namespace eigen
 
 }  // namespace algebra

@@ -50,6 +50,230 @@ struct hard_coded {
 
     return ret;
   }
+
+  // 4 X 4 matrix inverse
+  template <size_type N, std::enable_if_t<N == 4, bool> = true>
+  ALGEBRA_HOST_DEVICE inline matrix_type<N, N> operator()(
+      const matrix_type<N, N> &m) const {
+
+    matrix_type<N, N> ret;
+    element_getter()(ret, 0, 0) =
+        element_getter()(m, 1, 2) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 1) -
+        element_getter()(m, 1, 3) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 1) +
+        element_getter()(m, 1, 3) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 2) -
+        element_getter()(m, 1, 1) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 2) -
+        element_getter()(m, 1, 2) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 3) +
+        element_getter()(m, 1, 1) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 3);
+    element_getter()(ret, 0, 1) =
+        element_getter()(m, 0, 3) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 1) -
+        element_getter()(m, 0, 2) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 1) -
+        element_getter()(m, 0, 3) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 2) +
+        element_getter()(m, 0, 1) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 2) +
+        element_getter()(m, 0, 2) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 3) -
+        element_getter()(m, 0, 1) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 3);
+    element_getter()(ret, 0, 2) =
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 3) *
+            element_getter()(m, 3, 1) -
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 2) *
+            element_getter()(m, 3, 1) +
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 1) *
+            element_getter()(m, 3, 2) -
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 3) *
+            element_getter()(m, 3, 2) -
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 1) *
+            element_getter()(m, 3, 3) +
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 2) *
+            element_getter()(m, 3, 3);
+    element_getter()(ret, 0, 3) =
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 2) *
+            element_getter()(m, 2, 1) -
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 3) *
+            element_getter()(m, 2, 1) -
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 1) *
+            element_getter()(m, 2, 2) +
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 3) *
+            element_getter()(m, 2, 2) +
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 1) *
+            element_getter()(m, 2, 3) -
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 2) *
+            element_getter()(m, 2, 3);
+    element_getter()(ret, 1, 0) =
+        element_getter()(m, 1, 3) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 1, 2) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 1, 3) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 2) +
+        element_getter()(m, 1, 0) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 2) +
+        element_getter()(m, 1, 2) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 3) -
+        element_getter()(m, 1, 0) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 3);
+    element_getter()(ret, 1, 1) =
+        element_getter()(m, 0, 2) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 0, 3) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 0) +
+        element_getter()(m, 0, 3) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 2) -
+        element_getter()(m, 0, 0) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 2) -
+        element_getter()(m, 0, 2) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 3) +
+        element_getter()(m, 0, 0) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 3);
+    element_getter()(ret, 1, 2) =
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 2) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 3) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 0) *
+            element_getter()(m, 3, 2) +
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 3) *
+            element_getter()(m, 3, 2) +
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 0) *
+            element_getter()(m, 3, 3) -
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 2) *
+            element_getter()(m, 3, 3);
+    element_getter()(ret, 1, 3) =
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 3) *
+            element_getter()(m, 2, 0) -
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 2) *
+            element_getter()(m, 2, 0) +
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 0) *
+            element_getter()(m, 2, 2) -
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 3) *
+            element_getter()(m, 2, 2) -
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 0) *
+            element_getter()(m, 2, 3) +
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 2) *
+            element_getter()(m, 2, 3);
+    element_getter()(ret, 2, 0) =
+        element_getter()(m, 1, 1) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 1, 3) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 0) +
+        element_getter()(m, 1, 3) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 1) -
+        element_getter()(m, 1, 0) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 1) -
+        element_getter()(m, 1, 1) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 3) +
+        element_getter()(m, 1, 0) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 3);
+    element_getter()(ret, 2, 1) =
+        element_getter()(m, 0, 3) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 0, 1) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 0, 3) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 1) +
+        element_getter()(m, 0, 0) * element_getter()(m, 2, 3) *
+            element_getter()(m, 3, 1) +
+        element_getter()(m, 0, 1) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 3) -
+        element_getter()(m, 0, 0) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 3);
+    element_getter()(ret, 2, 2) =
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 3) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 1) *
+            element_getter()(m, 3, 0) +
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 0) *
+            element_getter()(m, 3, 1) -
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 3) *
+            element_getter()(m, 3, 1) -
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 0) *
+            element_getter()(m, 3, 3) +
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 1) *
+            element_getter()(m, 3, 3);
+    element_getter()(ret, 2, 3) =
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 1) *
+            element_getter()(m, 2, 0) -
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 3) *
+            element_getter()(m, 2, 0) -
+        element_getter()(m, 0, 3) * element_getter()(m, 1, 0) *
+            element_getter()(m, 2, 1) +
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 3) *
+            element_getter()(m, 2, 1) +
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 0) *
+            element_getter()(m, 2, 3) -
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 1) *
+            element_getter()(m, 2, 3);
+    element_getter()(ret, 3, 0) =
+        element_getter()(m, 1, 2) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 1, 1) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 1, 2) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 1) +
+        element_getter()(m, 1, 0) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 1) +
+        element_getter()(m, 1, 1) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 2) -
+        element_getter()(m, 1, 0) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 2);
+    element_getter()(ret, 3, 1) =
+        element_getter()(m, 0, 1) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 0, 2) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 0) +
+        element_getter()(m, 0, 2) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 1) -
+        element_getter()(m, 0, 0) * element_getter()(m, 2, 2) *
+            element_getter()(m, 3, 1) -
+        element_getter()(m, 0, 1) * element_getter()(m, 2, 0) *
+            element_getter()(m, 3, 2) +
+        element_getter()(m, 0, 0) * element_getter()(m, 2, 1) *
+            element_getter()(m, 3, 2);
+    element_getter()(ret, 3, 2) =
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 1) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 2) *
+            element_getter()(m, 3, 0) -
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 0) *
+            element_getter()(m, 3, 1) +
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 2) *
+            element_getter()(m, 3, 1) +
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 0) *
+            element_getter()(m, 3, 2) -
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 1) *
+            element_getter()(m, 3, 2);
+    element_getter()(ret, 3, 3) =
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 2) *
+            element_getter()(m, 2, 0) -
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 1) *
+            element_getter()(m, 2, 0) +
+        element_getter()(m, 0, 2) * element_getter()(m, 1, 0) *
+            element_getter()(m, 2, 1) -
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 2) *
+            element_getter()(m, 2, 1) -
+        element_getter()(m, 0, 1) * element_getter()(m, 1, 0) *
+            element_getter()(m, 2, 2) +
+        element_getter()(m, 0, 0) * element_getter()(m, 1, 1) *
+            element_getter()(m, 2, 2);
+
+    scalar_t idet = static_cast<scalar_t>(1.) / determinant_getter_type()(ret);
+    for (unsigned int c = 0; c < 4; ++c) {
+      for (unsigned int r = 0; r < 4; ++r) {
+        element_getter()(ret, c, r) *= idet;
+      }
+    }
+    return ret;
+  }
 };
 
 }  // namespace algebra::cmath::matrix::inverse

@@ -66,7 +66,7 @@ struct actor {
 
   // Create zero matrix
   template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() {
+  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() const {
     matrix_type<ROWS, COLS> ret;
 
     for (size_type i = 0; i < ROWS; ++i) {
@@ -80,7 +80,7 @@ struct actor {
 
   // Create identity matrix
   template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() {
+  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() const {
     matrix_type<ROWS, COLS> ret;
 
     for (size_type i = 0; i < ROWS; ++i) {
@@ -96,10 +96,28 @@ struct actor {
     return ret;
   }
 
+  // Set input matrix as identity matrix
+  template <size_type ROWS, size_type COLS>
+  ALGEBRA_HOST_DEVICE inline void set_identity(
+      matrix_type<ROWS, COLS> &m) const {
+
+    for (size_type i = 0; i < ROWS; ++i) {
+      for (size_type j = 0; j < COLS; ++j) {
+        if (i == j) {
+          element_getter()(m, i, j) = 1;
+        } else {
+          element_getter()(m, i, j) = 0;
+        }
+      }
+    }
+
+    return;
+  }
+
   // Create transpose matrix
   template <size_type ROWS, size_type COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<COLS, ROWS> transpose(
-      const matrix_type<ROWS, COLS> &m) {
+      const matrix_type<ROWS, COLS> &m) const {
 
     matrix_type<COLS, ROWS> ret;
 
@@ -114,7 +132,8 @@ struct actor {
 
   // Get determinant
   template <size_type N>
-  ALGEBRA_HOST_DEVICE inline scalar_t determinant(const matrix_type<N, N> &m) {
+  ALGEBRA_HOST_DEVICE inline scalar_t determinant(
+      const matrix_type<N, N> &m) const {
 
     return determinant_actor_t()(m);
   }
@@ -122,7 +141,7 @@ struct actor {
   // Create inverse matrix
   template <size_type N>
   ALGEBRA_HOST_DEVICE inline matrix_type<N, N> inverse(
-      const matrix_type<N, N> &m) {
+      const matrix_type<N, N> &m) const {
 
     return inverse_actor_t()(m);
   }

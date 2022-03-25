@@ -169,8 +169,7 @@ struct transform3 {
    **/
   ALGEBRA_HOST_DEVICE
   transform3() {
-    // TODO: Make SetIdentity function in matrix actor
-    _data = matrix_actor().template identity<4, 4>();
+    matrix_actor().set_identity(_data);
     _data_inv = _data;
   }
 

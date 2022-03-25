@@ -89,10 +89,10 @@ using matrix_type = vc::matrix_type<T, ROWS, COLS>;
 
 template <typename size_type, typename scalar_t>
 using element_getter_type =
-    cmath::element_getter<size_type, Vc::array, scalar_t>;
+    cmath::element_getter<size_type, array_type, scalar_t>;
 
 template <typename size_type, typename scalar_t>
-using block_getter_type = cmath::block_getter<size_type, Vc::array, scalar_t>;
+using block_getter_type = cmath::block_getter<size_type, array_type, scalar_t>;
 
 // matrix actor
 template <typename size_type, typename scalar_t, typename determinant_actor_t,

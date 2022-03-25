@@ -29,6 +29,27 @@ struct actor {
   template <int ROWS, int COLS>
   using matrix_type = Eigen::Matrix<scalar_t, ROWS, COLS, 0, ROWS, COLS>;
 
+  /// Operator getting a reference to one element of a non-const matrix
+  template <int ROWS, int COLS>
+  ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
+                                               int row, int col) const {
+    return m(row, col);
+  }
+
+  /// Operator getting one value of a const matrix
+  template <int ROWS, int COLS>
+  ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
+                                              int row, int col) const {
+    return m(row, col);
+  }
+
+  /// Operator getting a block of a const matrix
+  template <int ROWS, int COLS, class input_matrix_type>
+  ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
+                                                    int row, int col) {
+    return m.template block<ROWS, COLS>(row, col);
+  }
+
   // Create zero matrix
   template <int ROWS, int COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() {
@@ -44,20 +65,20 @@ struct actor {
   // Create transpose matrix
   template <int ROWS, int COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<COLS, ROWS> transpose(
-      const matrix_type<ROWS, COLS>& m) {
+      const matrix_type<ROWS, COLS> &m) {
     return m.transpose();
   }
 
   // Get determinant
   template <int N>
-  ALGEBRA_HOST_DEVICE inline scalar_t determinant(const matrix_type<N, N>& m) {
+  ALGEBRA_HOST_DEVICE inline scalar_t determinant(const matrix_type<N, N> &m) {
     return m.determinant();
   }
 
   // Create inverse matrix
   template <int N>
   ALGEBRA_HOST_DEVICE inline matrix_type<N, N> inverse(
-      const matrix_type<N, N>& m) {
+      const matrix_type<N, N> &m) {
     return m.inverse();
   }
 };

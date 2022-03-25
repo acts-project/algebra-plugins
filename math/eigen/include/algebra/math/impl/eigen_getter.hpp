@@ -103,16 +103,14 @@ struct element_getter {
                                        Eigen::MatrixBase<derived_type> >::value,
                        bool> = true>
   ALGEBRA_HOST_DEVICE inline auto &operator()(
-      Eigen::MatrixBase<derived_type> &m, std::size_t row,
-      std::size_t col) const {
+      Eigen::MatrixBase<derived_type> &m, int row, int col) const {
 
     return m(row, col);
   }
   /// Get const access to a matrix element
   template <typename derived_type>
   ALGEBRA_HOST_DEVICE inline auto operator()(
-      const Eigen::MatrixBase<derived_type> &m, std::size_t row,
-      std::size_t col) const {
+      const Eigen::MatrixBase<derived_type> &m, int row, int col) const {
 
     return m(row, col);
   }
@@ -121,8 +119,7 @@ struct element_getter {
 /// Function extracting an element from a matrix (const)
 template <typename derived_type>
 ALGEBRA_HOST_DEVICE inline auto element(
-    const Eigen::MatrixBase<derived_type> &m, std::size_t row,
-    std::size_t col) {
+    const Eigen::MatrixBase<derived_type> &m, int row, int col) {
 
   return element_getter()(m, row, col);
 }
@@ -135,16 +132,16 @@ template <
                                      Eigen::MatrixBase<derived_type> >::value,
                      bool> = true>
 ALGEBRA_HOST_DEVICE inline auto &element(Eigen::MatrixBase<derived_type> &m,
-                                         std::size_t row, std::size_t col) {
+                                         int row, int col) {
 
   return element_getter()(m, row, col);
 }
 
 /// Functor used to extract a block from Eigen matrices
 struct block_getter {
-  template <std::size_t kROWS, std::size_t kCOLS, typename matrix_type>
-  ALGEBRA_HOST_DEVICE auto operator()(const matrix_type &m, std::size_t row,
-                                      std::size_t col) const {
+  template <int kROWS, int kCOLS, typename matrix_type>
+  ALGEBRA_HOST_DEVICE auto operator()(const matrix_type &m, int row,
+                                      int col) const {
 
     return m.template block<kROWS, kCOLS>(row, col);
   }

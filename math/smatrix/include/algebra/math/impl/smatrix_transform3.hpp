@@ -27,17 +27,17 @@ struct transform3 {
   /// @{
 
   /// Array type used by the transform
-  template <typename T, std::size_t N>
-  using array_type = ROOT::Math::SVector<T, N>;
+  template <unsigned int N>
+  using array_type = ROOT::Math::SVector<scalar_t, N>;
   /// Scalar type used by the transform
   using scalar_type = scalar_t;
 
   /// 3-element "vector" type
-  using vector3 = array_type<scalar_type, 3>;
+  using vector3 = array_type<3>;
   /// Point in 3D space
   using point3 = vector3;
   /// Point in 2D space
-  using point2 = array_type<scalar_type, 2>;
+  using point2 = array_type<2>;
 
   /// 4x4 matrix type
   using matrix44 = ROOT::Math::SMatrix<scalar_type, 4, 4>;
@@ -119,7 +119,7 @@ struct transform3 {
    * @param ma is the full 4x4 matrix asa 16 array
    **/
   ALGEBRA_HOST
-  transform3(const array_type<scalar_type, 16> &ma) {
+  transform3(const array_type<16> &ma) {
 
     _data(0, 0) = ma[0];
     _data(1, 0) = ma[4];

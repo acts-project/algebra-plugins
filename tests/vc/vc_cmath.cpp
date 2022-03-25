@@ -34,8 +34,8 @@ struct test_specialisation_name {
 
 // Instantiate the test(s).
 typedef testing::Types<
-    test_types<float, algebra::vc::point2<float>, algebra::vc::point3<float>,
-               algebra::vc::vector2<float>, algebra::vc::vector3<float>,
+    test_types<float, Vc::array<float, 2>, Vc::array<float, 3>,
+               Vc::array<float, 2>, Vc::array<float, 3>,
                algebra::vc::transform3<float>, algebra::vc::cartesian2<float>,
                algebra::vc::polar2<float>, algebra::vc::cylindrical2<float>,
                std::size_t, algebra::vc::matrix_type,
@@ -43,8 +43,8 @@ typedef testing::Types<
                    std::size_t, float,
                    algebra::matrix::determinant::preset0<std::size_t, float>,
                    algebra::matrix::inverse::preset0<std::size_t, float>>>,
-    test_types<double, algebra::vc::point2<double>, algebra::vc::point3<double>,
-               algebra::vc::vector2<double>, algebra::vc::vector3<double>,
+    test_types<double, Vc::array<double, 2>, Vc::array<double, 3>,
+               Vc::array<double, 2>, Vc::array<double, 3>,
                algebra::vc::transform3<double>, algebra::vc::cartesian2<double>,
                algebra::vc::polar2<double>, algebra::vc::cylindrical2<double>,
                std::size_t, algebra::vc::matrix_type,

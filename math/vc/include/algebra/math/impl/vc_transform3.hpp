@@ -43,11 +43,11 @@ struct matrix44 {
 };  // struct matrix44
 
 /// Functor used to access elements of Vc matrices
-template <template <typename, std::size_t> class array_t, typename scalar_t>
+template <template <std::size_t> class array_t, typename scalar_t>
 struct element_getter {
 
   /// Get const access to a matrix element
-  ALGEBRA_HOST inline scalar_t operator()(const array_t<scalar_t, 16> &m,
+  ALGEBRA_HOST inline scalar_t operator()(const array_t<16> &m,
                                           unsigned int row,
                                           unsigned int col) const {
 
@@ -98,8 +98,8 @@ struct transform3 {
   /// @{
 
   /// Array type used by the transform
-  template <typename T, std::size_t N>
-  using array_type = array_t<T, N>;
+  template <std::size_t N>
+  using array_type = array_t<scalar_t, N>;
   /// Scalar type used by the transform
   using scalar_type = scalar_t;
 
@@ -178,7 +178,7 @@ struct transform3 {
    * @param ma is the full 4x4 matrix 16 array
    **/
   ALGEBRA_HOST_DEVICE
-  transform3(const array_type<scalar_type, 16> &ma) {
+  transform3(const array_type<16> &ma) {
 
     _data.x = {ma[0], ma[4], ma[8], ma[12]};
     _data.y = {ma[1], ma[5], ma[9], ma[13]};
@@ -326,9 +326,9 @@ struct transform3 {
 
   /** This method retrieves the rotation of a transform */
   ALGEBRA_HOST_DEVICE
-  inline array_type<scalar_type, 16> rotation() const {
+  inline array_type<16> rotation() const {
 
-    array_type<scalar_type, 16> submatrix;
+    array_type<16> submatrix;
     for (unsigned int irow = 0; irow < 3; ++irow) {
       for (unsigned int icol = 0; icol < 3; ++icol) {
         submatrix[icol + irow * 4] = element_getter()(_data, irow, icol);

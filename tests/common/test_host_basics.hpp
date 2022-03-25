@@ -329,9 +329,7 @@ TYPED_TEST_P(test_host_basics, transform3) {
   // Check a contruction from an array[16]
   std::array<typename TypeParam::scalar, 16> matray_helper = {
       1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0};
-  typename TypeParam::transform3::template array_type<
-      typename TypeParam::scalar, 16>
-      matray;
+  typename TypeParam::transform3::template array_type<16> matray;
   for (int i = 0; i < 16; ++i) {
     matray[i] = matray_helper[i];
   }
@@ -358,7 +356,7 @@ TYPED_TEST_P(test_host_basics, transform3) {
 // This test global coordinate transforms
 TYPED_TEST_P(test_host_basics, global_transformations) {
 
-  // Preparatioon work
+  // Preparation work
   typename TypeParam::vector3 z =
       algebra::vector::normalize(typename TypeParam::vector3{3., 2., 1.});
   typename TypeParam::vector3 x =

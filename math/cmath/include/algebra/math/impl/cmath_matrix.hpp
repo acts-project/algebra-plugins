@@ -14,18 +14,55 @@
 namespace algebra::cmath::matrix {
 
 /// "Matrix actor", assuming a simple 2D matrix
-template <typename size_type,
+template <typename size_type, template <typename, size_type> class array_t,
           template <typename, size_type, size_type> class matrix_t,
           typename scalar_t, class determinant_actor_t, class inverse_actor_t,
-          class element_getter_t>
+          class element_getter_t, class block_getter_t>
 struct actor {
+
+  /// Size type
+  using size_ty = size_type;
+
+  /// Scalar type
+  using scalar_type = scalar_t;
 
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
 
+  /// Function (object) used for accessing a matrix block
+  using block_getter = block_getter_t;
+
   /// 2D matrix type
   template <size_type ROWS, size_type COLS>
   using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
+
+  /// Array type
+  template <size_type N>
+  using array_type = array_t<scalar_t, N>;
+
+  /// Operator getting a reference to one element of a non-const matrix
+  template <size_type ROWS, size_type COLS>
+  ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
+                                               size_type row,
+                                               size_type col) const {
+    return element_getter()(m, row, col);
+  }
+
+  /// Operator getting one value of a const matrix
+  template <size_type ROWS, size_type COLS>
+  ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
+                                              size_type row,
+                                              size_type col) const {
+    return element_getter()(m, row, col);
+  }
+
+  /// Operator getting a block of a const matrix
+  template <size_type ROWS, size_type COLS, class input_matrix_type>
+  ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
+                                                    size_type row,
+                                                    size_type col) {
+    return block_getter().template operator()<ROWS, COLS>(m, row, col);
+  }
 
   // Create zero matrix
   template <size_type ROWS, size_type COLS>

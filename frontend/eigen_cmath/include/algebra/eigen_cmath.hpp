@@ -74,15 +74,15 @@ template <typename T, int N>
 using array_type = eigen::storage_type<T, N>;
 template <typename T, int ROWS, int COLS>
 using matrix_type = eigen::matrix_type<T, ROWS, COLS>;
-using element_getter_type = eigen::math::element_getter;
-using block_getter_type = eigen::math::block_getter;
+using element_getter = eigen::math::element_getter;
+using block_getter = eigen::math::block_getter;
 
 // matrix actor
 template <typename size_type, typename scalar_t, typename determinant_actor_t,
           typename inverse_actor_t>
 using actor = cmath::matrix::actor<size_type, array_type, matrix_type, scalar_t,
                                    determinant_actor_t, inverse_actor_t,
-                                   element_getter_type, block_getter_type>;
+                                   element_getter, block_getter>;
 
 namespace determinant {
 
@@ -95,13 +95,13 @@ using actor =
 template <typename size_type, typename scalar_t, size_type... Ds>
 using cofactor =
     cmath::matrix::determinant::cofactor<size_type, matrix_type, scalar_t,
-                                         element_getter_type, Ds...>;
+                                         element_getter, Ds...>;
 
 // determinant::hard_coded
 template <typename size_type, typename scalar_t, size_type... Ds>
 using hard_coded =
     cmath::matrix::determinant::hard_coded<size_type, matrix_type, scalar_t,
-                                           element_getter_type, Ds...>;
+                                           element_getter, Ds...>;
 
 // preset(s) as standard option(s) for user's convenience
 template <typename size_type, typename scalar_t>
@@ -121,13 +121,13 @@ using actor =
 template <typename size_type, typename scalar_t, size_type... Ds>
 using cofactor =
     cmath::matrix::inverse::cofactor<size_type, matrix_type, scalar_t,
-                                     element_getter_type, Ds...>;
+                                     element_getter, Ds...>;
 
 // inverse::hard_coded
 template <typename size_type, typename scalar_t, size_type... Ds>
 using hard_coded =
     cmath::matrix::inverse::hard_coded<size_type, matrix_type, scalar_t,
-                                       element_getter_type, Ds...>;
+                                       element_getter, Ds...>;
 
 // preset(s) as standard option(s) for user's convenience
 template <typename size_type, typename scalar_t>

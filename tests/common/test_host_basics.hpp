@@ -178,8 +178,6 @@ TYPED_TEST_P(test_host_basics, matrix64) {
   ASSERT_NEAR(algebra::getter::element(m, 3, 3), 13., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 4, 2), 5., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 4, 3), 6., this->m_epsilon);
-
-  // Test block setter
 }
 
 // Test matrix operations with 3x3 matrix

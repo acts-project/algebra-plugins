@@ -64,6 +64,18 @@ struct actor {
     return block_getter().template operator()<ROWS, COLS>(m, row, col);
   }
 
+  /// Operator setting a block
+  template <size_type ROWS, size_type COLS, class input_matrix_type>
+  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
+                                     const matrix_type<ROWS, COLS> &b, int row,
+                                     int col) {
+    for (size_type i = 0; i < ROWS; ++i) {
+      for (size_type j = 0; j < COLS; ++j) {
+        element_getter()(m, i + row, j + col) = element_getter()(b, i, j);
+      }
+    }
+  }
+
   // Create zero matrix
   template <size_type ROWS, size_type COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() const {

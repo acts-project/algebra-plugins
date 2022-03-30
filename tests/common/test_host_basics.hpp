@@ -134,6 +134,26 @@ TYPED_TEST_P(test_host_basics, matrix64) {
                   this->m_epsilon);
     }
   }
+
+  // Test set_zero
+  typename TypeParam::matrix_actor().set_zero(m);
+  for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
+    for (typename TypeParam::size_type j = 0; j < COLS; ++j) {
+      ASSERT_FLOAT_EQ(algebra::getter::element(m, i, j), 0.);
+    }
+  }
+
+  // Test set_identity
+  typename TypeParam::matrix_actor().set_identity(m);
+  for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
+    for (typename TypeParam::size_type j = 0; j < COLS; ++j) {
+      if (i == j) {
+        ASSERT_FLOAT_EQ(algebra::getter::element(m, i, j), 1.);
+      } else {
+        ASSERT_FLOAT_EQ(algebra::getter::element(m, i, j), 0.);
+      }
+    }
+  }
 }
 
 // Test matrix operations with 3x3 matrix

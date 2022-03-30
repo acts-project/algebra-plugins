@@ -96,6 +96,19 @@ struct actor {
     return ret;
   }
 
+  // Set input matrix as zero matrix
+  template <size_type ROWS, size_type COLS>
+  ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<ROWS, COLS> &m) const {
+
+    for (size_type i = 0; i < ROWS; ++i) {
+      for (size_type j = 0; j < COLS; ++j) {
+        element_getter()(m, i, j) = 0;
+      }
+    }
+
+    return;
+  }
+
   // Set input matrix as identity matrix
   template <size_type ROWS, size_type COLS>
   ALGEBRA_HOST_DEVICE inline void set_identity(

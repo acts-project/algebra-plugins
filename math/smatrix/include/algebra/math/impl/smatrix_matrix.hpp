@@ -56,8 +56,38 @@ struct actor {
   // Create identity matrix
   template <unsigned int ROWS, unsigned int COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() {
-    matrix_type<ROWS, COLS> ret = ROOT::Math::SMatrixIdentity();
-    return ret;
+    return matrix_type<ROWS, COLS>(ROOT::Math::SMatrixIdentity());
+  }
+
+  // Set input matrix as zero matrix
+  template <unsigned int ROWS, unsigned int COLS>
+  ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<ROWS, COLS> &m) const {
+
+    for (unsigned int i = 0; i < ROWS; ++i) {
+      for (unsigned int j = 0; j < COLS; ++j) {
+        m(i, j) = 0;
+      }
+    }
+
+    return;
+  }
+
+  // Set input matrix as identity matrix
+  template <unsigned int ROWS, unsigned int COLS>
+  ALGEBRA_HOST_DEVICE inline void set_identity(
+      matrix_type<ROWS, COLS> &m) const {
+
+    for (unsigned int i = 0; i < ROWS; ++i) {
+      for (unsigned int j = 0; j < COLS; ++j) {
+        if (i == j) {
+          m(i, j) = 1;
+        } else {
+          m(i, j) = 0;
+        }
+      }
+    }
+
+    return;
   }
 
   // Create transpose matrix

@@ -68,8 +68,6 @@ struct actor {
         m(i, j) = 0;
       }
     }
-
-    return;
   }
 
   // Set input matrix as identity matrix
@@ -86,8 +84,6 @@ struct actor {
         }
       }
     }
-
-    return;
   }
 
   // Create transpose matrix

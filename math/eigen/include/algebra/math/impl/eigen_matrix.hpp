@@ -66,7 +66,6 @@ struct actor {
   template <int ROWS, int COLS>
   ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<ROWS, COLS> &m) const {
     m.setZero();
-    return;
   }
 
   // Set input matrix as identity matrix
@@ -74,7 +73,6 @@ struct actor {
   ALGEBRA_HOST_DEVICE inline void set_identity(
       matrix_type<ROWS, COLS> &m) const {
     m.setIdentity();
-    return;
   }
 
   // Create transpose matrix

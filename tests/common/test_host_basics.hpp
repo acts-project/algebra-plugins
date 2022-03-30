@@ -139,7 +139,7 @@ TYPED_TEST_P(test_host_basics, matrix64) {
   typename TypeParam::matrix_actor().set_zero(m);
   for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
     for (typename TypeParam::size_type j = 0; j < COLS; ++j) {
-      ASSERT_FLOAT_EQ(algebra::getter::element(m, i, j), 0.);
+      ASSERT_NEAR(algebra::getter::element(m, i, j), 0., this->m_epsilon);
     }
   }
 
@@ -148,9 +148,9 @@ TYPED_TEST_P(test_host_basics, matrix64) {
   for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
     for (typename TypeParam::size_type j = 0; j < COLS; ++j) {
       if (i == j) {
-        ASSERT_FLOAT_EQ(algebra::getter::element(m, i, j), 1.);
+        ASSERT_NEAR(algebra::getter::element(m, i, j), 1., this->m_epsilon);
       } else {
-        ASSERT_FLOAT_EQ(algebra::getter::element(m, i, j), 0.);
+        ASSERT_NEAR(algebra::getter::element(m, i, j), 0., this->m_epsilon);
       }
     }
   }

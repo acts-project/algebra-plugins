@@ -98,6 +98,7 @@ class test_device_basics : public test_base<T> {
       }
     }
 
+    // Test set_zero
     matrix_actor().set_zero(m2);
     for (size_type i = 0; i < 6; ++i) {
       for (size_type j = 0; j < 4; ++j) {
@@ -105,10 +106,27 @@ class test_device_basics : public test_base<T> {
       }
     }
 
+    // Test set_identity
     matrix_actor().set_identity(m2);
     for (size_type i = 0; i < 6; ++i) {
       for (size_type j = 0; j < 4; ++j) {
         result += 0.3f * algebra::getter::element(m2, i, j);
+      }
+    }
+
+    // Test block operations
+    auto b32 = matrix_actor().template block<3, 2>(m2, 2, 2);
+    algebra::getter::element(b32, 0, 0) = 4;
+    algebra::getter::element(b32, 0, 1) = 3;
+    algebra::getter::element(b32, 1, 0) = 12;
+    algebra::getter::element(b32, 1, 1) = 13;
+    algebra::getter::element(b32, 2, 0) = 5;
+    algebra::getter::element(b32, 2, 1) = 6;
+
+    matrix_actor().set_block(m2, b32, 2, 2);
+    for (size_type i = 0; i < 6; ++i) {
+      for (size_type j = 0; j < 4; ++j) {
+        result += 0.57f * algebra::getter::element(m2, i, j);
       }
     }
 

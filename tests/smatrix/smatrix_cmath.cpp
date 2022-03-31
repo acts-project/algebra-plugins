@@ -41,10 +41,9 @@ typedef testing::Types<
         algebra::smatrix::cartesian2<float>, algebra::smatrix::polar2<float>,
         algebra::smatrix::cylindrical2<float>, unsigned int,
         algebra::smatrix::matrix_type,
-        algebra::matrix::actor<
-            unsigned int, float,
-            algebra::matrix::determinant::preset0<unsigned int, float>,
-            algebra::matrix::inverse::preset0<unsigned int, float>>>,
+        algebra::matrix::actor<float,
+                               algebra::matrix::determinant::preset0<float>,
+                               algebra::matrix::inverse::preset0<float>>>,
     test_types<
         double, algebra::smatrix::point2<double>,
         algebra::smatrix::point3<double>, algebra::smatrix::vector2<double>,
@@ -52,10 +51,9 @@ typedef testing::Types<
         algebra::smatrix::cartesian2<double>, algebra::smatrix::polar2<double>,
         algebra::smatrix::cylindrical2<double>, unsigned int,
         algebra::smatrix::matrix_type,
-        algebra::matrix::actor<
-            unsigned int, double,
-            algebra::matrix::determinant::preset0<unsigned int, double>,
-            algebra::matrix::inverse::preset0<unsigned int, double>>>>
+        algebra::matrix::actor<double,
+                               algebra::matrix::determinant::preset0<double>,
+                               algebra::matrix::inverse::preset0<double>>>>
     smatrix_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
                                smatrix_cmath_types, test_specialisation_name);

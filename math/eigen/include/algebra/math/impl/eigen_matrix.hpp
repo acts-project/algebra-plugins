@@ -50,6 +50,14 @@ struct actor {
     return m.template block<ROWS, COLS>(row, col);
   }
 
+  /// Operator setting a block
+  template <int ROWS, int COLS, class input_matrix_type>
+  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
+                                     const matrix_type<ROWS, COLS> &b, int row,
+                                     int col) {
+    m.template block<ROWS, COLS>(row, col) = b;
+  }
+
   // Create zero matrix
   template <int ROWS, int COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() {

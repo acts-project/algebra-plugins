@@ -47,6 +47,18 @@ struct actor {
     return m.template Sub<matrix_type<ROWS, COLS> >(row, col);
   }
 
+  /// Operator setting a block
+  template <unsigned int ROWS, unsigned int COLS, class input_matrix_type>
+  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
+                                     const matrix_type<ROWS, COLS> &b,
+                                     unsigned int row, unsigned int col) {
+    for (unsigned int i = 0; i < ROWS; ++i) {
+      for (unsigned int j = 0; j < COLS; ++j) {
+        m(i + row, j + col) = b(i, j);
+      }
+    }
+  }
+
   // Create zero matrix
   template <unsigned int ROWS, unsigned int COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() {

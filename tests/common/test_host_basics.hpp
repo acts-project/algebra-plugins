@@ -154,6 +154,30 @@ TYPED_TEST_P(test_host_basics, matrix64) {
       }
     }
   }
+
+  // Test block operations
+  auto b32 = typename TypeParam::matrix_actor().template block<3, 2>(m, 2, 2);
+  ASSERT_NEAR(algebra::getter::element(b32, 0, 0), 1., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(b32, 0, 1), 0., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(b32, 1, 0), 0., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(b32, 1, 1), 1., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(b32, 2, 0), 0., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(b32, 2, 1), 0., this->m_epsilon);
+
+  algebra::getter::element(b32, 0, 0) = 4;
+  algebra::getter::element(b32, 0, 1) = 3;
+  algebra::getter::element(b32, 1, 0) = 12;
+  algebra::getter::element(b32, 1, 1) = 13;
+  algebra::getter::element(b32, 2, 0) = 5;
+  algebra::getter::element(b32, 2, 1) = 6;
+
+  typename TypeParam::matrix_actor().set_block(m, b32, 2, 2);
+  ASSERT_NEAR(algebra::getter::element(m, 2, 2), 4., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m, 2, 3), 3., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m, 3, 2), 12., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m, 3, 3), 13., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m, 4, 2), 5., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m, 4, 3), 6., this->m_epsilon);
 }
 
 // Test matrix operations with 3x3 matrix

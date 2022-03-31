@@ -40,18 +40,16 @@ typedef testing::Types<
                algebra::vc::polar2<float>, algebra::vc::cylindrical2<float>,
                std::size_t, algebra::vc::matrix_type,
                algebra::matrix::actor<
-                   std::size_t, float,
-                   algebra::matrix::determinant::preset0<std::size_t, float>,
-                   algebra::matrix::inverse::preset0<std::size_t, float>>>,
+                   float, algebra::matrix::determinant::preset0<float>,
+                   algebra::matrix::inverse::preset0<float>>>,
     test_types<double, Vc::array<double, 2>, Vc::array<double, 3>,
                Vc::array<double, 2>, Vc::array<double, 3>,
                algebra::vc::transform3<double>, algebra::vc::cartesian2<double>,
                algebra::vc::polar2<double>, algebra::vc::cylindrical2<double>,
                std::size_t, algebra::vc::matrix_type,
                algebra::matrix::actor<
-                   std::size_t, double,
-                   algebra::matrix::determinant::preset0<std::size_t, double>,
-                   algebra::matrix::inverse::preset0<std::size_t, double>>>>
+                   double, algebra::matrix::determinant::preset0<double>,
+                   algebra::matrix::inverse::preset0<double>>>>
     vc_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
                                vc_cmath_types, test_specialisation_name);

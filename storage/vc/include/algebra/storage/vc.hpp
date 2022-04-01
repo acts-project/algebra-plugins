@@ -25,11 +25,13 @@
 
 namespace algebra::vc {
 
+/// size type for Vc storage model
+using size_type = std::size_t;
 /// Array type used in the Vc storage model
-template <typename T, std::size_t N>
+template <typename T, size_type N>
 using storage_type = Vc::SimdArray<T, N>;
 /// Matrix type used in the Vc storage model
-template <typename T, std::size_t ROWS, std::size_t COLS>
+template <typename T, size_type ROWS, size_type COLS>
 using matrix_type = Vc::array<Vc::array<T, ROWS>, COLS>;
 
 /// 3-element "vector" type, using @c algebra::vc::array4

@@ -70,7 +70,7 @@ using cmath::normalize;
 
 namespace matrix {
 
-using size_type = std::size_t;
+using size_type = array::size_type;
 
 template <typename T, size_type N>
 using array_type = array::storage_type<T, N>;

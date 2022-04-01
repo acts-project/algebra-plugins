@@ -64,8 +64,7 @@ using smatrix::math::normalize;
 
 namespace matrix {
 
-using size_type = unsigned int;
-
+using size_type = smatrix::size_type;
 template <typename T, size_type N>
 using array_type = smatrix::storage_type<T, N>;
 template <typename T, size_type ROWS, size_type COLS>

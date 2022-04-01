@@ -16,11 +16,13 @@
 
 namespace algebra::smatrix {
 
+/// size type for SMatrix storage model
+using size_type = unsigned int;
 /// Array type used in the SMatrix storage model
-template <typename T, unsigned int N>
+template <typename T, size_type N>
 using storage_type = ROOT::Math::SVector<T, N>;
 /// Matrix type used in the SMatrix storage model
-template <typename T, unsigned int ROWS, unsigned int COLS>
+template <typename T, size_type ROWS, size_type COLS>
 using matrix_type = ROOT::Math::SMatrix<T, ROWS, COLS>;
 
 /// 3-element "vector" type, using @c ROOT::Math::SVector

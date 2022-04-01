@@ -70,8 +70,7 @@ using eigen::math::normalize;
 
 namespace matrix {
 
-using size_type = int;
-
+using size_type = eigen::size_type;
 template <typename T, size_type N>
 using array_type = eigen::storage_type<T, N>;
 template <typename T, size_type ROWS, size_type COLS>

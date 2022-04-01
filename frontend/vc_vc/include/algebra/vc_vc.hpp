@@ -148,7 +148,7 @@ using vc::math::normalize;
 
 namespace matrix {
 
-using size_type = std::size_t;
+using size_type = vc::size_type;
 
 template <typename T, size_type N>
 using array_type = vc::storage_type<T, N>;

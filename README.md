@@ -4,6 +4,15 @@ This repository provides different algebra plugins with minimal functionality
 for the R&D projects [detray](https://github.com/acts-project/detray) and
 [traccc](https://github.com/acts-project/traccc).
 
+| Backend                                                                   | CPU | CUDA | SYCL |
+| ------------------------------------------------------------------- | --- | ---- | ---- |
+| cmath                                                               | ✅  | ✅   | ✅   |
+| [Eigen](https://eigen.tuxfamily.org)                                | ✅  | ✅   | 🟡   |
+| [SMatrix](https://root.cern.ch/doc/master/group__SMatrixGroup.html) | ✅  | ⚪   | ⚪   |
+| [VC](https://github.com/VcDevel/Vc)                                 | ✅  | ⚪   | ⚪   |
+
+## Building
+
 To build it standalone, run e.g.
 
 ```

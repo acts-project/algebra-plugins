@@ -36,7 +36,7 @@ struct actor {
   template <size_type ROWS, size_type COLS>
   using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
 
-  /// Array type
+  /// vector type
   template <size_type N>
   using array_type = array_t<scalar_t, N>;
 
@@ -64,7 +64,7 @@ struct actor {
     return block_getter().template operator()<ROWS, COLS>(m, row, col);
   }
 
-  /// Operator setting a block
+  /// Operator setting a block with a vector matrix
   template <size_type ROWS, size_type COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const matrix_type<ROWS, COLS> &b, int row,
@@ -73,6 +73,27 @@ struct actor {
       for (size_type j = 0; j < COLS; ++j) {
         element_getter()(m, i + row, j + col) = element_getter()(b, i, j);
       }
+    }
+  }
+
+  /// Operator setting a block with a vector
+  /*
+  template <size_type ROWS, class input_matrix_type>
+  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
+                                     const array_t<scalar_t, ROWS> &b, int row,
+                                     int col) {
+    for (size_type i = 0; i < ROWS; ++i) {
+      element_getter()(m, i + row, col) = b[i];
+    }
+  }
+  */
+  template <size_type ROWS, template <typename, size_type> class vector_t,
+            class input_matrix_type>
+  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
+                                     const vector_t<scalar_t, ROWS> &b, int row,
+                                     int col) {
+    for (size_type i = 0; i < ROWS; ++i) {
+      element_getter()(m, i + row, col) = b[i];
     }
   }
 

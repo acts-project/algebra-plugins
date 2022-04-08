@@ -70,34 +70,35 @@ using vc::math::theta;
 /// Function extracting a slice from the matrix used by
 /// @c algebra::vc::transform3<float>
 template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline auto vector(const vc::transform3<float>::matrix44& m,
-                                       std::size_t
+ALGEBRA_HOST_DEVICE inline Vc::array<float, 3> vector(
+    const vc::transform3<float>::matrix44& m,
+    std::size_t
 #ifndef NDEBUG
-                                           row
+        row
 #endif  // not NDEBUG
-                                       ,
-                                       std::size_t col) {
+    ,
+    std::size_t col) {
 
   assert(row == 0);
   assert(col < 4);
   switch (col) {
     case 0:
-      return m.x;
+      return {m.x[0], m.x[1], m.x[2]};
     case 1:
-      return m.y;
+      return {m.y[0], m.y[1], m.y[2]};
     case 2:
-      return m.z;
+      return {m.z[0], m.z[1], m.z[2]};
     case 3:
-      return m.t;
+      return {m.t[0], m.t[1], m.t[2]};
     default:
-      return m.x;
+      return {m.x[0], m.x[1], m.x[2]};
   }
 }
 
 /// Function extracting a slice from the matrix used by
 /// @c algebra::vc::transform3<double>
 template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline auto vector(
+ALGEBRA_HOST_DEVICE inline Vc::array<double, 3> vector(
     const vc::transform3<double>::matrix44& m,
     std::size_t
 #ifndef NDEBUG
@@ -110,15 +111,15 @@ ALGEBRA_HOST_DEVICE inline auto vector(
   assert(col < 4);
   switch (col) {
     case 0:
-      return m.x;
+      return {m.x[0], m.x[1], m.x[2]};
     case 1:
-      return m.y;
+      return {m.y[0], m.y[1], m.y[2]};
     case 2:
-      return m.z;
+      return {m.z[0], m.z[1], m.z[2]};
     case 3:
-      return m.t;
+      return {m.t[0], m.t[1], m.t[2]};
     default:
-      return m.x;
+      return {m.x[0], m.x[1], m.x[2]};
   }
 }
 

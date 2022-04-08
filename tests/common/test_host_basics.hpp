@@ -105,6 +105,34 @@ TYPED_TEST_P(test_host_basics, vector3) {
 
   typename TypeParam::scalar norm = algebra::getter::norm(vD);
   ASSERT_NEAR(norm, std::sqrt(3.), this->m_epsilon);
+
+  // Test on matrix - vector operations
+  typename TypeParam::vector3 vE{1., 2., 3.};
+
+  typename TypeParam::template matrix<2, 3> m23;
+
+  algebra::getter::element(m23, 0, 0) = 1;
+  algebra::getter::element(m23, 0, 1) = 2;
+  algebra::getter::element(m23, 0, 2) = 3;
+  algebra::getter::element(m23, 1, 0) = 4;
+  algebra::getter::element(m23, 1, 1) = 5;
+  algebra::getter::element(m23, 1, 2) = 6;
+
+  typename TypeParam::vector2 v2 = m23 * vE;
+
+  ASSERT_NEAR(v2[0], 14, this->m_epsilon);
+  ASSERT_NEAR(v2[1], 32, this->m_epsilon);
+
+  // Cross product on vector3 - matrix<3,1>
+  typename TypeParam::template matrix<3, 1> vF;
+  algebra::getter::element(vF, 0, 0) = 5;
+  algebra::getter::element(vF, 1, 0) = 6;
+  algebra::getter::element(vF, 2, 0) = 13;
+
+  auto vG = algebra::vector::cross(vD, vF);
+  ASSERT_NEAR(vG[0], 7, this->m_epsilon);
+  ASSERT_NEAR(vG[1], -8, this->m_epsilon);
+  ASSERT_NEAR(vG[2], 1, this->m_epsilon);
 }
 
 // Test generic access to a 6x4 matrix
@@ -178,6 +206,12 @@ TYPED_TEST_P(test_host_basics, matrix64) {
   ASSERT_NEAR(algebra::getter::element(m, 3, 3), 13., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 4, 2), 5., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 4, 3), 6., this->m_epsilon);
+
+  typename TypeParam::vector3 v = {10, 20, 30};
+  typename TypeParam::matrix_actor().set_block(m, v, 0, 2);
+  ASSERT_NEAR(algebra::getter::element(m, 0, 2), 10., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m, 1, 2), 20., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m, 2, 2), 30., this->m_epsilon);
 }
 
 // Test matrix operations with 3x3 matrix
@@ -300,7 +334,8 @@ TYPED_TEST_P(test_host_basics, getter) {
       algebra::vector::normalize(typename TypeParam::vector3{3., 2., 1.});
   typename TypeParam::vector3 x =
       algebra::vector::normalize(typename TypeParam::vector3{2., -3., 0.});
-  typename TypeParam::vector3 y = algebra::vector::cross(z, x);
+  typename TypeParam::vector3 y =
+      algebra::vector::cross(z, algebra::vector::normalize(x));
 
   // Check with dot product
   ASSERT_NEAR(algebra::vector::dot(x, y), 0., this->m_epsilon);

@@ -23,6 +23,9 @@ struct actor {
   template <unsigned int ROWS, unsigned int COLS>
   using matrix_type = ROOT::Math::SMatrix<scalar_t, ROWS, COLS>;
 
+  template <unsigned int ROWS>
+  using vector_type = ROOT::Math::SVector<scalar_t, ROWS>;
+
   /// Operator getting a reference to one element of a non-const matrix
   template <unsigned int ROWS, unsigned int COLS>
   ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
@@ -47,7 +50,7 @@ struct actor {
     return m.template Sub<matrix_type<ROWS, COLS> >(row, col);
   }
 
-  /// Operator setting a block
+  /// Operator setting a block with a matrix
   template <unsigned int ROWS, unsigned int COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const matrix_type<ROWS, COLS> &b,
@@ -56,6 +59,16 @@ struct actor {
       for (unsigned int j = 0; j < COLS; ++j) {
         m(i + row, j + col) = b(i, j);
       }
+    }
+  }
+
+  /// Operator setting a block with a vector
+  template <unsigned int ROWS, class input_matrix_type>
+  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
+                                     const vector_type<ROWS> &b,
+                                     unsigned int row, unsigned int col) {
+    for (unsigned int i = 0; i < ROWS; ++i) {
+      m(i + row, col) = b[i];
     }
   }
 

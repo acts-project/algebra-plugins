@@ -149,4 +149,49 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
   return ROOT::Math::Cross(a, b);
 }
 
+/** Cross product between vector3 and matrix<3,1>
+ *
+ * @param a the first input vector
+ * @param b the second input matrix<3,1>
+ *
+ * @return a vector (expression) representing the cross product
+ **/
+template <typename scalar_t>
+ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
+    const ROOT::Math::SVector<scalar_t, 3> &a,
+    const ROOT::Math::SMatrix<scalar_t, 3, 1> &b) {
+
+  return ROOT::Math::Cross(a, b.Col(0));
+}
+
+/** Cross product between matrix<3,1> and vector3
+ *
+ * @param a the second input matrix<3,1>
+ * @param b the first input vector
+ *
+ * @return a vector (expression) representing the cross product
+ **/
+template <typename scalar_t>
+ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
+    const ROOT::Math::SMatrix<scalar_t, 3, 1> &a,
+    const ROOT::Math::SVector<scalar_t, 3> &b) {
+
+  return ROOT::Math::Cross(a.Col(0), b);
+}
+
+/** Cross product between two matrix<3,1>
+ *
+ * @param a the second input matrix<3,1>
+ * @param b the first input matrix<3,1>
+ *
+ * @return a vector (expression) representing the cross product
+ **/
+template <typename scalar_t>
+ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
+    const ROOT::Math::SMatrix<scalar_t, 3, 1> &a,
+    const ROOT::Math::SMatrix<scalar_t, 3, 1> &b) {
+
+  return ROOT::Math::Cross(a.Col(0), b.Col(0));
+}
+
 }  // namespace algebra::smatrix::math

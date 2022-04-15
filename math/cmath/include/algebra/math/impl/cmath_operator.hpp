@@ -259,4 +259,27 @@ ALGEBRA_HOST_DEVICE inline array_t<array_t<scalar_t, ROWS>, COLS> operator-(
 
 /// @}
 
+/// @name Operators on matrix * vector
+/// @{
+
+template <typename size_type, template <typename, size_type> class array_t,
+          typename scalar_t, size_type ROWS, size_type COLS,
+          std::enable_if_t<std::is_scalar_v<scalar_t>, bool> = true>
+ALGEBRA_HOST_DEVICE inline array_t<scalar_t, ROWS> operator*(
+    const array_t<array_t<scalar_t, ROWS>, COLS> &a,
+    const array_t<scalar_t, COLS> &b) {
+
+  array_t<scalar_t, ROWS> ret{0};
+
+  for (size_type i = 0; i < ROWS; ++i) {
+    for (size_type j = 0; j < COLS; ++j) {
+      ret[i] += a[j][i] * b[j];
+    }
+  }
+
+  return ret;
+}
+
+/// @}
+
 }  // namespace algebra::cmath

@@ -77,16 +77,6 @@ struct actor {
   }
 
   /// Operator setting a block with a vector
-  /*
-  template <size_type ROWS, class input_matrix_type>
-  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const array_t<scalar_t, ROWS> &b, int row,
-                                     int col) {
-    for (size_type i = 0; i < ROWS; ++i) {
-      element_getter()(m, i + row, col) = b[i];
-    }
-  }
-  */
   template <size_type ROWS, template <typename, size_type> class vector_t,
             class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,

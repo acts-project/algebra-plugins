@@ -390,7 +390,6 @@ TYPED_TEST_P(test_host_basics, transform3) {
 
   // Test constructor from inverse matrix
   auto m44_inv = trf2.matrix_inverse();
-  typename TypeParam::transform3 trfm(m44_inv);
 
   // Make sure that algebra::getter:vector can be called.
   (void)algebra::getter::vector<3>(m44_inv, 0, 0);

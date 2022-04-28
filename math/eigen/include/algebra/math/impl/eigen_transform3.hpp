@@ -46,8 +46,7 @@ struct transform3 {
   using point2 = array_type<2>;
 
   /// 4x4 matrix type
-  using matrix44 =
-      typename Eigen::Transform<scalar_type, 3, Eigen::Affine>::MatrixType;
+  using matrix44 = typename Eigen::Matrix<scalar_t, 4, 4, 0, 4, 4>;
 
   /// Function (object) used for accessing a matrix element
   using element_getter = algebra::eigen::math::element_getter;

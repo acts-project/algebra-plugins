@@ -252,6 +252,10 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   inline const matrix44 &matrix() const { return _data; }
 
+  /** This method retrieves the 4x4 matrix of an inverse transform */
+  ALGEBRA_HOST_DEVICE
+  inline const matrix44 &matrix_inverse() const { return _data_inv; }
+
   /** This method transform from a point from the local 3D cartesian frame to
    * the global 3D cartesian frame */
   ALGEBRA_HOST_DEVICE inline point3 point_to_global(const point3 &v) const {

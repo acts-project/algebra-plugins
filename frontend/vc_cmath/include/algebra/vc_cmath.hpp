@@ -45,12 +45,12 @@ using vc::math::theta;
 /// @c algebra::vc::transform3
 template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
           typename scalar_t>
-ALGEBRA_HOST_DEVICE inline vc::storage_type<scalar_t, SIZE> vector(
+ALGEBRA_HOST_DEVICE inline Vc::array<scalar_t, SIZE> vector(
     const vc::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
     std::size_t col) {
 
   return cmath::vector_getter<std::size_t, Vc::array, scalar_t, SIZE,
-                              vc::storage_type<scalar_t, SIZE>>()(m, row, col);
+                              Vc::array<scalar_t, SIZE>>()(m, row, col);
 }
 
 /// @name Getter functions on @c algebra::vc::matrix_type

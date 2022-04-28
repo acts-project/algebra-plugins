@@ -123,16 +123,20 @@ TYPED_TEST_P(test_host_basics, vector3) {
   ASSERT_NEAR(v2[0], 14, this->m_epsilon);
   ASSERT_NEAR(v2[1], 32, this->m_epsilon);
 
-  // Cross product on vector3 - matrix<3,1>
+  // Cross product on vector3 and matrix<3,1>
   typename TypeParam::template matrix<3, 1> vF;
   algebra::getter::element(vF, 0, 0) = 5;
   algebra::getter::element(vF, 1, 0) = 6;
   algebra::getter::element(vF, 2, 0) = 13;
 
-  auto vG = algebra::vector::cross(vD, vF);
+  typename TypeParam::vector3 vG = algebra::vector::cross(vD, vF);
   ASSERT_NEAR(vG[0], 7, this->m_epsilon);
   ASSERT_NEAR(vG[1], -8, this->m_epsilon);
   ASSERT_NEAR(vG[2], 1, this->m_epsilon);
+
+  // Dot product on vector3 and matrix<3,1>
+  auto dot = algebra::vector::dot(vG, vF);
+  ASSERT_NEAR(dot, 0, this->m_epsilon);
 }
 
 // Test generic access to a 6x4 matrix

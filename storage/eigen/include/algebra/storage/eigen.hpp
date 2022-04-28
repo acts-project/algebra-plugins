@@ -21,8 +21,14 @@ using size_type = int;
 template <typename T, size_type N>
 using storage_type = array<T, N>;
 /// Matrix type used in the Eigen storage model
+
+#ifdef _MSC_VER
 template <typename T, size_type ROWS, size_type COLS>
 using matrix_type = Eigen::Matrix<T, ROWS, COLS, 0, ROWS, COLS>;
+#else
+template <typename T, size_type ROWS, size_type COLS>
+using matrix_type = Eigen::Matrix<T, ROWS, COLS>;
+#endif  // MSVC
 
 /// 3-element "vector" type, using @c algebra::eigen::array
 template <typename T>

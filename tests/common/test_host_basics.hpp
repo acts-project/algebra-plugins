@@ -388,6 +388,15 @@ TYPED_TEST_P(test_host_basics, transform3) {
   (void)algebra::getter::vector<3>(m44, 0, 1);
   (void)algebra::getter::vector<3>(m44, 0, 2);
 
+  // Test constructor from inverse matrix
+  auto m44_inv = trf2.matrix_inverse();
+  typename TypeParam::transform3 trfm(m44_inv);
+
+  // Make sure that algebra::getter:vector can be called.
+  (void)algebra::getter::vector<3>(m44_inv, 0, 0);
+  (void)algebra::getter::vector<3>(m44_inv, 0, 1);
+  (void)algebra::getter::vector<3>(m44_inv, 0, 2);
+
   // Re-evaluate rot and trn
   auto rotm = trfm.rotation();
   ASSERT_NEAR(element_getter(rotm, 0, 0), x[0], this->m_epsilon);

@@ -176,7 +176,7 @@ struct transform3 {
 
   /** This method retrieves the 4x4 matrix of an inverse transform */
   ALGEBRA_HOST
-  inline matrix44 matrix() const { return _data_inv; }
+  inline matrix44 matrix_inverse() const { return _data_inv; }
 
   /** This method transform from a point from the local 3D cartesian frame to
    * the global 3D cartesian frame */

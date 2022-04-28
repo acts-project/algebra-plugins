@@ -193,6 +193,11 @@ TYPED_TEST_P(test_host_basics, matrix64) {
   ASSERT_NEAR(algebra::getter::element(b13, 0, 1), 0., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b13, 0, 2), 0., this->m_epsilon);
 
+  auto b13_tp = typename TypeParam::matrix_actor().transpose(b13);
+  ASSERT_NEAR(algebra::getter::element(b13_tp, 0, 0), 1., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(b13_tp, 1, 0), 0., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(b13_tp, 2, 0), 0., this->m_epsilon);
+
   auto b32 = typename TypeParam::matrix_actor().template block<3, 2>(m, 2, 2);
   ASSERT_NEAR(algebra::getter::element(b32, 0, 0), 1., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b32, 0, 1), 0., this->m_epsilon);

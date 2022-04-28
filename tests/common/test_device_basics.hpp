@@ -115,6 +115,13 @@ class test_device_basics : public test_base<T> {
     }
 
     // Test block operations
+    auto b13 = matrix_actor().template block<1, 3>(m2, 0, 0);
+    auto b13_tp = matrix_actor().transpose(b13);
+    algebra::getter::element(b13_tp, 0, 0) = 1;
+    algebra::getter::element(b13_tp, 1, 0) = 2;
+    algebra::getter::element(b13_tp, 2, 0) = 3;
+    matrix_actor().set_block(m2, b13_tp, 0, 0);
+
     auto b32 = matrix_actor().template block<3, 2>(m2, 2, 2);
     algebra::getter::element(b32, 0, 0) = 4;
     algebra::getter::element(b32, 0, 1) = 3;

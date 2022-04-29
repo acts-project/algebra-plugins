@@ -78,6 +78,21 @@ ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::VecExpr<A, scalar_t, N> &a,
 
   return ROOT::Math::Dot(a, b);
 }
+
+/** Dot product between two input vectors
+ *
+ * @param a the first input vector
+ * @param b the second input vector
+ *
+ * @return the scalar dot product value
+ **/
+template <typename scalar_t, class A, auto N>
+ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::VecExpr<A, scalar_t, N> &a,
+                                 const ROOT::Math::VecExpr<A, scalar_t, N> &b) {
+
+  return ROOT::Math::Dot(a, b);
+}
+
 /** Dot product between two input vectors
  *
  * @param a the first input vector

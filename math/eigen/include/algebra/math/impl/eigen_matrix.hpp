@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/qualifiers.hpp"
+#include "algebra/storage/eigen.hpp"
 
 // Eigen include(s).
 #ifdef _MSC_VER
@@ -27,7 +28,7 @@ struct actor {
 
   /// 2D matrix type
   template <int ROWS, int COLS>
-  using matrix_type = Eigen::Matrix<scalar_t, ROWS, COLS, 0, ROWS, COLS>;
+  using matrix_type = algebra::eigen::matrix_type<scalar_t, ROWS, COLS>;
 
   /// Operator getting a reference to one element of a non-const matrix
   template <int ROWS, int COLS>

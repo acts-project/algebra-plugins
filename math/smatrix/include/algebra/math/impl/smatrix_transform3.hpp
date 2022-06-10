@@ -55,18 +55,17 @@ struct transform3 {
 
   /// @}
 
-  /** Contructor with arguments: t, z, x
+  /** Contructor with arguments: t, x, y, z
    *
    * @param t the translation (or origin of the new frame)
-   * @param z the z axis of the new frame, normal vector for planes
    * @param x the x axis of the new frame
+   * @param y the y axis of the new frame
+   * @param z the z axis of the new frame, normal vector for planes
    *
    **/
-  ALGEBRA_HOST
-  transform3(const vector3 &t, const vector3 &z, const vector3 &x) {
-
-    auto y = ROOT::Math::Cross(z, x);
-
+  ALGEBRA_HOST_DEVICE
+  transform3(const vector3 &t, const vector3 &x, const vector3 &y,
+             const vector3 &z, bool get_inverse = true) {
     _data(0, 0) = x[0];
     _data(1, 0) = x[1];
     _data(2, 0) = x[2];
@@ -80,10 +79,24 @@ struct transform3 {
     _data(1, 3) = t[1];
     _data(2, 3) = t[2];
 
-    int ifail = 0;
-    _data_inv = _data.Inverse(ifail);
-    SMATRIX_CHECK(ifail);
+    if (get_inverse) {
+      int ifail = 0;
+      _data_inv = _data.Inverse(ifail);
+      SMATRIX_CHECK(ifail);
+    }
   }
+
+  /** Contructor with arguments: t, z, x
+   *
+   * @param t the translation (or origin of the new frame)
+   * @param z the z axis of the new frame, normal vector for planes
+   * @param x the x axis of the new frame
+   *
+   **/
+  ALGEBRA_HOST
+  transform3(const vector3 &t, const vector3 &z, const vector3 &x,
+             bool get_inverse = true)
+      : transform3(t, x, ROOT::Math::Cross(z, x), z, get_inverse) {}
 
   /** Constructor with arguments: translation
    *

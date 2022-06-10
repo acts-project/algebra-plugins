@@ -63,6 +63,28 @@ struct transform3 {
 
   /// @}
 
+  /** Contructor with arguments: t, x, y, z
+   *
+   * @param t the translation (or origin of the new frame)
+   * @param x the x axis of the new frame
+   * @param y the y axis of the new frame
+   * @param z the z axis of the new frame, normal vector for planes
+   *
+   **/
+  ALGEBRA_HOST_DEVICE
+  transform3(const vector3 &t, const vector3 &x, const vector3 &y,
+             const vector3 &z, bool get_inverse = true) {
+    auto &matrix = _data.matrix();
+    matrix.template block<3, 1>(0, 0) = x;
+    matrix.template block<3, 1>(0, 1) = y;
+    matrix.template block<3, 1>(0, 2) = z;
+    matrix.template block<3, 1>(0, 3) = t;
+
+    if (get_inverse) {
+      _data_inv = _data.inverse();
+    }
+  }
+
   /** Contructor with arguments: t, z, x
    *
    * @param t the translation (or origin of the new frame)
@@ -71,18 +93,9 @@ struct transform3 {
    *
    **/
   ALGEBRA_HOST_DEVICE
-  transform3(const vector3 &t, const vector3 &z, const vector3 &x) {
-
-    auto y = z.cross(x);
-
-    auto &matrix = _data.matrix();
-    matrix.template block<3, 1>(0, 0) = x;
-    matrix.template block<3, 1>(0, 1) = y;
-    matrix.template block<3, 1>(0, 2) = z;
-    matrix.template block<3, 1>(0, 3) = t;
-
-    _data_inv = _data.inverse();
-  }
+  transform3(const vector3 &t, const vector3 &z, const vector3 &x,
+             bool get_inverse = true)
+      : transform3(t, x, z.cross(x), z, get_inverse) {}
 
   /** Constructor with arguments: translation
    *

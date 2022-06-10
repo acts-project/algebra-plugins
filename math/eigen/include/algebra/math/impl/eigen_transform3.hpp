@@ -57,9 +57,10 @@ struct transform3 {
   /// @name Data objects
   /// @{
 
-  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data;
-
-  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data_inv;
+  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data =
+      Eigen::Transform<scalar_type, 3, Eigen::Affine>::Identity();
+  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data_inv =
+      Eigen::Transform<scalar_type, 3, Eigen::Affine>::Identity();
 
   /// @}
 

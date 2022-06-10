@@ -60,8 +60,8 @@ struct transform3 {
   /// @name Data objects
   /// @{
 
-  matrix44 _data;
-  matrix44 _data_inv;
+  matrix44 _data = matrix_actor().template identity<4, 4>();
+  matrix44 _data_inv = matrix_actor().template identity<4, 4>();
 
   /// @}
 

@@ -46,6 +46,8 @@ option( ALGEBRA_PLUGINS_INCLUDE_VECMEM
    "Include VecMem types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_BUILD_TESTING "Build the unit tests of Algebra Plugins"
    TRUE )
+option( ALGEBRA_PLUGINS_BUILD_BENCHMARKS "Build the benchmark suite of Algebra Plugins"
+	FALSE )
 
 # Suppress developer warnings for all of the externals by default.
 # Unless the user explicitly requested otherwise.
@@ -81,6 +83,20 @@ if( ALGEBRA_PLUGINS_SETUP_GOOGLETEST )
       find_package( GTest REQUIRED )
    else()
       add_subdirectory( extern/googletest )
+   endif()
+endif()
+
+# Set up Google Benchmark
+option( ALGEBRA_PLUGINS_SETUP_GOOGLEBENCHMARK
+   "Set up the Google Benchmark target(s) explicitly" TRUE )
+option( ALGEBRA_PLUGINS_USE_SYSTEM_GOOGLEBENCHMARK
+   "Pick up an existing installation of Google Benchmark from the build environment"
+   FALSE )
+if( ALGEBRA_PLUGINS_SETUP_GOOGLEBENCHMARK )
+   if( ALGEBRA_PLUGINS_USE_SYSTEM_GOOGLEBENCHMARK )
+      find_package( benchmark REQUIRED )
+   else()
+      add_subdirectory( extern/googlebenchmark )
    endif()
 endif()
 
@@ -136,6 +152,11 @@ add_subdirectory( frontend )
 include( CTest )
 if( BUILD_TESTING AND ALGEBRA_PLUGINS_BUILD_TESTING )
   add_subdirectory( tests )
+endif()
+
+# Set up the benchmarks.
+if( ALGEBRA_PLUGINS_BUILD_BENCHMARKS )
+  add_subdirectory( benchmarks )
 endif()
 
 # Set up the packaging of the project.

@@ -87,16 +87,16 @@ if( ALGEBRA_PLUGINS_SETUP_GOOGLETEST )
 endif()
 
 # Set up Google Benchmark
-option( ALGEBRA_PLUGINS_SETUP_GOOGLEBENCHMARK
+option( ALGEBRA_PLUGINS_SETUP_BENCHMARK
    "Set up the Google Benchmark target(s) explicitly" TRUE )
-option( ALGEBRA_PLUGINS_USE_SYSTEM_GOOGLEBENCHMARK
+option( ALGEBRA_PLUGINS_USE_SYSTEM_BENCHMARK
    "Pick up an existing installation of Google Benchmark from the build environment"
    FALSE )
-if( ALGEBRA_PLUGINS_SETUP_GOOGLEBENCHMARK )
-   if( ALGEBRA_PLUGINS_USE_SYSTEM_GOOGLEBENCHMARK )
+if( ALGEBRA_PLUGINS_SETUP_BENCHMARK )
+   if( ALGEBRA_PLUGINS_USE_SYSTEM_BENCHMARK )
       find_package( benchmark REQUIRED )
    else()
-      add_subdirectory( extern/googlebenchmark )
+      add_subdirectory( extern/benchmark )
    endif()
 endif()
 

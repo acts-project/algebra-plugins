@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,15 +8,15 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/impl/cmath_getter.hpp"
 #include "algebra/qualifiers.hpp"
 
-namespace algebra::cmath {
+// System include(s)
+#include <climits>
 
-/** Local frame projection into a polar coordinate frame
+/** Local frame projection into a radius
  */
 template <typename transform3_t>
-struct polar2 {
+struct radial {
 
   /// @name Type definitions for the struct
   /// @{
@@ -37,7 +37,7 @@ struct polar2 {
    * @param trf the transform from global to local thredimensional frame
    * @param p the point in global frame
    *
-   * @return a local point2
+   * @return a local point2 ({radius, invalid})
    **/
   ALGEBRA_HOST_DEVICE
   inline point2 operator()(const transform3_type &trf, const point3 &p) const {
@@ -45,19 +45,19 @@ struct polar2 {
     return operator()(trf.point_to_local(p));
   }
 
-  /** This method transform from a point in 2D cartesian frame to a 2D
-   * polar point */
+  /** This method transform from a point in 2D cartesian frame to a radius */
   ALGEBRA_HOST_DEVICE inline point2 operator()(const point2 &v) const {
 
-    return {perp(v), phi(v)};
+    return {
+        perp(v),
+        std::numeric_limits<typename transform3_type::scalar_type>::infinity()};
   }
-  /** This method transform from a point in 3D cartesian frame to a 2D
-   * polar point */
+  /** This method transform from a point in 3D cartesian frame to a radius */
   ALGEBRA_HOST_DEVICE inline point2 operator()(const point3 &v) const {
 
-    return {perp(v), phi(v)};
+    return {
+        perp(v),
+        std::numeric_limits<typename transform3_type::scalar_type>::infinity()};
   }
 
-};  // struct polar2
-
-}  // namespace algebra::cmath
+};  // struct radial

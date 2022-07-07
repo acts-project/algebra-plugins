@@ -8,10 +8,12 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/impl/smatrix_cartesian2.hpp"
-#include "algebra/math/impl/smatrix_cylindrical2.hpp"
 #include "algebra/math/impl/smatrix_getter.hpp"
 #include "algebra/math/impl/smatrix_matrix.hpp"
-#include "algebra/math/impl/smatrix_polar2.hpp"
 #include "algebra/math/impl/smatrix_transform3.hpp"
 #include "algebra/math/impl/smatrix_vector.hpp"
+
+// Common include(s)
+namespace algebra::smatrix::math {
+#include "algebra/coordinate/coordinates.hpp"
+}  // namespace algebra::smatrix::math

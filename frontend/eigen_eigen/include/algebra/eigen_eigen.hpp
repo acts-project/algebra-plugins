@@ -6,7 +6,6 @@
  */
 
 // Project include(s).
-#include "algebra/math/cmath.hpp"
 #include "algebra/math/eigen.hpp"
 #include "algebra/storage/eigen.hpp"
 
@@ -28,7 +27,7 @@ namespace eigen {
 template <typename T>
 using transform3 = math::transform3<T>;
 template <typename T>
-using cartesian2 = cmath::cartesian2<transform3<T> >;
+using cartesian2 = math::cartesian2<transform3<T> >;
 template <typename T>
 using polar2 = math::polar2<transform3<T> >;
 template <typename T>

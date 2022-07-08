@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,15 +8,12 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/impl/smatrix_getter.hpp"
 #include "algebra/qualifiers.hpp"
 
-namespace algebra::smatrix::math {
-
-/** Local frame projection into a polar coordinate frame
- **/
+/** Frame projection into a cartesian coordinate frame
+ */
 template <typename transform3_t>
-struct cylindrical2 {
+struct cartesian2 {
 
   /// @name Type definitions for the struct
   /// @{
@@ -32,18 +29,6 @@ struct cylindrical2 {
   /// @}
 
   /** This method transform from a point from the global 3D cartesian frame to
-   * the local 2D cartesian frame
-   *
-   * @param v the point in local frame
-   *
-   * @return a local point2
-   */
-  ALGEBRA_HOST inline point2 operator()(const point3 &v) const {
-
-    return {perp(v) * phi(v), v[2]};
-  }
-
-  /** This method transform from a point from the global 3D cartesian frame to
    *the local 2D cartesian frame
    *
    * @param trf the transform from global to local thredimensional frame
@@ -51,12 +36,19 @@ struct cylindrical2 {
    *
    * @return a local point2
    **/
-  ALGEBRA_HOST
+  ALGEBRA_HOST_DEVICE
   inline point2 operator()(const transform3_type &trf, const point3 &p) const {
-
     return operator()(trf.point_to_local(p));
   }
 
-};  // struct cylindrical2
+  /** This method transform from a point from the global 3D cartesian frame to
+   * the local 2D cartesian frame
+   *
+   * @param v the point in local frame
+   *
+   * @return a local point2
+   */
+  ALGEBRA_HOST_DEVICE
+  inline point2 operator()(const point3 &v) const { return {v[0], v[1]}; }
 
-}  // namespace algebra::smatrix::math
+};  // struct cartesian2

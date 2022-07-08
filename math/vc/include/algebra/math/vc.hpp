@@ -11,3 +11,8 @@
 #include "algebra/math/impl/vc_getter.hpp"
 #include "algebra/math/impl/vc_transform3.hpp"
 #include "algebra/math/impl/vc_vector.hpp"
+
+// Common include(s)
+namespace algebra::cmath {
+#include "algebra/coordinate/coordinates.hpp"
+}  // namespace algebra::cmath

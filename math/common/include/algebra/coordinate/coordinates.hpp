@@ -11,4 +11,3 @@
 #include "algebra/coordinate/cartesian2.hpp"
 #include "algebra/coordinate/cylindrical2.hpp"
 #include "algebra/coordinate/polar2.hpp"
-#include "algebra/coordinate/radial.hpp"

@@ -20,7 +20,7 @@ namespace algebra::smatrix::math {
 /** Transform wrapper class to ensure standard API within differnt plugins
  *
  **/
-template <typename scalar_t>
+template <typename scalar_t, typename vector_actor_t>
 struct transform3 {
 
   /// @name Type definitions for the struct
@@ -44,6 +44,8 @@ struct transform3 {
 
   /// Function (object) used for accessing a matrix element
   using element_getter = algebra::smatrix::math::element_getter<scalar_t>;
+
+  using vector_actor = vector_actor_t;
 
   /// @}
 

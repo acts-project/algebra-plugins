@@ -48,16 +48,17 @@ TYPED_TEST_P(test_host_basics, local_vectors) {
 
   // Cast operations to phi, theta, eta, perp
   typename TypeParam::vector2 vD{1., 1.};
-  typename TypeParam::scalar phi = algebra::getter::phi(vD);
+  typename TypeParam::scalar phi = typename TypeParam::vector_actor().phi(vD);
   ASSERT_NEAR(phi, M_PI_4, this->m_epsilon);
 
-  typename TypeParam::scalar perp = algebra::getter::perp(vD);
+  typename TypeParam::scalar perp = typename TypeParam::vector_actor().perp(vD);
   ASSERT_NEAR(perp, std::sqrt(2.), this->m_epsilon);
 
-  typename TypeParam::scalar norm = algebra::getter::norm(vD);
+  typename TypeParam::scalar norm = typename TypeParam::vector_actor().norm(vD);
   ASSERT_NEAR(norm, std::sqrt(2.), this->m_epsilon);
 
-  typename TypeParam::vector2 vDnorm = algebra::vector::normalize(vD);
+  typename TypeParam::vector2 vDnorm =
+      typename TypeParam::vector_actor().normalize(vD);
   ASSERT_NEAR(vDnorm[0], 1. / std::sqrt(2.), this->m_epsilon);
   ASSERT_NEAR(vDnorm[1], 1. / std::sqrt(2.), this->m_epsilon);
 }
@@ -91,19 +92,20 @@ TYPED_TEST_P(test_host_basics, vector3) {
 
   // Cast operations to phi, theta, eta, perp
   typename TypeParam::vector3 vD{1., 1., 1.};
-  typename TypeParam::scalar phi = algebra::getter::phi(vD);
+  typename TypeParam::scalar phi = typename TypeParam::vector_actor().phi(vD);
   ASSERT_NEAR(phi, M_PI_4, this->m_epsilon);
 
-  typename TypeParam::scalar theta = algebra::getter::theta(vD);
+  typename TypeParam::scalar theta =
+      typename TypeParam::vector_actor().theta(vD);
   ASSERT_NEAR(theta, std::atan2(std::sqrt(2.), 1.), this->m_epsilon);
 
-  typename TypeParam::scalar eta = algebra::getter::eta(vD);
+  typename TypeParam::scalar eta = typename TypeParam::vector_actor().eta(vD);
   ASSERT_NEAR(eta, 0.65847891569137573, this->m_isclose);
 
-  typename TypeParam::scalar perp = algebra::getter::perp(vD);
+  typename TypeParam::scalar perp = typename TypeParam::vector_actor().perp(vD);
   ASSERT_NEAR(perp, std::sqrt(2.), this->m_epsilon);
 
-  typename TypeParam::scalar norm = algebra::getter::norm(vD);
+  typename TypeParam::scalar norm = typename TypeParam::vector_actor().norm(vD);
   ASSERT_NEAR(norm, std::sqrt(3.), this->m_epsilon);
 
   // Test on matrix - vector operations
@@ -129,13 +131,14 @@ TYPED_TEST_P(test_host_basics, vector3) {
   algebra::getter::element(vF, 1, 0) = 6;
   algebra::getter::element(vF, 2, 0) = 13;
 
-  typename TypeParam::vector3 vG = algebra::vector::cross(vD, vF);
+  typename TypeParam::vector3 vG =
+      typename TypeParam::vector_actor().cross(vD, vF);
   ASSERT_NEAR(vG[0], 7, this->m_epsilon);
   ASSERT_NEAR(vG[1], -8, this->m_epsilon);
   ASSERT_NEAR(vG[2], 1, this->m_epsilon);
 
   // Dot product on vector3 and matrix<3,1>
-  auto dot = algebra::vector::dot(vG, vF);
+  auto dot = typename TypeParam::vector_actor().dot(vG, vF);
   ASSERT_NEAR(dot, 0, this->m_epsilon);
 }
 
@@ -338,34 +341,39 @@ TYPED_TEST_P(test_host_basics, getter) {
   typename TypeParam::vector3 v3{1., 1., 1.};
 
   // Normalization
-  typename TypeParam::vector3 v3n = algebra::vector::normalize(v3);
+  typename TypeParam::vector3 v3n =
+      typename TypeParam::vector_actor().normalize(v3);
   ASSERT_NEAR(v3n[0], 1. / std::sqrt(3.), this->m_epsilon);
   ASSERT_NEAR(v3n[1], 1. / std::sqrt(3.), this->m_epsilon);
   ASSERT_NEAR(v3n[2], 1. / std::sqrt(3.), this->m_epsilon);
 
   // Cross product
-  typename TypeParam::vector3 z =
-      algebra::vector::normalize(typename TypeParam::vector3{3., 2., 1.});
-  typename TypeParam::vector3 x =
-      algebra::vector::normalize(typename TypeParam::vector3{2., -3., 0.});
-  typename TypeParam::vector3 y =
-      algebra::vector::cross(z, algebra::vector::normalize(x));
+  typename TypeParam::vector3 z = typename TypeParam::vector_actor().normalize(
+      typename TypeParam::vector3{3., 2., 1.});
+  typename TypeParam::vector3 x = typename TypeParam::vector_actor().normalize(
+      typename TypeParam::vector3{2., -3., 0.});
+  typename TypeParam::vector3 y = typename TypeParam::vector_actor().cross(
+      z, typename TypeParam::vector_actor().normalize(x));
 
   // Check with dot product
-  ASSERT_NEAR(algebra::vector::dot(x, y), 0., this->m_epsilon);
-  ASSERT_NEAR(algebra::vector::dot(y, z), 0., this->m_epsilon);
-  ASSERT_NEAR(algebra::vector::dot(z, x), 0., this->m_epsilon);
+  ASSERT_NEAR(typename TypeParam::vector_actor().dot(x, y), 0.,
+              this->m_epsilon);
+  ASSERT_NEAR(typename TypeParam::vector_actor().dot(y, z), 0.,
+              this->m_epsilon);
+  ASSERT_NEAR(typename TypeParam::vector_actor().dot(z, x), 0.,
+              this->m_epsilon);
 }
 
 // This defines the transform3 test suite
 TYPED_TEST_P(test_host_basics, transform3) {
 
   // Preparatioon work
-  typename TypeParam::vector3 z =
-      algebra::vector::normalize(typename TypeParam::vector3{3., 2., 1.});
-  typename TypeParam::vector3 x =
-      algebra::vector::normalize(typename TypeParam::vector3{2., -3., 0.});
-  typename TypeParam::vector3 y = algebra::vector::cross(z, x);
+  typename TypeParam::vector3 z = typename TypeParam::vector_actor().normalize(
+      typename TypeParam::vector3{3., 2., 1.});
+  typename TypeParam::vector3 x = typename TypeParam::vector_actor().normalize(
+      typename TypeParam::vector3{2., -3., 0.});
+  typename TypeParam::vector3 y =
+      typename TypeParam::vector_actor().cross(z, x);
   typename TypeParam::point3 t = {2., 3., 4.};
 
   // Test constructor from t, z, x
@@ -458,11 +466,12 @@ TYPED_TEST_P(test_host_basics, transform3) {
 TYPED_TEST_P(test_host_basics, global_transformations) {
 
   // Preparation work
-  typename TypeParam::vector3 z =
-      algebra::vector::normalize(typename TypeParam::vector3{3., 2., 1.});
-  typename TypeParam::vector3 x =
-      algebra::vector::normalize(typename TypeParam::vector3{2., -3., 0.});
-  typename TypeParam::vector3 y = algebra::vector::cross(z, x);
+  typename TypeParam::vector3 z = typename TypeParam::vector_actor().normalize(
+      typename TypeParam::vector3{3., 2., 1.});
+  typename TypeParam::vector3 x = typename TypeParam::vector_actor().normalize(
+      typename TypeParam::vector3{2., -3., 0.});
+  typename TypeParam::vector3 y =
+      typename TypeParam::vector_actor().cross(z, x);
   (void)y;
   typename TypeParam::point3 t = {2., 3., 4.};
   typename TypeParam::transform3 trf(t, z, x);

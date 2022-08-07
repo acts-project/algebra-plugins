@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/coordinates.hpp"
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/smatrix.hpp"
 #include "algebra/storage/smatrix.hpp"
@@ -17,17 +18,6 @@
 
 namespace algebra {
 namespace getter {
-
-/// @name Getter functions on @c algebra::smatrix::storage_type
-/// @{
-
-using smatrix::math::eta;
-using smatrix::math::norm;
-using smatrix::math::perp;
-using smatrix::math::phi;
-using smatrix::math::theta;
-
-/// @}
 
 /// Function extracting a slice from the matrix used by
 /// @c algebra::smatrix::transform3
@@ -49,24 +39,19 @@ using smatrix::math::element;
 
 }  // namespace getter
 
+using size_type = smatrix::size_type;
+template <typename T, size_type N>
+using array_type = smatrix::storage_type<T, N>;
+
 namespace vector {
 
-/// @name Vector functions on @c algebra::smatrix::storage_type
-/// @{
-
-using smatrix::math::cross;
-using smatrix::math::dot;
-using smatrix::math::normalize;
-
-/// @}
+template <typename scalar_t>
+using actor = smatrix::vector::actor<scalar_t>;
 
 }  // namespace vector
 
 namespace matrix {
 
-using size_type = smatrix::size_type;
-template <typename T, size_type N>
-using array_type = smatrix::storage_type<T, N>;
 template <typename T, size_type ROWS, size_type COLS>
 using matrix_type = smatrix::matrix_type<T, ROWS, COLS>;
 template <typename scalar_t>
@@ -140,18 +125,22 @@ namespace smatrix {
 /// @{
 
 template <typename T>
-using transform3_actor =
+using transform3_matrix_actor =
     algebra::matrix::actor<T, algebra::matrix::determinant::preset0<T>,
                            algebra::matrix::inverse::preset0<T>>;
 
 template <typename T>
-using transform3 = cmath::transform3<transform3_actor<T>>;
+using transform3_vector_actor = algebra::vector::actor<T>;
+
 template <typename T>
-using cartesian2 = cmath::cartesian2<transform3<T>>;
+using transform3 =
+    cmath::transform3<transform3_matrix_actor<T>, transform3_vector_actor<T>>;
 template <typename T>
-using polar2 = cmath::polar2<transform3<T>>;
+using cartesian2 = cartesian2<transform3<T>>;
 template <typename T>
-using cylindrical2 = cmath::cylindrical2<transform3<T>>;
+using polar2 = polar2<transform3<T>>;
+template <typename T>
+using cylindrical2 = cylindrical2<transform3<T>>;
 
 /// @}
 

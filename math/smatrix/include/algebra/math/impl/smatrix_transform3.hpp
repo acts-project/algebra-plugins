@@ -178,6 +178,18 @@ struct transform3 {
     return (_data.template Sub<ROOT::Math::SMatrix<scalar_type, 3, 3> >(0, 0));
   }
 
+  /** This method retrieves x axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 x() const { return (_data.template SubCol<vector3>(0, 0)); }
+
+  /** This method retrieves y axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 y() const { return (_data.template SubCol<vector3>(1, 0)); }
+
+  /** This method retrieves z axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 z() const { return (_data.template SubCol<vector3>(2, 0)); }
+
   /** This method retrieves the translation of a transform */
   ALGEBRA_HOST
   inline vector3 translation() const {

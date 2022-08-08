@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/coordinates.hpp"
+#include "algebra/coordinates/coordinates.hpp"
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/vc.hpp"
 #include "algebra/storage/vc.hpp"

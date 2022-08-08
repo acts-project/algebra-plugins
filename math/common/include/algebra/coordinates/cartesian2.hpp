@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/coordinates/coordinate_base.hpp"
 #include "algebra/qualifiers.hpp"
 
 namespace algebra {
@@ -15,61 +16,55 @@ namespace algebra {
 /** Frame projection into a cartesian coordinate frame
  */
 template <typename transform3_t>
-struct cartesian2 {
+struct cartesian2 final : public coordinate_base<transform3_t> {
 
   /// @name Type definitions for the struct
   /// @{
 
+  /// Base type
+  using base_type = coordinate_base<transform3_t>;
+  /// Sclar type
+  using scalar_type = typename base_type::scalar_type;
   /// Transformation matching this struct
-  using transform3_type = transform3_t;
-
+  using transform3_type = typename base_type::transform3_type;
   /// Point in 2D space
-  using point2 = typename transform3_type::point2;
+  using point2 = typename base_type::point2;
   /// Point in 3D space
-  using point3 = typename transform3_type::point3;
+  using point3 = typename base_type::point3;
   /// Vector in 3D space
-  using vector3 = typename transform3_type::vector3;
+  using vector3 = typename base_type::vector3;
+  /// Vector actor
+  using vector_actor = typename base_type::vector_actor;
 
   /// @}
 
-  /** This method transform from a point from the global 3D cartesian frame to
-   *the local 2D cartesian frame
-   *
-   * @param trf the transform from global to local thredimensional frame
-   * @param p the point in global frame
-   * @param v unused vector
-   *
-   * @return a local point2
-   **/
+  /** This method transform from a point from 2D cartesian frame to a 2D
+   * cartesian point */
   ALGEBRA_HOST_DEVICE
-  inline point2 operator()(const transform3_type &trf, const point3 &p,
-                           const vector3 & /*v*/) const {
+  inline point2 operator()(const point2 &local2) const {
 
-    return operator()(trf, p);
+    return {local2[0], local2[1]};
   }
 
-  /** This method transform from a point from the global 3D cartesian frame to
-   *the local 2D cartesian frame
-   *
-   * @param trf the transform from global to local thredimensional frame
-   * @param p the point in global frame
-   *
-   * @return a local point2
-   **/
+  /** This method transform from a point from 3D cartesian frame to a 2D
+   * cartesian point */
   ALGEBRA_HOST_DEVICE
-  inline point2 operator()(const transform3_type &trf, const point3 &p) const {
-    return operator()(trf.point_to_local(p));
+  inline point2 operator()(const point3 &local3) const {
+
+    return {local3[0], local3[1]};
   }
 
-  /** This method transform from a point from the global 3D cartesian frame to
-   * the local 2D cartesian frame
-   *
-   * @param v the point in local frame
-   *
-   * @return a local point2
-   */
   ALGEBRA_HOST_DEVICE
-  inline point2 operator()(const point3 &v) const { return {v[0], v[1]}; }
+  inline point2 global_to_local(const transform3_type &trf, const point3 &p) {
+    const auto local3 = trf.point_to_local(p);
+    return this->operator()(local3);
+  }
+
+  ALGEBRA_HOST_DEVICE
+  inline point2 global_to_local(const transform3_type &trf, const point3 &p,
+                                const vector3 & /*d*/) {
+    return global_to_local(trf, p);
+  }
 
 };  // struct cartesian2
 

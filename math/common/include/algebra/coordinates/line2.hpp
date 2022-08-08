@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -11,12 +11,13 @@
 #include "algebra/coordinates/coordinate_base.hpp"
 #include "algebra/qualifiers.hpp"
 
+// System include(s).
+#include <climits>
+
 namespace algebra {
 
-/** Local frame projection into a polar coordinate frame
- */
 template <typename transform3_t>
-struct cylindrical2 : public coordinate_base<transform3_t> {
+struct line2 : public coordinate_base<transform3_t> {
 
   /// @name Type definitions for the struct
   /// @{
@@ -39,25 +40,35 @@ struct cylindrical2 : public coordinate_base<transform3_t> {
   /// @}
 
   /** This method transform from a point from 3D cartesian frame to a 2D
-   * cylindrical point */
+   * line point */
   ALGEBRA_HOST_DEVICE
-  inline point2 operator()(const point3 &p) const {
+  inline point2 operator()(const point3 &local3, int sign) const {
 
-    return {vector_actor().perp(p) * vector_actor().phi(p), p[2]};
-  }
-
-  ALGEBRA_HOST_DEVICE
-  inline point2 global_to_local(const transform3_type &trf, const point3 &p) {
-    const auto local3 = trf.point_to_local(p);
-    return this->operator()(local3);
+    return {sign * vector_actor().perp(local3), local3[2]};
   }
 
   ALGEBRA_HOST_DEVICE
   inline point2 global_to_local(const transform3_type &trf, const point3 &p,
-                                const vector3 & /*d*/) {
-    return global_to_local(trf, p);
-  }
+                                const vector3 &d) {
 
-};  // struct cylindrical2
+    const auto local3 = trf.point_to_local(p);
+
+    // Line direction
+    const vector3 z = trf.z();
+
+    // Line center
+    const point3 t = trf.translation();
+
+    // Radial vector
+    const auto r = vector_actor().cross(z, d);
+
+    // Assign the sign depending on the position w.r.t line
+    // Right -1
+    // Left: 1
+    const scalar_type sign = vector_actor().dot(r, t - p) > 0. ? -1. : 1.;
+
+    return this->operator()(local3, sign);
+  }
+};
 
 }  // namespace algebra

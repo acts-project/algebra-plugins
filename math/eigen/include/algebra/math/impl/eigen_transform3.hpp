@@ -182,6 +182,18 @@ struct transform3 {
     return _data.matrix().template block<3, 3>(0, 0);
   }
 
+  /** This method retrieves x axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 x() const { return _data.matrix().template block<3, 1>(0, 0); }
+
+  /** This method retrieves y axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 y() const { return _data.matrix().template block<3, 1>(0, 1); }
+
+  /** This method retrieves z axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 z() const { return _data.matrix().template block<3, 1>(0, 2); }
+
   /** This method retrieves the translation of a transform **/
   ALGEBRA_HOST_DEVICE
   inline auto translation() const {

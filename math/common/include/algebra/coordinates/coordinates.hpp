@@ -9,4 +9,5 @@
 
 #include "algebra/coordinates/cartesian2.hpp"
 #include "algebra/coordinates/cylindrical2.hpp"
+#include "algebra/coordinates/line2.hpp"
 #include "algebra/coordinates/polar2.hpp"

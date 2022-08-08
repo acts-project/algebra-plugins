@@ -6,7 +6,7 @@
  */
 
 // Project include(s).
-#include "algebra/coordinates.hpp"
+#include "algebra/coordinates/coordinates.hpp"
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/eigen.hpp"
 #include "algebra/storage/eigen.hpp"

@@ -354,6 +354,18 @@ struct transform3 {
     return submatrix;
   }
 
+  /** This method retrieves z axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 x() const { return {_data.x[0], _data.x[1], _data.x[2]}; }
+
+  /** This method retrieves z axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 y() const { return {_data.y[0], _data.y[1], _data.y[2]}; }
+
+  /** This method retrieves z axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 z() const { return {_data.z[0], _data.z[1], _data.z[2]}; }
+
   /** This method retrieves the translation of a transform */
   ALGEBRA_HOST_DEVICE
   inline point3 translation() const {

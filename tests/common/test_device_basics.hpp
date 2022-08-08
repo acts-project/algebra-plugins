@@ -232,7 +232,7 @@ class test_device_basics : public test_base<T> {
     transform3 tr(t1, t2, t3);
     cartesian2 ca;
 
-    point2 p1 = ca(tr, a);
+    point2 p1 = ca.global_to_local(tr, a);
     point2 p2 = ca(b);
 
     return {vector_actor().phi(p1) + vector_actor().norm(p2)};
@@ -246,7 +246,7 @@ class test_device_basics : public test_base<T> {
     transform3 tr(t1, t2, t3);
     cylindrical2 cy;
 
-    point2 p1 = cy(tr, a);
+    point2 p1 = cy.global_to_local(tr, a);
     point2 p2 = cy(b);
 
     return {vector_actor().phi(p1) + vector_actor().norm(p2)};
@@ -260,7 +260,7 @@ class test_device_basics : public test_base<T> {
     transform3 tr(t1, t2, t3);
     polar2 po;
 
-    point2 p1 = po(tr, a);
+    point2 p1 = po.global_to_local(tr, a);
     point2 p2 = po(b);
     point2 p3 = po(p1);
 

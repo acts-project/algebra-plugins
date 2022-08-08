@@ -124,6 +124,8 @@ template <typename T>
 using polar2 = polar2<transform3<T>>;
 template <typename T>
 using cylindrical2 = cylindrical2<transform3<T>>;
+template <typename T>
+using line2 = line2<transform3<T>>;
 
 /// @}
 

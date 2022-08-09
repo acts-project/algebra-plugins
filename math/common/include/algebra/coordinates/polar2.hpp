@@ -11,6 +11,9 @@
 #include "algebra/coordinates/coordinate_base.hpp"
 #include "algebra/qualifiers.hpp"
 
+// System include(s).
+#include <cmath>
+
 namespace algebra {
 
 template <typename transform3_t>
@@ -48,16 +51,24 @@ struct polar2 : public coordinate_base<transform3_t> {
     return {vector_actor().perp(p), vector_actor().phi(p)};
   }
 
+  /** This method transform from a point from global cartesian 3D frame to a
+   * local 2D polar point */
   ALGEBRA_HOST_DEVICE
-  inline point2 global_to_local(const transform3_type &trf, const point3 &p) {
+  inline point2 global_to_local(const transform3_type &trf,
+                                const point3 &p) const {
     const auto local3 = trf.point_to_local(p);
     return this->operator()(local3);
   }
 
+  /** This method transform from a local 2D polar point to a point global
+   * cartesian 3D frame*/
   ALGEBRA_HOST_DEVICE
-  inline point2 global_to_local(const transform3_type &trf, const point3 &p,
-                                const vector3 & /*d*/) {
-    return global_to_local(trf, p);
+  inline point3 local_to_global(const transform3_type &trf,
+                                const point2 &p) const {
+    const scalar_type x = p[0] * std::cos(p[1]);
+    const scalar_type y = p[0] * std::sin(p[1]);
+
+    return trf.point_to_global(point3{x, y, 0.});
   }
 };
 

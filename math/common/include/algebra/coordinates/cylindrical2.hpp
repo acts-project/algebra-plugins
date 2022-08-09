@@ -11,6 +11,9 @@
 #include "algebra/coordinates/coordinate_base.hpp"
 #include "algebra/qualifiers.hpp"
 
+// System include(s).
+#include <cmath>
+
 namespace algebra {
 
 /** Local frame projection into a polar coordinate frame
@@ -46,16 +49,28 @@ struct cylindrical2 : public coordinate_base<transform3_t> {
     return {vector_actor().perp(p) * vector_actor().phi(p), p[2]};
   }
 
+  /** This method transform from a point from global cartesian 3D frame to a
+   * local 2D cylindrical point */
   ALGEBRA_HOST_DEVICE
-  inline point2 global_to_local(const transform3_type &trf, const point3 &p) {
+  inline point2 global_to_local(const transform3_type &trf,
+                                const point3 &p) const {
     const auto local3 = trf.point_to_local(p);
     return this->operator()(local3);
   }
 
-  ALGEBRA_HOST_DEVICE
-  inline point2 global_to_local(const transform3_type &trf, const point3 &p,
-                                const vector3 & /*d*/) {
-    return global_to_local(trf, p);
+  /** This method transform from a local 2D cylindrical point to a point global
+   * cartesian 3D frame*/
+  template <typename cylinder_mask_t>
+  ALGEBRA_HOST_DEVICE inline point3 local_to_global(
+      const transform3_type &trf, const point2 &p,
+      const cylinder_mask_t &mask) const {
+    const scalar_type r = mask.radius();
+    const scalar_type phi = p[0] / r;
+    const scalar_type x = r * std::cos(phi);
+    const scalar_type y = r * std::sin(phi);
+    const scalar_type z = p[1];
+
+    return trf.point_to_global(point3{x, y, z});
   }
 
 };  // struct cylindrical2

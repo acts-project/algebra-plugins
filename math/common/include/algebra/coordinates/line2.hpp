@@ -47,9 +47,11 @@ struct line2 : public coordinate_base<transform3_t> {
     return {sign * vector_actor().perp(local3), local3[2]};
   }
 
+  /** This method transform from a point from global cartesian 3D frame to a
+   * local 2D line point */
   ALGEBRA_HOST_DEVICE
   inline point2 global_to_local(const transform3_type &trf, const point3 &p,
-                                const vector3 &d) {
+                                const vector3 &d) const {
 
     const auto local3 = trf.point_to_local(p);
 
@@ -60,15 +62,33 @@ struct line2 : public coordinate_base<transform3_t> {
     const point3 t = trf.translation();
 
     // Radial vector
-    const auto r = vector_actor().cross(z, d);
+    const vector3 r = vector_actor().cross(z, d);
 
     // Assign the sign depending on the position w.r.t line
-    // Right -1
+    // Right: -1
     // Left: 1
     const scalar_type sign = vector_actor().dot(r, t - p) > 0. ? -1. : 1.;
 
     return this->operator()(local3, sign);
   }
+
+  /** This method transform from a local 2D line point to a point global
+   * cartesian 3D frame*/
+  ALGEBRA_HOST_DEVICE
+  inline point3 local_to_global(const transform3_type &trf, const point2 &p,
+                                const vector3 &d) const {
+
+    // Line direction
+    const vector3 z = trf.z();
+
+    // Radial vector
+    const vector3 r = vector_actor().cross(z, d);
+
+    // Local Z poisition in global cartesian coordinate
+    const point3 locZ_in_global = trf.point_to_global(point3{0., 0., p[1]});
+
+    return locZ_in_global + p[0] * vector_actor().normalize(r);
+  };
 };
 
 }  // namespace algebra

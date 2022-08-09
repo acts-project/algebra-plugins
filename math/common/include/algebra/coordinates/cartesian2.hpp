@@ -54,16 +54,21 @@ struct cartesian2 final : public coordinate_base<transform3_t> {
     return {local3[0], local3[1]};
   }
 
+  /** This method transform from a point from global cartesian 3D frame to a
+   * local 2D cartesian point */
   ALGEBRA_HOST_DEVICE
-  inline point2 global_to_local(const transform3_type &trf, const point3 &p) {
+  inline point2 global_to_local(const transform3_type &trf,
+                                const point3 &p) const {
     const auto local3 = trf.point_to_local(p);
     return this->operator()(local3);
   }
 
+  /** This method transform from a local 2D cartesian point to a point global
+   * cartesian 3D frame*/
   ALGEBRA_HOST_DEVICE
-  inline point2 global_to_local(const transform3_type &trf, const point3 &p,
-                                const vector3 & /*d*/) {
-    return global_to_local(trf, p);
+  inline point3 local_to_global(const transform3_type &trf,
+                                const point2 &p) const {
+    return trf.point_to_global(point3{p[0], p[1], 0.});
   }
 
 };  // struct cartesian2

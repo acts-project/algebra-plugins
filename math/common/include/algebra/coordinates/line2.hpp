@@ -42,7 +42,7 @@ struct line2 : public coordinate_base<transform3_t> {
   /** This method transform from a point from 3D cartesian frame to a 2D
    * line point */
   ALGEBRA_HOST_DEVICE
-  inline point2 operator()(const point3 &local3, int sign) const {
+  inline point2 operator()(const point3 &local3, scalar_type sign) const {
 
     return {sign * vector_actor().perp(local3), local3[2]};
   }
@@ -67,7 +67,8 @@ struct line2 : public coordinate_base<transform3_t> {
     // Assign the sign depending on the position w.r.t line
     // Right: -1
     // Left: 1
-    const scalar_type sign = vector_actor().dot(r, t - p) > 0. ? -1. : 1.;
+    const scalar_type sign =
+        vector_actor().dot(r, t - p) > 0. ? scalar_type{-1.} : scalar_type{1.};
 
     return this->operator()(local3, sign);
   }

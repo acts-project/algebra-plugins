@@ -627,9 +627,8 @@ TYPED_TEST_P(test_host_basics, cylindrical2) {
   /*
   const typename TypeParam::point3 global1 = {2. + std::sqrt(2.),
                                               3. + std::sqrt(2.), 9.};
-  */                                              
+  */
   const typename TypeParam::point3 global1 = {3.4142136, 4.4142136, 9.};
-
 
   // Global to local transformation
   const typename TypeParam::point2 local = c2.global_to_local(trf, global1);

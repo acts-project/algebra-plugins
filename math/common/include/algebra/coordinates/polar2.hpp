@@ -14,7 +14,7 @@
 // System include(s).
 #include <cmath>
 
-namespace algebra {
+namespace algebra::common {
 
 template <typename transform3_t>
 struct polar2 : public coordinate_base<transform3_t> {
@@ -72,4 +72,4 @@ struct polar2 : public coordinate_base<transform3_t> {
   }
 };
 
-}  // namespace algebra
+}  // namespace algebra::common

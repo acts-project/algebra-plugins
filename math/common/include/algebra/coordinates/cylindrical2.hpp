@@ -14,7 +14,7 @@
 // System include(s).
 #include <cmath>
 
-namespace algebra {
+namespace algebra::common {
 
 /** Local frame projection into a polar coordinate frame
  */
@@ -75,4 +75,4 @@ struct cylindrical2 : public coordinate_base<transform3_t> {
 
 };  // struct cylindrical2
 
-}  // namespace algebra
+}  // namespace algebra::common

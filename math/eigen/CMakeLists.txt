@@ -5,14 +5,12 @@
 # Mozilla Public License Version 2.0
 
 # Set up the library.
-algebra_add_library( algebra_eigen_math eigen_math
+algebra_add_library(algebra_eigen_math eigen_math
    "include/algebra/math/eigen.hpp"
-   "include/algebra/math/impl/eigen_cartesian2.hpp"
-   "include/algebra/math/impl/eigen_cylindrical2.hpp"
+   "include/algebra/math/impl/eigen_coordinates.hpp"
    "include/algebra/math/impl/eigen_getter.hpp"
    "include/algebra/math/impl/eigen_matrix.hpp"
-   "include/algebra/math/impl/eigen_polar2.hpp"
    "include/algebra/math/impl/eigen_transform3.hpp"
-   "include/algebra/math/impl/eigen_vector.hpp" )
-target_link_libraries( algebra_eigen_math
-   INTERFACE algebra::common algebra::common_math Eigen3::Eigen )
+   "include/algebra/math/impl/eigen_vector.hpp")
+target_link_libraries(algebra_eigen_math
+   INTERFACE algebra::common algebra::common_math Eigen3::Eigen)

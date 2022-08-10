@@ -7,7 +7,7 @@
 
 #pragma once
 
-// Common include(s).
+// Project include(s).
 #include "algebra/coordinates/cartesian2.hpp"
 #include "algebra/coordinates/cylindrical2.hpp"
 #include "algebra/coordinates/line2.hpp"

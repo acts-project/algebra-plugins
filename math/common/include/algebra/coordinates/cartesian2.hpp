@@ -11,7 +11,7 @@
 #include "algebra/coordinates/coordinate_base.hpp"
 #include "algebra/qualifiers.hpp"
 
-namespace algebra {
+namespace algebra::common {
 
 /** Frame projection into a cartesian coordinate frame
  */
@@ -73,4 +73,4 @@ struct cartesian2 final : public coordinate_base<transform3_t> {
 
 };  // struct cartesian2
 
-}  // namespace algebra
+}  // namespace algebra::common

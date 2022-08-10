@@ -12,6 +12,7 @@
 
 // System include(s).
 #include <cstddef>
+#include <type_traits>
 
 namespace algebra::cmath {
 

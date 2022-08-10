@@ -10,7 +10,7 @@
 // Project include(s).
 #include "algebra/qualifiers.hpp"
 
-namespace algebra {
+namespace algebra::common {
 
 /** Local frame projection into a polar coordinate frame
  */
@@ -74,4 +74,4 @@ struct cylindrical2 {
 
 };  // struct cylindrical2
 
-}  // namespace algebra
+}  // namespace algebra::common

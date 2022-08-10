@@ -10,7 +10,7 @@
 // Project include(s).
 #include "algebra/qualifiers.hpp"
 
-namespace algebra {
+namespace algebra::common {
 
 /** Frame projection into a cartesian coordinate frame
  */
@@ -73,4 +73,4 @@ struct cartesian2 {
 
 };  // struct cartesian2
 
-}  // namespace algebra
+}  // namespace algebra::common

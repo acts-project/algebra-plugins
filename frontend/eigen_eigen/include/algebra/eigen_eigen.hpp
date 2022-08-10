@@ -6,8 +6,6 @@
  */
 
 // Project include(s).
-#include "algebra/coordinates.hpp"
-#include "algebra/math/cmath.hpp"
 #include "algebra/math/eigen.hpp"
 #include "algebra/storage/eigen.hpp"
 
@@ -63,11 +61,11 @@ namespace eigen {
 template <typename T>
 using transform3 = math::transform3<T, algebra::vector::actor>;
 template <typename T>
-using cartesian2 = cartesian2<transform3<T> >;
+using cartesian2 = coordinate::cartesian2<transform3<T> >;
 template <typename T>
-using polar2 = polar2<transform3<T> >;
+using polar2 = coordinate::polar2<transform3<T> >;
 template <typename T>
-using cylindrical2 = cylindrical2<transform3<T> >;
+using cylindrical2 = coordinate::cylindrical2<transform3<T> >;
 
 /// @}
 

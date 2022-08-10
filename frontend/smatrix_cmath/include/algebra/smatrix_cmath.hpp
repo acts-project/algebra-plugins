@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/coordinates.hpp"
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/smatrix.hpp"
 #include "algebra/storage/smatrix.hpp"
@@ -136,11 +135,11 @@ template <typename T>
 using transform3 =
     cmath::transform3<transform3_matrix_actor<T>, transform3_vector_actor<T>>;
 template <typename T>
-using cartesian2 = cartesian2<transform3<T>>;
+using cartesian2 = cmath::coordinate::cartesian2<transform3<T>>;
 template <typename T>
-using polar2 = polar2<transform3<T>>;
+using polar2 = cmath::coordinate::polar2<transform3<T>>;
 template <typename T>
-using cylindrical2 = cylindrical2<transform3<T>>;
+using cylindrical2 = cmath::coordinate::cylindrical2<transform3<T>>;
 
 /// @}
 

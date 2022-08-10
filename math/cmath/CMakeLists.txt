@@ -8,12 +8,9 @@
 algebra_add_library( algebra_cmath_math cmath_math
    # impl include
    "include/algebra/math/cmath.hpp"
-   "include/algebra/math/impl/cmath_cartesian2.hpp"
-   "include/algebra/math/impl/cmath_cylindrical2.hpp"
    "include/algebra/math/impl/cmath_getter.hpp"
    "include/algebra/math/impl/cmath_matrix.hpp"
    "include/algebra/math/impl/cmath_operator.hpp"
-   "include/algebra/math/impl/cmath_polar2.hpp"
    "include/algebra/math/impl/cmath_transform3.hpp"
    "include/algebra/math/impl/cmath_vector.hpp"
    # algorithms include

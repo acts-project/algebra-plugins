@@ -49,7 +49,7 @@ typedef testing::Types<
         algebra::vecmem::point3<double>, algebra::vecmem::vector2<double>,
         algebra::vecmem::vector3<double>, algebra::vecmem::transform3<double>,
         algebra::vecmem::cartesian2<double>, algebra::vecmem::polar2<double>,
-        algebra::vecmem::cylindrical2<double>, algebra::vecmem::line2<float>,
+        algebra::vecmem::cylindrical2<double>, algebra::vecmem::line2<double>,
         std::size_t, algebra::vecmem::matrix_type,
         algebra::vector::actor<double>,
         algebra::matrix::actor<double,

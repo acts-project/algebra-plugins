@@ -49,7 +49,7 @@ typedef testing::Types<
         algebra::eigen::vector2<double>, algebra::eigen::vector3<double>,
         algebra::eigen::transform3<double>, algebra::eigen::cartesian2<double>,
         algebra::eigen::polar2<double>, algebra::eigen::cylindrical2<double>,
-        algebra::eigen::line2<float>, int, algebra::eigen::matrix_type,
+        algebra::eigen::line2<double>, int, algebra::eigen::matrix_type,
         algebra::vector::actor,
         algebra::matrix::actor<double,
                                algebra::matrix::determinant::preset0<double>,

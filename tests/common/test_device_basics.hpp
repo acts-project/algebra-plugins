@@ -34,6 +34,7 @@ class test_device_basics : public test_base<T> {
   using cartesian2 = typename test_base<T>::cartesian2;
   using polar2 = typename test_base<T>::polar2;
   using cylindrical2 = typename test_base<T>::cylindrical2;
+  using line2 = typename test_base<T>::line2;
   using size_type = typename test_base<T>::size_type;
   template <size_type ROWS, size_type COLS>
   using matrix = typename test_base<T>::template matrix<ROWS, COLS>;
@@ -234,8 +235,10 @@ class test_device_basics : public test_base<T> {
 
     point2 p1 = ca.global_to_local(tr, a);
     point2 p2 = ca(b);
+    point3 p3 = ca.local_to_global(tr, p2);
 
-    return {vector_actor().phi(p1) + vector_actor().norm(p2)};
+    return {vector_actor().phi(p1) + vector_actor().norm(p2) +
+            vector_actor().perp(p3)};
   }
 
   /// Perform various operations using the @c cylintridcal2 type
@@ -246,10 +249,21 @@ class test_device_basics : public test_base<T> {
     transform3 tr(t1, t2, t3);
     cylindrical2 cy;
 
+    // Define cylinder mask
+    struct cylinder_mask {
+      scalar r = 0.;
+      ALGEBRA_HOST_DEVICE scalar radius() const { return r; }
+    };
+
+    const scalar r = 2.;
+    const cylinder_mask mask{r};
+
     point2 p1 = cy.global_to_local(tr, a);
     point2 p2 = cy(b);
+    point3 p3 = cy.local_to_global(tr, p2, mask);
 
-    return {vector_actor().phi(p1) + vector_actor().norm(p2)};
+    return {vector_actor().phi(p1) + vector_actor().norm(p2) +
+            vector_actor().perp(p3)};
   }
 
   /// Perform various operations using the @c polar2 type
@@ -263,8 +277,24 @@ class test_device_basics : public test_base<T> {
     point2 p1 = po.global_to_local(tr, a);
     point2 p2 = po(b);
     point2 p3 = po(p1);
+    point3 p4 = po.local_to_global(tr, p2);
 
-    return {vector_actor().phi(p2) + vector_actor().norm(p3)};
+    return {vector_actor().phi(p2) + vector_actor().norm(p3) +
+            +vector_actor().perp(p4)};
+  }
+
+  /// Perform various operations using the @c line2 type
+  ALGEBRA_HOST_DEVICE
+  scalar line2_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
+                   vector3 b) const {
+
+    transform3 tr(t1, t2, t3);
+    line2 li;
+
+    point2 p1 = li.global_to_local(tr, a, b);
+    point3 p2 = li.local_to_global(tr, p1, b);
+
+    return {vector_actor().phi(p1) + vector_actor().norm(p2)};
   }
 
 };  // class test_device_basics

@@ -14,8 +14,6 @@
 #include <cstddef>
 #include <type_traits>
 
-namespace algebra::cmath {
-
 /// @name Operators on 2-element arrays
 /// @{
 
@@ -282,5 +280,3 @@ ALGEBRA_HOST_DEVICE inline array_t<scalar_t, ROWS> operator*(
 }
 
 /// @}
-
-}  // namespace algebra::cmath

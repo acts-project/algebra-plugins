@@ -7,6 +7,9 @@
 
 #pragma once
 
+// Common include(s).
+#include "algebra/math/operators.hpp"
+
 // Project include(s).
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/vc.hpp"
@@ -15,15 +18,6 @@
 // System include(s).
 #include <cassert>
 #include <type_traits>
-
-/// @name Operators on @c algebra::array::storage_type
-/// @{
-
-using algebra::cmath::operator*;
-using algebra::cmath::operator-;
-using algebra::cmath::operator+;
-
-/// @}
 
 namespace algebra {
 

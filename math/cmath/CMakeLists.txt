@@ -7,6 +7,7 @@
 # Set up the library.
 algebra_add_library( algebra_cmath_math cmath_math
    # impl include
+   "include/algebra/math/cmath_operators.hpp"
    "include/algebra/math/cmath.hpp"
    "include/algebra/math/impl/cmath_coordinates.hpp"
    "include/algebra/math/impl/cmath_getter.hpp"

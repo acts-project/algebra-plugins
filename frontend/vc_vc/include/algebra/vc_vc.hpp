@@ -7,8 +7,8 @@
 
 #pragma once
 
-// Common include(s).
-#include "algebra/math/operators.hpp"
+// Operators include(s).
+#include "algebra/math/cmath_operators.hpp"
 
 // Project include(s).
 #include "algebra/math/cmath.hpp"

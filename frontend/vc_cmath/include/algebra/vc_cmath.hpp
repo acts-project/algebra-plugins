@@ -12,15 +12,6 @@
 #include "algebra/math/vc.hpp"
 #include "algebra/storage/vc.hpp"
 
-/// @name Operators on @c algebra::vc types
-/// @{
-
-using algebra::cmath::operator*;
-using algebra::cmath::operator-;
-using algebra::cmath::operator+;
-
-/// @}
-
 namespace algebra {
 namespace getter {
 

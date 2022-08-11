@@ -11,15 +11,6 @@
 #include "algebra/math/cmath.hpp"
 #include "algebra/storage/vecmem.hpp"
 
-/// @name Operators on @c algebra::vecmem::storage_type
-/// @{
-
-using algebra::cmath::operator*;
-using algebra::cmath::operator-;
-using algebra::cmath::operator+;
-
-/// @}
-
 namespace algebra {
 
 namespace getter {

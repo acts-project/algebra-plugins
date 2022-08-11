@@ -284,3 +284,12 @@ ALGEBRA_HOST_DEVICE inline array_t<scalar_t, ROWS> operator*(
 /// @}
 
 }  // namespace algebra::cmath
+
+/// @name Operators on @c algebra::array::storage_type
+/// @{
+
+using algebra::cmath::operator*;
+using algebra::cmath::operator-;
+using algebra::cmath::operator+;
+
+/// @}

@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/coordinates/coordinates.hpp"
+#include "algebra/math/impl/cmath_operator.hpp"
 
 namespace algebra::cmath::coordinate {
 

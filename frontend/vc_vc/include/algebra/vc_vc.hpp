@@ -16,6 +16,15 @@
 #include <cassert>
 #include <type_traits>
 
+/// @name Operators on @c algebra::array::storage_type
+/// @{
+
+using algebra::cmath::operator*;
+using algebra::cmath::operator-;
+using algebra::cmath::operator+;
+
+/// @}
+
 namespace algebra {
 
 using size_type = vc::size_type;

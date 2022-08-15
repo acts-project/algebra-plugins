@@ -24,17 +24,6 @@ namespace algebra {
 
 namespace getter {
 
-/// @name Getter functions on @c algebra::vecmem::storage_type
-/// @{
-
-using cmath::eta;
-using cmath::norm;
-using cmath::perp;
-using cmath::phi;
-using cmath::theta;
-
-/// @}
-
 /// Function extracting a slice from the matrix used by
 /// @c algebra::vecmem::transform3
 template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
@@ -56,25 +45,19 @@ using cmath::element;
 
 }  // namespace getter
 
-namespace vector {
-
-/// @name Vector functions on @c algebra::vecmem::storage_type
-/// @{
-
-using cmath::cross;
-using cmath::dot;
-using cmath::normalize;
-
-/// @}
-
-}  // namespace vector
-
-namespace matrix {
-
 using size_type = std::size_t;
 
 template <typename T, size_type N>
 using array_type = vecmem::storage_type<T, N>;
+
+namespace vector {
+
+template <typename scalar_t>
+using actor = cmath::vector::actor<size_type, array_type, scalar_t>;
+
+}  // namespace vector
+
+namespace matrix {
 
 template <typename T, size_type ROWS, size_type COLS>
 using matrix_type = vecmem::matrix_type<T, ROWS, COLS>;
@@ -151,18 +134,21 @@ namespace vecmem {
 /// @{
 
 template <typename T>
-using transform3_actor = matrix::actor<T, matrix::determinant::preset0<T>,
-                                       matrix::inverse::preset0<T>>;
+using transform3_matrix_actor =
+    matrix::actor<T, matrix::determinant::preset0<T>,
+                  matrix::inverse::preset0<T>>;
+template <typename T>
+using transform3_vector_actor = vector::actor<T>;
 
 template <typename T>
-using transform3 = cmath::transform3<transform3_actor<T>>;
+using transform3 =
+    cmath::transform3<transform3_matrix_actor<T>, transform3_vector_actor<T>>;
 template <typename T>
-using cartesian2 = cmath::cartesian2<transform3<T>>;
+using cartesian2 = cmath::coordinate::cartesian2<transform3<T>>;
 template <typename T>
-using polar2 = cmath::polar2<transform3<T>>;
+using polar2 = cmath::coordinate::polar2<transform3<T>>;
 template <typename T>
-using cylindrical2 = cmath::cylindrical2<transform3<T>>;
-
+using cylindrical2 = cmath::coordinate::cylindrical2<transform3<T>>;
 /// @}
 
 }  // namespace vecmem

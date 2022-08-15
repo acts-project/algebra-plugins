@@ -40,6 +40,7 @@ typedef testing::Types<
         algebra::vecmem::transform3<float>, algebra::vecmem::cartesian2<float>,
         algebra::vecmem::polar2<float>, algebra::vecmem::cylindrical2<float>,
         std::size_t, algebra::vecmem::matrix_type,
+        algebra::vector::actor<float>,
         algebra::matrix::actor<float,
                                algebra::matrix::determinant::preset0<float>,
                                algebra::matrix::inverse::preset0<float>>>,
@@ -49,7 +50,7 @@ typedef testing::Types<
         algebra::vecmem::vector3<double>, algebra::vecmem::transform3<double>,
         algebra::vecmem::cartesian2<double>, algebra::vecmem::polar2<double>,
         algebra::vecmem::cylindrical2<double>, std::size_t,
-        algebra::vecmem::matrix_type,
+        algebra::vecmem::matrix_type, algebra::vector::actor<double>,
         algebra::matrix::actor<double,
                                algebra::matrix::determinant::preset0<double>,
                                algebra::matrix::inverse::preset0<double>>>>

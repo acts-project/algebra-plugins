@@ -40,7 +40,7 @@ typedef testing::Types<
         algebra::smatrix::transform3<float>,
         algebra::smatrix::cartesian2<float>, algebra::smatrix::polar2<float>,
         algebra::smatrix::cylindrical2<float>, unsigned int,
-        algebra::smatrix::matrix_type,
+        algebra::smatrix::matrix_type, algebra::vector::actor<float>,
         algebra::matrix::actor<float,
                                algebra::matrix::determinant::preset0<float>,
                                algebra::matrix::inverse::preset0<float>>>,
@@ -50,7 +50,7 @@ typedef testing::Types<
         algebra::smatrix::vector3<double>, algebra::smatrix::transform3<double>,
         algebra::smatrix::cartesian2<double>, algebra::smatrix::polar2<double>,
         algebra::smatrix::cylindrical2<double>, unsigned int,
-        algebra::smatrix::matrix_type,
+        algebra::smatrix::matrix_type, algebra::vector::actor<double>,
         algebra::matrix::actor<double,
                                algebra::matrix::determinant::preset0<double>,
                                algebra::matrix::inverse::preset0<double>>>>

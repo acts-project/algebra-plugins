@@ -26,17 +26,6 @@ namespace algebra {
 
 namespace getter {
 
-/// @name Getter functions on @c algebra::eigen::storage_type
-/// @{
-
-using eigen::math::eta;
-using eigen::math::norm;
-using eigen::math::perp;
-using eigen::math::phi;
-using eigen::math::theta;
-
-/// @}
-
 /// Function extracting a slice from the matrix used by
 /// @c algebra::eigen::transform3
 template <unsigned int SIZE, typename derived_type>
@@ -55,24 +44,18 @@ using eigen::math::element;
 
 }  // namespace getter
 
+using size_type = eigen::size_type;
+template <typename T, size_type N>
+using array_type = eigen::storage_type<T, N>;
+
 namespace vector {
 
-/// @name Vector functions on @c algebra::eigen::storage_type
-/// @{
-
-using eigen::math::cross;
-using eigen::math::dot;
-using eigen::math::normalize;
-
-/// @}
+using actor = eigen::vector::actor;
 
 }  // namespace vector
 
 namespace matrix {
 
-using size_type = eigen::size_type;
-template <typename T, size_type N>
-using array_type = eigen::storage_type<T, N>;
 template <typename T, size_type ROWS, size_type COLS>
 using matrix_type = eigen::matrix_type<T, ROWS, COLS>;
 using element_getter = eigen::math::element_getter;
@@ -143,18 +126,19 @@ namespace eigen {
 /// @{
 
 template <typename T>
-using transform3_actor =
+using transform3_matrix_actor =
     algebra::matrix::actor<T, algebra::matrix::determinant::preset0<T>,
                            algebra::matrix::inverse::preset0<T>>;
 
 template <typename T>
-using transform3 = cmath::transform3<transform3_actor<T>>;
+using transform3 =
+    cmath::transform3<transform3_matrix_actor<T>, algebra::vector::actor>;
 template <typename T>
-using cartesian2 = cmath::cartesian2<transform3<T>>;
+using cartesian2 = cmath::coordinate::cartesian2<transform3<T>>;
 template <typename T>
-using polar2 = cmath::polar2<transform3<T>>;
+using polar2 = cmath::coordinate::polar2<transform3<T>>;
 template <typename T>
-using cylindrical2 = cmath::cylindrical2<transform3<T>>;
+using cylindrical2 = cmath::coordinate::cylindrical2<transform3<T>>;
 
 /// @}
 

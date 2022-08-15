@@ -10,11 +10,12 @@
 // Project include(s).
 #include "algebra/qualifiers.hpp"
 
-namespace algebra::smatrix::math {
+namespace algebra::common {
 
-/** Local frame projection into a cartesian coordinate frame */
+/** Local frame projection into a polar coordinate frame
+ */
 template <typename transform3_t>
-struct cartesian2 {
+struct cylindrical2 {
 
   /// @name Type definitions for the struct
   /// @{
@@ -26,19 +27,27 @@ struct cartesian2 {
   using point2 = typename transform3_type::point2;
   /// Point in 3D space
   using point3 = typename transform3_type::point3;
+  /// Vector in 3D space
+  using vector3 = typename transform3_type::vector3;
+  /// Vector actor
+  using vector_actor = typename transform3_type::vector_actor;
 
   /// @}
 
   /** This method transform from a point from the global 3D cartesian frame to
-   * the local 2D cartesian frame
+   *the local 2D cartesian frame
    *
-   * @param v the point in local frame
+   * @param trf the transform from global to local thredimensional frame
+   * @param p the point in global frame
+   * @param v unused vector
    *
    * @return a local point2
-   */
-  ALGEBRA_HOST inline point2 operator()(const point3 &v) const {
+   **/
+  ALGEBRA_HOST_DEVICE
+  inline point2 operator()(const transform3_type &trf, const point3 &p,
+                           const vector3 & /*v*/) const {
 
-    return v.template Sub<point2>(0);
+    return operator()(trf, p);
   }
 
   /** This method transform from a point from the global 3D cartesian frame to
@@ -49,12 +58,20 @@ struct cartesian2 {
    *
    * @return a local point2
    **/
-  ALGEBRA_HOST
+  ALGEBRA_HOST_DEVICE
   inline point2 operator()(const transform3_type &trf, const point3 &p) const {
 
     return operator()(trf.point_to_local(p));
   }
 
-};  // struct cartesian2
+  /** This method transform from a point from 3D cartesian frame to a 2D
+   * cylindrical point */
+  ALGEBRA_HOST_DEVICE
+  inline point2 operator()(const point3 &v) const {
 
-}  // namespace algebra::smatrix::math
+    return {vector_actor().perp(v) * vector_actor().phi(v), v[2]};
+  }
+
+};  // struct cylindrical2
+
+}  // namespace algebra::common

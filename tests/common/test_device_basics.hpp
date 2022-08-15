@@ -37,6 +37,7 @@ class test_device_basics : public test_base<T> {
   using size_type = typename test_base<T>::size_type;
   template <size_type ROWS, size_type COLS>
   using matrix = typename test_base<T>::template matrix<ROWS, COLS>;
+  using vector_actor = typename test_base<T>::vector_actor;
   using matrix_actor = typename test_base<T>::matrix_actor;
 
   /// @}
@@ -48,13 +49,13 @@ class test_device_basics : public test_base<T> {
     point2 c = a + b;
     point2 c2 = c * 2.0;
 
-    scalar phi = algebra::getter::phi(c2);
-    scalar perp = algebra::getter::perp(c2);
-    scalar norm1 = algebra::getter::norm(c2);
+    scalar phi = vector_actor().phi(c2);
+    scalar perp = vector_actor().perp(c2);
+    scalar norm1 = vector_actor().norm(c2);
 
-    scalar dot = algebra::vector::dot(a, b);
-    point2 norm2 = algebra::vector::normalize(c);
-    scalar norm3 = algebra::getter::norm(norm2);
+    scalar dot = vector_actor().dot(a, b);
+    point2 norm2 = vector_actor().normalize(c);
+    scalar norm3 = vector_actor().norm(norm2);
 
     return (phi + perp + norm1 + dot + norm3);
   }
@@ -66,15 +67,15 @@ class test_device_basics : public test_base<T> {
     vector3 c = a + b;
     vector3 c2 = c * 2.0;
 
-    scalar phi = algebra::getter::phi(c2);
-    scalar perp = algebra::getter::perp(c2);
-    scalar norm1 = algebra::getter::norm(c2);
+    scalar phi = vector_actor().phi(c2);
+    scalar perp = vector_actor().perp(c2);
+    scalar norm1 = vector_actor().norm(c2);
 
-    vector3 d = algebra::vector::cross(a, b);
+    vector3 d = vector_actor().cross(a, b);
 
-    scalar dot = algebra::vector::dot(a, d);
-    vector3 norm2 = algebra::vector::normalize(c);
-    scalar norm3 = algebra::getter::norm(norm2);
+    scalar dot = vector_actor().dot(a, d);
+    vector3 norm2 = vector_actor().normalize(c);
+    scalar norm3 = vector_actor().norm(norm2);
 
     return (phi + perp + norm1 + dot + norm3);
   }
@@ -219,8 +220,8 @@ class test_device_basics : public test_base<T> {
     vector3 gvec = tr2.vector_to_global(a);
     vector3 lvec = tr2.vector_to_local(b);
 
-    return {algebra::getter::norm(translation) + algebra::getter::perp(gpoint) +
-            algebra::getter::phi(lpoint) + algebra::vector::dot(gvec, lvec)};
+    return {vector_actor().norm(translation) + vector_actor().perp(gpoint) +
+            vector_actor().phi(lpoint) + vector_actor().dot(gvec, lvec)};
   }
 
   /// Perform various operations using the @c cartesian2 type
@@ -234,7 +235,7 @@ class test_device_basics : public test_base<T> {
     point2 p1 = ca(tr, a);
     point2 p2 = ca(b);
 
-    return {algebra::getter::phi(p1) + algebra::getter::norm(p2)};
+    return {vector_actor().phi(p1) + vector_actor().norm(p2)};
   }
 
   /// Perform various operations using the @c cylintridcal2 type
@@ -248,7 +249,7 @@ class test_device_basics : public test_base<T> {
     point2 p1 = cy(tr, a);
     point2 p2 = cy(b);
 
-    return {algebra::getter::phi(p1) + algebra::getter::norm(p2)};
+    return {vector_actor().phi(p1) + vector_actor().norm(p2)};
   }
 
   /// Perform various operations using the @c polar2 type
@@ -263,7 +264,7 @@ class test_device_basics : public test_base<T> {
     point2 p2 = po(b);
     point2 p3 = po(p1);
 
-    return {algebra::getter::phi(p2) + algebra::getter::norm(p3)};
+    return {vector_actor().phi(p2) + vector_actor().norm(p3)};
   }
 
 };  // class test_device_basics

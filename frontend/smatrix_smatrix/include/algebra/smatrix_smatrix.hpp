@@ -12,36 +12,8 @@
 #include "algebra/storage/smatrix.hpp"
 
 namespace algebra {
-namespace smatrix {
-
-/// @name SMatrix based transforms on @c algebra::smatrix::storage_type
-/// @{
-
-template <typename T>
-using transform3 = math::transform3<T>;
-template <typename T>
-using cartesian2 = math::cartesian2<transform3<T> >;
-template <typename T>
-using polar2 = math::polar2<transform3<T> >;
-template <typename T>
-using cylindrical2 = math::cylindrical2<transform3<T> >;
-
-/// @}
-
-}  // namespace smatrix
 
 namespace getter {
-
-/// @name Getter functions on @c algebra::smatrix::storage_type
-/// @{
-
-using smatrix::math::eta;
-using smatrix::math::norm;
-using smatrix::math::perp;
-using smatrix::math::phi;
-using smatrix::math::theta;
-
-/// @}
 
 /// Function extracting a slice from the matrix used by
 /// @c algebra::smatrix::transform3
@@ -51,7 +23,7 @@ ALGEBRA_HOST_DEVICE inline auto vector(
     const ROOT::Math::SMatrix<scalar_t, ROWS, COLS>& m, unsigned int row,
     unsigned int col) {
 
-  return m.template SubCol<smatrix::storage_type<scalar_t, SIZE> >(col, row);
+  return m.template SubCol<smatrix::storage_type<scalar_t, SIZE>>(col, row);
 }
 
 /// @name Getter functions on @c algebra::smatrix::matrix_type
@@ -65,14 +37,8 @@ using smatrix::math::element;
 
 namespace vector {
 
-/// @name Vector functions on @c algebra::smatrix::storage_type
-/// @{
-
-using smatrix::math::cross;
-using smatrix::math::dot;
-using smatrix::math::normalize;
-
-/// @}
+template <typename scalar_t>
+using actor = smatrix::vector::actor<scalar_t>;
 
 }  // namespace vector
 
@@ -82,5 +48,23 @@ template <typename scalar_t>
 using actor = smatrix::matrix::actor<scalar_t>;
 
 }  // namespace matrix
+
+namespace smatrix {
+
+/// @name SMatrix based transforms on @c algebra::smatrix::storage_type
+/// @{
+
+template <typename T>
+using transform3 = math::transform3<T, algebra::vector::actor<T>>;
+template <typename T>
+using cartesian2 = smatrix::coordinate::cartesian2<transform3<T>>;
+template <typename T>
+using polar2 = smatrix::coordinate::polar2<transform3<T>>;
+template <typename T>
+using cylindrical2 = smatrix::coordinate::cylindrical2<transform3<T>>;
+
+/// @}
+
+}  // namespace smatrix
 
 }  // namespace algebra

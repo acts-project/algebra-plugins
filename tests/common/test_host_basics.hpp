@@ -642,13 +642,15 @@ TYPED_TEST_P(test_host_basics, cylindrical2) {
   const cylinder_mask mask{r};
 
   // Global position on surface
-  const typename TypeParam::point3 global1 = {3.4142136, 4.4142136, 9.};
+  const typename TypeParam::point3 global1 = {
+      typename TypeParam::scalar{3.4142136},
+      typename TypeParam::scalar{4.4142136}, typename TypeParam::scalar{9.}};
 
   // Global to local transformation
   const typename TypeParam::point2 local = c2.global_to_local(trf, global1);
 
   // Check if the local position is correct
-  ASSERT_NEAR(local[0], r * M_PI / 4., this->m_isclose);
+  ASSERT_NEAR(local[0], r * M_PI_4, this->m_isclose);
   ASSERT_NEAR(local[1], 5., this->m_isclose);
 
   // Local to global transformation
@@ -672,14 +674,16 @@ TYPED_TEST_P(test_host_basics, cylindrical3) {
   const typename TypeParam::cylindrical3 c3;
 
   // Global position on surface
-  const typename TypeParam::point3 global1 = {3.4142136, 4.4142136, 9.};
+  const typename TypeParam::point3 global1 = {
+      typename TypeParam::scalar{3.4142136},
+      typename TypeParam::scalar{4.4142136}, typename TypeParam::scalar{9.}};
 
   // Global to local transformation
   const typename TypeParam::point3 local = c3.global_to_local(trf, global1);
 
   // Check if the local position is correct
   ASSERT_NEAR(local[0], 2, this->m_isclose);
-  ASSERT_NEAR(local[1], M_PI / 4., this->m_isclose);
+  ASSERT_NEAR(local[1], M_PI_4, this->m_isclose);
   ASSERT_NEAR(local[2], 5., this->m_isclose);
 
   // Local to global transformation

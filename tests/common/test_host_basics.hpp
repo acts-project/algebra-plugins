@@ -538,12 +538,8 @@ TYPED_TEST_P(test_host_basics, local_transformations) {
 TYPED_TEST_P(test_host_basics, cartesian2) {
 
   // Preparation work
-  const typename TypeParam::vector3 z =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{0., 0., 1.});
-  const typename TypeParam::vector3 x =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{1., 0., 0.});
+  const typename TypeParam::vector3 z = {0., 0., 1.};
+  const typename TypeParam::vector3 x = {1., 0., 0.};
   const typename TypeParam::point3 t = {2., 3., 4.};
   const typename TypeParam::transform3 trf(t, z, x);
   const typename TypeParam::cartesian2 c2;
@@ -571,12 +567,8 @@ TYPED_TEST_P(test_host_basics, cartesian2) {
 TYPED_TEST_P(test_host_basics, cartesian3) {
 
   // Preparation work
-  const typename TypeParam::vector3 z =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{0., 0., 1.});
-  const typename TypeParam::vector3 x =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{1., 0., 0.});
+  const typename TypeParam::vector3 z = {0., 0., 1.};
+  const typename TypeParam::vector3 x = {1., 0., 0.};
   const typename TypeParam::point3 t = {2., 3., 4.};
   const typename TypeParam::transform3 trf(t, z, x);
   const typename TypeParam::cartesian3 c3;
@@ -605,12 +597,8 @@ TYPED_TEST_P(test_host_basics, cartesian3) {
 TYPED_TEST_P(test_host_basics, polar2) {
 
   // Preparation work
-  const typename TypeParam::vector3 z =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{0., 0., 1.});
-  const typename TypeParam::vector3 x =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{1., 0., 0.});
+  const typename TypeParam::vector3 z = {0., 0., 1.};
+  const typename TypeParam::vector3 x = {1., 0., 0.};
   const typename TypeParam::point3 t = {2., 3., 4.};
   const typename TypeParam::transform3 trf(t, z, x);
   const typename TypeParam::polar2 p2;
@@ -638,12 +626,8 @@ TYPED_TEST_P(test_host_basics, polar2) {
 TYPED_TEST_P(test_host_basics, cylindrical2) {
 
   // Preparation work
-  const typename TypeParam::vector3 z =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{0., 0., 1.});
-  const typename TypeParam::vector3 x =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{1., 0., 0.});
+  const typename TypeParam::vector3 z = {0., 0., 1.};
+  const typename TypeParam::vector3 x = {1., 0., 0.};
   const typename TypeParam::point3 t = {2., 3., 4.};
   const typename TypeParam::transform3 trf(t, z, x);
   const typename TypeParam::cylindrical2 c2;
@@ -658,9 +642,7 @@ TYPED_TEST_P(test_host_basics, cylindrical2) {
   const cylinder_mask mask{r};
 
   // Global position on surface
-  const typename TypeParam::point3 global1 = {
-      typename TypeParam::scalar{3.4142136},
-      typename TypeParam::scalar{4.4142136}, typename TypeParam::scalar{9.}};
+  const typename TypeParam::point3 global1 = {3.4142136, 4.4142136, 9.};
 
   // Global to local transformation
   const typename TypeParam::point2 local = c2.global_to_local(trf, global1);
@@ -683,20 +665,14 @@ TYPED_TEST_P(test_host_basics, cylindrical2) {
 TYPED_TEST_P(test_host_basics, cylindrical3) {
 
   // Preparation work
-  const typename TypeParam::vector3 z =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{0., 0., 1.});
-  const typename TypeParam::vector3 x =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{1., 0., 0.});
+  const typename TypeParam::vector3 z = {0., 0., 1.};
+  const typename TypeParam::vector3 x = {1., 0., 0.};
   const typename TypeParam::point3 t = {2., 3., 4.};
   const typename TypeParam::transform3 trf(t, z, x);
   const typename TypeParam::cylindrical3 c3;
 
   // Global position on surface
-  const typename TypeParam::point3 global1 = {
-      typename TypeParam::scalar{3.4142136},
-      typename TypeParam::scalar{4.4142136}, typename TypeParam::scalar{9.}};
+  const typename TypeParam::point3 global1 = {3.4142136, 4.4142136, 9.};
 
   // Global to local transformation
   const typename TypeParam::point3 local = c3.global_to_local(trf, global1);
@@ -719,12 +695,8 @@ TYPED_TEST_P(test_host_basics, cylindrical3) {
 TYPED_TEST_P(test_host_basics, line2) {
 
   // Preparation work
-  const typename TypeParam::vector3 z =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{0., 0., 1.});
-  const typename TypeParam::vector3 x =
-      typename TypeParam::vector_actor().normalize(
-          typename TypeParam::vector3{1., 0., 0.});
+  const typename TypeParam::vector3 z = {0., 0., 1.};
+  const typename TypeParam::vector3 x = {1., 0., 0.};
   const typename TypeParam::point3 t = {2., 3., 4.};
   const typename TypeParam::transform3 trf(t, z, x);
   const typename TypeParam::line2 l2;

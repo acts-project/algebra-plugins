@@ -65,7 +65,7 @@ struct line2 : public coordinate_base<transform3_t> {
     // Right: -1
     // Left: 1
     const scalar_type sign =
-        vector_actor().dot(r, t - p) > 0. ? scalar_type{-1.} : scalar_type{1.};
+        vector_actor().dot(r, t - p) > scalar_type{0.} ? -1. : 1.;
 
     return this->operator()(local3, sign);
   }

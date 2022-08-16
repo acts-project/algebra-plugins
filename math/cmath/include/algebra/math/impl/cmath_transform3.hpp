@@ -253,6 +253,30 @@ struct transform3 {
     return matrix_actor().template block<3, 3>(_data, 0, 0);
   }
 
+  /** This method retrieves x axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 x() const {
+    return {matrix_actor().element(_data, 0, 0),
+            matrix_actor().element(_data, 1, 0),
+            matrix_actor().element(_data, 2, 0)};
+  }
+
+  /** This method retrieves y axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 y() const {
+    return {matrix_actor().element(_data, 0, 1),
+            matrix_actor().element(_data, 1, 1),
+            matrix_actor().element(_data, 2, 1)};
+  }
+
+  /** This method retrieves z axis */
+  ALGEBRA_HOST_DEVICE
+  inline point3 z() const {
+    return {matrix_actor().element(_data, 0, 2),
+            matrix_actor().element(_data, 1, 2),
+            matrix_actor().element(_data, 2, 2)};
+  }
+
   /** This method retrieves the translation of a transform */
   ALGEBRA_HOST_DEVICE
   inline point3 translation() const {

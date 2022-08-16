@@ -11,7 +11,6 @@
 #include "algebra/math/impl/cmath_coordinates.hpp"
 #include "algebra/math/impl/cmath_getter.hpp"
 #include "algebra/math/impl/cmath_matrix.hpp"
-#include "algebra/math/impl/cmath_operator.hpp"
 #include "algebra/math/impl/cmath_transform3.hpp"
 #include "algebra/math/impl/cmath_vector.hpp"
 // Algorithms include(s).

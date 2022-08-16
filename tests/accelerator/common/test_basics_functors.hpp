@@ -156,6 +156,31 @@ class cartesian2_ops_functor : public functor_base<T> {
   }
 };
 
+/// Functor running @c test_device_basics::cartesian3_ops
+template <typename T>
+class cartesian3_ops_functor : public functor_base<T> {
+
+ public:
+  ALGEBRA_HOST_DEVICE void operator()(
+      std::size_t i, vecmem::data::vector_view<const typename T::vector3> t1,
+      vecmem::data::vector_view<const typename T::vector3> t2,
+      vecmem::data::vector_view<const typename T::vector3> t3,
+      vecmem::data::vector_view<const typename T::vector3> a,
+      vecmem::data::vector_view<const typename T::vector3> b,
+      vecmem::data::vector_view<typename T::scalar> output) const {
+
+    // Create the VecMem vector(s).
+    vecmem::device_vector<const typename T::vector3> vec_t1(t1), vec_t2(t2),
+        vec_t3(t3), vec_a(a), vec_b(b);
+    vecmem::device_vector<typename T::scalar> vec_output(output);
+
+    // Perform the operation.
+    auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
+    vec_output[ii] = this->m_tester.cartesian3_ops(
+        vec_t1[ii], vec_t2[ii], vec_t3[ii], vec_a[ii], vec_b[ii]);
+  }
+};
+
 /// Functor running @c test_device_basics::cylindrical2_ops
 template <typename T>
 class cylindrical2_ops_functor : public functor_base<T> {
@@ -177,6 +202,31 @@ class cylindrical2_ops_functor : public functor_base<T> {
     // Perform the operation.
     auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
     vec_output[ii] = this->m_tester.cylindrical2_ops(
+        vec_t1[ii], vec_t2[ii], vec_t3[ii], vec_a[ii], vec_b[ii]);
+  }
+};
+
+/// Functor running @c test_device_basics::cylindrical3_ops
+template <typename T>
+class cylindrical3_ops_functor : public functor_base<T> {
+
+ public:
+  ALGEBRA_HOST_DEVICE void operator()(
+      std::size_t i, vecmem::data::vector_view<const typename T::vector3> t1,
+      vecmem::data::vector_view<const typename T::vector3> t2,
+      vecmem::data::vector_view<const typename T::vector3> t3,
+      vecmem::data::vector_view<const typename T::vector3> a,
+      vecmem::data::vector_view<const typename T::vector3> b,
+      vecmem::data::vector_view<typename T::scalar> output) const {
+
+    // Create the VecMem vector(s).
+    vecmem::device_vector<const typename T::vector3> vec_t1(t1), vec_t2(t2),
+        vec_t3(t3), vec_a(a), vec_b(b);
+    vecmem::device_vector<typename T::scalar> vec_output(output);
+
+    // Perform the operation.
+    auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
+    vec_output[ii] = this->m_tester.cylindrical3_ops(
         vec_t1[ii], vec_t2[ii], vec_t3[ii], vec_a[ii], vec_b[ii]);
   }
 };
@@ -203,5 +253,30 @@ class polar2_ops_functor : public functor_base<T> {
     auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
     vec_output[ii] = this->m_tester.polar2_ops(
         vec_t1[ii], vec_t2[ii], vec_t3[ii], vec_a[ii], vec_b[ii]);
+  }
+};
+
+/// Functor running @c test_device_basics::polar2_ops
+template <typename T>
+class line2_ops_functor : public functor_base<T> {
+
+ public:
+  ALGEBRA_HOST_DEVICE void operator()(
+      std::size_t i, vecmem::data::vector_view<const typename T::vector3> t1,
+      vecmem::data::vector_view<const typename T::vector3> t2,
+      vecmem::data::vector_view<const typename T::vector3> t3,
+      vecmem::data::vector_view<const typename T::vector3> a,
+      vecmem::data::vector_view<const typename T::vector3> b,
+      vecmem::data::vector_view<typename T::scalar> output) const {
+
+    // Create the VecMem vector(s).
+    vecmem::device_vector<const typename T::vector3> vec_t1(t1), vec_t2(t2),
+        vec_t3(t3), vec_a(a), vec_b(b);
+    vecmem::device_vector<typename T::scalar> vec_output(output);
+
+    // Perform the operation.
+    auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
+    vec_output[ii] = this->m_tester.line2_ops(vec_t1[ii], vec_t2[ii],
+                                              vec_t3[ii], vec_a[ii], vec_b[ii]);
   }
 };

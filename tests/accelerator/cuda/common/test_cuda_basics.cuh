@@ -144,6 +144,25 @@ TYPED_TEST_P(test_cuda_basics, cartesian2) {
   this->compareOutputs();
 }
 
+/// Test for some operations with @c cartesian3
+TYPED_TEST_P(test_cuda_basics, cartesian3) {
+
+  // Run the test on the host, and on the/a device.
+  execute_host_test<cartesian3_ops_functor<TypeParam> >(
+      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
+      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
+      vecmem::get_data(*(this->m_output_host)));
+  execute_cuda_test<cartesian3_ops_functor<TypeParam> >(
+      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
+      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
+      vecmem::get_data(*(this->m_output_device)));
+
+  // Compare the outputs.
+  this->compareOutputs();
+}
+
 /// Test for some operations with @c cylindrical2
 TYPED_TEST_P(test_cuda_basics, cylindrical2) {
 
@@ -154,6 +173,25 @@ TYPED_TEST_P(test_cuda_basics, cylindrical2) {
       vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_host)));
   execute_cuda_test<cylindrical2_ops_functor<TypeParam> >(
+      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
+      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
+      vecmem::get_data(*(this->m_output_device)));
+
+  // Compare the outputs.
+  this->compareOutputs();
+}
+
+/// Test for some operations with @c cylindrical3
+TYPED_TEST_P(test_cuda_basics, cylindrical3) {
+
+  // Run the test on the host, and on the/a device.
+  execute_host_test<cylindrical3_ops_functor<TypeParam> >(
+      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
+      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
+      vecmem::get_data(*(this->m_output_host)));
+  execute_cuda_test<cylindrical3_ops_functor<TypeParam> >(
       this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
       vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
       vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
@@ -182,6 +220,26 @@ TYPED_TEST_P(test_cuda_basics, polar2) {
   this->compareOutputs();
 }
 
+/// Test for some operations with @c line2
+TYPED_TEST_P(test_cuda_basics, line2) {
+
+  // Run the test on the host, and on the/a device.
+  execute_host_test<line2_ops_functor<TypeParam> >(
+      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
+      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
+      vecmem::get_data(*(this->m_output_host)));
+  execute_cuda_test<line2_ops_functor<TypeParam> >(
+      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
+      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
+      vecmem::get_data(*(this->m_output_device)));
+
+  // Compare the outputs.
+  this->compareOutputs();
+}
+
 REGISTER_TYPED_TEST_SUITE_P(test_cuda_basics, vector_2d_ops, vector_3d_ops,
                             matrix64_ops, matrix22_ops, transform3, cartesian2,
-                            cylindrical2, polar2);
+                            cartesian3, cylindrical2, cylindrical3, polar2,
+                            line2);

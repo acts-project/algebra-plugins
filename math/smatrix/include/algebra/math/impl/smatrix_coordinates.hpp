@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/coordinates.hpp"
+#include "algebra/coordinates/coordinates.hpp"
 
 namespace algebra::smatrix::coordinate {
 
@@ -16,9 +16,18 @@ template <typename transform3_t>
 using cartesian2 = algebra::common::cartesian2<transform3_t>;
 
 template <typename transform3_t>
+using cartesian3 = algebra::common::cartesian3<transform3_t>;
+
+template <typename transform3_t>
 using polar2 = algebra::common::polar2<transform3_t>;
 
 template <typename transform3_t>
 using cylindrical2 = algebra::common::cylindrical2<transform3_t>;
+
+template <typename transform3_t>
+using cylindrical3 = algebra::common::cylindrical3<transform3_t>;
+
+template <typename transform3_t>
+using line2 = algebra::common::line2<transform3_t>;
 
 }  // namespace algebra::smatrix::coordinate

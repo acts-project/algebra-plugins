@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -16,7 +16,7 @@ namespace algebra::common {
 /** Frame projection into a cartesian coordinate frame
  */
 template <typename transform3_t>
-struct cartesian2 final : public coordinate_base<transform3_t> {
+struct cartesian3 final : public coordinate_base<transform3_t> {
 
   /// @name Type definitions for the struct
   /// @{
@@ -38,39 +38,27 @@ struct cartesian2 final : public coordinate_base<transform3_t> {
 
   /// @}
 
-  /** This method transform from a point from 2D cartesian frame to a 2D
+  /** This method transform from a point from 3D cartesian frame to a 3D
    * cartesian point */
   ALGEBRA_HOST_DEVICE
-  inline point2 operator()(const point2 &local2) const {
-
-    return {local2[0], local2[1]};
-  }
-
-  /** This method transform from a point from 3D cartesian frame to a 2D
-   * cartesian point */
-  ALGEBRA_HOST_DEVICE
-  inline point2 operator()(const point3 &local3) const {
-
-    return {local3[0], local3[1]};
-  }
+  inline point3 operator()(const point3 &local3) const { return local3; }
 
   /** This method transform from a point from global cartesian 3D frame to a
-   * local 2D cartesian point */
+   * local 3D cartesian point */
   ALGEBRA_HOST_DEVICE
-  inline point2 global_to_local(const transform3_type &trf,
+  inline point3 global_to_local(const transform3_type &trf,
                                 const point3 &p) const {
-    const auto local3 = trf.point_to_local(p);
-    return this->operator()(local3);
+    return trf.point_to_local(p);
   }
 
-  /** This method transform from a local 2D cartesian point to a point global
+  /** This method transform from a local 3D cartesian point to a point global
    * cartesian 3D frame*/
   ALGEBRA_HOST_DEVICE
   inline point3 local_to_global(const transform3_type &trf,
-                                const point2 &p) const {
-    return trf.point_to_global(point3{p[0], p[1], 0.});
+                                const point3 &p) const {
+    return trf.point_to_global(p);
   }
 
-};  // struct cartesian2
+};  // struct cartesian3
 
 }  // namespace algebra::common

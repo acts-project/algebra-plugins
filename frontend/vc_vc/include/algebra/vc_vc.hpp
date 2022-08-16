@@ -7,6 +7,9 @@
 
 #pragma once
 
+// Operators include(s).
+#include "algebra/math/cmath_operators.hpp"
+
 // Project include(s).
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/vc.hpp"
@@ -15,15 +18,6 @@
 // System include(s).
 #include <cassert>
 #include <type_traits>
-
-/// @name Operators on @c algebra::vc types
-/// @{
-
-using algebra::cmath::operator*;
-using algebra::cmath::operator-;
-using algebra::cmath::operator+;
-
-/// @}
 
 namespace algebra {
 
@@ -120,9 +114,15 @@ using transform3 = math::transform3<storage_type, T, algebra::vector::actor<T>,
 template <typename T>
 using cartesian2 = cmath::coordinate::cartesian2<transform3<T>>;
 template <typename T>
+using cartesian3 = cmath::coordinate::cartesian3<transform3<T>>;
+template <typename T>
 using polar2 = cmath::coordinate::polar2<transform3<T>>;
 template <typename T>
 using cylindrical2 = cmath::coordinate::cylindrical2<transform3<T>>;
+template <typename T>
+using cylindrical3 = cmath::coordinate::cylindrical3<transform3<T>>;
+template <typename T>
+using line2 = cmath::coordinate::line2<transform3<T>>;
 
 /// @}
 

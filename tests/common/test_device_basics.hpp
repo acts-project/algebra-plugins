@@ -32,8 +32,10 @@ class test_device_basics : public test_base<T> {
   using vector3 = typename test_base<T>::vector3;
   using transform3 = typename test_base<T>::transform3;
   using cartesian2 = typename test_base<T>::cartesian2;
+  using cartesian3 = typename test_base<T>::cartesian3;
   using polar2 = typename test_base<T>::polar2;
   using cylindrical2 = typename test_base<T>::cylindrical2;
+  using cylindrical3 = typename test_base<T>::cylindrical3;
   using line2 = typename test_base<T>::line2;
   using size_type = typename test_base<T>::size_type;
   template <size_type ROWS, size_type COLS>
@@ -241,6 +243,22 @@ class test_device_basics : public test_base<T> {
             vector_actor().perp(p3)};
   }
 
+  /// Perform various operations using the @c cartesian3 type
+  ALGEBRA_HOST_DEVICE
+  scalar cartesian3_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
+                        vector3 b) const {
+
+    transform3 tr(t1, t2, t3);
+    cartesian3 ca;
+
+    point3 p1 = ca.global_to_local(tr, a);
+    point3 p2 = ca(b);
+    point3 p3 = ca.local_to_global(tr, p2);
+
+    return {vector_actor().phi(p1) + vector_actor().norm(p2) +
+            vector_actor().perp(p3)};
+  }
+
   /// Perform various operations using the @c cylintridcal2 type
   ALGEBRA_HOST_DEVICE
   scalar cylindrical2_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
@@ -261,6 +279,22 @@ class test_device_basics : public test_base<T> {
     point2 p1 = cy.global_to_local(tr, a);
     point2 p2 = cy(b);
     point3 p3 = cy.local_to_global(tr, p2, mask);
+
+    return {vector_actor().phi(p1) + vector_actor().norm(p2) +
+            vector_actor().perp(p3)};
+  }
+
+  /// Perform various operations using the @c cylintridcal3 type
+  ALGEBRA_HOST_DEVICE
+  scalar cylindrical3_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
+                          vector3 b) const {
+
+    transform3 tr(t1, t2, t3);
+    cylindrical3 cy;
+
+    point3 p1 = cy.global_to_local(tr, a);
+    point3 p2 = cy(b);
+    point3 p3 = cy.local_to_global(tr, p2);
 
     return {vector_actor().phi(p1) + vector_actor().norm(p2) +
             vector_actor().perp(p3)};

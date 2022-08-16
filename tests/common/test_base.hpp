@@ -20,14 +20,15 @@ class test_base {};
 /// Test base class, using a @c test_types type argument
 template <typename scalar_t, typename point2_t, typename point3_t,
           typename vector2_t, typename vector3_t, typename transform3_t,
-          typename cartesian2_t, typename polar2_t, typename cylindrical2_t,
-          typename line2_t, typename size_ty,
+          typename cartesian2_t, typename cartesian3_t, typename polar2_t,
+          typename cylindrical2_t, typename cylindrical3_t, typename line2_t,
+          typename size_ty,
           template <typename, size_ty, size_ty> class matrix_t,
           typename vector_actor_t, class matrix_actor_t>
-class test_base<
-    test_types<scalar_t, point2_t, point3_t, vector2_t, vector3_t, transform3_t,
-               cartesian2_t, polar2_t, cylindrical2_t, line2_t, size_ty,
-               matrix_t, vector_actor_t, matrix_actor_t> > {
+class test_base<test_types<scalar_t, point2_t, point3_t, vector2_t, vector3_t,
+                           transform3_t, cartesian2_t, cartesian3_t, polar2_t,
+                           cylindrical2_t, cylindrical3_t, line2_t, size_ty,
+                           matrix_t, vector_actor_t, matrix_actor_t> > {
 
  public:
   /// @name Type definitions
@@ -40,8 +41,10 @@ class test_base<
   using vector3 = vector3_t;
   using transform3 = transform3_t;
   using cartesian2 = cartesian2_t;
+  using cartesian3 = cartesian3_t;
   using polar2 = polar2_t;
   using cylindrical2 = cylindrical2_t;
+  using cylindrical3 = cylindrical3_t;
   using line2 = line2_t;
   using size_type = size_ty;
   template <size_type ROWS, size_type COLS>

@@ -567,6 +567,40 @@ TYPED_TEST_P(test_host_basics, cartesian2) {
   ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
 }
 
+// This test cartesian3 coordinate
+TYPED_TEST_P(test_host_basics, cartesian3) {
+
+  // Preparation work
+  const typename TypeParam::vector3 z =
+      typename TypeParam::vector_actor().normalize(
+          typename TypeParam::vector3{0., 0., 1.});
+  const typename TypeParam::vector3 x =
+      typename TypeParam::vector_actor().normalize(
+          typename TypeParam::vector3{1., 0., 0.});
+  const typename TypeParam::point3 t = {2., 3., 4.};
+  const typename TypeParam::transform3 trf(t, z, x);
+  const typename TypeParam::cartesian3 c3;
+
+  // Global position on surface
+  const typename TypeParam::point3 global1 = {4., 7., 5.};
+
+  // Global to local transformation
+  const typename TypeParam::point3 local = c3.global_to_local(trf, global1);
+
+  // Check if the local position is correct
+  ASSERT_NEAR(local[0], 2., this->m_isclose);
+  ASSERT_NEAR(local[1], 4., this->m_isclose);
+  ASSERT_NEAR(local[2], 1., this->m_isclose);
+
+  // Local to global transformation
+  const typename TypeParam::point3 global2 = c3.local_to_global(trf, local);
+
+  // Check if the same global position is obtained
+  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
+  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
+  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
+}
+
 // This test polar2 coordinate
 TYPED_TEST_P(test_host_basics, polar2) {
 
@@ -645,6 +679,42 @@ TYPED_TEST_P(test_host_basics, cylindrical2) {
   ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
 }
 
+// This test cylindrical2 coordinate
+TYPED_TEST_P(test_host_basics, cylindrical3) {
+
+  // Preparation work
+  const typename TypeParam::vector3 z =
+      typename TypeParam::vector_actor().normalize(
+          typename TypeParam::vector3{0., 0., 1.});
+  const typename TypeParam::vector3 x =
+      typename TypeParam::vector_actor().normalize(
+          typename TypeParam::vector3{1., 0., 0.});
+  const typename TypeParam::point3 t = {2., 3., 4.};
+  const typename TypeParam::transform3 trf(t, z, x);
+  const typename TypeParam::cylindrical3 c3;
+
+  // Global position on surface
+  const typename TypeParam::point3 global1 = {
+      typename TypeParam::scalar{3.4142136},
+      typename TypeParam::scalar{4.4142136}, typename TypeParam::scalar{9.}};
+
+  // Global to local transformation
+  const typename TypeParam::point3 local = c3.global_to_local(trf, global1);
+
+  // Check if the local position is correct
+  ASSERT_NEAR(local[0], 2, this->m_isclose);
+  ASSERT_NEAR(local[1], M_PI / 4., this->m_isclose);
+  ASSERT_NEAR(local[2], 5., this->m_isclose);
+
+  // Local to global transformation
+  const typename TypeParam::point3 global2 = c3.local_to_global(trf, local);
+
+  // Check if the same global position is obtained
+  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
+  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
+  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
+}
+
 // This test line2 coordinate
 TYPED_TEST_P(test_host_basics, line2) {
 
@@ -686,4 +756,5 @@ TYPED_TEST_P(test_host_basics, line2) {
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics, local_vectors, vector3, matrix64,
                             matrix22, getter, transform3,
                             global_transformations, local_transformations,
-                            cartesian2, polar2, cylindrical2, line2);
+                            cartesian2, cartesian3, polar2, cylindrical2,
+                            cylindrical3, line2);

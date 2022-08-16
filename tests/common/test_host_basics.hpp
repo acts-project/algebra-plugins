@@ -650,7 +650,8 @@ TYPED_TEST_P(test_host_basics, cylindrical2) {
   const typename TypeParam::point2 local = c2.global_to_local(trf, global1);
 
   // Check if the local position is correct
-  ASSERT_NEAR(local[0], r * M_PI_4, this->m_isclose);
+  ASSERT_NEAR(local[0], r * typename TypeParam::scalar{M_PI_4},
+              this->m_isclose);
   ASSERT_NEAR(local[1], 5., this->m_isclose);
 
   // Local to global transformation

@@ -36,6 +36,10 @@ struct cartesian2 final : public coordinate_base<transform3_t> {
   /// Vector actor
   using vector_actor = typename base_type::vector_actor;
 
+  /// Track indices
+  using bound_indices = typename base_type::bound_indices;
+  using free_indices = typename base_type::free_indices;
+
   /// @}
 
   /** This method transform from a point from 2D cartesian frame to a 2D

@@ -109,8 +109,11 @@ namespace vc {
 /// @{
 
 template <typename T>
-using transform3 = math::transform3<storage_type, T, algebra::vector::actor<T>,
-                                    vector3<T>, point2<T>>;
+using transform3 =
+    math::transform3<storage_type, T,
+                     algebra::matrix::actor<T, matrix::determinant::preset0<T>,
+                                            matrix::inverse::preset0<T>>,
+                     algebra::vector::actor<T>, vector3<T>, point2<T>>;
 template <typename T>
 using cartesian2 = cmath::coordinate::cartesian2<transform3<T>>;
 template <typename T>

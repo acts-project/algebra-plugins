@@ -91,12 +91,19 @@ struct element_getter {
 /** Transform wrapper class to ensure standard API within differnt plugins
  **/
 template <template <typename, std::size_t> class array_t, typename scalar_t,
-          typename vector_actor_t, typename vector3_t = array_t<scalar_t, 3>,
+          typename matrix_actor_t, typename vector_actor_t,
+          typename vector3_t = array_t<scalar_t, 3>,
           typename point2_t = array_t<scalar_t, 2>>
 struct transform3 {
 
   /// @name Type definitions for the struct
   /// @{
+
+  /// Matrix actor
+  using matrix_actor = matrix_actor_t;
+
+  /// Size type
+  using size_type = typename matrix_actor_t::size_ty;
 
   /// Array type used by the transform
   template <std::size_t N>

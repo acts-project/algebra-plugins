@@ -59,7 +59,8 @@ namespace eigen {
 /// @{
 
 template <typename T>
-using transform3 = math::transform3<T, algebra::vector::actor>;
+using transform3 =
+    math::transform3<T, algebra::matrix::actor<T>, algebra::vector::actor>;
 template <typename T>
 using cartesian2 = eigen::coordinate::cartesian2<transform3<T>>;
 template <typename T>

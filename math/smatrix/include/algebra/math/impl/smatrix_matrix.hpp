@@ -19,6 +19,9 @@ namespace algebra::smatrix::matrix {
 template <typename scalar_t>
 struct actor {
 
+  /// Size type
+  using size_ty = unsigned int;
+
   /// 2D matrix type
   template <unsigned int ROWS, unsigned int COLS>
   using matrix_type = ROOT::Math::SMatrix<scalar_t, ROWS, COLS>;

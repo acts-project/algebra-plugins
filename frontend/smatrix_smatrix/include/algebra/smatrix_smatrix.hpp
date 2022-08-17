@@ -55,7 +55,8 @@ namespace smatrix {
 /// @{
 
 template <typename T>
-using transform3 = math::transform3<T, algebra::vector::actor<T>>;
+using transform3 =
+    math::transform3<T, algebra::matrix::actor<T>, algebra::vector::actor<T>>;
 template <typename T>
 using cartesian2 = smatrix::coordinate::cartesian2<transform3<T>>;
 template <typename T>

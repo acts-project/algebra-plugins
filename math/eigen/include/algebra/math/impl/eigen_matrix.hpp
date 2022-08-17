@@ -26,6 +26,9 @@ namespace algebra::eigen::matrix {
 template <typename scalar_t>
 struct actor {
 
+  /// Size type
+  using size_ty = int;
+
   /// 2D matrix type
   template <int ROWS, int COLS>
   using matrix_type = algebra::eigen::matrix_type<scalar_t, ROWS, COLS>;

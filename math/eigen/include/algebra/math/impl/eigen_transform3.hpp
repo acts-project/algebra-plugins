@@ -26,7 +26,7 @@
 namespace algebra::eigen::math {
 
 /** Transform wrapper class to ensure standard API within differnt plugins */
-template <typename scalar_t, typename vector_actor_t>
+template <typename scalar_t, typename matrix_actor_t, typename vector_actor_t>
 struct transform3 {
 
   /// @name Type definitions for the struct
@@ -52,6 +52,13 @@ struct transform3 {
   /// Function (object) used for accessing a matrix element
   using element_getter = algebra::eigen::math::element_getter;
 
+  /// Size type
+  using size_type = typename matrix_actor_t::size_ty;
+
+  /// Matrix actor
+  using matrix_actor = matrix_actor_t;
+
+  /// Vector actor
   using vector_actor = vector_actor_t;
 
   /// @}

@@ -8,8 +8,9 @@
 #pragma once
 
 // Impl include(s).
-#include "algebra/math/impl/cmath_coordinates.hpp"
+#include "algebra/math/impl/cmath_commons.hpp"
 #include "algebra/math/impl/cmath_getter.hpp"
+#include "algebra/math/impl/cmath_indices.hpp"
 #include "algebra/math/impl/cmath_matrix.hpp"
 #include "algebra/math/impl/cmath_transform3.hpp"
 #include "algebra/math/impl/cmath_vector.hpp"

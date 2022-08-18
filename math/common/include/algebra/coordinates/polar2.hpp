@@ -16,18 +16,18 @@
 
 namespace algebra::common {
 
-template <typename transform3_t>
-struct polar2 : public coordinate_base<transform3_t> {
+template <typename transform3_t, typename E>
+struct polar2 : public coordinate_base<polar2, transform3_t, E> {
 
   /// @name Type definitions for the struct
   /// @{
 
   /// Base type
-  using base_type = coordinate_base<transform3_t>;
-  /// Sclar type
-  using scalar_type = typename base_type::scalar_type;
+  using base_type = coordinate_base<polar2, transform3_t, E>;
   /// Transformation matching this struct
   using transform3_type = typename base_type::transform3_type;
+  /// Sclar type
+  using scalar_type = typename base_type::scalar_type;
   /// Point in 2D space
   using point2 = typename base_type::point2;
   /// Point in 3D space

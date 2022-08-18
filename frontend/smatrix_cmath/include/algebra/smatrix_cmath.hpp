@@ -124,28 +124,49 @@ namespace smatrix {
 /// @{
 
 template <typename T>
-using transform3_matrix_actor =
+using matrix_actor =
     algebra::matrix::actor<T, algebra::matrix::determinant::preset0<T>,
                            algebra::matrix::inverse::preset0<T>>;
+template <typename T>
+using vector_actor = algebra::vector::actor<T>;
+template <typename T>
+using transform3 = cmath::transform3<matrix_actor<T>, vector_actor<T>>;
+
+/// @}
+
+/// @name cmath based track indices
+
+using track_indices = cmath::index::track_indices;
+
+/// @}
+
+/// @name cmath based common algebras
+/// @{
 
 template <typename T>
-using transform3_vector_actor = algebra::vector::actor<T>;
+using cartesian2 = common::cartesian2<transform3<T>, track_indices>;
+template <typename T>
+using cartesian3 = common::cartesian3<transform3<T>, track_indices>;
+template <typename T>
+using polar2 = common::polar2<transform3<T>, track_indices>;
+template <typename T>
+using cylindrical2 = common::cylindrical2<transform3<T>, track_indices>;
+template <typename T>
+using cylindrical3 = common::cylindrical3<transform3<T>, track_indices>;
+template <typename T>
+using line2 = common::line2<transform3<T>, track_indices>;
 
 template <typename T>
-using transform3 =
-    cmath::transform3<transform3_matrix_actor<T>, transform3_vector_actor<T>>;
+using bound_track_parameters =
+    common::bound_track_parameters<matrix_actor<T>, track_indices>;
 template <typename T>
-using cartesian2 = cmath::coordinate::cartesian2<transform3<T>>;
+using free_track_parameters =
+    common::free_track_parameters<matrix_actor<T>, vector_actor<T>,
+                                  track_indices>;
+
 template <typename T>
-using cartesian3 = cmath::coordinate::cartesian3<transform3<T>>;
-template <typename T>
-using polar2 = cmath::coordinate::polar2<transform3<T>>;
-template <typename T>
-using cylindrical2 = cmath::coordinate::cylindrical2<transform3<T>>;
-template <typename T>
-using cylindrical3 = cmath::coordinate::cylindrical3<transform3<T>>;
-template <typename T>
-using line2 = cmath::coordinate::line2<transform3<T>>;
+using column_wise_operator =
+    common::column_wise_operator<matrix_actor<T>, vector_actor<T>>;
 
 /// @}
 

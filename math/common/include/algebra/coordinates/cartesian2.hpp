@@ -15,18 +15,18 @@ namespace algebra::common {
 
 /** Frame projection into a cartesian coordinate frame
  */
-template <typename transform3_t>
-struct cartesian2 final : public coordinate_base<transform3_t> {
+template <typename transform3_t, typename E>
+struct cartesian2 final : public coordinate_base<cartesian2, transform3_t, E> {
 
   /// @name Type definitions for the struct
   /// @{
 
   /// Base type
-  using base_type = coordinate_base<transform3_t>;
-  /// Sclar type
-  using scalar_type = typename base_type::scalar_type;
+  using base_type = coordinate_base<cartesian2, transform3_t, E>;
   /// Transformation matching this struct
   using transform3_type = typename base_type::transform3_type;
+  /// Sclar type
+  using scalar_type = typename base_type::scalar_type;
   /// Point in 2D space
   using point2 = typename base_type::point2;
   /// Point in 3D space
@@ -35,10 +35,24 @@ struct cartesian2 final : public coordinate_base<transform3_t> {
   using vector3 = typename base_type::vector3;
   /// Vector actor
   using vector_actor = typename base_type::vector_actor;
+  /// Matrix actor
+  using matrix_actor = typename base_type::matrix_actor;
+  /// Matrix size type
+  using size_type = typename base_type::size_type;
+  /// 2D matrix type
+  template <size_type ROWS, size_type COLS>
+  using matrix_type = typename base_type::matrix_type<ROWS, COLS>;
 
-  /// Track indices
-  using bound_indices = typename base_type::bound_indices;
-  using free_indices = typename base_type::free_indices;
+  // Shorthand vector/matrix types related to bound track parameters.
+  using bound_vector = typename base_type::bound_vector;
+  using bound_matrix = typename base_type::bound_matrix;
+
+  // Mapping from bound track parameters.
+  using bound_to_free_matrix = typename base_type::bound_to_free_matrix;
+
+  // Shorthand vector/matrix types related to free track parameters.
+  using free_vector = typename base_type::free_vector;
+  using free_matrix = typename base_type::free_matrix;
 
   /// @}
 
@@ -73,6 +87,25 @@ struct cartesian2 final : public coordinate_base<transform3_t> {
   inline point3 local_to_global(const transform3_type &trf,
                                 const point2 &p) const {
     return trf.point_to_global(point3{p[0], p[1], 0.});
+  }
+
+  ALGEBRA_HOST_DEVICE
+  inline matrix_type<3, 2> bound_to_free_rotation(
+      const transform3_type &trf3, const bound_vector & /*bound_vec*/) {
+
+    // Get d(x_glo,y_glo,z_glo)/d(x_loc, y_loc)
+    return matrix_actor().template block<3, 2>(trf3.matrix(), 0, 0);
+  }
+
+  ALGEBRA_HOST_DEVICE
+  inline matrix_type<2, 3> free_to_bound_rotation(
+      const transform3_type &trf3, const free_vector & /*free_vec*/) {
+
+    // Get transpose of transform3 matrix
+    const auto trf3T = matrix_actor().transpose(trf3);
+
+    // Get d(x_loc, y_loc)/d(x_glo,y_glo,z_glo)
+    return matrix_actor().template block<2, 3>(trf3T.matrix(), 0, 0);
   }
 
 };  // struct cartesian2

@@ -18,26 +18,26 @@ namespace algebra::common {
 
 /** Local frame projection into a polar coordinate frame
  */
-template <typename transform3_t>
-struct cylindrical2 : public coordinate_base<transform3_t> {
+template <typename transform3_t, typename E>
+struct cylindrical2 : public coordinate_base<cylindrical2, transform3_t, E> {
 
   /// @name Type definitions for the struct
   /// @{
 
   /// Base type
-  using base_type = coordinate_base<transform3_t>;
-  /// Sclar type
-  using scalar_type = typename base_type::scalar_type;
+  using base_type = coordinate_base<cylindrical2, transform3_t, E>;
   /// Transformation matching this struct
   using transform3_type = typename base_type::transform3_type;
+  /// Sclar type
+  using scalar_type = typename transform3_type::scalar_type;
   /// Point in 2D space
-  using point2 = typename base_type::point2;
+  using point2 = typename transform3_type::point2;
   /// Point in 3D space
-  using point3 = typename base_type::point3;
+  using point3 = typename transform3_type::point3;
   /// Vector in 3D space
-  using vector3 = typename base_type::vector3;
+  using vector3 = typename transform3_type::vector3;
   /// Vector actor
-  using vector_actor = typename base_type::vector_actor;
+  using vector_actor = typename transform3_type::vector_actor;
 
   /// @}
 

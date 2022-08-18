@@ -16,7 +16,7 @@ namespace algebra::common {
 /** Coordinate base struct
  */
 template <template <class, class> class Derived, typename transform3_t,
-          typename E>
+          typename track_indices_t>
 struct coordinate_base {
 
   /// @name Type definitions for the struct
@@ -42,11 +42,14 @@ struct coordinate_base {
   template <size_type ROWS, size_type COLS>
   using matrix_type = typename matrix_actor::matrix_type<ROWS, COLS>;
 
-  // Shorthand vector/matrix types related to bound track parameters.
+  /// Track indices
+  using E = track_indices_t;
+
+  /// Shorthand vector/matrix types related to bound track parameters.
   using bound_vector = matrix_type<E::bound_size, 1>;
   using bound_matrix = matrix_type<E::bound_size, E::bound_size>;
 
-  // Mapping from bound track parameters.
+  /// Mapping from bound track parameters.
   using bound_to_free_matrix = matrix_type<E::free_size, E::bound_size>;
 
   // Shorthand vector/matrix types related to free track parameters.

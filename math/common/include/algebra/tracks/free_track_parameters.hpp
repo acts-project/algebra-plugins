@@ -12,7 +12,8 @@
 
 namespace algebra::common {
 
-template <typename matrix_actor_t, typename vector_actor_t, typename E>
+template <typename matrix_actor_t, typename vector_actor_t,
+          typename track_indices_t>
 struct free_track_parameters {
 
   /// @name Type definitions for the struct
@@ -38,6 +39,9 @@ struct free_track_parameters {
   using point3 = vector3;
   /// Point in 2D space
   using point2 = array_type<2>;
+
+  /// Track indices
+  using E = track_indices_t;
 
   // Shorthand vector/matrix types related to free track parameters.
   using free_vector = matrix_type<E::free_size, 1>;

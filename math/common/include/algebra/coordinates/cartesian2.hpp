@@ -15,14 +15,15 @@ namespace algebra::common {
 
 /** Frame projection into a cartesian coordinate frame
  */
-template <typename transform3_t, typename E>
-struct cartesian2 final : public coordinate_base<cartesian2, transform3_t, E> {
+template <typename transform3_t, typename track_indices_t>
+struct cartesian2 final
+    : public coordinate_base<cartesian2, transform3_t, track_indices_t> {
 
   /// @name Type definitions for the struct
   /// @{
 
   /// Base type
-  using base_type = coordinate_base<cartesian2, transform3_t, E>;
+  using base_type = coordinate_base<cartesian2, transform3_t, track_indices_t>;
   /// Transformation matching this struct
   using transform3_type = typename base_type::transform3_type;
   /// Sclar type
@@ -42,6 +43,8 @@ struct cartesian2 final : public coordinate_base<cartesian2, transform3_t, E> {
   /// 2D matrix type
   template <size_type ROWS, size_type COLS>
   using matrix_type = typename base_type::matrix_type<ROWS, COLS>;
+  /// Track indices
+  using E = track_indices_t;
 
   // Shorthand vector/matrix types related to bound track parameters.
   using bound_vector = typename base_type::bound_vector;

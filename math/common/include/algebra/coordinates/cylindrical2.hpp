@@ -18,14 +18,16 @@ namespace algebra::common {
 
 /** Local frame projection into a polar coordinate frame
  */
-template <typename transform3_t, typename E>
-struct cylindrical2 : public coordinate_base<cylindrical2, transform3_t, E> {
+template <typename transform3_t, typename track_indices_t>
+struct cylindrical2
+    : public coordinate_base<cylindrical2, transform3_t, track_indices_t> {
 
   /// @name Type definitions for the struct
   /// @{
 
   /// Base type
-  using base_type = coordinate_base<cylindrical2, transform3_t, E>;
+  using base_type =
+      coordinate_base<cylindrical2, transform3_t, track_indices_t>;
   /// Transformation matching this struct
   using transform3_type = typename base_type::transform3_type;
   /// Sclar type
@@ -38,6 +40,8 @@ struct cylindrical2 : public coordinate_base<cylindrical2, transform3_t, E> {
   using vector3 = typename transform3_type::vector3;
   /// Vector actor
   using vector_actor = typename transform3_type::vector_actor;
+  /// Track indices
+  using E = track_indices_t;
 
   /// @}
 

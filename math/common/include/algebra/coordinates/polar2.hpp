@@ -16,14 +16,14 @@
 
 namespace algebra::common {
 
-template <typename transform3_t, typename E>
-struct polar2 : public coordinate_base<polar2, transform3_t, E> {
+template <typename transform3_t, typename track_indices_t>
+struct polar2 : public coordinate_base<polar2, transform3_t, track_indices_t> {
 
   /// @name Type definitions for the struct
   /// @{
 
   /// Base type
-  using base_type = coordinate_base<polar2, transform3_t, E>;
+  using base_type = coordinate_base<polar2, transform3_t, track_indices_t>;
   /// Transformation matching this struct
   using transform3_type = typename base_type::transform3_type;
   /// Sclar type
@@ -36,6 +36,8 @@ struct polar2 : public coordinate_base<polar2, transform3_t, E> {
   using vector3 = typename base_type::vector3;
   /// Vector actor
   using vector_actor = typename base_type::vector_actor;
+  /// Track indices
+  using E = track_indices_t;
 
   /** This method transform from a point from 2D cartesian frame to a 2D
    * polar point */

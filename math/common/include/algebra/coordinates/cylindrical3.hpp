@@ -15,15 +15,16 @@ namespace algebra::common {
 
 /** Frame projection into a cartesian coordinate frame
  */
-template <typename transform3_t, typename E>
+template <typename transform3_t, typename track_indices_t>
 struct cylindrical3 final
-    : public coordinate_base<cylindrical3, transform3_t, E> {
+    : public coordinate_base<cylindrical3, transform3_t, track_indices_t> {
 
   /// @name Type definitions for the struct
   /// @{
 
   /// Base type
-  using base_type = coordinate_base<cylindrical3, transform3_t, E>;
+  using base_type =
+      coordinate_base<cylindrical3, transform3_t, track_indices_t>;
   /// Transformation matching this struct
   using transform3_type = typename base_type::transform3_type;
   /// Sclar type
@@ -36,6 +37,8 @@ struct cylindrical3 final
   using vector3 = typename base_type::vector3;
   /// Vector actor
   using vector_actor = typename base_type::vector_actor;
+  /// Track indices
+  using E = track_indices_t;
 
   /// @}
 

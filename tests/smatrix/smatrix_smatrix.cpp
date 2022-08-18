@@ -42,8 +42,11 @@ typedef testing::Types<
         algebra::smatrix::cartesian3<float>, algebra::smatrix::polar2<float>,
         algebra::smatrix::cylindrical2<float>,
         algebra::smatrix::cylindrical3<float>, algebra::smatrix::line2<float>,
-        unsigned int, algebra::smatrix::matrix_type,
-        algebra::vector::actor<float>, algebra::matrix::actor<float>>,
+        algebra::smatrix::bound_track_parameters<float>,
+        algebra::smatrix::free_track_parameters<float>,
+        algebra::smatrix::column_wise_operator<float>, unsigned int,
+        algebra::smatrix::matrix_type, algebra::vector::actor<float>,
+        algebra::matrix::actor<float>>,
     test_types<
         double, algebra::smatrix::point2<double>,
         algebra::smatrix::point3<double>, algebra::smatrix::vector2<double>,
@@ -52,8 +55,11 @@ typedef testing::Types<
         algebra::smatrix::cartesian3<double>, algebra::smatrix::polar2<double>,
         algebra::smatrix::cylindrical2<double>,
         algebra::smatrix::cylindrical3<double>, algebra::smatrix::line2<double>,
-        unsigned int, algebra::smatrix::matrix_type,
-        algebra::vector::actor<double>, algebra::matrix::actor<double>>>
+        algebra::smatrix::bound_track_parameters<double>,
+        algebra::smatrix::free_track_parameters<double>,
+        algebra::smatrix::column_wise_operator<double>, unsigned int,
+        algebra::smatrix::matrix_type, algebra::vector::actor<double>,
+        algebra::matrix::actor<double>>>
     smatrix_smatrix_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
                                smatrix_smatrix_types, test_specialisation_name);

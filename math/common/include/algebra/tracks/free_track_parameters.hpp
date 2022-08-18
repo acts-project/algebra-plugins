@@ -44,8 +44,8 @@ struct free_track_parameters {
   using E = track_indices_t;
 
   // Shorthand vector/matrix types related to free track parameters.
-  using free_vector = matrix_type<E::free_size, 1>;
-  using free_matrix = matrix_type<E::free_size, E::free_size>;
+  using vector_type = matrix_type<E::free_size, 1>;
+  using covariance_type = matrix_type<E::free_size, E::free_size>;
 
   // Track helper
   using track_helper = detail::track_helper<matrix_actor, E>;
@@ -59,7 +59,7 @@ struct free_track_parameters {
             matrix_actor().template zero<E::free_size, E::free_size>()){};
 
   ALGEBRA_HOST_DEVICE
-  free_track_parameters(const free_vector& params, const free_matrix& cov)
+  free_track_parameters(const vector_type& params, const covariance_type& cov)
       : m_vector(params), m_covariance(cov) {}
 
   ALGEBRA_HOST_DEVICE
@@ -80,16 +80,16 @@ struct free_track_parameters {
   }
 
   ALGEBRA_HOST_DEVICE
-  const free_vector& vector() const { return m_vector; }
+  const vector_type& vector() const { return m_vector; }
 
   ALGEBRA_HOST_DEVICE
-  void set_vector(const free_vector& v) { m_vector = v; }
+  void set_vector(const vector_type& v) { m_vector = v; }
 
   ALGEBRA_HOST_DEVICE
-  const free_matrix& covariance() const { return m_covariance; }
+  const covariance_type& covariance() const { return m_covariance; }
 
   ALGEBRA_HOST_DEVICE
-  void set_covariance(const free_matrix& c) { m_covariance = c; }
+  void set_covariance(const covariance_type& c) { m_covariance = c; }
 
   ALGEBRA_HOST_DEVICE
   scalar_type overstep_tolerance() const { return m_overstep_tolerance; }
@@ -148,8 +148,8 @@ struct free_track_parameters {
   }
 
  private:
-  free_vector m_vector;
-  free_matrix m_covariance;
+  vector_type m_vector;
+  covariance_type m_covariance;
   scalar_type m_overstep_tolerance = -1e-4;
 };
 

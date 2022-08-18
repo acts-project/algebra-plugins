@@ -29,9 +29,19 @@ struct actor {
   /// Size type
   using size_ty = int;
 
+  /// Scalar type
+  using scalar_type = scalar_t;
+
   /// 2D matrix type
   template <int ROWS, int COLS>
   using matrix_type = algebra::eigen::matrix_type<scalar_t, ROWS, COLS>;
+
+  /// Array type
+  template <size_ty N>
+  using array_type = storage_type<scalar_type, N>;
+
+  /// 3-element "vector" type
+  using vector3 = array_type<3>;
 
   /// Operator getting a reference to one element of a non-const matrix
   template <int ROWS, int COLS>

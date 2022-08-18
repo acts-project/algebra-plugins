@@ -12,7 +12,8 @@ template <typename scalar_t, typename point2_t, typename point3_t,
           typename vector2_t, typename vector3_t, typename transform3_t,
           typename cartesian2_t, typename cartesian3_t, typename polar2_t,
           typename cylindrical2_t, typename cylindrical3_t, typename line2_t,
-          typename size_ty,
+          typename bound_track_parameters_t, typename free_track_parameters_t,
+          typename column_wise_operator_t, typename size_ty,
           template <typename, size_ty, size_ty> class matrix_t,
           typename vector_actor_t, class matrix_actor_t>
 struct test_types {
@@ -29,6 +30,9 @@ struct test_types {
   using cylindrical2 = cylindrical2_t;
   using cylindrical3 = cylindrical3_t;
   using line2 = line2_t;
+  using bound_track_parameters = bound_track_parameters_t;
+  using free_track_parameters = free_track_parameters_t;
+  using column_wise_operator = column_wise_operator_t;
   using size_type = size_ty;
   template <size_type ROWS, size_type COLS>
   using matrix = matrix_t<scalar, ROWS, COLS>;

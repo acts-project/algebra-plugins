@@ -40,7 +40,10 @@ typedef testing::Types<
         algebra::eigen::transform3<float>, algebra::eigen::cartesian2<float>,
         algebra::eigen::cartesian3<float>, algebra::eigen::polar2<float>,
         algebra::eigen::cylindrical2<float>,
-        algebra::eigen::cylindrical3<float>, algebra::eigen::line2<float>, int,
+        algebra::eigen::cylindrical3<float>, algebra::eigen::line2<float>,
+        algebra::eigen::bound_track_parameters<float>,
+        algebra::eigen::free_track_parameters<float>,
+        algebra::eigen::column_wise_operator<float>, int,
         algebra::eigen::matrix_type, algebra::vector::actor,
         algebra::matrix::actor<float>>,
     test_types<
@@ -50,7 +53,10 @@ typedef testing::Types<
         algebra::eigen::cartesian3<double>, algebra::eigen::polar2<double>,
         algebra::eigen::cylindrical2<double>,
         algebra::eigen::cylindrical3<double>, algebra::eigen::line2<double>,
-        int, algebra::eigen::matrix_type, algebra::vector::actor,
+        algebra::eigen::bound_track_parameters<double>,
+        algebra::eigen::free_track_parameters<double>,
+        algebra::eigen::column_wise_operator<double>, int,
+        algebra::eigen::matrix_type, algebra::vector::actor,
         algebra::matrix::actor<double>>>
     eigen_eigen_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,

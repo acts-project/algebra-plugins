@@ -59,8 +59,8 @@ struct free_track_parameters {
             matrix_actor().template zero<E::free_size, E::free_size>()){};
 
   ALGEBRA_HOST_DEVICE
-  free_track_parameters(const vector_type& params, const covariance_type& cov)
-      : m_vector(params), m_covariance(cov) {}
+  free_track_parameters(const vector_type& vec, const covariance_type& cov)
+      : m_vector(vec), m_covariance(cov) {}
 
   ALGEBRA_HOST_DEVICE
   free_track_parameters(const point3& pos, const scalar_type time,

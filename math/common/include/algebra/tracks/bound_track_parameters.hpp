@@ -42,8 +42,8 @@ struct bound_track_parameters {
   using E = track_indices_t;
 
   // Shorthand vector/matrix types related to bound track parameters.
-  using bound_vector = matrix_type<E::bound_size, 1>;
-  using bound_matrix = matrix_type<E::bound_size, E::bound_size>;
+  using vector_type = matrix_type<E::bound_size, 1>;
+  using covariance_type = matrix_type<E::bound_size, E::bound_size>;
 
   // Track helper
   using track_helper = detail::track_helper<matrix_actor, E>;
@@ -57,24 +57,24 @@ struct bound_track_parameters {
             matrix_actor().template zero<E::bound_size, E::bound_size>()) {}
 
   ALGEBRA_HOST_DEVICE
-  bound_track_parameters(const std::size_t sf_idx, const bound_vector& params,
-                         const bound_matrix& cov)
-      : m_surface_link(sf_idx), m_vector(params), m_covariance(cov) {}
+  bound_track_parameters(const std::size_t sf_idx, const vector_type& vec,
+                         const covariance_type& cov)
+      : m_surface_link(sf_idx), m_vector(vec), m_covariance(cov) {}
 
   ALGEBRA_HOST_DEVICE
   const std::size_t& surface_link() const { return m_surface_link; }
 
   ALGEBRA_HOST_DEVICE
-  const bound_vector& vector() const { return m_vector; }
+  const vector_type& vector() const { return m_vector; }
 
   ALGEBRA_HOST_DEVICE
-  void set_vector(const bound_vector& v) { m_vector = v; }
+  void set_vector(const vector_type& v) { m_vector = v; }
 
   ALGEBRA_HOST_DEVICE
-  const bound_matrix& covariance() const { return m_covariance; }
+  const covariance_type& covariance() const { return m_covariance; }
 
   ALGEBRA_HOST_DEVICE
-  void set_covariance(const bound_matrix& c) { m_covariance = c; }
+  void set_covariance(const covariance_type& c) { m_covariance = c; }
 
   ALGEBRA_HOST_DEVICE
   point3 local() const { return track_helper().local(m_vector); }
@@ -113,8 +113,8 @@ struct bound_track_parameters {
 
  private:
   std::size_t m_surface_link;
-  bound_vector m_vector;
-  bound_matrix m_covariance;
+  vector_type m_vector;
+  covariance_type m_covariance;
 };
 
 }  // namespace algebra::common

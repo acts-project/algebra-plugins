@@ -47,7 +47,7 @@ using block_getter = cmath::block_getter<size_type, Vc::array, scalar_t>;
 template <typename scalar_t, typename determinant_actor_t,
           typename inverse_actor_t>
 using actor =
-    cmath::matrix::actor<size_type, array_type, matrix_type, scalar_t,
+    cmath::matrix::actor<size_type, Vc::array, matrix_type, scalar_t,
                          determinant_actor_t, inverse_actor_t,
                          element_getter<scalar_t>, block_getter<scalar_t>>;
 

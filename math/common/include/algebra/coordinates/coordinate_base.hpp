@@ -89,14 +89,16 @@ struct coordinate_base {
     return bound_vec;
   }
 
-  ALGEBRA_HOST_DEVICE
-  inline free_vector bound_to_free_vector(const transform3_type& trf3,
-                                          const bound_vector& bound_vec) const {
+  template <typename mask_t>
+  ALGEBRA_HOST_DEVICE inline free_vector bound_to_free_vector(
+      const transform3_type& trf3, const mask_t& mask,
+      const bound_vector& bound_vec) const {
 
     const point2 local = track_helper().local(bound_vec);
     const vector3 dir = track_helper().dir(bound_vec);
 
-    const auto pos = Derived<transform3_t, E>().local_to_global(trf3, local);
+    const auto pos =
+        Derived<transform3_t, E>().local_to_global(trf3, mask, local, dir);
 
     free_vector free_vec;
     matrix_actor().element(free_vec, E::free_pos0, 0) = pos[0];

@@ -234,10 +234,12 @@ class test_device_basics : public test_base<T> {
 
     transform3 tr(t1, t2, t3);
     cartesian2 ca;
+    struct dummy_mask {
+    } mask;
 
     point2 p1 = ca.global_to_local(tr, a, b);
     point2 p2 = ca(b);
-    point3 p3 = ca.local_to_global(tr, p2);
+    point3 p3 = ca.local_to_global(tr, mask, p2, b);
 
     return {vector_actor().phi(p1) + vector_actor().norm(p2) +
             vector_actor().perp(p3)};
@@ -250,10 +252,12 @@ class test_device_basics : public test_base<T> {
 
     transform3 tr(t1, t2, t3);
     cartesian3 ca;
+    struct dummy_mask {
+    } mask;
 
     point3 p1 = ca.global_to_local(tr, a, b);
     point3 p2 = ca(b);
-    point3 p3 = ca.local_to_global(tr, p2);
+    point3 p3 = ca.local_to_global(tr, mask, p2, b);
 
     return {vector_actor().phi(p1) + vector_actor().norm(p2) +
             vector_actor().perp(p3)};
@@ -278,7 +282,7 @@ class test_device_basics : public test_base<T> {
 
     point2 p1 = cy.global_to_local(tr, a, b);
     point2 p2 = cy(b);
-    point3 p3 = cy.local_to_global(tr, mask, p2);
+    point3 p3 = cy.local_to_global(tr, mask, p2, b);
 
     return {vector_actor().phi(p1) + vector_actor().norm(p2) +
             vector_actor().perp(p3)};
@@ -291,10 +295,12 @@ class test_device_basics : public test_base<T> {
 
     transform3 tr(t1, t2, t3);
     cylindrical3 cy;
+    struct dummy_mask {
+    } mask;
 
     point3 p1 = cy.global_to_local(tr, a, b);
     point3 p2 = cy(b);
-    point3 p3 = cy.local_to_global(tr, p2);
+    point3 p3 = cy.local_to_global(tr, mask, p2, b);
 
     return {vector_actor().phi(p1) + vector_actor().norm(p2) +
             vector_actor().perp(p3)};
@@ -307,11 +313,13 @@ class test_device_basics : public test_base<T> {
 
     transform3 tr(t1, t2, t3);
     polar2 po;
+    struct dummy_mask {
+    } mask;
 
     point2 p1 = po.global_to_local(tr, a, b);
     point2 p2 = po(b);
     point2 p3 = po(p1);
-    point3 p4 = po.local_to_global(tr, p2);
+    point3 p4 = po.local_to_global(tr, mask, p2, b);
 
     return {vector_actor().phi(p2) + vector_actor().norm(p3) +
             +vector_actor().perp(p4)};
@@ -324,9 +332,11 @@ class test_device_basics : public test_base<T> {
 
     transform3 tr(t1, t2, t3);
     line2 li;
+    struct dummy_mask {
+    } mask;
 
     point2 p1 = li.global_to_local(tr, a, b);
-    point3 p2 = li.local_to_global(tr, p1, b);
+    point3 p2 = li.local_to_global(tr, mask, p1, b);
 
     return {vector_actor().phi(p1) + vector_actor().norm(p2)};
   }

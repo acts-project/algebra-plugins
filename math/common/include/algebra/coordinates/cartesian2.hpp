@@ -86,9 +86,10 @@ struct cartesian2 final
 
   /** This method transform from a local 2D cartesian point to a point global
    * cartesian 3D frame*/
-  ALGEBRA_HOST_DEVICE
-  inline point3 local_to_global(const transform3_type &trf,
-                                const point2 &p) const {
+  template <typename mask_t>
+  ALGEBRA_HOST_DEVICE inline point3 local_to_global(
+      const transform3_type &trf, const mask_t & /*mask*/, const point2 &p,
+      const vector3 & /*d*/) const {
     return trf.point_to_global(point3{p[0], p[1], 0.});
   }
 

@@ -74,9 +74,11 @@ struct line2 : public coordinate_base<line2, transform3_t, track_indices_t> {
 
   /** This method transform from a local 2D line point to a point global
    * cartesian 3D frame*/
-  ALGEBRA_HOST_DEVICE
-  inline point3 local_to_global(const transform3_type &trf, const point2 &p,
-                                const vector3 &d) const {
+  template <typename mask_t>
+  ALGEBRA_HOST_DEVICE inline point3 local_to_global(const transform3_type &trf,
+                                                    const mask_t & /*mask*/,
+                                                    const point2 &p,
+                                                    const vector3 &d) const {
 
     // Line direction
     const vector3 z = trf.z();

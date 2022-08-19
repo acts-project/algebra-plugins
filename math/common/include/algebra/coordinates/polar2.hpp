@@ -64,14 +64,36 @@ struct polar2 : public coordinate_base<polar2, transform3_t, track_indices_t> {
 
   /** This method transform from a local 2D polar point to a point global
    * cartesian 3D frame*/
-  ALGEBRA_HOST_DEVICE
-  inline point3 local_to_global(const transform3_type &trf,
-                                const point2 &p) const {
+  template <typename mask_t>
+  ALGEBRA_HOST_DEVICE inline point3 local_to_global(
+      const transform3_type &trf, const mask_t & /*mask*/, const point2 &p,
+      const vector3 & /*d*/) const {
     const scalar_type x = p[0] * std::cos(p[1]);
     const scalar_type y = p[0] * std::sin(p[1]);
 
     return trf.point_to_global(point3{x, y, 0.});
   }
+
+  /*
+  ALGEBRA_HOST_DEVICE
+  inline matrix_type<3, 2> bound_to_free_rotation(
+      const transform3_type &trf3, const bound_vector & /*bound_vec*/) {
+
+    // Get d(x_glo,y_glo,z_glo)/d(x_loc, y_loc)
+    return matrix_actor().template block<3, 2>(trf3.matrix(), 0, 0);
+  }
+
+  ALGEBRA_HOST_DEVICE
+  inline matrix_type<2, 3> free_to_bound_rotation(
+      const transform3_type &trf3, const free_vector & /*free_vec*/) {
+
+    // Get transpose of transform3 matrix
+    const auto trf3T = matrix_actor().transpose(trf3);
+
+    // Get d(x_loc, y_loc)/d(x_glo,y_glo,z_glo)
+    return matrix_actor().template block<2, 3>(trf3T.matrix(), 0, 0);
+  }
+  * /
 };
 
 }  // namespace algebra::common

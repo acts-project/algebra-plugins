@@ -64,10 +64,10 @@ struct cylindrical2
 
   /** This method transform from a local 2D cylindrical point to a point global
    * cartesian 3D frame*/
-  template <typename cylinder_mask_t>
-  ALGEBRA_HOST_DEVICE inline point3 local_to_global(const transform3_type &trf,
-                                                    const cylinder_mask_t &mask,
-                                                    const point2 &p) const {
+  template <typename mask_t>
+  ALGEBRA_HOST_DEVICE inline point3 local_to_global(
+      const transform3_type &trf, const mask_t &mask, const point2 &p,
+      const vector3 & /*d*/) const {
     const scalar_type r = mask.radius();
     const scalar_type phi = p[0] / r;
     const scalar_type x = r * std::cos(phi);

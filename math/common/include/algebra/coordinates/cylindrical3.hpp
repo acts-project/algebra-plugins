@@ -61,9 +61,10 @@ struct cylindrical3 final
 
   /** This method transform from a local 3D cylindrical point to a point global
    * cartesian 3D frame*/
-  ALGEBRA_HOST_DEVICE
-  inline point3 local_to_global(const transform3_type &trf,
-                                const point3 &p) const {
+  template <typename mask_t>
+  ALGEBRA_HOST_DEVICE inline point3 local_to_global(
+      const transform3_type &trf, const mask_t & /*mask*/, const point3 &p,
+      const vector3 & /*d*/) const {
     const scalar_type x = p[0] * std::cos(p[1]);
     const scalar_type y = p[0] * std::sin(p[1]);
 

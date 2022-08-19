@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "*.sycl": "cpp",
-        "array": "cpp",
-        "initializer_list": "cpp",
-        "string_view": "cpp"
-    }
-}

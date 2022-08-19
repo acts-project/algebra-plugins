@@ -13,7 +13,8 @@
 
 namespace algebra::common {
 
-template <typename matrix_actor_t, typename track_indices_t>
+template <typename matrix_actor_t, typename vector_actor_t,
+          typename track_indices_t>
 struct bound_track_parameters {
 
   /// @name Type definitions for the struct
@@ -21,6 +22,8 @@ struct bound_track_parameters {
 
   /// Matrix actor
   using matrix_actor = matrix_actor_t;
+  /// Vector actor
+  using vector_actor = vector_actor_t;
   /// Size type
   using size_type = typename matrix_actor_t::size_ty;
   /// Scalar type
@@ -46,7 +49,7 @@ struct bound_track_parameters {
   using covariance_type = matrix_type<E::bound_size, E::bound_size>;
 
   // Track helper
-  using track_helper = detail::track_helper<matrix_actor, E>;
+  using track_helper = detail::track_helper<matrix_actor, vector_actor, E>;
 
   /// @}
 

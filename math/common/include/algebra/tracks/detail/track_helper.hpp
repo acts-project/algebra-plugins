@@ -9,17 +9,20 @@
 
 // Project include(s).
 #include "algebra/qualifiers.hpp"
+#include "algebra/tracks/detail/trigonometrics.hpp"
 
 // System include(s).
 #include <cmath>
 
 namespace algebra::common::detail {
 
-template <typename matrix_actor_t, typename E>
+template <typename matrix_actor_t, typename vector_actor_t, typename E>
 struct track_helper {
 
   /// Matrix actor
   using matrix_actor = matrix_actor_t;
+  /// Vector actor
+  using vector_actor = vector_actor_t;
   /// Size type
   using size_type = typename matrix_actor_t::size_ty;
   /// Scalar type
@@ -36,6 +39,8 @@ struct track_helper {
   using point3 = vector3;
   /// Point in 2D space
   using point2 = array_type<2>;
+  /// Trigonometrics
+  using trigonometrics = detail::trigonometrics<scalar_type>;
 
   /// Track vector types
   using bound_vector = matrix_type<E::bound_size, 1>;
@@ -83,6 +88,25 @@ struct track_helper {
     const auto sinTheta = std::sin(theta);
 
     return {std::cos(phi) * sinTheta, std::sin(phi) * sinTheta, cosTheta};
+  }
+
+  ALGEBRA_HOST_DEVICE
+  inline trigonometrics get_trigonometrics(
+      const bound_vector& bound_vec) const {
+    const scalar_type theta =
+        matrix_actor().element(bound_vec, E::bound_theta, 0);
+    const scalar_type phi = matrix_actor().element(bound_vec, E::bound_phi, 0);
+
+    return {std::cos(theta), std::sin(theta), std::cos(phi), std::sin(phi)};
+  }
+
+  ALGEBRA_HOST_DEVICE
+  inline trigonometrics get_trigonometrics(const free_vector& free_vec) const {
+
+    const scalar_type theta = vector_actor().theta(dir);
+    const scalar_type phi = vector_actor().phi(dir);
+
+    return {std::cos(theta), std::sin(theta), std::cos(phi), std::sin(phi)};
   }
 };
 

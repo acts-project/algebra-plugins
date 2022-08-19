@@ -45,17 +45,11 @@ struct cartesian2 final
   using matrix_type = typename base_type::matrix_type<ROWS, COLS>;
   /// Track indices
   using E = track_indices_t;
-
-  // Shorthand vector/matrix types related to bound track parameters.
+  // Trigonometrics
+  using trigonometrics = typename base_type::trigonometrics;
+  // Vector types
   using bound_vector = typename base_type::bound_vector;
-  using bound_matrix = typename base_type::bound_matrix;
-
-  // Mapping from bound track parameters.
-  using bound_to_free_matrix = typename base_type::bound_to_free_matrix;
-
-  // Shorthand vector/matrix types related to free track parameters.
   using free_vector = typename base_type::free_vector;
-  using free_matrix = typename base_type::free_matrix;
 
   /// @}
 
@@ -95,20 +89,20 @@ struct cartesian2 final
 
   ALGEBRA_HOST_DEVICE
   inline matrix_type<3, 2> bound_to_free_rotation(
-      const transform3_type &trf3, const bound_vector & /*bound_vec*/) {
+      const transform3_type &trf3, const trigonometrics & /*t*/) {
 
-    // Get d(x_glo,y_glo,z_glo)/d(x_loc, y_loc)
+    // Get d(x,y,z)/d(loc0, loc1)
     return matrix_actor().template block<3, 2>(trf3.matrix(), 0, 0);
   }
 
   ALGEBRA_HOST_DEVICE
   inline matrix_type<2, 3> free_to_bound_rotation(
-      const transform3_type &trf3, const free_vector & /*free_vec*/) {
+      const transform3_type &trf3, const trigonometrics & /*t*/) {
 
     // Get transpose of transform3 matrix
     const auto trf3T = matrix_actor().transpose(trf3);
 
-    // Get d(x_loc, y_loc)/d(x_glo,y_glo,z_glo)
+    // Get d(loc0, loc1)/d(x,y,z)
     return matrix_actor().template block<2, 3>(trf3T.matrix(), 0, 0);
   }
 

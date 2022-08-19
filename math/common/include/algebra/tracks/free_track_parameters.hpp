@@ -48,7 +48,7 @@ struct free_track_parameters {
   using covariance_type = matrix_type<E::free_size, E::free_size>;
 
   // Track helper
-  using track_helper = detail::track_helper<matrix_actor, E>;
+  using track_helper = detail::track_helper<matrix_actor, vector_actor, E>;
 
   /// @}
 

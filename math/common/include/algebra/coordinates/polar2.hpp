@@ -36,8 +36,20 @@ struct polar2 : public coordinate_base<polar2, transform3_t, track_indices_t> {
   using vector3 = typename base_type::vector3;
   /// Vector actor
   using vector_actor = typename base_type::vector_actor;
+  /// Matrix actor
+  using matrix_actor = typename base_type::matrix_actor;
+  /// Matrix size type
+  using size_type = typename base_type::size_type;
+  /// 2D matrix type
+  template <size_type ROWS, size_type COLS>
+  using matrix_type = typename base_type::matrix_type<ROWS, COLS>;
   /// Track indices
   using E = track_indices_t;
+  // Trigonometrics
+  using trigonometrics = typename base_type::trigonometrics;
+  // Vector types
+  using bound_vector = typename base_type::bound_vector;
+  using free_vector = typename base_type::free_vector;
 
   /** This method transform from a point from 2D cartesian frame to a 2D
    * polar point */
@@ -74,26 +86,16 @@ struct polar2 : public coordinate_base<polar2, transform3_t, track_indices_t> {
     return trf.point_to_global(point3{x, y, 0.});
   }
 
-  /*
   ALGEBRA_HOST_DEVICE
   inline matrix_type<3, 2> bound_to_free_rotation(
-      const transform3_type &trf3, const bound_vector & /*bound_vec*/) {
+      const transform3_type &trf3, const trigonometrics & /*t*/) {
 
-    // Get d(x_glo,y_glo,z_glo)/d(x_loc, y_loc)
-    return matrix_actor().template block<3, 2>(trf3.matrix(), 0, 0);
+    matrix_type<3, 2> bound_to_free_rotation =
+        matrix_actor().template zero<3, 2>();
   }
 
-  ALGEBRA_HOST_DEVICE
-  inline matrix_type<2, 3> free_to_bound_rotation(
-      const transform3_type &trf3, const free_vector & /*free_vec*/) {
-
-    // Get transpose of transform3 matrix
-    const auto trf3T = matrix_actor().transpose(trf3);
-
-    // Get d(x_loc, y_loc)/d(x_glo,y_glo,z_glo)
-    return matrix_actor().template block<2, 3>(trf3T.matrix(), 0, 0);
-  }
-  * /
+  ALGEBRA_HOST_DEVICE inline matrix_type<2, 3> free_to_bound_rotation(
+      const transform3_type &trf3, const trigonometrics & /*t*/) {}
 };
 
 }  // namespace algebra::common

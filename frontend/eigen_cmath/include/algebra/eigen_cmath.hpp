@@ -158,7 +158,8 @@ using line2 = common::line2<transform3<T>, track_indices>;
 
 template <typename T>
 using bound_track_parameters =
-    common::bound_track_parameters<matrix_actor<T>, track_indices>;
+    common::bound_track_parameters<matrix_actor<T>, algebra::vector::actor,
+                                   track_indices>;
 template <typename T>
 using free_track_parameters =
     common::free_track_parameters<matrix_actor<T>, algebra::vector::actor,

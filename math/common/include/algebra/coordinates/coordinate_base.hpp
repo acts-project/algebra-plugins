@@ -41,27 +41,23 @@ struct coordinate_base {
   /// 2D matrix type
   template <size_type ROWS, size_type COLS>
   using matrix_type = typename matrix_actor::matrix_type<ROWS, COLS>;
-
   /// Track indices
   using E = track_indices_t;
-
   /// Shorthand vector/matrix types related to bound track parameters.
   using bound_vector = matrix_type<E::bound_size, 1>;
   using bound_matrix = matrix_type<E::bound_size, E::bound_size>;
-
   /// Mapping from bound track parameters.
   using bound_to_free_matrix = matrix_type<E::free_size, E::bound_size>;
-
   // Shorthand vector/matrix types related to free track parameters.
   using free_vector = matrix_type<E::free_size, 1>;
   using free_matrix = matrix_type<E::free_size, E::free_size>;
-
   // Mapping from free track parameters.
   using free_to_bound_matrix = matrix_type<E::bound_size, E::free_size>;
   using free_to_path_matrix = matrix_type<1, E::free_size>;
-
   // Track helper
-  using track_helper = detail::track_helper<matrix_actor, E>;
+  using track_helper = detail::track_helper<matrix_actor, vector_actor, E>;
+  // Trigonometrics
+  using trigonometrics = typename track_helper::trigonometrics;
 
   /// @}
 
@@ -123,32 +119,26 @@ struct coordinate_base {
         matrix_actor().template zero<E::free_size, E::bound_size>();
 
     // Get trigonometric values
-    const scalar_type theta =
-        matrix_actor().element(bound_vec, E::bound_theta, 0);
-    const scalar_type phi = matrix_actor().element(bound_vec, E::bound_phi, 0);
-    const scalar_type cos_theta = std::cos(theta);
-    const scalar_type sin_theta = std::sin(theta);
-    const scalar_type cos_phi = std::cos(phi);
-    const scalar_type sin_phi = std::sin(phi);
+    const auto t = track_helper().get_trigonometrics(bound_vec);
 
-    // Get d(x_glo,y_glo,z_glo)/d(x_loc, y_loc)
+    // Get d(x,y,z)/d(loc0, loc1)
     const matrix_type<3, 2> bound_to_free_rotation =
-        Derived<transform3_t, E>().bound_to_free_rotation(trf3, bound_vec);
+        Derived<transform3_t, E>().bound_to_free_rotation(trf3, t);
 
     matrix_actor().template set_block(jac_to_global, bound_to_free_rotation,
                                       E::free_pos0, E::bound_loc0);
 
     matrix_actor().element(jac_to_global, E::free_time, E::bound_time) = 1;
     matrix_actor().element(jac_to_global, E::free_dir0, E::bound_phi) =
-        -1 * sin_theta * sin_phi;
+        -1 * t.sin_theta * t.sin_phi;
     matrix_actor().element(jac_to_global, E::free_dir0, E::bound_theta) =
-        cos_theta * cos_phi;
+        t.cos_theta * t.cos_phi;
     matrix_actor().element(jac_to_global, E::free_dir1, E::bound_phi) =
-        sin_theta * cos_phi;
+        t.sin_theta * t.cos_phi;
     matrix_actor().element(jac_to_global, E::free_dir1, E::bound_theta) =
-        cos_theta * sin_phi;
+        t.cos_theta * t.sin_phi;
     matrix_actor().element(jac_to_global, E::free_dir2, E::bound_theta) =
-        -1 * sin_theta;
+        -1 * t.sin_theta;
     matrix_actor().element(jac_to_global, E::free_qoverp, E::bound_qoverp) = 1;
 
     return jac_to_global;
@@ -166,17 +156,11 @@ struct coordinate_base {
     const vector3 dir = track_helper().dir(free_vec);
 
     // Get trigonometric values
-    const scalar_type theta = vector_actor().theta(dir);
-    const scalar_type phi = vector_actor().phi(dir);
-    const scalar_type cos_theta = std::cos(theta);
-    const scalar_type sin_theta = std::sin(theta);
-    const scalar_type inv_sin_theta = 1. / sin_theta;
-    const scalar_type cos_phi = std::cos(phi);
-    const scalar_type sin_phi = std::sin(phi);
+    const auto t = track_helper().get_trigonometrics(free_vec);
 
-    // Get d(x_loc, y_loc)/d(x_glo,y_glo,z_glo)
+    // Get d(loc0, loc1)/d(x,y,z)
     const matrix_type<2, 3> free_to_bound_rotation =
-        Derived<transform3_t, E>().free_to_bound_rotation(trf3, free_vec);
+        Derived<transform3_t, E>().free_to_bound_rotation(trf3, t);
 
     matrix_actor().template set_block(jac_to_local, free_to_bound_rotation,
                                       E::bound_loc0, E::free_pos0);
@@ -186,15 +170,15 @@ struct coordinate_base {
 
     // Set d(phi, theta)/d(free dir)
     matrix_actor().element(jac_to_local, E::bound_phi, E::free_dir0) =
-        -1. * sin_phi * inv_sin_theta;
+        -1. * t.sin_phi / t.sin_theta;
     matrix_actor().element(jac_to_local, E::bound_phi, E::free_dir1) =
-        cos_phi * inv_sin_theta;
+        t.cos_phi / t.sin_theta;
     matrix_actor().element(jac_to_local, E::bound_theta, E::free_dir0) =
-        cos_phi * cos_theta;
+        t.cos_phi * t.cos_theta;
     matrix_actor().element(jac_to_local, E::bound_theta, E::free_dir1) =
-        sin_phi * cos_theta;
+        t.sin_phi * t.cos_theta;
     matrix_actor().element(jac_to_local, E::bound_theta, E::free_dir2) =
-        -1 * sin_theta;
+        -1 * t.sin_theta;
 
     // Set d(Free Qop)/d(Bound Qop)
     matrix_actor().element(jac_to_local, E::bound_qoverp, E::free_qoverp) = 1;

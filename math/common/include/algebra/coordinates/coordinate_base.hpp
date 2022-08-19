@@ -71,7 +71,8 @@ struct coordinate_base {
     const point3 pos = track_helper().pos(free_vec);
     const vector3 dir = track_helper().dir(free_vec);
 
-    const point2 local = Derived<transform3_t, E>().global_to_local(trf3, pos);
+    const point2 local =
+        Derived<transform3_t, E>().global_to_local(trf3, pos, dir);
 
     bound_vector bound_vec;
     matrix_actor().element(bound_vec, E::bound_loc0, 0) = local[0];

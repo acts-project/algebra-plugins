@@ -49,8 +49,8 @@ struct cartesian3 final
   /** This method transform from a point from global cartesian 3D frame to a
    * local 3D cartesian point */
   ALGEBRA_HOST_DEVICE
-  inline point3 global_to_local(const transform3_type &trf,
-                                const point3 &p) const {
+  inline point3 global_to_local(const transform3_type &trf, const point3 &p,
+                                const vector3 & /*d*/) const {
     return trf.point_to_local(p);
   }
 

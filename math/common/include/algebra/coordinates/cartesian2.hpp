@@ -78,8 +78,8 @@ struct cartesian2 final
   /** This method transform from a point from global cartesian 3D frame to a
    * local 2D cartesian point */
   ALGEBRA_HOST_DEVICE
-  inline point2 global_to_local(const transform3_type &trf,
-                                const point3 &p) const {
+  inline point2 global_to_local(const transform3_type &trf, const point3 &p,
+                                const vector3 & /*d*/) const {
     const auto local3 = trf.point_to_local(p);
     return this->operator()(local3);
   }

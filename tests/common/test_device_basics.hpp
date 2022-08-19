@@ -235,7 +235,7 @@ class test_device_basics : public test_base<T> {
     transform3 tr(t1, t2, t3);
     cartesian2 ca;
 
-    point2 p1 = ca.global_to_local(tr, a);
+    point2 p1 = ca.global_to_local(tr, a, b);
     point2 p2 = ca(b);
     point3 p3 = ca.local_to_global(tr, p2);
 
@@ -251,7 +251,7 @@ class test_device_basics : public test_base<T> {
     transform3 tr(t1, t2, t3);
     cartesian3 ca;
 
-    point3 p1 = ca.global_to_local(tr, a);
+    point3 p1 = ca.global_to_local(tr, a, b);
     point3 p2 = ca(b);
     point3 p3 = ca.local_to_global(tr, p2);
 
@@ -276,9 +276,9 @@ class test_device_basics : public test_base<T> {
     const scalar r = 2.;
     const cylinder_mask mask{r};
 
-    point2 p1 = cy.global_to_local(tr, a);
+    point2 p1 = cy.global_to_local(tr, a, b);
     point2 p2 = cy(b);
-    point3 p3 = cy.local_to_global(tr, p2, mask);
+    point3 p3 = cy.local_to_global(tr, mask, p2);
 
     return {vector_actor().phi(p1) + vector_actor().norm(p2) +
             vector_actor().perp(p3)};
@@ -292,7 +292,7 @@ class test_device_basics : public test_base<T> {
     transform3 tr(t1, t2, t3);
     cylindrical3 cy;
 
-    point3 p1 = cy.global_to_local(tr, a);
+    point3 p1 = cy.global_to_local(tr, a, b);
     point3 p2 = cy(b);
     point3 p3 = cy.local_to_global(tr, p2);
 
@@ -308,7 +308,7 @@ class test_device_basics : public test_base<T> {
     transform3 tr(t1, t2, t3);
     polar2 po;
 
-    point2 p1 = po.global_to_local(tr, a);
+    point2 p1 = po.global_to_local(tr, a, b);
     point2 p2 = po(b);
     point2 p3 = po(p1);
     point3 p4 = po.local_to_global(tr, p2);

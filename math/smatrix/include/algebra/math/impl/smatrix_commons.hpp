@@ -8,6 +8,4 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/coordinates/coordinates.hpp"
-#include "algebra/tracks/tracks.hpp"
 #include "algebra/utils/utils.hpp"

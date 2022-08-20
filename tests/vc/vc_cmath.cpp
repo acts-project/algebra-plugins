@@ -36,12 +36,7 @@ struct test_specialisation_name {
 typedef testing::Types<
     test_types<float, Vc::array<float, 2>, Vc::array<float, 3>,
                Vc::array<float, 2>, Vc::array<float, 3>,
-               algebra::vc::transform3<float>, algebra::vc::cartesian2<float>,
-               algebra::vc::cartesian3<float>, algebra::vc::polar2<float>,
-               algebra::vc::cylindrical2<float>,
-               algebra::vc::cylindrical3<float>, algebra::vc::line2<float>,
-               algebra::vc::bound_track_parameters<float>,
-               algebra::vc::free_track_parameters<float>,
+               algebra::vc::transform3<float>,
                algebra::vc::column_wise_operator<float>, std::size_t,
                algebra::vc::matrix_type, algebra::vector::actor<float>,
                algebra::matrix::actor<
@@ -49,12 +44,7 @@ typedef testing::Types<
                    algebra::matrix::inverse::preset0<float>>>,
     test_types<double, Vc::array<double, 2>, Vc::array<double, 3>,
                Vc::array<double, 2>, Vc::array<double, 3>,
-               algebra::vc::transform3<double>, algebra::vc::cartesian2<double>,
-               algebra::vc::cartesian3<double>, algebra::vc::polar2<double>,
-               algebra::vc::cylindrical2<double>,
-               algebra::vc::cylindrical3<double>, algebra::vc::line2<double>,
-               algebra::vc::bound_track_parameters<double>,
-               algebra::vc::free_track_parameters<double>,
+               algebra::vc::transform3<double>,
                algebra::vc::column_wise_operator<double>, std::size_t,
                algebra::vc::matrix_type, algebra::vector::actor<double>,
                algebra::matrix::actor<

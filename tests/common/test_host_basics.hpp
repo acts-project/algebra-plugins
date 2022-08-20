@@ -510,361 +510,47 @@ TYPED_TEST_P(test_host_basics, global_transformations) {
   ASSERT_NEAR(lvectorB[2], lvectorC[2], this->m_isclose);
 }
 
-// This test local coordinate transforms
-TYPED_TEST_P(test_host_basics, local_transformations) {
+// This test column wise operator
+TYPED_TEST_P(test_host_basics, column_wise_operator) {
+  typename TypeParam::column_wise_operator co;
+  typename TypeParam::template matrix<3, 3> m33;
+  algebra::getter::element(m33, 0, 0) = 1;
+  algebra::getter::element(m33, 0, 1) = 5;
+  algebra::getter::element(m33, 0, 2) = 7;
+  algebra::getter::element(m33, 1, 0) = 3;
+  algebra::getter::element(m33, 1, 1) = 5;
+  algebra::getter::element(m33, 1, 2) = 6;
+  algebra::getter::element(m33, 2, 0) = 2;
+  algebra::getter::element(m33, 2, 1) = 8;
+  algebra::getter::element(m33, 2, 2) = 9;
 
-  typename TypeParam::point2 p2 = {3., 3.};
-  typename TypeParam::point3 p3 = {3., 3., 5.};
+  typename TypeParam::vector3 v3{1., 2., 3.};
 
-  typename TypeParam::cartesian2 c2;
-  auto cart2fromp3 = c2(p3);
-  ASSERT_NEAR(p2[0], cart2fromp3[0], this->m_epsilon);
-  ASSERT_NEAR(p2[1], cart2fromp3[1], this->m_epsilon);
+  const auto m33_v3_cr = co.cross(m33, v3);
 
-  typename TypeParam::polar2 pol2;
-  auto polfrom2 = pol2(p2);
-  auto polfrom3 = pol2(p3);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_cr, 0, 0), 5., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_cr, 1, 0), -1., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_cr, 2, 0), -1., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_cr, 0, 1), -1., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_cr, 1, 1), -7., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_cr, 2, 1), 5., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_cr, 0, 2), 0., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_cr, 1, 2), -12., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_cr, 2, 2), 8., this->m_epsilon);
 
-  // Check r-phi
-  ASSERT_NEAR(polfrom2[0], std::sqrt(18.), this->m_isclose);
-  ASSERT_NEAR(polfrom2[1], M_PI_4, this->m_isclose);
+  const auto m33_v3_mu = co.multiply(m33, v3);
 
-  // Need to be identical
-  ASSERT_NEAR(polfrom2[0], polfrom3[0], this->m_epsilon);
-  ASSERT_NEAR(polfrom2[1], polfrom3[1], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_mu, 0, 0), 1., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_mu, 1, 0), 6., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_mu, 2, 0), 6., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_mu, 0, 1), 5., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_mu, 1, 1), 10., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_mu, 2, 1), 24., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_mu, 0, 2), 7., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_mu, 1, 2), 12., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m33_v3_mu, 2, 2), 27., this->m_epsilon);
 }
-
-// This test cartesian2 coordinate
-TYPED_TEST_P(test_host_basics, cartesian2) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::cartesian2 c2;
-  const typename TypeParam::point3 global1 = {4., 7., 4.};
-  const typename TypeParam::vector3 mom = {1., 2., 3.};
-  const typename TypeParam::vector3 d =
-      typename TypeParam::vector_actor().normalize(mom);
-  const typename TypeParam::scalar time = 0.1;
-  const typename TypeParam::scalar charge = -1.;
-  struct dummy_mask {
-  } mask;
-
-  // Global to local transformation
-  const typename TypeParam::point2 local = c2.global_to_local(trf, global1, d);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], 2., this->m_isclose);
-  ASSERT_NEAR(local[1], 4., this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 =
-      c2.local_to_global(trf, mask, local, d);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-
-  // Free track parameter
-  const typename TypeParam::free_track_parameters free_params(global1, time,
-                                                              mom, charge);
-  const auto free_vec1 = free_params.vector();
-
-  const auto bound_vec = c2.free_to_bound_vector(trf, free_vec1);
-  const auto free_vec2 = c2.bound_to_free_vector(trf, mask, bound_vec);
-
-  const typename TypeParam::matrix_actor m;
-
-  // Check if the bound vector is correct
-  ASSERT_NEAR(m.element(bound_vec, 0, 0), 2., this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 1, 0), 4., this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 2, 0), 1.1071487,
-              this->m_isclose);  // atan(2)
-  ASSERT_NEAR(m.element(bound_vec, 3, 0), 0.64052231,
-              this->m_isclose);  // atan(sqrt(5)/3)
-  ASSERT_NEAR(m.element(bound_vec, 4, 0), -1 / 3.7416574, this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 5, 0), 0.1, this->m_isclose);
-
-  // Check if the same free vector is obtained
-  for (int i = 0; i < 8; i++) {
-    ASSERT_NEAR(m.element(free_vec1, i, 0), m.element(free_vec2, i, 0),
-                this->m_isclose);
-  }
-}
-
-// This test cartesian3 coordinate
-TYPED_TEST_P(test_host_basics, cartesian3) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::cartesian3 c3;
-  const typename TypeParam::point3 global1 = {4., 7., 5.};
-  const typename TypeParam::vector3 mom = {1., 2., 3.};
-  const typename TypeParam::vector3 d =
-      typename TypeParam::vector_actor().normalize(mom);
-  struct dummy_mask {
-  } mask;
-
-  // Global to local transformation
-  const typename TypeParam::point3 local = c3.global_to_local(trf, global1, d);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], 2., this->m_isclose);
-  ASSERT_NEAR(local[1], 4., this->m_isclose);
-  ASSERT_NEAR(local[2], 1., this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 =
-      c3.local_to_global(trf, mask, local, d);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-}
-
-// This test polar2 coordinate
-TYPED_TEST_P(test_host_basics, polar2) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::polar2 p2;
-  const typename TypeParam::point3 global1 = {4., 7., 4.};
-  const typename TypeParam::vector3 mom = {1., 2., 3.};
-  const typename TypeParam::vector3 d =
-      typename TypeParam::vector_actor().normalize(mom);
-  const typename TypeParam::scalar time = 0.1;
-  const typename TypeParam::scalar charge = -1.;
-  struct dummy_mask {
-  } mask;
-
-  // Global to local transformation
-  const typename TypeParam::point2 local = p2.global_to_local(trf, global1, d);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], std::sqrt(20.), this->m_isclose);
-  ASSERT_NEAR(local[1], atan2(4., 2.), this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 =
-      p2.local_to_global(trf, mask, local, d);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-
-  // Free track parameter
-  const typename TypeParam::free_track_parameters free_params(global1, time,
-                                                              mom, charge);
-  const auto free_vec1 = free_params.vector();
-
-  const auto bound_vec = p2.free_to_bound_vector(trf, free_vec1);
-  const auto free_vec2 = p2.bound_to_free_vector(trf, mask, bound_vec);
-
-  const typename TypeParam::matrix_actor m;
-
-  // Check if the bound vector is correct
-  ASSERT_NEAR(m.element(bound_vec, 0, 0), std::sqrt(20.), this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 1, 0), atan2(4., 2.), this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 2, 0), 1.1071487,
-              this->m_isclose);  // atan(2)
-  ASSERT_NEAR(m.element(bound_vec, 3, 0), 0.64052231,
-              this->m_isclose);  // atan(sqrt(5)/3)
-  ASSERT_NEAR(m.element(bound_vec, 4, 0), -1 / 3.7416574, this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 5, 0), 0.1, this->m_isclose);
-
-  // Check if the same free vector is obtained
-  for (int i = 0; i < 8; i++) {
-    ASSERT_NEAR(m.element(free_vec1, i, 0), m.element(free_vec2, i, 0),
-                this->m_isclose);
-  }
-}
-
-// This test cylindrical2 coordinate
-TYPED_TEST_P(test_host_basics, cylindrical2) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::cylindrical2 c2;
-  // Global position on surface
-  const typename TypeParam::point3 global1 = {
-      typename TypeParam::scalar{3.4142136},
-      typename TypeParam::scalar{4.4142136}, typename TypeParam::scalar{9.}};
-  const typename TypeParam::vector3 mom = {1., 2., 3.};
-  const typename TypeParam::vector3 d =
-      typename TypeParam::vector_actor().normalize(mom);
-  const typename TypeParam::scalar time = 0.1;
-  const typename TypeParam::scalar charge = -1.;
-
-  // Define cylinder mask
-  struct cylinder_mask {
-    typename TypeParam::scalar r = 0.;
-    typename TypeParam::scalar radius() const { return r; }
-  };
-
-  const typename TypeParam::scalar r = 2.;
-  const cylinder_mask mask{r};
-
-  // Global to local transformation
-  const typename TypeParam::point2 local = c2.global_to_local(trf, global1, d);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], r * typename TypeParam::scalar{M_PI_4},
-              this->m_isclose);
-  ASSERT_NEAR(local[1], 5., this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 =
-      c2.local_to_global(trf, mask, local, d);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-
-  // Free track parameter
-  const typename TypeParam::free_track_parameters free_params(global1, time,
-                                                              mom, charge);
-  const auto free_vec1 = free_params.vector();
-
-  const auto bound_vec = c2.free_to_bound_vector(trf, free_vec1);
-  const auto free_vec2 = c2.bound_to_free_vector(trf, mask, bound_vec);
-
-  const typename TypeParam::matrix_actor m;
-
-  // Check if the bound vector is correct
-  ASSERT_NEAR(m.element(bound_vec, 0, 0),
-              r * typename TypeParam::scalar{M_PI_4}, this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 1, 0), 5, this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 2, 0), 1.1071487,
-              this->m_isclose);  // atan(2)
-  ASSERT_NEAR(m.element(bound_vec, 3, 0), 0.64052231,
-              this->m_isclose);  // atan(sqrt(5)/3)
-  ASSERT_NEAR(m.element(bound_vec, 4, 0), -1 / 3.7416574, this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 5, 0), 0.1, this->m_isclose);
-
-  // Check if the same free vector is obtained
-  for (int i = 0; i < 8; i++) {
-    ASSERT_NEAR(m.element(free_vec1, i, 0), m.element(free_vec2, i, 0),
-                this->m_isclose);
-  }
-}
-
-// This test cylindrical2 coordinate
-TYPED_TEST_P(test_host_basics, cylindrical3) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::cylindrical3 c3;
-  const typename TypeParam::point3 global1 = {
-      typename TypeParam::scalar{3.4142136},
-      typename TypeParam::scalar{4.4142136}, typename TypeParam::scalar{9.}};
-  const typename TypeParam::vector3 mom = {1., 2., 3.};
-  const typename TypeParam::vector3 d =
-      typename TypeParam::vector_actor().normalize(mom);
-  struct dummy_mask {
-  } mask;
-
-  // Global to local transformation
-  const typename TypeParam::point3 local = c3.global_to_local(trf, global1, d);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], 2, this->m_isclose);
-  ASSERT_NEAR(local[1], M_PI_4, this->m_isclose);
-  ASSERT_NEAR(local[2], 5., this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 =
-      c3.local_to_global(trf, mask, local, d);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-}
-
-// This test line2 coordinate
-TYPED_TEST_P(test_host_basics, line2) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::line2 l2;
-  const typename TypeParam::point3 global1 = {3., 3., 9.};
-  const typename TypeParam::vector3 mom = {0., 2., 0.};
-  const typename TypeParam::vector3 d =
-      typename TypeParam::vector_actor().normalize(mom);
-  const typename TypeParam::scalar time = 0.1;
-  const typename TypeParam::scalar charge = -1.;
-  struct dummy_mask {
-  } mask;
-
-  // Global to local transformation
-  const typename TypeParam::point2 local = l2.global_to_local(trf, global1, d);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], -1., this->m_isclose);
-  ASSERT_NEAR(local[1], 5., this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 =
-      l2.local_to_global(trf, mask, local, d);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-
-  // Free track parameter
-  const typename TypeParam::free_track_parameters free_params(global1, time,
-                                                              mom, charge);
-  const auto free_vec1 = free_params.vector();
-
-  const auto bound_vec = l2.free_to_bound_vector(trf, free_vec1);
-  const auto free_vec2 = l2.bound_to_free_vector(trf, mask, bound_vec);
-
-  const typename TypeParam::matrix_actor m;
-
-  // Check if the bound vector is correct
-  ASSERT_NEAR(m.element(bound_vec, 0, 0), -1., this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 1, 0), 5, this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 2, 0), M_PI_2, this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 3, 0), M_PI_2, this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 4, 0), -0.5, this->m_isclose);
-  ASSERT_NEAR(m.element(bound_vec, 5, 0), 0.1, this->m_isclose);
-
-  // Check if the same free vector is obtained
-  for (int i = 0; i < 8; i++) {
-    ASSERT_NEAR(m.element(free_vec1, i, 0), m.element(free_vec2, i, 0),
-                this->m_isclose);
-  }
-}
-
-TYPED_TEST_P(test_host_basics, bound_track_parameters) {}
-
-TYPED_TEST_P(test_host_basics, free_track_parameters) {}
 
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics, local_vectors, vector3, matrix64,
                             matrix22, getter, transform3,
-                            global_transformations, local_transformations,
-                            cartesian2, cartesian3, polar2, cylindrical2,
-                            cylindrical3, line2, bound_track_parameters,
-                            free_track_parameters);
+                            global_transformations, column_wise_operator);

@@ -130,114 +130,15 @@ TYPED_TEST_P(test_sycl_basics, transform3) {
   this->compareOutputs();
 }
 
-/// Test for some operations with @c cartesian2
-TYPED_TEST_P(test_sycl_basics, cartesian2) {
+/// Test for some operations with @c column_wise_operator
+TYPED_TEST_P(test_sycl_basics, column_wise_ops) {
 
   // Run the test on the host, and on the/a device.
-  execute_host_test<cartesian2_ops_functor<TypeParam> >(
+  execute_host_test<column_wise_ops_functor<TypeParam> >(
       this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_host)));
-  execute_sycl_test<cartesian2_ops_functor<TypeParam> >(
-      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_device)));
-
-  // Compare the outputs.
-  this->compareOutputs();
-}
-
-/// Test for some operations with @c cartesian3
-TYPED_TEST_P(test_sycl_basics, cartesian3) {
-
-  // Run the test on the host, and on the/a device.
-  execute_host_test<cartesian3_ops_functor<TypeParam> >(
+  execute_sycl_test<column_wise_ops_functor<TypeParam> >(
       this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_host)));
-  execute_sycl_test<cartesian3_ops_functor<TypeParam> >(
-      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_device)));
-
-  // Compare the outputs.
-  this->compareOutputs();
-}
-
-/// Test for some operations with @c cylindrical2
-TYPED_TEST_P(test_sycl_basics, cylindrical2) {
-
-  // Run the test on the host, and on the/a device.
-  execute_host_test<cylindrical2_ops_functor<TypeParam> >(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_host)));
-  execute_sycl_test<cylindrical2_ops_functor<TypeParam> >(
-      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_device)));
-
-  // Compare the outputs.
-  this->compareOutputs();
-}
-
-/// Test for some operations with @c cylindrical3
-TYPED_TEST_P(test_sycl_basics, cylindrical3) {
-
-  // Run the test on the host, and on the/a device.
-  execute_host_test<cylindrical3_ops_functor<TypeParam> >(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_host)));
-  execute_sycl_test<cylindrical3_ops_functor<TypeParam> >(
-      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_device)));
-
-  // Compare the outputs.
-  this->compareOutputs();
-}
-
-/// Test for some operations with @c polar2
-TYPED_TEST_P(test_sycl_basics, polar2) {
-
-  // Run the test on the host, and on the/a device.
-  execute_host_test<polar2_ops_functor<TypeParam> >(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_host)));
-  execute_sycl_test<polar2_ops_functor<TypeParam> >(
-      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_device)));
-
-  // Compare the outputs.
-  this->compareOutputs();
-}
-
-/// Test for some operations with @c line2
-TYPED_TEST_P(test_sycl_basics, line2) {
-
-  // Run the test on the host, and on the/a device.
-  execute_host_test<line2_ops_functor<TypeParam> >(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_host)));
-  execute_sycl_test<line2_ops_functor<TypeParam> >(
-      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
       vecmem::get_data(*(this->m_output_device)));
 
   // Compare the outputs.
@@ -245,6 +146,5 @@ TYPED_TEST_P(test_sycl_basics, line2) {
 }
 
 REGISTER_TYPED_TEST_SUITE_P(test_sycl_basics, vector_2d_ops, vector_3d_ops,
-                            matrix64_ops, matrix22_ops, transform3, cartesian2,
-                            cartesian3, cylindrical2, cylindrical3, polar2,
-                            line2);
+                            matrix64_ops, matrix22_ops, transform3,
+                            column_wise_ops);

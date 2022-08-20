@@ -34,30 +34,20 @@ struct test_specialisation_name {
 
 // Instantiate the test(s).
 typedef testing::Types<
-    test_types<
-        float, algebra::eigen::point2<float>, algebra::eigen::point3<float>,
-        algebra::eigen::vector2<float>, algebra::eigen::vector3<float>,
-        algebra::eigen::transform3<float>, algebra::eigen::cartesian2<float>,
-        algebra::eigen::cartesian3<float>, algebra::eigen::polar2<float>,
-        algebra::eigen::cylindrical2<float>,
-        algebra::eigen::cylindrical3<float>, algebra::eigen::line2<float>,
-        algebra::eigen::bound_track_parameters<float>,
-        algebra::eigen::free_track_parameters<float>,
-        algebra::eigen::column_wise_operator<float>, int,
-        algebra::eigen::matrix_type, algebra::vector::actor,
-        algebra::matrix::actor<float>>,
-    test_types<
-        double, algebra::eigen::point2<double>, algebra::eigen::point3<double>,
-        algebra::eigen::vector2<double>, algebra::eigen::vector3<double>,
-        algebra::eigen::transform3<double>, algebra::eigen::cartesian2<double>,
-        algebra::eigen::cartesian3<double>, algebra::eigen::polar2<double>,
-        algebra::eigen::cylindrical2<double>,
-        algebra::eigen::cylindrical3<double>, algebra::eigen::line2<double>,
-        algebra::eigen::bound_track_parameters<double>,
-        algebra::eigen::free_track_parameters<double>,
-        algebra::eigen::column_wise_operator<double>, int,
-        algebra::eigen::matrix_type, algebra::vector::actor,
-        algebra::matrix::actor<double>>>
+    test_types<float, algebra::eigen::point2<float>,
+               algebra::eigen::point3<float>, algebra::eigen::vector2<float>,
+               algebra::eigen::vector3<float>,
+               algebra::eigen::transform3<float>,
+               algebra::eigen::column_wise_operator<float>, int,
+               algebra::eigen::matrix_type, algebra::vector::actor,
+               algebra::matrix::actor<float>>,
+    test_types<double, algebra::eigen::point2<double>,
+               algebra::eigen::point3<double>, algebra::eigen::vector2<double>,
+               algebra::eigen::vector3<double>,
+               algebra::eigen::transform3<double>,
+               algebra::eigen::column_wise_operator<double>, int,
+               algebra::eigen::matrix_type, algebra::vector::actor,
+               algebra::matrix::actor<double>>>
     eigen_eigen_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_cuda_basics,
                                eigen_eigen_types, test_specialisation_name);

@@ -74,28 +74,6 @@ using track_indices = eigen::index::track_indices;
 /// @{
 
 template <typename T>
-using cartesian2 = common::cartesian2<transform3<T>, track_indices>;
-template <typename T>
-using cartesian3 = common::cartesian3<transform3<T>, track_indices>;
-template <typename T>
-using polar2 = common::polar2<transform3<T>, track_indices>;
-template <typename T>
-using cylindrical2 = common::cylindrical2<transform3<T>, track_indices>;
-template <typename T>
-using cylindrical3 = common::cylindrical3<transform3<T>, track_indices>;
-template <typename T>
-using line2 = common::line2<transform3<T>, track_indices>;
-
-template <typename T>
-using bound_track_parameters =
-    common::bound_track_parameters<algebra::matrix::actor<T>,
-                                   algebra::vector::actor, track_indices>;
-template <typename T>
-using free_track_parameters =
-    common::free_track_parameters<algebra::matrix::actor<T>,
-                                  algebra::vector::actor, track_indices>;
-
-template <typename T>
 using column_wise_operator =
     common::column_wise_operator<algebra::matrix::actor<T>,
                                  algebra::vector::actor>;

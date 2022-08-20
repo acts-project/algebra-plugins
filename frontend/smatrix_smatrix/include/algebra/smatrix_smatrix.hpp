@@ -15,6 +15,17 @@ namespace algebra {
 
 namespace getter {
 
+/// @name Getter functions on @c algebra::smatrix::storage_type
+/// @{
+
+using smatrix::math::eta;
+using smatrix::math::norm;
+using smatrix::math::perp;
+using smatrix::math::phi;
+using smatrix::math::theta;
+
+/// @}
+
 /// Function extracting a slice from the matrix used by
 /// @c algebra::smatrix::transform3
 template <unsigned int SIZE, unsigned int ROWS, unsigned int COLS,
@@ -35,6 +46,19 @@ using smatrix::math::element;
 
 }  // namespace getter
 
+namespace vector {
+
+/// @name Vector functions on @c algebra::smatrix::storage_type
+/// @{
+
+using smatrix::math::cross;
+using smatrix::math::dot;
+using smatrix::math::normalize;
+
+/// @}
+
+}  // namespace vector
+
 namespace matrix {
 
 template <typename scalar_t>
@@ -48,11 +72,7 @@ namespace smatrix {
 /// @{
 
 template <typename T>
-using transform3 = math::transform3<T, algebra::matrix::actor<T>>;
-
-/// @}
-
-/// @name SMatrix based track indices
+using transform3 = math::transform3<T, matrix::actor<T>>;
 
 using track_indices = smatrix::index::track_indices;
 

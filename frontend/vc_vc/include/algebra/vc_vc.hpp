@@ -7,9 +7,6 @@
 
 #pragma once
 
-// Operators include(s).
-#include "algebra/math/cmath_operators.hpp"
-
 // Project include(s).
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/vc.hpp"
@@ -19,98 +16,27 @@
 #include <cassert>
 #include <type_traits>
 
+/// @name Operators on @c algebra::vc types
+/// @{
+
+using algebra::cmath::operator*;
+using algebra::cmath::operator-;
+using algebra::cmath::operator+;
+
+/// @}
+
 namespace algebra {
-
-using size_type = vc::size_type;
-template <typename T, size_type N>
-using array_type = vc::storage_type<T, N>;
-
-namespace matrix {
-
-template <typename T, size_type ROWS, size_type COLS>
-using matrix_type = vc::matrix_type<T, ROWS, COLS>;
-
-template <typename scalar_t>
-using element_getter = cmath::element_getter<size_type, Vc::array, scalar_t>;
-
-template <typename scalar_t>
-using block_getter = cmath::block_getter<size_type, Vc::array, scalar_t>;
-
-// matrix actor
-template <typename scalar_t, typename determinant_actor_t,
-          typename inverse_actor_t>
-using actor =
-    cmath::matrix::actor<size_type, Vc::array, matrix_type, scalar_t,
-                         determinant_actor_t, inverse_actor_t,
-                         element_getter<scalar_t>, block_getter<scalar_t>>;
-
-namespace determinant {
-
-// determinant aggregation
-template <typename scalar_t, class... As>
-using actor =
-    cmath::matrix::determinant::actor<size_type, matrix_type, scalar_t, As...>;
-
-// determinant::cofactor
-template <typename scalar_t, size_type... Ds>
-using cofactor =
-    cmath::matrix::determinant::cofactor<size_type, matrix_type, scalar_t,
-                                         element_getter<scalar_t>, Ds...>;
-
-// determinant::hard_coded
-template <typename scalar_t, size_type... Ds>
-using hard_coded =
-    cmath::matrix::determinant::hard_coded<size_type, matrix_type, scalar_t,
-                                           element_getter<scalar_t>, Ds...>;
-
-// preset(s) as standard option(s) for user's convenience
-template <typename scalar_t>
-using preset0 = actor<scalar_t, cofactor<scalar_t>, hard_coded<scalar_t, 2, 4>>;
-
-}  // namespace determinant
-
-namespace inverse {
-
-// inverion aggregation
-template <typename scalar_t, class... As>
-using actor =
-    cmath::matrix::inverse::actor<size_type, matrix_type, scalar_t, As...>;
-
-// inverse::cofactor
-template <typename scalar_t, size_type... Ds>
-using cofactor =
-    cmath::matrix::inverse::cofactor<size_type, matrix_type, scalar_t,
-                                     element_getter<scalar_t>, Ds...>;
-
-// inverse::hard_coded
-template <typename scalar_t, size_type... Ds>
-using hard_coded =
-    cmath::matrix::inverse::hard_coded<size_type, matrix_type, scalar_t,
-                                       element_getter<scalar_t>, Ds...>;
-
-// preset(s) as standard option(s) for user's convenience
-template <typename scalar_t>
-using preset0 = actor<scalar_t, cofactor<scalar_t>, hard_coded<scalar_t, 2, 4>>;
-
-}  // namespace inverse
-
-}  // namespace matrix
-
 namespace vc {
 
 /// @name Vc based transforms on @c algebra::vc::storage_type
 /// @{
 
-template <typename T>
-using matrix_actor = algebra::matrix::actor<T, matrix::determinant::preset0<T>,
-                                            matrix::inverse::preset0<T>>;
-template <typename T>
-using transform3 =
-    math::transform3<storage_type, T, matrix_actor<T>, vector3<T>, point2<T>>;
+// Pull in the definitions needed by the cmath transforms, into this namespace.
+using math::perp;
+using math::phi;
 
-/// @}
-
-/// @name cmath based track indices
+template <typename T>
+using transform3 = math::transform3<storage_type, T, vector3<T>, point2<T>>;
 
 using track_indices = cmath::index::track_indices;
 
@@ -119,6 +45,21 @@ using track_indices = cmath::index::track_indices;
 }  // namespace vc
 
 namespace getter {
+
+/// @name Getter functions on @c algebra::vc types
+/// @{
+
+using cmath::eta;
+using cmath::norm;
+using cmath::perp;
+using cmath::phi;
+using cmath::theta;
+
+using vc::math::eta;
+using vc::math::norm;
+using vc::math::perp;
+using vc::math::phi;
+using vc::math::theta;
 
 /// @}
 
@@ -187,4 +128,94 @@ using cmath::element;
 
 }  // namespace getter
 
+namespace vector {
+
+/// @name Vector functions on @c algebra::vc types
+/// @{
+
+using cmath::dot;
+using cmath::normalize;
+using vc::math::cross;
+using vc::math::dot;
+using vc::math::normalize;
+
+/// @}
+
+}  // namespace vector
+
+namespace matrix {
+
+using size_type = vc::size_type;
+
+template <typename T, size_type N>
+using array_type = vc::storage_type<T, N>;
+
+template <typename T, size_type ROWS, size_type COLS>
+using matrix_type = vc::matrix_type<T, ROWS, COLS>;
+
+template <typename scalar_t>
+using element_getter = cmath::element_getter<size_type, Vc::array, scalar_t>;
+
+template <typename scalar_t>
+using block_getter = cmath::block_getter<size_type, Vc::array, scalar_t>;
+
+// matrix actor
+template <typename scalar_t, typename determinant_actor_t,
+          typename inverse_actor_t>
+using actor =
+    cmath::matrix::actor<size_type, array_type, matrix_type, scalar_t,
+                         determinant_actor_t, inverse_actor_t,
+                         element_getter<scalar_t>, block_getter<scalar_t>>;
+
+namespace determinant {
+
+// determinant aggregation
+template <typename scalar_t, class... As>
+using actor =
+    cmath::matrix::determinant::actor<size_type, matrix_type, scalar_t, As...>;
+
+// determinant::cofactor
+template <typename scalar_t, size_type... Ds>
+using cofactor =
+    cmath::matrix::determinant::cofactor<size_type, matrix_type, scalar_t,
+                                         element_getter<scalar_t>, Ds...>;
+
+// determinant::hard_coded
+template <typename scalar_t, size_type... Ds>
+using hard_coded =
+    cmath::matrix::determinant::hard_coded<size_type, matrix_type, scalar_t,
+                                           element_getter<scalar_t>, Ds...>;
+
+// preset(s) as standard option(s) for user's convenience
+template <typename scalar_t>
+using preset0 = actor<scalar_t, cofactor<scalar_t>, hard_coded<scalar_t, 2, 4>>;
+
+}  // namespace determinant
+
+namespace inverse {
+
+// inverion aggregation
+template <typename scalar_t, class... As>
+using actor =
+    cmath::matrix::inverse::actor<size_type, matrix_type, scalar_t, As...>;
+
+// inverse::cofactor
+template <typename scalar_t, size_type... Ds>
+using cofactor =
+    cmath::matrix::inverse::cofactor<size_type, matrix_type, scalar_t,
+                                     element_getter<scalar_t>, Ds...>;
+
+// inverse::hard_coded
+template <typename scalar_t, size_type... Ds>
+using hard_coded =
+    cmath::matrix::inverse::hard_coded<size_type, matrix_type, scalar_t,
+                                       element_getter<scalar_t>, Ds...>;
+
+// preset(s) as standard option(s) for user's convenience
+template <typename scalar_t>
+using preset0 = actor<scalar_t, cofactor<scalar_t>, hard_coded<scalar_t, 2, 4>>;
+
+}  // namespace inverse
+
+}  // namespace matrix
 }  // namespace algebra

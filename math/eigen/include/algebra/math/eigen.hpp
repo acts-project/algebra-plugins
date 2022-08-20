@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/impl/eigen_commons.hpp"
 #include "algebra/math/impl/eigen_getter.hpp"
 #include "algebra/math/impl/eigen_indices.hpp"
 #include "algebra/math/impl/eigen_matrix.hpp"

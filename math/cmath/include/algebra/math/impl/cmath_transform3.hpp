@@ -8,6 +8,8 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/impl/cmath_getter.hpp"
+#include "algebra/math/impl/cmath_vector.hpp"
 #include "algebra/qualifiers.hpp"
 
 namespace algebra::cmath {
@@ -109,7 +111,7 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &z, const vector3 &x,
              bool get_inverse = true)
-      : transform3(t, x, vector::cross(z, x), z, get_inverse) {}
+      : transform3(t, x, cross(z, x), z, get_inverse) {}
 
   /** Constructor with arguments: translation
    *

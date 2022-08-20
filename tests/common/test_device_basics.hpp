@@ -51,7 +51,7 @@ class test_device_basics : public test_base<T> {
 
     scalar dot = algebra::vector::dot(a, b);
     point2 norm2 = algebra::vector::normalize(c);
-    scalar norm3 = algebra::getter::normnorm(norm2);
+    scalar norm3 = algebra::getter::norm(norm2);
 
     return (phi + perp + norm1 + dot + norm3);
   }
@@ -67,10 +67,10 @@ class test_device_basics : public test_base<T> {
     scalar perp = algebra::getter::perp(c2);
     scalar norm1 = algebra::getter::norm(c2);
 
-    vector3 d = algebra::vector::.cross(a, b);
+    vector3 d = algebra::vector::cross(a, b);
 
-    scalar dot = algebra::vector::.dot(a, d);
-    vector3 norm2 = algebra::getter::normalize(c);
+    scalar dot = algebra::vector::dot(a, d);
+    vector3 norm2 = algebra::vector::normalize(c);
     scalar norm3 = algebra::getter::norm(norm2);
 
     return (phi + perp + norm1 + dot + norm3);
@@ -217,7 +217,7 @@ class test_device_basics : public test_base<T> {
     vector3 lvec = tr2.vector_to_local(b);
 
     return {algebra::getter::norm(translation) + algebra::getter::perp(gpoint) +
-            algebra::getter::phi(lpoint) + algebra::vector::.dot(gvec, lvec)};
+            algebra::getter::phi(lpoint) + algebra::vector::dot(gvec, lvec)};
   }
 
 };  // class test_device_basics

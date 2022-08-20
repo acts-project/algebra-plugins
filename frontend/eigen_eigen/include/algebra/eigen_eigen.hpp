@@ -6,6 +6,7 @@
  */
 
 // Project include(s).
+#include "algebra/math/cmath.hpp"
 #include "algebra/math/eigen.hpp"
 #include "algebra/storage/eigen.hpp"
 
@@ -21,6 +22,17 @@
 namespace algebra {
 
 namespace getter {
+
+/// @name Getter functions on @c algebra::eigen::storage_type
+/// @{
+
+using eigen::math::eta;
+using eigen::math::norm;
+using eigen::math::perp;
+using eigen::math::phi;
+using eigen::math::theta;
+
+/// @}
 
 /// Function extracting a slice from the matrix used by
 /// @c algebra::eigen::transform3
@@ -40,6 +52,19 @@ using eigen::math::element;
 
 }  // namespace getter
 
+namespace vector {
+
+/// @name Vector functions on @c algebra::eigen::storage_type
+/// @{
+
+using eigen::math::cross;
+using eigen::math::dot;
+using eigen::math::normalize;
+
+/// @}
+
+}  // namespace vector
+
 namespace matrix {
 
 template <typename scalar_t>
@@ -49,18 +74,11 @@ using actor = eigen::matrix::actor<scalar_t>;
 
 namespace eigen {
 
-/// @name Eigen based transforms on @c algebra::eigen::storage_type
-/// @{
-
 template <typename T>
-using transform3 = math::transform3<T, algebra::matrix::actor<T>>;
-
-/// @}
-
-/// @name Eigen based track indices
+using transform3 = math::transform3<T, matrix::actor<T>>;
 
 using track_indices = eigen::index::track_indices;
 
-/// @}
-
 }  // namespace eigen
+
+}  // namespace algebra

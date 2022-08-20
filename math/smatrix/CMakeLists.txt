@@ -10,7 +10,6 @@ find_package(ROOT COMPONENTS Core MathCore Smatrix REQUIRED)
 # Set up the library.
 algebra_add_library(algebra_smatrix_math smatrix_math
    "include/algebra/math/smatrix.hpp"
-   "include/algebra/math/impl/smatrix_commons.hpp"
    "include/algebra/math/impl/smatrix_errorcheck.hpp"
    "include/algebra/math/impl/smatrix_getter.hpp"
    "include/algebra/math/impl/smatrix_indices.hpp"

@@ -18,6 +18,17 @@
 namespace algebra {
 namespace getter {
 
+/// @name Getter functions on @c algebra::smatrix::storage_type
+/// @{
+
+using smatrix::math::eta;
+using smatrix::math::norm;
+using smatrix::math::perp;
+using smatrix::math::phi;
+using smatrix::math::theta;
+
+/// @}
+
 /// Function extracting a slice from the matrix used by
 /// @c algebra::smatrix::transform3
 template <unsigned int SIZE, unsigned int ROWS, unsigned int COLS,
@@ -38,12 +49,24 @@ using smatrix::math::element;
 
 }  // namespace getter
 
-using size_type = smatrix::size_type;
-template <typename T, size_type N>
-using array_type = smatrix::storage_type<T, N>;
+namespace vector {
+
+/// @name Vector functions on @c algebra::smatrix::storage_type
+/// @{
+
+using smatrix::math::cross;
+using smatrix::math::dot;
+using smatrix::math::normalize;
+
+/// @}
+
+}  // namespace vector
 
 namespace matrix {
 
+using size_type = smatrix::size_type;
+template <typename T, size_type N>
+using array_type = smatrix::storage_type<T, N>;
 template <typename T, size_type ROWS, size_type COLS>
 using matrix_type = smatrix::matrix_type<T, ROWS, COLS>;
 template <typename scalar_t>
@@ -117,19 +140,15 @@ namespace smatrix {
 /// @{
 
 template <typename T>
-using matrix_actor =
+using transform3_actor =
     algebra::matrix::actor<T, algebra::matrix::determinant::preset0<T>,
                            algebra::matrix::inverse::preset0<T>>;
 template <typename T>
-using transform3 = cmath::transform3<matrix_actor<T>>;
+using transform3 = cmath::transform3<transform3_actor<T>>;
 
 /// @}
 
-/// @name cmath based track indices
-
-using track_indices = cmath::index::track_indices;
-
-/// @}
+using track_indices = smatrix::index::track_indices;
 
 }  // namespace smatrix
 

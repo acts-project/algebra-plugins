@@ -26,6 +26,8 @@
 
 namespace algebra::vc::math {
 
+using cmath::cross;
+
 namespace internal {
 
 /// 4x4 matrix type used by @c algebra::vc::math::transform3
@@ -91,18 +93,12 @@ struct element_getter {
 /** Transform wrapper class to ensure standard API within differnt plugins
  **/
 template <template <typename, std::size_t> class array_t, typename scalar_t,
-          typename matrix_actor_t, typename vector3_t = array_t<scalar_t, 3>,
+          typename vector3_t = array_t<scalar_t, 3>,
           typename point2_t = array_t<scalar_t, 2>>
 struct transform3 {
 
   /// @name Type definitions for the struct
   /// @{
-
-  /// Matrix actor
-  using matrix_actor = matrix_actor_t;
-
-  /// Size type
-  using size_type = typename matrix_actor_t::size_ty;
 
   /// Array type used by the transform
   template <std::size_t N>
@@ -166,7 +162,7 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &z, const vector3 &x,
              bool get_inverse = true)
-      : transform3(t, x, vector::cross(z, x), z, get_inverse) {}
+      : transform3(t, x, cross(z, x), z, get_inverse) {}
 
   /** Constructor with arguments: translation
    *
@@ -357,18 +353,6 @@ struct transform3 {
     }
     return submatrix;
   }
-
-  /** This method retrieves z axis */
-  ALGEBRA_HOST_DEVICE
-  inline point3 x() const { return {_data.x[0], _data.x[1], _data.x[2]}; }
-
-  /** This method retrieves z axis */
-  ALGEBRA_HOST_DEVICE
-  inline point3 y() const { return {_data.y[0], _data.y[1], _data.y[2]}; }
-
-  /** This method retrieves z axis */
-  ALGEBRA_HOST_DEVICE
-  inline point3 z() const { return {_data.z[0], _data.z[1], _data.z[2]}; }
 
   /** This method retrieves the translation of a transform */
   ALGEBRA_HOST_DEVICE

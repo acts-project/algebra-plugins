@@ -7,9 +7,6 @@
 # Set up the library.
 algebra_add_library(algebra_common_math common_math
    # Math
-   "include/algebra/math/common.hpp"
-   # Utils
-   "include/algebra/utils/column_wise_operator.hpp"
-   "include/algebra/utils/utils.hpp")
+   "include/algebra/math/common.hpp")
 target_link_libraries(algebra_common_math
    INTERFACE algebra::common)

@@ -25,13 +25,6 @@ using size_type = vc::size_type;
 template <typename T, size_type N>
 using array_type = vc::storage_type<T, N>;
 
-namespace vector {
-
-template <typename scalar_t>
-using actor = cmath::vector::actor<size_type, Vc::array, scalar_t>;
-
-}  // namespace vector
-
 namespace matrix {
 
 template <typename T, size_type ROWS, size_type COLS>
@@ -112,25 +105,14 @@ template <typename T>
 using matrix_actor = algebra::matrix::actor<T, matrix::determinant::preset0<T>,
                                             matrix::inverse::preset0<T>>;
 template <typename T>
-using vector_actor = algebra::vector::actor<T>;
-template <typename T>
-using transform3 = math::transform3<storage_type, T, matrix_actor<T>,
-                                    vector_actor<T>, vector3<T>, point2<T>>;
+using transform3 =
+    math::transform3<storage_type, T, matrix_actor<T>, vector3<T>, point2<T>>;
 
 /// @}
 
 /// @name cmath based track indices
 
 using track_indices = cmath::index::track_indices;
-
-/// @}
-
-/// @name cmath based common algebras
-/// @{
-
-template <typename T>
-using column_wise_operator =
-    common::column_wise_operator<matrix_actor<T>, vector_actor<T>>;
 
 /// @}
 

@@ -130,22 +130,3 @@ class transform3_ops_functor : public functor_base<T> {
         vec_t1[ii], vec_t2[ii], vec_t3[ii], vec_a[ii], vec_b[ii]);
   }
 };
-
-/// Functor running @c test_device_basics::column_wise_ops
-template <typename T>
-class column_wise_ops_functor : public functor_base<T> {
-
- public:
-  ALGEBRA_HOST_DEVICE void operator()(
-      std::size_t i, vecmem::data::vector_view<const typename T::vector3> t1,
-      vecmem::data::vector_view<typename T::scalar> output) const {
-
-    // Create the VecMem vector(s).
-    vecmem::device_vector<const typename T::vector3> vec_t1(t1);
-    vecmem::device_vector<typename T::scalar> vec_output(output);
-
-    // Perform the operation.
-    auto ii = static_cast<typename decltype(vec_output)::size_type>(i);
-    vec_output[ii] = this->m_tester.column_wise_ops(vec_t1[ii]);
-  }
-};

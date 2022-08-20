@@ -130,21 +130,5 @@ TYPED_TEST_P(test_sycl_basics, transform3) {
   this->compareOutputs();
 }
 
-/// Test for some operations with @c column_wise_operator
-TYPED_TEST_P(test_sycl_basics, column_wise_ops) {
-
-  // Run the test on the host, and on the/a device.
-  execute_host_test<column_wise_ops_functor<TypeParam> >(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_output_host)));
-  execute_sycl_test<column_wise_ops_functor<TypeParam> >(
-      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_output_device)));
-
-  // Compare the outputs.
-  this->compareOutputs();
-}
-
 REGISTER_TYPED_TEST_SUITE_P(test_sycl_basics, vector_2d_ops, vector_3d_ops,
-                            matrix64_ops, matrix22_ops, transform3,
-                            column_wise_ops);
+                            matrix64_ops, matrix22_ops, transform3);

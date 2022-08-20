@@ -14,7 +14,7 @@ namespace algebra::cmath {
 
 /** Transform wrapper class to ensure standard API within differnt plugins
  **/
-template <typename matrix_actor_t, typename vector_actor_t>
+template <typename matrix_actor_t>
 struct transform3 {
 
   /// @name Type definitions for the struct
@@ -36,8 +36,6 @@ struct transform3 {
   /// Array type
   template <size_type N>
   using array_type = typename matrix_actor::template array_type<N>;
-
-  using vector_actor = vector_actor_t;
 
   // 4 x 4 Matrix
   using matrix44 = matrix_type<4, 4>;
@@ -111,7 +109,7 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &z, const vector3 &x,
              bool get_inverse = true)
-      : transform3(t, x, vector_actor().cross(z, x), z, get_inverse) {}
+      : transform3(t, x, vector::cross(z, x), z, get_inverse) {}
 
   /** Constructor with arguments: translation
    *

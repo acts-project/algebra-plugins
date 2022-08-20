@@ -40,12 +40,6 @@ using eigen::math::element;
 
 }  // namespace getter
 
-namespace vector {
-
-using actor = eigen::vector::actor;
-
-}  // namespace vector
-
 namespace matrix {
 
 template <typename scalar_t>
@@ -59,8 +53,7 @@ namespace eigen {
 /// @{
 
 template <typename T>
-using transform3 =
-    math::transform3<T, algebra::matrix::actor<T>, algebra::vector::actor>;
+using transform3 = math::transform3<T, algebra::matrix::actor<T>>;
 
 /// @}
 
@@ -70,16 +63,4 @@ using track_indices = eigen::index::track_indices;
 
 /// @}
 
-/// @name Eigen based common algebras
-/// @{
-
-template <typename T>
-using column_wise_operator =
-    common::column_wise_operator<algebra::matrix::actor<T>,
-                                 algebra::vector::actor>;
-
-/// @}
-
 }  // namespace eigen
-
-}  // namespace algebra

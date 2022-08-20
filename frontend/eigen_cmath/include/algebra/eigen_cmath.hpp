@@ -48,12 +48,6 @@ using size_type = eigen::size_type;
 template <typename T, size_type N>
 using array_type = eigen::storage_type<T, N>;
 
-namespace vector {
-
-using actor = eigen::vector::actor;
-
-}  // namespace vector
-
 namespace matrix {
 
 template <typename T, size_type ROWS, size_type COLS>
@@ -137,15 +131,6 @@ using transform3 = cmath::transform3<matrix_actor<T>, algebra::vector::actor>;
 /// @name cmath based track indices
 
 using track_indices = cmath::index::track_indices;
-
-/// @}
-
-/// @name cmath based commons algebras
-/// @{
-
-template <typename T>
-using column_wise_operator =
-    common::column_wise_operator<matrix_actor<T>, algebra::vector::actor>;
 
 /// @}
 

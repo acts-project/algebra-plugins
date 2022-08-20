@@ -34,9 +34,7 @@ class test_device_basics : public test_base<T> {
   using size_type = typename test_base<T>::size_type;
   template <size_type ROWS, size_type COLS>
   using matrix = typename test_base<T>::template matrix<ROWS, COLS>;
-  using vector_actor = typename test_base<T>::vector_actor;
   using matrix_actor = typename test_base<T>::matrix_actor;
-  using column_wise_operator = typename test_base<T>::column_wise_operator;
 
   /// @}
 
@@ -47,13 +45,13 @@ class test_device_basics : public test_base<T> {
     point2 c = a + b;
     point2 c2 = c * 2.0;
 
-    scalar phi = vector_actor().phi(c2);
-    scalar perp = vector_actor().perp(c2);
-    scalar norm1 = vector_actor().norm(c2);
+    scalar phi = algebra::getter::phi(c2);
+    scalar perp = algebra::getter::perp(c2);
+    scalar norm1 = algebra::getter::norm(c2);
 
-    scalar dot = vector_actor().dot(a, b);
-    point2 norm2 = vector_actor().normalize(c);
-    scalar norm3 = vector_actor().norm(norm2);
+    scalar dot = algebra::vector::dot(a, b);
+    point2 norm2 = algebra::vector::normalize(c);
+    scalar norm3 = algebra::getter::normnorm(norm2);
 
     return (phi + perp + norm1 + dot + norm3);
   }
@@ -65,15 +63,15 @@ class test_device_basics : public test_base<T> {
     vector3 c = a + b;
     vector3 c2 = c * 2.0;
 
-    scalar phi = vector_actor().phi(c2);
-    scalar perp = vector_actor().perp(c2);
-    scalar norm1 = vector_actor().norm(c2);
+    scalar phi = algebra::getter::phi(c2);
+    scalar perp = algebra::getter::perp(c2);
+    scalar norm1 = algebra::getter::norm(c2);
 
-    vector3 d = vector_actor().cross(a, b);
+    vector3 d = algebra::vector::.cross(a, b);
 
-    scalar dot = vector_actor().dot(a, d);
-    vector3 norm2 = vector_actor().normalize(c);
-    scalar norm3 = vector_actor().norm(norm2);
+    scalar dot = algebra::vector::.dot(a, d);
+    vector3 norm2 = algebra::getter::normalize(c);
+    scalar norm3 = algebra::getter::norm(norm2);
 
     return (phi + perp + norm1 + dot + norm3);
   }
@@ -218,39 +216,8 @@ class test_device_basics : public test_base<T> {
     vector3 gvec = tr2.vector_to_global(a);
     vector3 lvec = tr2.vector_to_local(b);
 
-    return {vector_actor().norm(translation) + vector_actor().perp(gpoint) +
-            vector_actor().phi(lpoint) + vector_actor().dot(gvec, lvec)};
-  }
-
-  /// Perform various operations using the @c column_wise_operator type
-  ALGEBRA_HOST_DEVICE
-  scalar column_wise_ops(vector3 t1) const {
-
-    matrix<3, 3> m33;
-    algebra::getter::element(m33, 0, 0) = 1;
-    algebra::getter::element(m33, 0, 1) = 5;
-    algebra::getter::element(m33, 0, 2) = 7;
-    algebra::getter::element(m33, 1, 0) = 3;
-    algebra::getter::element(m33, 1, 1) = 5;
-    algebra::getter::element(m33, 1, 2) = 6;
-    algebra::getter::element(m33, 2, 0) = 2;
-    algebra::getter::element(m33, 2, 1) = 8;
-    algebra::getter::element(m33, 2, 2) = 9;
-
-    const auto c = column_wise_operator().cross(m33, t1);
-
-    const auto m = column_wise_operator().multiply(m33, t1);
-
-    scalar sum = 0;
-
-    for (size_type i = 0; i < 3; i++) {
-      for (size_type j = 0; j < 3; j++) {
-        sum += algebra::getter::element(c, i, j);
-        sum += algebra::getter::element(m, i, j);
-      }
-    }
-
-    return sum;
+    return {algebra::getter::norm(translation) + algebra::getter::perp(gpoint) +
+            algebra::getter::phi(lpoint) + algebra::vector::.dot(gvec, lvec)};
   }
 
 };  // class test_device_basics

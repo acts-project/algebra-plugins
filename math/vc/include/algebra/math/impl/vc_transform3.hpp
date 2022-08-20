@@ -91,8 +91,7 @@ struct element_getter {
 /** Transform wrapper class to ensure standard API within differnt plugins
  **/
 template <template <typename, std::size_t> class array_t, typename scalar_t,
-          typename matrix_actor_t, typename vector_actor_t,
-          typename vector3_t = array_t<scalar_t, 3>,
+          typename matrix_actor_t, typename vector3_t = array_t<scalar_t, 3>,
           typename point2_t = array_t<scalar_t, 2>>
 struct transform3 {
 
@@ -123,8 +122,6 @@ struct transform3 {
 
   /// Function (object) used for accessing a matrix element
   using element_getter = internal::element_getter<array_type, scalar_type>;
-
-  using vector_actor = vector_actor_t;
 
   /// @}
 
@@ -169,7 +166,7 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &z, const vector3 &x,
              bool get_inverse = true)
-      : transform3(t, x, vector_actor().cross(z, x), z, get_inverse) {}
+      : transform3(t, x, vector::cross(z, x), z, get_inverse) {}
 
   /** Constructor with arguments: translation
    *

@@ -37,9 +37,8 @@ typedef testing::Types<
     test_types<float, algebra::vecmem::point2<float>,
                algebra::vecmem::point3<float>, algebra::vecmem::vector2<float>,
                algebra::vecmem::vector3<float>,
-               algebra::vecmem::transform3<float>,
-               algebra::vecmem::column_wise_operator<float>, std::size_t,
-               algebra::vecmem::matrix_type, algebra::vector::actor<float>,
+               algebra::vecmem::transform3<float>, std::size_t,
+               algebra::vecmem::matrix_type,
                algebra::matrix::actor<
                    float, algebra::matrix::determinant::preset0<float>,
                    algebra::matrix::inverse::preset0<float>>>,
@@ -47,8 +46,7 @@ typedef testing::Types<
         double, algebra::vecmem::point2<double>,
         algebra::vecmem::point3<double>, algebra::vecmem::vector2<double>,
         algebra::vecmem::vector3<double>, algebra::vecmem::transform3<double>,
-        algebra::vecmem::column_wise_operator<double>, std::size_t,
-        algebra::vecmem::matrix_type, algebra::vector::actor<double>,
+        std::size_t, algebra::vecmem::matrix_type,
         algebra::matrix::actor<double,
                                algebra::matrix::determinant::preset0<double>,
                                algebra::matrix::inverse::preset0<double>>>>

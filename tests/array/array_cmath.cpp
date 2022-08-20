@@ -37,18 +37,16 @@ typedef testing::Types<
     test_types<float, algebra::array::point2<float>,
                algebra::array::point3<float>, algebra::array::vector2<float>,
                algebra::array::vector3<float>,
-               algebra::array::transform3<float>,
-               algebra::array::column_wise_operator<float>, std::size_t,
-               algebra::array::matrix_type, algebra::vector::actor<float>,
+               algebra::array::transform3<float>, std::size_t,
+               algebra::array::matrix_type,
                algebra::matrix::actor<
                    float, algebra::matrix::determinant::preset0<float>,
                    algebra::matrix::inverse::preset0<float>>>,
     test_types<double, algebra::array::point2<double>,
                algebra::array::point3<double>, algebra::array::vector2<double>,
                algebra::array::vector3<double>,
-               algebra::array::transform3<double>,
-               algebra::array::column_wise_operator<double>, std::size_t,
-               algebra::array::matrix_type, algebra::vector::actor<double>,
+               algebra::array::transform3<double>, std::size_t,
+               algebra::array::matrix_type,
                algebra::matrix::actor<
                    double, algebra::matrix::determinant::preset0<double>,
                    algebra::matrix::inverse::preset0<double>>>>

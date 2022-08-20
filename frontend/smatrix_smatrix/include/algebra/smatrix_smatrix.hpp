@@ -35,13 +35,6 @@ using smatrix::math::element;
 
 }  // namespace getter
 
-namespace vector {
-
-template <typename scalar_t>
-using actor = smatrix::vector::actor<scalar_t>;
-
-}  // namespace vector
-
 namespace matrix {
 
 template <typename scalar_t>
@@ -55,24 +48,13 @@ namespace smatrix {
 /// @{
 
 template <typename T>
-using transform3 =
-    math::transform3<T, algebra::matrix::actor<T>, algebra::vector::actor<T>>;
+using transform3 = math::transform3<T, algebra::matrix::actor<T>>;
 
 /// @}
 
 /// @name SMatrix based track indices
 
 using track_indices = smatrix::index::track_indices;
-
-/// @}
-
-/// @name SMatrix based common algebras
-/// @{
-
-template <typename T>
-using column_wise_operator =
-    common::column_wise_operator<algebra::matrix::actor<T>,
-                                 algebra::vector::actor<T>>;
 
 /// @}
 

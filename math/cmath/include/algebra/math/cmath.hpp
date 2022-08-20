@@ -12,6 +12,7 @@
 #include "algebra/math/impl/cmath_getter.hpp"
 #include "algebra/math/impl/cmath_indices.hpp"
 #include "algebra/math/impl/cmath_matrix.hpp"
+#include "algebra/math/impl/cmath_operators.hpp"
 #include "algebra/math/impl/cmath_transform3.hpp"
 #include "algebra/math/impl/cmath_vector.hpp"
 // Algorithms include(s).

@@ -36,17 +36,15 @@ struct test_specialisation_name {
 typedef testing::Types<
     test_types<float, Vc::array<float, 2>, Vc::array<float, 3>,
                Vc::array<float, 2>, Vc::array<float, 3>,
-               algebra::vc::transform3<float>,
-               algebra::vc::column_wise_operator<float>, std::size_t,
-               algebra::vc::matrix_type, algebra::vector::actor<float>,
+               algebra::vc::transform3<float>, std::size_t,
+               algebra::vc::matrix_type,
                algebra::matrix::actor<
                    float, algebra::matrix::determinant::preset0<float>,
                    algebra::matrix::inverse::preset0<float>>>,
     test_types<double, Vc::array<double, 2>, Vc::array<double, 3>,
                Vc::array<double, 2>, Vc::array<double, 3>,
-               algebra::vc::transform3<double>,
-               algebra::vc::column_wise_operator<double>, std::size_t,
-               algebra::vc::matrix_type, algebra::vector::actor<double>,
+               algebra::vc::transform3<double>, std::size_t,
+               algebra::vc::matrix_type,
                algebra::matrix::actor<
                    double, algebra::matrix::determinant::preset0<double>,
                    algebra::matrix::inverse::preset0<double>>>>

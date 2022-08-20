@@ -42,13 +42,6 @@ using size_type = smatrix::size_type;
 template <typename T, size_type N>
 using array_type = smatrix::storage_type<T, N>;
 
-namespace vector {
-
-template <typename scalar_t>
-using actor = smatrix::vector::actor<scalar_t>;
-
-}  // namespace vector
-
 namespace matrix {
 
 template <typename T, size_type ROWS, size_type COLS>
@@ -128,24 +121,13 @@ using matrix_actor =
     algebra::matrix::actor<T, algebra::matrix::determinant::preset0<T>,
                            algebra::matrix::inverse::preset0<T>>;
 template <typename T>
-using vector_actor = algebra::vector::actor<T>;
-template <typename T>
-using transform3 = cmath::transform3<matrix_actor<T>, vector_actor<T>>;
+using transform3 = cmath::transform3<matrix_actor<T>>;
 
 /// @}
 
 /// @name cmath based track indices
 
 using track_indices = cmath::index::track_indices;
-
-/// @}
-
-/// @name cmath based common algebras
-/// @{
-
-template <typename T>
-using column_wise_operator =
-    common::column_wise_operator<matrix_actor<T>, vector_actor<T>>;
 
 /// @}
 

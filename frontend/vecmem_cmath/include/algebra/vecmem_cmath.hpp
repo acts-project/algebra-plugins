@@ -44,13 +44,6 @@ using size_type = std::size_t;
 template <typename T, size_type N>
 using array_type = vecmem::storage_type<T, N>;
 
-namespace vector {
-
-template <typename scalar_t>
-using actor = cmath::vector::actor<size_type, array_type, scalar_t>;
-
-}  // namespace vector
-
 namespace matrix {
 
 template <typename T, size_type ROWS, size_type COLS>
@@ -131,24 +124,13 @@ template <typename T>
 using matrix_actor = matrix::actor<T, matrix::determinant::preset0<T>,
                                    matrix::inverse::preset0<T>>;
 template <typename T>
-using vector_actor = vector::actor<T>;
-template <typename T>
-using transform3 = cmath::transform3<matrix_actor<T>, vector_actor<T>>;
+using transform3 = cmath::transform3<matrix_actor<T>>;
 
 /// @}
 
 /// @name cmath based track indices
 
 using track_indices = cmath::index::track_indices;
-
-/// @}
-
-/// @name cmath based common algebras
-/// @{
-
-template <typename T>
-using column_wise_operator =
-    common::column_wise_operator<matrix_actor<T>, vector_actor<T>>;
 
 /// @}
 

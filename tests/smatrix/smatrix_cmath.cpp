@@ -37,9 +37,8 @@ typedef testing::Types<
     test_types<
         float, algebra::smatrix::point2<float>, algebra::smatrix::point3<float>,
         algebra::smatrix::vector2<float>, algebra::smatrix::vector3<float>,
-        algebra::smatrix::transform3<float>,
-        algebra::smatrix::column_wise_operator<float>, unsigned int,
-        algebra::smatrix::matrix_type, algebra::vector::actor<float>,
+        algebra::smatrix::transform3<float>, unsigned int,
+        algebra::smatrix::matrix_type,
         algebra::matrix::actor<float,
                                algebra::matrix::determinant::preset0<float>,
                                algebra::matrix::inverse::preset0<float>>>,
@@ -47,8 +46,7 @@ typedef testing::Types<
         double, algebra::smatrix::point2<double>,
         algebra::smatrix::point3<double>, algebra::smatrix::vector2<double>,
         algebra::smatrix::vector3<double>, algebra::smatrix::transform3<double>,
-        algebra::smatrix::column_wise_operator<double>, unsigned int,
-        algebra::smatrix::matrix_type, algebra::vector::actor<double>,
+        unsigned int, algebra::smatrix::matrix_type,
         algebra::matrix::actor<double,
                                algebra::matrix::determinant::preset0<double>,
                                algebra::matrix::inverse::preset0<double>>>>

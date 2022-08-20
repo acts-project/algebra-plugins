@@ -138,7 +138,7 @@ TYPED_TEST_P(test_sycl_basics, column_wise_ops) {
       this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
       vecmem::get_data(*(this->m_output_host)));
   execute_sycl_test<column_wise_ops_functor<TypeParam> >(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+      this->m_queue, this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
       vecmem::get_data(*(this->m_output_device)));
 
   // Compare the outputs.

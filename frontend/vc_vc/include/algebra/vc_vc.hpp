@@ -38,8 +38,6 @@ using math::phi;
 template <typename T>
 using transform3 = math::transform3<storage_type, T, vector3<T>, point2<T>>;
 
-using track_indices = cmath::index::track_indices;
-
 /// @}
 
 }  // namespace vc

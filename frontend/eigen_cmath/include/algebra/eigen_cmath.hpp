@@ -152,8 +152,6 @@ using transform3 = cmath::transform3<transform3_actor<T>>;
 
 /// @}
 
-using track_indices = eigen::index::track_indices;
-
 }  // namespace eigen
 
 }  // namespace algebra

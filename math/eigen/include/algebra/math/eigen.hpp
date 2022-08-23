@@ -9,7 +9,6 @@
 
 // Project include(s).
 #include "algebra/math/impl/eigen_getter.hpp"
-#include "algebra/math/impl/eigen_indices.hpp"
 #include "algebra/math/impl/eigen_matrix.hpp"
 #include "algebra/math/impl/eigen_transform3.hpp"
 #include "algebra/math/impl/eigen_vector.hpp"

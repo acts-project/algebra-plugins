@@ -74,8 +74,6 @@ namespace smatrix {
 template <typename T>
 using transform3 = math::transform3<T, matrix::actor<T>>;
 
-using track_indices = smatrix::index::track_indices;
-
 /// @}
 
 }  // namespace smatrix

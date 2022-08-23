@@ -148,8 +148,6 @@ using transform3 = cmath::transform3<transform3_actor<T>>;
 
 /// @}
 
-using track_indices = smatrix::index::track_indices;
-
 }  // namespace smatrix
 
 }  // namespace algebra

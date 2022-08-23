@@ -77,8 +77,6 @@ namespace eigen {
 template <typename T>
 using transform3 = math::transform3<T, matrix::actor<T>>;
 
-using track_indices = eigen::index::track_indices;
-
 }  // namespace eigen
 
 }  // namespace algebra

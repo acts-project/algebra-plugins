@@ -51,6 +51,10 @@ struct transform3 {
   /// Matrix actor
   using matrix_actor = matrix_actor_t;
 
+  /// 2D Matrix type
+  template <size_type ROWS, size_type COLS>
+  using matrix_type = typename matrix_actor::template matrix_type<ROWS, COLS>;
+
   /// @}
 
   /// @name Data objects

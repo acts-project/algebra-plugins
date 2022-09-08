@@ -10,7 +10,6 @@ algebra_add_library( algebra_cmath_math cmath_math
    "include/algebra/math/cmath_operators.hpp"
    "include/algebra/math/cmath.hpp"
    "include/algebra/math/impl/cmath_getter.hpp"
-   "include/algebra/math/impl/cmath_indices.hpp"
    "include/algebra/math/impl/cmath_matrix.hpp"
    "include/algebra/math/impl/cmath_operators.hpp"
    "include/algebra/math/impl/cmath_transform3.hpp"

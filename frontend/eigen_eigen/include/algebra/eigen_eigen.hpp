@@ -6,6 +6,7 @@
  */
 
 // Project include(s).
+#include "algebra/math/cmath.hpp"
 #include "algebra/math/eigen.hpp"
 #include "algebra/storage/eigen.hpp"
 
@@ -21,6 +22,17 @@
 namespace algebra {
 
 namespace getter {
+
+/// @name Getter functions on @c algebra::eigen::storage_type
+/// @{
+
+using eigen::math::eta;
+using eigen::math::norm;
+using eigen::math::perp;
+using eigen::math::phi;
+using eigen::math::theta;
+
+/// @}
 
 /// Function extracting a slice from the matrix used by
 /// @c algebra::eigen::transform3
@@ -42,7 +54,14 @@ using eigen::math::element;
 
 namespace vector {
 
-using actor = eigen::vector::actor;
+/// @name Vector functions on @c algebra::eigen::storage_type
+/// @{
+
+using eigen::math::cross;
+using eigen::math::dot;
+using eigen::math::normalize;
+
+/// @}
 
 }  // namespace vector
 
@@ -55,25 +74,8 @@ using actor = eigen::matrix::actor<scalar_t>;
 
 namespace eigen {
 
-/// @name Eigen based transforms on @c algebra::eigen::storage_type
-/// @{
-
 template <typename T>
-using transform3 = math::transform3<T, algebra::vector::actor>;
-template <typename T>
-using cartesian2 = eigen::coordinate::cartesian2<transform3<T>>;
-template <typename T>
-using cartesian3 = eigen::coordinate::cartesian3<transform3<T>>;
-template <typename T>
-using polar2 = eigen::coordinate::polar2<transform3<T>>;
-template <typename T>
-using cylindrical2 = eigen::coordinate::cylindrical2<transform3<T>>;
-template <typename T>
-using cylindrical3 = eigen::coordinate::cylindrical3<transform3<T>>;
-template <typename T>
-using line2 = eigen::coordinate::line2<transform3<T>>;
-
-/// @}
+using transform3 = math::transform3<T, matrix::actor<T>>;
 
 }  // namespace eigen
 

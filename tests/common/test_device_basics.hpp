@@ -31,16 +31,9 @@ class test_device_basics : public test_base<T> {
   using vector2 = typename test_base<T>::vector2;
   using vector3 = typename test_base<T>::vector3;
   using transform3 = typename test_base<T>::transform3;
-  using cartesian2 = typename test_base<T>::cartesian2;
-  using cartesian3 = typename test_base<T>::cartesian3;
-  using polar2 = typename test_base<T>::polar2;
-  using cylindrical2 = typename test_base<T>::cylindrical2;
-  using cylindrical3 = typename test_base<T>::cylindrical3;
-  using line2 = typename test_base<T>::line2;
   using size_type = typename test_base<T>::size_type;
   template <size_type ROWS, size_type COLS>
   using matrix = typename test_base<T>::template matrix<ROWS, COLS>;
-  using vector_actor = typename test_base<T>::vector_actor;
   using matrix_actor = typename test_base<T>::matrix_actor;
 
   /// @}
@@ -52,13 +45,13 @@ class test_device_basics : public test_base<T> {
     point2 c = a + b;
     point2 c2 = c * 2.0;
 
-    scalar phi = vector_actor().phi(c2);
-    scalar perp = vector_actor().perp(c2);
-    scalar norm1 = vector_actor().norm(c2);
+    scalar phi = algebra::getter::phi(c2);
+    scalar perp = algebra::getter::perp(c2);
+    scalar norm1 = algebra::getter::norm(c2);
 
-    scalar dot = vector_actor().dot(a, b);
-    point2 norm2 = vector_actor().normalize(c);
-    scalar norm3 = vector_actor().norm(norm2);
+    scalar dot = algebra::vector::dot(a, b);
+    point2 norm2 = algebra::vector::normalize(c);
+    scalar norm3 = algebra::getter::norm(norm2);
 
     return (phi + perp + norm1 + dot + norm3);
   }
@@ -70,15 +63,15 @@ class test_device_basics : public test_base<T> {
     vector3 c = a + b;
     vector3 c2 = c * 2.0;
 
-    scalar phi = vector_actor().phi(c2);
-    scalar perp = vector_actor().perp(c2);
-    scalar norm1 = vector_actor().norm(c2);
+    scalar phi = algebra::getter::phi(c2);
+    scalar perp = algebra::getter::perp(c2);
+    scalar norm1 = algebra::getter::norm(c2);
 
-    vector3 d = vector_actor().cross(a, b);
+    vector3 d = algebra::vector::cross(a, b);
 
-    scalar dot = vector_actor().dot(a, d);
-    vector3 norm2 = vector_actor().normalize(c);
-    scalar norm3 = vector_actor().norm(norm2);
+    scalar dot = algebra::vector::dot(a, d);
+    vector3 norm2 = algebra::vector::normalize(c);
+    scalar norm3 = algebra::getter::norm(norm2);
 
     return (phi + perp + norm1 + dot + norm3);
   }
@@ -223,112 +216,8 @@ class test_device_basics : public test_base<T> {
     vector3 gvec = tr2.vector_to_global(a);
     vector3 lvec = tr2.vector_to_local(b);
 
-    return {vector_actor().norm(translation) + vector_actor().perp(gpoint) +
-            vector_actor().phi(lpoint) + vector_actor().dot(gvec, lvec)};
-  }
-
-  /// Perform various operations using the @c cartesian2 type
-  ALGEBRA_HOST_DEVICE
-  scalar cartesian2_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
-                        vector3 b) const {
-
-    transform3 tr(t1, t2, t3);
-    cartesian2 ca;
-
-    point2 p1 = ca.global_to_local(tr, a);
-    point2 p2 = ca(b);
-    point3 p3 = ca.local_to_global(tr, p2);
-
-    return {vector_actor().phi(p1) + vector_actor().norm(p2) +
-            vector_actor().perp(p3)};
-  }
-
-  /// Perform various operations using the @c cartesian3 type
-  ALGEBRA_HOST_DEVICE
-  scalar cartesian3_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
-                        vector3 b) const {
-
-    transform3 tr(t1, t2, t3);
-    cartesian3 ca;
-
-    point3 p1 = ca.global_to_local(tr, a);
-    point3 p2 = ca(b);
-    point3 p3 = ca.local_to_global(tr, p2);
-
-    return {vector_actor().phi(p1) + vector_actor().norm(p2) +
-            vector_actor().perp(p3)};
-  }
-
-  /// Perform various operations using the @c cylintridcal2 type
-  ALGEBRA_HOST_DEVICE
-  scalar cylindrical2_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
-                          vector3 b) const {
-
-    transform3 tr(t1, t2, t3);
-    cylindrical2 cy;
-
-    // Define cylinder mask
-    struct cylinder_mask {
-      scalar r = 0.;
-      ALGEBRA_HOST_DEVICE scalar radius() const { return r; }
-    };
-
-    const scalar r = 2.;
-    const cylinder_mask mask{r};
-
-    point2 p1 = cy.global_to_local(tr, a);
-    point2 p2 = cy(b);
-    point3 p3 = cy.local_to_global(tr, p2, mask);
-
-    return {vector_actor().phi(p1) + vector_actor().norm(p2) +
-            vector_actor().perp(p3)};
-  }
-
-  /// Perform various operations using the @c cylintridcal3 type
-  ALGEBRA_HOST_DEVICE
-  scalar cylindrical3_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
-                          vector3 b) const {
-
-    transform3 tr(t1, t2, t3);
-    cylindrical3 cy;
-
-    point3 p1 = cy.global_to_local(tr, a);
-    point3 p2 = cy(b);
-    point3 p3 = cy.local_to_global(tr, p2);
-
-    return {vector_actor().phi(p1) + vector_actor().norm(p2) +
-            vector_actor().perp(p3)};
-  }
-
-  /// Perform various operations using the @c polar2 type
-  ALGEBRA_HOST_DEVICE
-  scalar polar2_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
-                    vector3 b) const {
-
-    transform3 tr(t1, t2, t3);
-    polar2 po;
-
-    point2 p1 = po.global_to_local(tr, a);
-    point2 p2 = po(b);
-    point2 p3 = po(p1);
-    point3 p4 = po.local_to_global(tr, p2);
-
-    return {vector_actor().phi(p2) + vector_actor().norm(p3) +
-            +vector_actor().perp(p4)};
-  }
-
-  /// Perform various operations using the @c line2 type
-  ALGEBRA_HOST_DEVICE
-  scalar line2_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
-                   vector3 b) const {
-
-    transform3 tr(t1, t2, t3);
-    line2 li;
-
-    point2 p1 = li.global_to_local(tr, a, b);
-    point3 p2 = li.local_to_global(tr, p1, b);
-
-    return {vector_actor().phi(p1) + vector_actor().norm(p2)};
+    return {algebra::getter::norm(translation) + algebra::getter::perp(gpoint) +
+            algebra::getter::phi(lpoint) + algebra::vector::dot(gvec, lvec)};
   }
 
 };  // class test_device_basics

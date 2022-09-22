@@ -19,12 +19,23 @@ namespace algebra::smatrix::matrix {
 template <typename scalar_t>
 struct actor {
 
+  /// Size type
+  using size_ty = unsigned int;
+
+  /// Scalar_type
+  using scalar_type = scalar_t;
+
   /// 2D matrix type
   template <unsigned int ROWS, unsigned int COLS>
   using matrix_type = ROOT::Math::SMatrix<scalar_t, ROWS, COLS>;
 
   template <unsigned int ROWS>
   using vector_type = ROOT::Math::SVector<scalar_t, ROWS>;
+
+  template <unsigned int ROWS>
+  using array_type = vector_type<ROWS>;
+
+  using vector3 = array_type<3>;
 
   /// Operator getting a reference to one element of a non-const matrix
   template <unsigned int ROWS, unsigned int COLS>

@@ -34,28 +34,19 @@ struct test_specialisation_name {
 
 // Instantiate the test(s).
 typedef testing::Types<
-    test_types<
-        float, algebra::vecmem::point2<float>, algebra::vecmem::point3<float>,
-        algebra::vecmem::vector2<float>, algebra::vecmem::vector3<float>,
-        algebra::vecmem::transform3<float>, algebra::vecmem::cartesian2<float>,
-        algebra::vecmem::cartesian3<float>, algebra::vecmem::polar2<float>,
-        algebra::vecmem::cylindrical2<float>,
-        algebra::vecmem::cylindrical3<float>, algebra::vecmem::line2<float>,
-        std::size_t, algebra::vecmem::matrix_type,
-        algebra::vector::actor<float>,
-        algebra::matrix::actor<float,
-                               algebra::matrix::determinant::preset0<float>,
-                               algebra::matrix::inverse::preset0<float>>>,
+    test_types<float, algebra::vecmem::point2<float>,
+               algebra::vecmem::point3<float>, algebra::vecmem::vector2<float>,
+               algebra::vecmem::vector3<float>,
+               algebra::vecmem::transform3<float>, std::size_t,
+               algebra::vecmem::matrix_type,
+               algebra::matrix::actor<
+                   float, algebra::matrix::determinant::preset0<float>,
+                   algebra::matrix::inverse::preset0<float>>>,
     test_types<
         double, algebra::vecmem::point2<double>,
         algebra::vecmem::point3<double>, algebra::vecmem::vector2<double>,
         algebra::vecmem::vector3<double>, algebra::vecmem::transform3<double>,
-        algebra::vecmem::cartesian2<double>,
-        algebra::vecmem::cartesian3<double>, algebra::vecmem::polar2<double>,
-        algebra::vecmem::cylindrical2<double>,
-        algebra::vecmem::cylindrical3<double>, algebra::vecmem::line2<double>,
         std::size_t, algebra::vecmem::matrix_type,
-        algebra::vector::actor<double>,
         algebra::matrix::actor<double,
                                algebra::matrix::determinant::preset0<double>,
                                algebra::matrix::inverse::preset0<double>>>>

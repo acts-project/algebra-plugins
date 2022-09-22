@@ -15,6 +15,17 @@ namespace algebra {
 
 namespace getter {
 
+/// @name Getter functions on @c algebra::smatrix::storage_type
+/// @{
+
+using smatrix::math::eta;
+using smatrix::math::norm;
+using smatrix::math::perp;
+using smatrix::math::phi;
+using smatrix::math::theta;
+
+/// @}
+
 /// Function extracting a slice from the matrix used by
 /// @c algebra::smatrix::transform3
 template <unsigned int SIZE, unsigned int ROWS, unsigned int COLS,
@@ -37,8 +48,14 @@ using smatrix::math::element;
 
 namespace vector {
 
-template <typename scalar_t>
-using actor = smatrix::vector::actor<scalar_t>;
+/// @name Vector functions on @c algebra::smatrix::storage_type
+/// @{
+
+using smatrix::math::cross;
+using smatrix::math::dot;
+using smatrix::math::normalize;
+
+/// @}
 
 }  // namespace vector
 
@@ -55,19 +72,7 @@ namespace smatrix {
 /// @{
 
 template <typename T>
-using transform3 = math::transform3<T, algebra::vector::actor<T>>;
-template <typename T>
-using cartesian2 = smatrix::coordinate::cartesian2<transform3<T>>;
-template <typename T>
-using cartesian3 = smatrix::coordinate::cartesian3<transform3<T>>;
-template <typename T>
-using polar2 = smatrix::coordinate::polar2<transform3<T>>;
-template <typename T>
-using cylindrical2 = smatrix::coordinate::cylindrical2<transform3<T>>;
-template <typename T>
-using cylindrical3 = smatrix::coordinate::cylindrical3<transform3<T>>;
-template <typename T>
-using line2 = smatrix::coordinate::line2<transform3<T>>;
+using transform3 = math::transform3<T, matrix::actor<T>>;
 
 /// @}
 

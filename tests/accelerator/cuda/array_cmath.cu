@@ -34,29 +34,22 @@ struct test_specialisation_name {
 
 // Instantiate the test(s).
 typedef testing::Types<
-    test_types<
-        float, algebra::array::point2<float>, algebra::array::point3<float>,
-        algebra::array::vector2<float>, algebra::array::vector3<float>,
-        algebra::array::transform3<float>, algebra::array::cartesian2<float>,
-        algebra::array::cartesian3<float>, algebra::array::polar2<float>,
-        algebra::array::cylindrical2<float>,
-        algebra::array::cylindrical3<float>, algebra::array::line2<float>,
-        std::size_t, algebra::array::matrix_type, algebra::vector::actor<float>,
-        algebra::matrix::actor<float,
-                               algebra::matrix::determinant::preset0<float>,
-                               algebra::matrix::inverse::preset0<float>>>,
-    test_types<
-        double, algebra::array::point2<double>, algebra::array::point3<double>,
-        algebra::array::vector2<double>, algebra::array::vector3<double>,
-        algebra::array::transform3<double>, algebra::array::cartesian2<double>,
-        algebra::array::cartesian3<double>, algebra::array::polar2<double>,
-        algebra::array::cylindrical2<double>,
-        algebra::array::cylindrical3<double>, algebra::array::line2<double>,
-        std::size_t, algebra::array::matrix_type,
-        algebra::vector::actor<double>,
-        algebra::matrix::actor<double,
-                               algebra::matrix::determinant::preset0<double>,
-                               algebra::matrix::inverse::preset0<double>>>>
+    test_types<float, algebra::array::point2<float>,
+               algebra::array::point3<float>, algebra::array::vector2<float>,
+               algebra::array::vector3<float>,
+               algebra::array::transform3<float>, std::size_t,
+               algebra::array::matrix_type,
+               algebra::matrix::actor<
+                   float, algebra::matrix::determinant::preset0<float>,
+                   algebra::matrix::inverse::preset0<float>>>,
+    test_types<double, algebra::array::point2<double>,
+               algebra::array::point3<double>, algebra::array::vector2<double>,
+               algebra::array::vector3<double>,
+               algebra::array::transform3<double>, std::size_t,
+               algebra::array::matrix_type,
+               algebra::matrix::actor<
+                   double, algebra::matrix::determinant::preset0<double>,
+                   algebra::matrix::inverse::preset0<double>>>>
     array_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_cuda_basics,
                                array_cmath_types, test_specialisation_name);

@@ -7,7 +7,6 @@
 # Set up the library.
 algebra_add_library(algebra_eigen_math eigen_math
    "include/algebra/math/eigen.hpp"
-   "include/algebra/math/impl/eigen_coordinates.hpp"
    "include/algebra/math/impl/eigen_getter.hpp"
    "include/algebra/math/impl/eigen_matrix.hpp"
    "include/algebra/math/impl/eigen_transform3.hpp"

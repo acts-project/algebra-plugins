@@ -48,17 +48,16 @@ TYPED_TEST_P(test_host_basics, local_vectors) {
 
   // Cast operations to phi, theta, eta, perp
   typename TypeParam::vector2 vD{1., 1.};
-  typename TypeParam::scalar phi = typename TypeParam::vector_actor().phi(vD);
+  typename TypeParam::scalar phi = algebra::getter::phi(vD);
   ASSERT_NEAR(phi, M_PI_4, this->m_epsilon);
 
-  typename TypeParam::scalar perp = typename TypeParam::vector_actor().perp(vD);
+  typename TypeParam::scalar perp = algebra::getter::perp(vD);
   ASSERT_NEAR(perp, std::sqrt(2.), this->m_epsilon);
 
-  typename TypeParam::scalar norm = typename TypeParam::vector_actor().norm(vD);
+  typename TypeParam::scalar norm = algebra::getter::norm(vD);
   ASSERT_NEAR(norm, std::sqrt(2.), this->m_epsilon);
 
-  typename TypeParam::vector2 vDnorm =
-      typename TypeParam::vector_actor().normalize(vD);
+  typename TypeParam::vector2 vDnorm = algebra::vector::normalize(vD);
   ASSERT_NEAR(vDnorm[0], 1. / std::sqrt(2.), this->m_epsilon);
   ASSERT_NEAR(vDnorm[1], 1. / std::sqrt(2.), this->m_epsilon);
 }
@@ -92,20 +91,19 @@ TYPED_TEST_P(test_host_basics, vector3) {
 
   // Cast operations to phi, theta, eta, perp
   typename TypeParam::vector3 vD{1., 1., 1.};
-  typename TypeParam::scalar phi = typename TypeParam::vector_actor().phi(vD);
+  typename TypeParam::scalar phi = algebra::getter::phi(vD);
   ASSERT_NEAR(phi, M_PI_4, this->m_epsilon);
 
-  typename TypeParam::scalar theta =
-      typename TypeParam::vector_actor().theta(vD);
+  typename TypeParam::scalar theta = algebra::getter::theta(vD);
   ASSERT_NEAR(theta, std::atan2(std::sqrt(2.), 1.), this->m_epsilon);
 
-  typename TypeParam::scalar eta = typename TypeParam::vector_actor().eta(vD);
+  typename TypeParam::scalar eta = algebra::getter::eta(vD);
   ASSERT_NEAR(eta, 0.65847891569137573, this->m_isclose);
 
-  typename TypeParam::scalar perp = typename TypeParam::vector_actor().perp(vD);
+  typename TypeParam::scalar perp = algebra::getter::perp(vD);
   ASSERT_NEAR(perp, std::sqrt(2.), this->m_epsilon);
 
-  typename TypeParam::scalar norm = typename TypeParam::vector_actor().norm(vD);
+  typename TypeParam::scalar norm = algebra::getter::norm(vD);
   ASSERT_NEAR(norm, std::sqrt(3.), this->m_epsilon);
 
   // Test on matrix - vector operations
@@ -131,14 +129,13 @@ TYPED_TEST_P(test_host_basics, vector3) {
   algebra::getter::element(vF, 1, 0) = 6;
   algebra::getter::element(vF, 2, 0) = 13;
 
-  typename TypeParam::vector3 vG =
-      typename TypeParam::vector_actor().cross(vD, vF);
+  typename TypeParam::vector3 vG = algebra::vector::cross(vD, vF);
   ASSERT_NEAR(vG[0], 7, this->m_epsilon);
   ASSERT_NEAR(vG[1], -8, this->m_epsilon);
   ASSERT_NEAR(vG[2], 1, this->m_epsilon);
 
   // Dot product on vector3 and matrix<3,1>
-  auto dot = typename TypeParam::vector_actor().dot(vG, vF);
+  auto dot = algebra::vector::dot(vG, vF);
   ASSERT_NEAR(dot, 0, this->m_epsilon);
 }
 
@@ -341,39 +338,34 @@ TYPED_TEST_P(test_host_basics, getter) {
   typename TypeParam::vector3 v3{1., 1., 1.};
 
   // Normalization
-  typename TypeParam::vector3 v3n =
-      typename TypeParam::vector_actor().normalize(v3);
+  typename TypeParam::vector3 v3n = algebra::vector::normalize(v3);
   ASSERT_NEAR(v3n[0], 1. / std::sqrt(3.), this->m_epsilon);
   ASSERT_NEAR(v3n[1], 1. / std::sqrt(3.), this->m_epsilon);
   ASSERT_NEAR(v3n[2], 1. / std::sqrt(3.), this->m_epsilon);
 
   // Cross product
-  typename TypeParam::vector3 z = typename TypeParam::vector_actor().normalize(
-      typename TypeParam::vector3{3., 2., 1.});
-  typename TypeParam::vector3 x = typename TypeParam::vector_actor().normalize(
-      typename TypeParam::vector3{2., -3., 0.});
-  typename TypeParam::vector3 y = typename TypeParam::vector_actor().cross(
-      z, typename TypeParam::vector_actor().normalize(x));
+  typename TypeParam::vector3 z =
+      algebra::vector::normalize(typename TypeParam::vector3{3., 2., 1.});
+  typename TypeParam::vector3 x =
+      algebra::vector::normalize(typename TypeParam::vector3{2., -3., 0.});
+  typename TypeParam::vector3 y =
+      algebra::vector::cross(z, algebra::vector::normalize(x));
 
   // Check with dot product
-  ASSERT_NEAR(typename TypeParam::vector_actor().dot(x, y), 0.,
-              this->m_epsilon);
-  ASSERT_NEAR(typename TypeParam::vector_actor().dot(y, z), 0.,
-              this->m_epsilon);
-  ASSERT_NEAR(typename TypeParam::vector_actor().dot(z, x), 0.,
-              this->m_epsilon);
+  ASSERT_NEAR(algebra::vector::dot(x, y), 0., this->m_epsilon);
+  ASSERT_NEAR(algebra::vector::dot(y, z), 0., this->m_epsilon);
+  ASSERT_NEAR(algebra::vector::dot(z, x), 0., this->m_epsilon);
 }
 
 // This defines the transform3 test suite
 TYPED_TEST_P(test_host_basics, transform3) {
 
   // Preparatioon work
-  typename TypeParam::vector3 z = typename TypeParam::vector_actor().normalize(
-      typename TypeParam::vector3{3., 2., 1.});
-  typename TypeParam::vector3 x = typename TypeParam::vector_actor().normalize(
-      typename TypeParam::vector3{2., -3., 0.});
-  typename TypeParam::vector3 y =
-      typename TypeParam::vector_actor().cross(z, x);
+  typename TypeParam::vector3 z =
+      algebra::vector::normalize(typename TypeParam::vector3{3., 2., 1.});
+  typename TypeParam::vector3 x =
+      algebra::vector::normalize(typename TypeParam::vector3{2., -3., 0.});
+  typename TypeParam::vector3 y = algebra::vector::cross(z, x);
   typename TypeParam::point3 t = {2., 3., 4.};
 
   // Test constructor from t, z, x
@@ -466,12 +458,11 @@ TYPED_TEST_P(test_host_basics, transform3) {
 TYPED_TEST_P(test_host_basics, global_transformations) {
 
   // Preparation work
-  typename TypeParam::vector3 z = typename TypeParam::vector_actor().normalize(
-      typename TypeParam::vector3{3., 2., 1.});
-  typename TypeParam::vector3 x = typename TypeParam::vector_actor().normalize(
-      typename TypeParam::vector3{2., -3., 0.});
-  typename TypeParam::vector3 y =
-      typename TypeParam::vector_actor().cross(z, x);
+  typename TypeParam::vector3 z =
+      algebra::vector::normalize(typename TypeParam::vector3{3., 2., 1.});
+  typename TypeParam::vector3 x =
+      algebra::vector::normalize(typename TypeParam::vector3{2., -3., 0.});
+  typename TypeParam::vector3 y = algebra::vector::cross(z, x);
   (void)y;
   typename TypeParam::point3 t = {2., 3., 4.};
   typename TypeParam::transform3 trf(t, z, x);
@@ -510,228 +501,6 @@ TYPED_TEST_P(test_host_basics, global_transformations) {
   ASSERT_NEAR(lvectorB[2], lvectorC[2], this->m_isclose);
 }
 
-// This test local coordinate transforms
-TYPED_TEST_P(test_host_basics, local_transformations) {
-
-  typename TypeParam::point2 p2 = {3., 3.};
-  typename TypeParam::point3 p3 = {3., 3., 5.};
-
-  typename TypeParam::cartesian2 c2;
-  auto cart2fromp3 = c2(p3);
-  ASSERT_NEAR(p2[0], cart2fromp3[0], this->m_epsilon);
-  ASSERT_NEAR(p2[1], cart2fromp3[1], this->m_epsilon);
-
-  typename TypeParam::polar2 pol2;
-  auto polfrom2 = pol2(p2);
-  auto polfrom3 = pol2(p3);
-
-  // Check r-phi
-  ASSERT_NEAR(polfrom2[0], std::sqrt(18.), this->m_isclose);
-  ASSERT_NEAR(polfrom2[1], M_PI_4, this->m_isclose);
-
-  // Need to be identical
-  ASSERT_NEAR(polfrom2[0], polfrom3[0], this->m_epsilon);
-  ASSERT_NEAR(polfrom2[1], polfrom3[1], this->m_epsilon);
-}
-
-// This test cartesian2 coordinate
-TYPED_TEST_P(test_host_basics, cartesian2) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::cartesian2 c2;
-
-  // Global position on surface
-  const typename TypeParam::point3 global1 = {4., 7., 4.};
-
-  // Global to local transformation
-  const typename TypeParam::point2 local = c2.global_to_local(trf, global1);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], 2., this->m_isclose);
-  ASSERT_NEAR(local[1], 4., this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 = c2.local_to_global(trf, local);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-}
-
-// This test cartesian3 coordinate
-TYPED_TEST_P(test_host_basics, cartesian3) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::cartesian3 c3;
-
-  // Global position on surface
-  const typename TypeParam::point3 global1 = {4., 7., 5.};
-
-  // Global to local transformation
-  const typename TypeParam::point3 local = c3.global_to_local(trf, global1);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], 2., this->m_isclose);
-  ASSERT_NEAR(local[1], 4., this->m_isclose);
-  ASSERT_NEAR(local[2], 1., this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 = c3.local_to_global(trf, local);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-}
-
-// This test polar2 coordinate
-TYPED_TEST_P(test_host_basics, polar2) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::polar2 p2;
-
-  // Global position on surface
-  const typename TypeParam::point3 global1 = {4., 7., 4.};
-
-  // Global to local transformation
-  const typename TypeParam::point2 local = p2.global_to_local(trf, global1);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], std::sqrt(20.), this->m_isclose);
-  ASSERT_NEAR(local[1], atan2(4., 2.), this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 = p2.local_to_global(trf, local);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-}
-
-// This test cylindrical2 coordinate
-TYPED_TEST_P(test_host_basics, cylindrical2) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::cylindrical2 c2;
-
-  // Define cylinder mask
-  struct cylinder_mask {
-    typename TypeParam::scalar r = 0.;
-    typename TypeParam::scalar radius() const { return r; }
-  };
-
-  const typename TypeParam::scalar r = 2.;
-  const cylinder_mask mask{r};
-
-  // Global position on surface
-  const typename TypeParam::point3 global1 = {
-      typename TypeParam::scalar{3.4142136},
-      typename TypeParam::scalar{4.4142136}, typename TypeParam::scalar{9.}};
-
-  // Global to local transformation
-  const typename TypeParam::point2 local = c2.global_to_local(trf, global1);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], r * typename TypeParam::scalar{M_PI_4},
-              this->m_isclose);
-  ASSERT_NEAR(local[1], 5., this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 =
-      c2.local_to_global(trf, local, mask);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-}
-
-// This test cylindrical2 coordinate
-TYPED_TEST_P(test_host_basics, cylindrical3) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::cylindrical3 c3;
-
-  // Global position on surface
-  const typename TypeParam::point3 global1 = {
-      typename TypeParam::scalar{3.4142136},
-      typename TypeParam::scalar{4.4142136}, typename TypeParam::scalar{9.}};
-
-  // Global to local transformation
-  const typename TypeParam::point3 local = c3.global_to_local(trf, global1);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], 2, this->m_isclose);
-  ASSERT_NEAR(local[1], M_PI_4, this->m_isclose);
-  ASSERT_NEAR(local[2], 5., this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 = c3.local_to_global(trf, local);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-}
-
-// This test line2 coordinate
-TYPED_TEST_P(test_host_basics, line2) {
-
-  // Preparation work
-  const typename TypeParam::vector3 z = {0., 0., 1.};
-  const typename TypeParam::vector3 x = {1., 0., 0.};
-  const typename TypeParam::point3 t = {2., 3., 4.};
-  const typename TypeParam::transform3 trf(t, z, x);
-  const typename TypeParam::line2 l2;
-
-  // Direction of track
-  const typename TypeParam::vector3 dir = {0., 1., 0.};
-
-  // Global position on surface
-  const typename TypeParam::point3 global1 = {3., 3., 9.};
-
-  // Global to local transformation
-  const typename TypeParam::point2 local =
-      l2.global_to_local(trf, global1, dir);
-
-  // Check if the local position is correct
-  ASSERT_NEAR(local[0], -1., this->m_isclose);
-  ASSERT_NEAR(local[1], 5., this->m_isclose);
-
-  // Local to global transformation
-  const typename TypeParam::point3 global2 =
-      l2.local_to_global(trf, local, dir);
-
-  // Check if the same global position is obtained
-  ASSERT_NEAR(global1[0], global2[0], this->m_isclose);
-  ASSERT_NEAR(global1[1], global2[1], this->m_isclose);
-  ASSERT_NEAR(global1[2], global2[2], this->m_isclose);
-}
-
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics, local_vectors, vector3, matrix64,
                             matrix22, getter, transform3,
-                            global_transformations, local_transformations,
-                            cartesian2, cartesian3, polar2, cylindrical2,
-                            cylindrical3, line2);
+                            global_transformations);

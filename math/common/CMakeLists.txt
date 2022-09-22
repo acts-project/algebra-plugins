@@ -6,14 +6,7 @@
 
 # Set up the library.
 algebra_add_library(algebra_common_math common_math
-   "include/algebra/coordinates/cartesian2.hpp"
-   "include/algebra/coordinates/cartesian3.hpp"
-   "include/algebra/coordinates/coordinate_base.hpp"
-   "include/algebra/coordinates/coordinates.hpp"
-   "include/algebra/coordinates/cylindrical2.hpp"
-   "include/algebra/coordinates/cylindrical3.hpp"
-   "include/algebra/coordinates/line2.hpp"
-   "include/algebra/coordinates/polar2.hpp"
+   # Math
    "include/algebra/math/common.hpp")
 target_link_libraries(algebra_common_math
    INTERFACE algebra::common)

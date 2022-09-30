@@ -18,6 +18,9 @@ set( CMAKE_SYCL_STANDARD 17 CACHE STRING "The (SYCL) C++ standard to use" )
 # Standard CMake include(s).
 include( GNUInstallDirs )
 
+# Flags controlling the meta-build system.
+option( ALGEBRA_PLUGINS_USE_SYSTEM_LIBS "Use system libraries be default" FALSE )
+
 # Explicitly set the output directory for the binaries. Such that if this
 # project is included by another project, the main project's configuration would
 # win out.
@@ -61,7 +64,7 @@ option( ALGEBRA_PLUGINS_SETUP_VECMEM
    "Set up the VecMem target(s) explicitly" TRUE )
 option( ALGEBRA_PLUGINS_USE_SYSTEM_VECMEM
    "Pick up an existing installation of VecMem from the build environment"
-   FALSE )
+   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
 if( ALGEBRA_PLUGINS_SETUP_VECMEM )
    if( ALGEBRA_PLUGINS_USE_SYSTEM_VECMEM )
       find_package( vecmem 0.7.0 REQUIRED COMPONENTS LANGUAGE )
@@ -77,7 +80,7 @@ option( ALGEBRA_PLUGINS_SETUP_GOOGLETEST
    "Set up the GoogleTest target(s) explicitly" TRUE )
 option( ALGEBRA_PLUGINS_USE_SYSTEM_GOOGLETEST
    "Pick up an existing installation of GoogleTest from the build environment"
-   FALSE )
+   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
 if( ALGEBRA_PLUGINS_SETUP_GOOGLETEST )
    if( ALGEBRA_PLUGINS_USE_SYSTEM_GOOGLETEST )
       find_package( GTest REQUIRED )
@@ -91,7 +94,7 @@ option( ALGEBRA_PLUGINS_SETUP_BENCHMARK
    "Set up the Google Benchmark target(s) explicitly" TRUE )
 option( ALGEBRA_PLUGINS_USE_SYSTEM_BENCHMARK
    "Pick up an existing installation of Google Benchmark from the build environment"
-   FALSE )
+   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
 if( ALGEBRA_PLUGINS_SETUP_BENCHMARK )
    if( ALGEBRA_PLUGINS_USE_SYSTEM_BENCHMARK )
       find_package( benchmark REQUIRED )

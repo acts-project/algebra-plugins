@@ -45,6 +45,8 @@ option( ALGEBRA_PLUGINS_INCLUDE_SMATRIX
    "Include Smatrix types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_INCLUDE_VC
    "Include Vc types in Algebra Plugins" FALSE )
+option( ALGEBRA_PLUGINS_INCLUDE_FASTOR
+   "Include Fastor types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_INCLUDE_VECMEM
    "Include VecMem types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_BUILD_TESTING "Build the unit tests of Algebra Plugins"
@@ -136,6 +138,20 @@ if( ALGEBRA_PLUGINS_SETUP_VC )
       vc_set_preferred_compiler_flags()
       add_compile_definitions( ${Vc_DEFINITIONS} )
       add_compile_options( ${Vc_COMPILE_FLAGS} ${Vc_ARCHITECTURE_FLAGS} )
+   endif()
+endif()
+
+# Set up Fastor.
+option( ALGEBRA_PLUGINS_SETUP_FASTOR
+   "Set up the Fastor target(s) explicitly" FALSE )
+option( ALGEBRA_PLUGINS_USE_SYSTEM_FASTOR
+   "Pick up an existing installation of Fastor from the build environment"
+   TRUE )
+if( ALGEBRA_PLUGINS_SETUP_FASTOR )
+   if( ALGEBRA_PLUGINS_USE_SYSTEM_FASTOR )
+      find_package( Fastor 0.6.3 REQUIRED )
+   else()
+      add_subdirectory( extern/fastor )
    endif()
 endif()
 

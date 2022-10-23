@@ -35,8 +35,8 @@ ALGEBRA_HOST_DEVICE inline auto normalize(
 
 /** Dot product between two input vectors
  *
- * @tparam derived_type_lhs is the first matrix (epresseion) template
- * @tparam derived_type_rhs is the second matrix (epresseion) template
+ * @tparam derived_type_lhs is the first matrix (expression) template
+ * @tparam derived_type_rhs is the second matrix (expression) template
  *
  * @param a the first input vector
  * @param b the second input vector
@@ -52,8 +52,8 @@ ALGEBRA_HOST_DEVICE inline auto dot(
 
 /** Cross product between two input vectors
  *
- * @tparam derived_type_lhs is the first matrix (epresseion) template
- * @tparam derived_type_rhs is the second matrix (epresseion) template
+ * @tparam derived_type_lhs is the first matrix (expression) template
+ * @tparam derived_type_rhs is the second matrix (expression) template
  *
  * @param a the first input vector
  * @param b the second input vector

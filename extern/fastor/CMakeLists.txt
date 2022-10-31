@@ -22,7 +22,6 @@ FetchContent_Declare( fastor ${ALGEBRA_PLUGINS_FASTOR_SOURCE} )
 
 # Options used in the build of Fastor.
 set(BUILD_TESTING OFF CACHE BOOL "Don't build the Fastor tests")
-add_compile_definitions(FASTOR_ENABLE_RUNTIME_CHECKS=0)
 
 # Get it into the current directory.
 FetchContent_Populate( fastor )

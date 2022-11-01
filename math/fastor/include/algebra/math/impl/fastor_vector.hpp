@@ -11,6 +11,9 @@
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
+// Fastor include(s).
+#include <Fastor/Fastor.h>
+
 namespace algebra::fastor::math {
 
 /** Get a normalized version of the input vector

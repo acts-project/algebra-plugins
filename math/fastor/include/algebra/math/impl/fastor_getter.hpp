@@ -15,6 +15,7 @@
 #include <Fastor/Fastor.h>
 
 // System include(s).
+#include <cstddef> // for the std::size_t type
 #include <type_traits>
 
 namespace algebra::fastor::math {

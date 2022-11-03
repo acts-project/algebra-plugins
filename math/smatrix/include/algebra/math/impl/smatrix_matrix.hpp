@@ -15,7 +15,7 @@
 
 namespace algebra::smatrix::matrix {
 
-/// "Matrix actor", assuming an Eigen matrix
+/// "Matrix actor", assuming an SMatrix matrix
 template <typename scalar_t>
 struct actor {
 
@@ -133,10 +133,7 @@ struct actor {
   template <unsigned int N>
   ALGEBRA_HOST_DEVICE inline scalar_t determinant(const matrix_type<N, N> &m) {
     scalar_t det;
-    bool success = m.Det2(det);
-
-    // suppress unused parameter warning
-    (void)success;
+    [[maybe_unused]] bool success = m.Det2(det);
 
     return det;
   }

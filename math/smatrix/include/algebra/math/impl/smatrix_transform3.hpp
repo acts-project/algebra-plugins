@@ -137,9 +137,9 @@ struct transform3 {
     SMATRIX_CHECK(ifail);
   }
 
-  /** Constructor with arguments: matrix as std::aray of scalar
+  /** Constructor with arguments: matrix as ROOT::Math::SVector<scalar_t, 16> of scalar
    *
-   * @param ma is the full 4x4 matrix asa 16 array
+   * @param ma is the full 4x4 matrix as a 16-element array
    **/
   ALGEBRA_HOST
   transform3(const array_type<16> &ma) {

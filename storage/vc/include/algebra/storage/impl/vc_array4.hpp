@@ -39,13 +39,13 @@ struct array4 {
    */
   array4() : _array() {}
 
-  /** const copy constructor
+  /** Copy constructor
    *
    * @param array wrapper object to copy the data from
    */
   array4(const array4 &array) : _array(array._array) {}
 
-  /** Copy constructor
+  /** Move constructor
    *
    * @param array wrapper object to copy the data from
    */
@@ -62,9 +62,9 @@ struct array4 {
    *  also all remaining values in the array are properly initialized.
    *
    * @param v1 value 1. dimension
-   * @param v1 value 2. dimension
-   * @param v1 value 3. dimension
-   * @param v1 optional value 4. dimension. if not passed, set to 0.0
+   * @param v2 value 2. dimension
+   * @param v3 value 3. dimension
+   * @param v4 optional value 4. dimension. if not passed, set to 0.0
    *
    */
   array4(scalar_t v1, scalar_t v2, scalar_t v3,
@@ -77,7 +77,7 @@ struct array4 {
    */
   array4(array_type base) : _array(base) {}
 
-  /** Generig assignment operator
+  /** Generic assignment operator
    *
    * @param lhs wrap a copy of this data
    */

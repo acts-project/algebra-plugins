@@ -43,7 +43,7 @@ ALGEBRA_HOST_DEVICE inline scalar_t theta(
                               v[2]);
 }
 
-/** This method retrieves the perpenticular magnitude of a vector with rows >= 2
+/** This method retrieves the perpendicular magnitude of a vector with rows >= 2
  *
  * @param v the input vector
  **/

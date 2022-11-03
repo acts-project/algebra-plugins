@@ -161,6 +161,7 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
 
   return ROOT::Math::Cross(a, b);
 }
+
 /** Cross product between two input vectors
  *
  * @param a the first input vector
@@ -175,6 +176,7 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
 
   return ROOT::Math::Cross(a, b);
 }
+
 /** Cross product between two input vectors
  *
  * @param a the first input vector
@@ -189,6 +191,7 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
 
   return ROOT::Math::Cross(a, b);
 }
+
 /** Cross product between two input vectors
  *
  * @param a the first input vector

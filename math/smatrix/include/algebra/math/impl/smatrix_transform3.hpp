@@ -138,7 +138,7 @@ struct transform3 {
   }
 
   /** Constructor with arguments: matrix as ROOT::Math::SVector<scalar_t, 16> of
-   *scalar
+   * scalars
    *
    * @param ma is the full 4x4 matrix as a 16-element array
    **/

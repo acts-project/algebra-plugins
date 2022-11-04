@@ -15,7 +15,7 @@
 #include <Fastor/Fastor.h>
 
 // System include(s).
-#include <cstddef> // for the std::size_t type
+#include <cstddef>  // for the std::size_t type
 
 namespace algebra::fastor::math {
 
@@ -58,16 +58,16 @@ struct actor {
   template <size_ty ROWS, size_ty COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
                                                     size_ty row, size_ty col) {
-	// In Fastor::fseq, the last element is not included.
+    // In Fastor::fseq, the last element is not included.
     return m(Fastor::fseq<row, row + ROWS>(), Fastor::fseq<col, col + COLS>());
   }
 
   /// Operator setting a block
   template <size_ty ROWS, size_ty COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const matrix_type<ROWS, COLS> &b, size_ty row,
-                                     size_ty col) {
-	m(Fastor::fseq<row, row + ROWS>(), Fastor::fseq<col, col + COLS>()) = b;
+                                     const matrix_type<ROWS, COLS> &b,
+                                     size_ty row, size_ty col) {
+    m(Fastor::fseq<row, row + ROWS>(), Fastor::fseq<col, col + COLS>()) = b;
   }
 
   // Create zero matrix
@@ -79,10 +79,10 @@ struct actor {
   // Create identity matrix
   template <int ROWS, int COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() {
-	// There are 2 identity tensor methods in Fastor, eye() and eye2(). The former
-	// is for arbitrary order tensors, whereas the latter is specifically for second
-	// order tensors. As such, I chose to use eye2() here because it does less and
-	// hence would be faster.
+    // There are 2 identity tensor methods in Fastor, eye() and eye2(). The
+    // former is for arbitrary order tensors, whereas the latter is specifically
+    // for second order tensors. As such, I chose to use eye2() here because it
+    // does less and hence would be faster.
     return matrix_type<ROWS, COLS>().eye2();
   }
 

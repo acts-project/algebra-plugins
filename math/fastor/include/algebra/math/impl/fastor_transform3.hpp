@@ -80,10 +80,10 @@ struct transform3 {
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
              const vector3 &z, bool get_inverse = true) {
 
-	_data(Fastor::fseq<0, 3>(), 0) = x;
-	_data(Fastor::fseq<0, 3>(), 1) = y;
-	_data(Fastor::fseq<0, 3>(), 2) = z;
-	_data(Fastor::fseq<0, 3>(), 3) = t;
+    _data(Fastor::fseq<0, 3>(), 0) = x;
+    _data(Fastor::fseq<0, 3>(), 1) = y;
+    _data(Fastor::fseq<0, 3>(), 2) = z;
+    _data(Fastor::fseq<0, 3>(), 3) = t;
 
     if (get_inverse) {
       _data_inv = Fastor::inverse(_data);
@@ -100,7 +100,8 @@ struct transform3 {
   ALGEBRA_HOST
   transform3(const vector3 &t, const vector3 &z, const vector3 &x,
              bool get_inverse = true)
-      : transform3(t, x, Fastor:cross(z, x), z, get_inverse) {}
+      : transform3(t, x, Fastor
+                   : cross(z, x), z, get_inverse) {}
 
   /** Constructor with arguments: translation
    *
@@ -115,9 +116,9 @@ struct transform3 {
   }
 
   /** Constructor with arguments: matrix
-  *
-  * @param m is the full 4x4 matrix
-  **/
+   *
+   * @param m is the full 4x4 matrix
+   **/
   ALGEBRA_HOST
   transform3(const matrix44 &m) {
     _data = m;
@@ -133,7 +134,7 @@ struct transform3 {
   transform3(const array_type<16> &ma) {
     _data = m;
 
-	_data_inv = Fastor::inverse(_data);
+    _data_inv = Fastor::inverse(_data);
   }
 
   /** Default contructors */
@@ -152,7 +153,8 @@ struct transform3 {
   ALGEBRA_HOST
   inline auto rotation() const {
 
-    return Fastor::Tensor<scalar_t, 3, 3>(_data(Fastor::fseq<0, 4>(), Fastor::fseq<0, 4>()));
+    return Fastor::Tensor<scalar_t, 3, 3>(
+        _data(Fastor::fseq<0, 4>(), Fastor::fseq<0, 4>()));
   }
 
   /** This method retrieves x axis */
@@ -169,10 +171,7 @@ struct transform3 {
 
   /** This method retrieves the translation of a transform */
   ALGEBRA_HOST
-  inline vector3 translation() const {
-
-    return _data(Fastor::fseq<0, 3>(), 3);
-  }
+  inline vector3 translation() const { return _data(Fastor::fseq<0, 3>(), 3); }
 
   /** This method retrieves the 4x4 matrix of a transform */
   ALGEBRA_HOST
@@ -188,10 +187,11 @@ struct transform3 {
   ALGEBRA_HOST
   inline const point3 point_to_global(const point3 &v) const {
 
-	Fastor::Tensor<scalar_type, 4> vector_4;
-	vector_4(Fastor::fseq<0, 3>()) = v;
+    Fastor::Tensor<scalar_type, 4> vector_4;
+    vector_4(Fastor::fseq<0, 3>()) = v;
     vector_4[3] = static_cast<scalar_type>(1);
-	return Fastor::Tensor<scalar_type, 3>(Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
+    return Fastor::Tensor<scalar_type, 3>(
+        Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
   }
 
   /** This method transform from a vector from the global 3D cartesian frame
@@ -200,9 +200,10 @@ struct transform3 {
   inline const point3 point_to_local(const point3 &v) const {
 
     Fastor::Tensor<scalar_type, 4> vector_4;
-	vector_4(Fastor::fseq<0, 3>()) = v;
+    vector_4(Fastor::fseq<0, 3>()) = v;
     vector_4[3] = static_cast<scalar_type>(1);
-	return Fastor::Tensor<scalar_type, 3>(Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
+    return Fastor::Tensor<scalar_type, 3>(
+        Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
   }
 
   /** This method transform from a vector from the local 3D cartesian frame to
@@ -211,9 +212,10 @@ struct transform3 {
   inline const point3 vector_to_global(const vector3 &v) const {
 
     Fastor::Tensor<scalar_type, 4> vector_4;
-	vector_4(Fastor::fseq<0, 3>()) = v;
+    vector_4(Fastor::fseq<0, 3>()) = v;
     vector_4[3] = static_cast<scalar_type>(0);
-	return Fastor::Tensor<scalar_type, 3>(Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
+    return Fastor::Tensor<scalar_type, 3>(
+        Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
   }
 
   /** This method transform from a vector from the global 3D cartesian frame
@@ -222,9 +224,10 @@ struct transform3 {
   inline const point3 vector_to_local(const vector3 &v) const {
 
     Fastor::Tensor<scalar_type, 4> vector_4;
-	vector_4(Fastor::fseq<0, 3>()) = v;
+    vector_4(Fastor::fseq<0, 3>()) = v;
     vector_4[3] = static_cast<scalar_type>(0);
-	return Fastor::Tensor<scalar_type, 3>(Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
+    return Fastor::Tensor<scalar_type, 3>(
+        Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
   }
 };  // struct transform3
 

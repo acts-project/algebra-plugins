@@ -15,7 +15,7 @@
 #include <Fastor/Fastor.h>
 
 // System include(s).
-#include <cstddef> // for the std::size_t type
+#include <cstddef>  // for the std::size_t type
 #include <type_traits>
 
 namespace algebra::fastor::math {
@@ -116,8 +116,7 @@ ALGEBRA_HOST_DEVICE inline scalar_t element(
 /// Function extracting an element from a matrix (non-const)
 template <typename scalar_t, std::size_t ROWS, std::size_t COLS>
 ALGEBRA_HOST_DEVICE inline scalar_t &element(
-    Fastor::Tensor<scalar_t, ROWS, COLS> &m, std::size_t row,
-    std::size_t col) {
+    Fastor::Tensor<scalar_t, ROWS, COLS> &m, std::size_t row, std::size_t col) {
 
   return element_getter<scalar_t>()(m, row, col);
 }

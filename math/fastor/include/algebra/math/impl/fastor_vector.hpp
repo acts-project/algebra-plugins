@@ -24,7 +24,7 @@ template <typename scalar_t, auto N>
 ALGEBRA_HOST inline Fastor::Tensor<scalar_t, N> normalize(
     const Fastor::Tensor<scalar_t, N> &v) {
 
-  return Fastor::evaluate(Fastor::norm(v));
+  return Fastor::norm(v);
 }
 
 /** Dot product between two input vectors
@@ -37,7 +37,7 @@ ALGEBRA_HOST inline Fastor::Tensor<scalar_t, N> normalize(
 template <typename scalar_t, auto N>
 ALGEBRA_HOST_DEVICE inline auto dot(const Fastor::Tensor<scalar_t, N> &a,
                                     const Fastor::Tensor<scalar_t, N> &b) {
-  return Fastor::evaluate(Fastor::inner(a, b));
+  return Fastor::inner(a, b);
 }
 
 /** Cross product between two input vectors
@@ -50,7 +50,7 @@ ALGEBRA_HOST_DEVICE inline auto dot(const Fastor::Tensor<scalar_t, N> &a,
 template <typename scalar_t>
 ALGEBRA_HOST_DEVICE inline auto cross(const Fastor::Tensor<scalar_t, 3> &a,
                                       const Fastor::Tensor<scalar_t, 3> &b) {
-  return Fastor::evaluate(Fastor::cross(a, b));
+  return Fastor::cross(a, b);
 }
 
 }  // namespace algebra::fastor::math

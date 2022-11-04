@@ -39,8 +39,7 @@ template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST inline scalar_t theta(
     const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
-  return algebra::math::atan2(algebra::math::sqrt(v[0] * v[0] + v[1] * v[1]),
-                              v[2]);
+  return algebra::math::atan2(Fastor::norm(v(Fastor::fseq<0, 2>())));
 }
 
 /** This method retrieves the perpenticular magnitude of a vector with rows >= 2
@@ -59,9 +58,9 @@ ALGEBRA_HOST inline scalar_t perp(
  * @param v the input vector
  **/
 template <typename scalar_t, auto N>
-ALGEBRA_HOST inline scalar_t norm(const ROOT::Math::SVector<scalar_t, N> &v) {
+ALGEBRA_HOST inline scalar_t norm(const Fastor::Tensor<scalar_t, N> &v) {
 
-  return algebra::math::sqrt(Fastor::inner(v, v));
+  return Fastor::norm(v);
 }
 
 /** This method retrieves the pseudo-rapidity from a vector or vector base with
@@ -73,7 +72,7 @@ template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST inline scalar_t eta(
     const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
-  return algebra::math::atanh(v[2] / norm(v));
+  return algebra::math::atanh(v[2] / Fastor::norm(v));
 }
 
 /// Functor used to access elements of Fastor matrices

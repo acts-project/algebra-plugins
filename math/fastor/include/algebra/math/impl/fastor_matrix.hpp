@@ -30,7 +30,7 @@ struct actor {
   using scalar_type = scalar_t;
 
   /// 2D matrix type
-  template <int ROWS, int COLS>
+  template <size_ty ROWS, size_ty COLS>
   using matrix_type = algebra::fastor::matrix_type<scalar_t, ROWS, COLS>;
 
   /// Array type
@@ -41,14 +41,14 @@ struct actor {
   using vector3 = array_type<3>;
 
   /// Operator getting a reference to one element of a non-const matrix
-  template <int ROWS, int COLS>
+  template <size_ty ROWS, size_ty COLS>
   ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
                                                int row, int col) const {
     return m(row, col);
   }
 
   /// Operator getting one value of a const matrix
-  template <int ROWS, int COLS>
+  template <size_ty ROWS, size_ty COLS>
   ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
                                               int row, int col) const {
     return m(row, col);
@@ -59,7 +59,7 @@ struct actor {
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
                                                     size_ty row, size_ty col) {
     // In Fastor::fseq, the last element is not included.
-    return m(Fastor::fseq<row, row + ROWS>(), Fastor::fseq<col, col + COLS>());
+    return m(Fastor::seq(row, row + ROWS), Fastor::seq(col, col + COLS));
   }
 
   /// Operator setting a block
@@ -71,13 +71,13 @@ struct actor {
   }
 
   // Create zero matrix
-  template <int ROWS, int COLS>
+  template <size_ty ROWS, size_ty COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() {
     return matrix_type<ROWS, COLS>().zeros();
   }
 
   // Create identity matrix
-  template <int ROWS, int COLS>
+  template <size_ty ROWS, size_ty COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() {
     // There are 2 identity tensor methods in Fastor, eye() and eye2(). The
     // former is for arbitrary order tensors, whereas the latter is specifically
@@ -87,13 +87,13 @@ struct actor {
   }
 
   // Set input matrix as zero matrix
-  template <int ROWS, int COLS>
+  template <size_ty ROWS, size_ty COLS>
   ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<ROWS, COLS> &m) const {
     m.zeros();
   }
 
   // Set input matrix as identity matrix
-  template <int ROWS, int COLS>
+  template <size_ty ROWS, size_ty COLS>
   ALGEBRA_HOST_DEVICE inline void set_identity(
       matrix_type<ROWS, COLS> &m) const {
     m.eye2();

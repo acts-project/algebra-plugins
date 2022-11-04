@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
 // Fastor include(s).

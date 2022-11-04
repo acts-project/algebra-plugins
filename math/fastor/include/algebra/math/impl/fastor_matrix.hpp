@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
+#include "algebra/storage/fastor.hpp"
 
 // Fastor include(s).
 #include <Fastor/Fastor.h>

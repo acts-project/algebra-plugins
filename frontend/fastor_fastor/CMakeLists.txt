@@ -9,4 +9,4 @@ algebra_add_library( algebra_fastor_fastor fastor_fastor
    "include/algebra/fastor_fastor.hpp" )
 target_link_libraries( algebra_fastor_fastor
    INTERFACE algebra::common algebra::fastor_storage algebra::cmath_math
-             algebra::fastor_math )
+   			 algebra::fastor_math )

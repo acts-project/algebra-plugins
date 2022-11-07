@@ -27,3 +27,14 @@ set(BUILD_TESTING OFF CACHE BOOL "Don't build the Fastor tests")
 FetchContent_Populate( fastor )
 add_subdirectory( "${fastor_SOURCE_DIR}" "${fastor_BINARY_DIR}"
    EXCLUDE_FROM_ALL )
+
+# Treat the Fastor headers as "system headers", to avoid getting warnings from
+# them.
+get_target_property( _incDirs Fastor INTERFACE_INCLUDE_DIRECTORIES ) 
+target_include_directories( Fastor  
+   SYSTEM INTERFACE ${_incDirs} )
+unset( _incDirs )
+
+# Set up an alias for the Fastor target, with the same name that it will have
+# when "finding it".
+add_library( Fastor::Fastor ALIAS Fastor )

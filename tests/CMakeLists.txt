@@ -44,6 +44,13 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
                      algebra::vc_cmath algebra::vc_vc )
 endif()
 
+if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )
+   algebra_add_test( fastor 
+      "fastor/fastor_fastor.cpp"
+      LINK_LIBRARIES GTest::gtest_main algebra::tests_common
+                     algebra::fastor_fastor )
+endif()
+
 if( ALGEBRA_PLUGINS_INCLUDE_VECMEM )
    algebra_add_test( vecmem
       "vecmem/vecmem_cmath.cpp"

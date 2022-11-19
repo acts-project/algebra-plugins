@@ -20,13 +20,23 @@ set( ALGEBRA_PLUGINS_FASTOR_SOURCE
 mark_as_advanced( ALGEBRA_PLUGINS_FASTOR_SOURCE )
 FetchContent_Declare( fastor ${ALGEBRA_PLUGINS_FASTOR_SOURCE} )
 
-# Options used in the build of Fastor.
-set(BUILD_TESTING OFF CACHE BOOL "Don't build the Fastor tests")
+# Turn off the unit tests for Fastor.
+if( DEFINED CACHE{BUILD_TESTING} )
+   set( _buildTestingValue ${BUILD_TESTING} )
+endif()
+set( BUILD_TESTING FALSE CACHE INTERNAL "Forceful setting of BUILD_TESTING" )
 
 # Get it into the current directory.
-FetchContent_Populate( fastor )
-add_subdirectory( "${fastor_SOURCE_DIR}" "${fastor_BINARY_DIR}"
-   EXCLUDE_FROM_ALL )
+FetchContent_MakeAvailable( fastor )
+
+# Reset the BUILD_TESTING variable.
+if( DEFINED _buildTestingValue )
+   set( BUILD_TESTING ${_buildTestingValue} CACHE BOOL "Turn tests on/off"
+      FORCE )
+   unset( _buildTestingValue )
+else()
+   unset( BUILD_TESTING CACHE )
+endif()
 
 # Treat the Fastor headers as "system headers", to avoid getting warnings from
 # them.

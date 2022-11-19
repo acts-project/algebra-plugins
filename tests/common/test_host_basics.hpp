@@ -288,6 +288,102 @@ TYPED_TEST_P(test_host_basics, matrix22) {
   ASSERT_NEAR(algebra::getter::element(m33_inv, 2, 2), -10 / 20.,
               this->m_isclose);
 
+  typename TypeParam::template matrix<6, 6> m66_big;
+  algebra::getter::element(m66_big, 0, 0) = 1;
+  algebra::getter::element(m66_big, 0, 1) = 0;
+  algebra::getter::element(m66_big, 0, 2) = 3;
+  algebra::getter::element(m66_big, 0, 3) = 0;
+  algebra::getter::element(m66_big, 0, 4) = 0;
+  algebra::getter::element(m66_big, 0, 5) = 0;
+
+  algebra::getter::element(m66_big, 1, 0) = 0;
+  algebra::getter::element(m66_big, 1, 1) = -2;
+  algebra::getter::element(m66_big, 1, 2) = 4;
+  algebra::getter::element(m66_big, 1, 3) = 0;
+  algebra::getter::element(m66_big, 1, 4) = 5;
+  algebra::getter::element(m66_big, 1, 5) = 0;
+
+  algebra::getter::element(m66_big, 2, 0) = 0;
+  algebra::getter::element(m66_big, 2, 1) = 0;
+  algebra::getter::element(m66_big, 2, 2) = 3;
+  algebra::getter::element(m66_big, 2, 3) = 0;
+  algebra::getter::element(m66_big, 2, 4) = 0;
+  algebra::getter::element(m66_big, 2, 5) = 0;
+
+  algebra::getter::element(m66_big, 3, 0) = 0;
+  algebra::getter::element(m66_big, 3, 1) = 0;
+  algebra::getter::element(m66_big, 3, 2) = 0;
+  algebra::getter::element(m66_big, 3, 3) = 4;
+  algebra::getter::element(m66_big, 3, 4) = 0;
+  algebra::getter::element(m66_big, 3, 5) = 0;
+
+  algebra::getter::element(m66_big, 4, 0) = 0;
+  algebra::getter::element(m66_big, 4, 1) = 0;
+  algebra::getter::element(m66_big, 4, 2) = 0;
+  algebra::getter::element(m66_big, 4, 3) = 0;
+  algebra::getter::element(m66_big, 4, 4) = 9;
+  algebra::getter::element(m66_big, 4, 5) = 0;
+
+  algebra::getter::element(m66_big, 5, 0) = -1;
+  algebra::getter::element(m66_big, 5, 1) = -1;
+  algebra::getter::element(m66_big, 5, 2) = -1;
+  algebra::getter::element(m66_big, 5, 3) = -1;
+  algebra::getter::element(m66_big, 5, 4) = -1;
+  algebra::getter::element(m66_big, 5, 5) = -1;
+
+  // Test 6 X 6 big matrix determinant
+  auto m66_big_det = typename TypeParam::matrix_actor().determinant(m66_big);
+  ASSERT_NEAR(m66_big_det, 216, this->m_isclose);
+
+  typename TypeParam::template matrix<6, 6> m66_small;
+
+  algebra::getter::element(m66_small, 0, 0) = 10.792386;
+  algebra::getter::element(m66_small, 0, 1) = 0.216181;
+  algebra::getter::element(m66_small, 0, 2) = 0.057650;
+  algebra::getter::element(m66_small, 0, 3) = -0.002764;
+  algebra::getter::element(m66_small, 0, 4) = 0.000001;
+  algebra::getter::element(m66_small, 0, 5) = 0;
+
+  algebra::getter::element(m66_small, 1, 0) = 43.909368;
+  algebra::getter::element(m66_small, 1, 1) = 10.372997;
+  algebra::getter::element(m66_small, 1, 2) = 0.231496;
+  algebra::getter::element(m66_small, 1, 3) = -0.065972;
+  algebra::getter::element(m66_small, 1, 4) = -0.000002;
+  algebra::getter::element(m66_small, 1, 5) = 0;
+
+  algebra::getter::element(m66_small, 2, 0) = 0.045474;
+  algebra::getter::element(m66_small, 2, 1) = -0.001730;
+  algebra::getter::element(m66_small, 2, 2) = 0.000246;
+  algebra::getter::element(m66_small, 2, 3) = 0.000004;
+  algebra::getter::element(m66_small, 2, 4) = 0;
+  algebra::getter::element(m66_small, 2, 5) = 0;
+
+  algebra::getter::element(m66_small, 3, 0) = -0.255134;
+  algebra::getter::element(m66_small, 3, 1) = -0.059846;
+  algebra::getter::element(m66_small, 3, 2) = -0.001345;
+  algebra::getter::element(m66_small, 3, 3) = 0.000383;
+  algebra::getter::element(m66_small, 3, 4) = 0;
+  algebra::getter::element(m66_small, 3, 5) = 0;
+
+  algebra::getter::element(m66_small, 4, 0) = -0.001490;
+  algebra::getter::element(m66_small, 4, 1) = -0.000057;
+  algebra::getter::element(m66_small, 4, 2) = -0.000008;
+  algebra::getter::element(m66_small, 4, 3) = 0.000001;
+  algebra::getter::element(m66_small, 4, 4) = 0.000001;
+  algebra::getter::element(m66_small, 4, 5) = 0;
+
+  algebra::getter::element(m66_small, 5, 0) = 0;
+  algebra::getter::element(m66_small, 5, 1) = 0;
+  algebra::getter::element(m66_small, 5, 2) = 0;
+  algebra::getter::element(m66_small, 5, 3) = 0;
+  algebra::getter::element(m66_small, 5, 4) = 0;
+  algebra::getter::element(m66_small, 5, 5) = 89875.517874;
+
+  // Test 6 X 6 small matrix determinant
+  auto m66_small_det = typename TypeParam::matrix_actor().determinant(m66_small);
+  //ASSERT_NEAR(m66_big_det, 216, this->m_isclose);
+  printf("%.20lf \n", m66_small_det);
+
   // Test Zero
   typename TypeParam::template matrix<2, 3> m23 =
       typename TypeParam::matrix_actor().template zero<2, 3>();

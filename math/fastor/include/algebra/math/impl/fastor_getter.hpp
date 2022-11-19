@@ -39,7 +39,7 @@ template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST inline scalar_t theta(
     const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
-  return algebra::math::atan2(Fastor::norm(v(Fastor::fseq<0, 2>())));
+  return algebra::math::atan2(Fastor::norm(v(Fastor::fseq<0, 2>())), v[2]);
 }
 
 /** This method retrieves the perpenticular magnitude of a vector with rows >= 2
@@ -131,7 +131,7 @@ struct block_getter {
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> operator()(
       const input_matrix_type &m, std::size_t row, std::size_t col) const {
 
-    return m(Fastor::fseq<row, row + ROWS>(), Fastor::fseq<col, col + COLS>());
+    return m(Fastor::seq(row, row + ROWS), Fastor::seq(col, col + COLS));
   }
 };  // struct block_getter
 

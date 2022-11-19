@@ -18,7 +18,7 @@
 
 namespace algebra::fastor::math {
 
-/** Transform wrapper class to ensure standard API within differnt plugins
+/** Transform wrapper class to ensure standard API within different plugins
  *
  **/
 template <typename scalar_t, typename matrix_actor_t>
@@ -61,9 +61,7 @@ struct transform3 {
   /// @{
 
   matrix44 _data;
-  _data.eye2();
   matrix44 _data_inv;
-  _data_inv.eye2();
 
   /// @}
 
@@ -78,6 +76,10 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
              const vector3 &z, bool get_inverse = true) {
+
+  // The matrices need to be initialized to the identity matrix first.
+  _data.eye2();
+  _data_inv.eye2();
 
     _data(Fastor::fseq<0, 3>(), 0) = x;
     _data(Fastor::fseq<0, 3>(), 1) = y;
@@ -108,6 +110,10 @@ struct transform3 {
   ALGEBRA_HOST
   transform3(const vector3 &t) {
 
+  // The matrices need to be initialized to the identity matrix first.
+  _data.eye2();
+  _data_inv.eye2();
+
     _data(Fastor::fseq<0, 3>(), 3) = t;
 
     _data_inv = Fastor::inverse(_data);
@@ -131,7 +137,7 @@ struct transform3 {
    **/
   ALGEBRA_HOST
   transform3(const array_type<16> &ma) {
-    _data = m;
+    _data = ma;
 
     _data_inv = Fastor::inverse(_data);
   }
@@ -145,7 +151,7 @@ struct transform3 {
   ALGEBRA_HOST
   inline bool operator==(const transform3 &rhs) const {
 
-    return _data == rhs._data;
+    return Fastor::isequal(_data, rhs._data);
   }
 
   /** This method retrieves the rotation of a transform */

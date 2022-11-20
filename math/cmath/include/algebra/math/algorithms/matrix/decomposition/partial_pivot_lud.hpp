@@ -60,7 +60,7 @@ struct partial_pivot_lud {
 
     // Unit permutation matrix, P[N] initialized with N
     for (size_type i = 0; i < N; i++) {
-      element_getter_t()(P, 0, i) = i;
+      element_getter_t()(P, 0, i) = static_cast<scalar_t>(i);
     }
 
     for (size_type i = 0; i < N; i++) {
@@ -114,7 +114,7 @@ struct partial_pivot_lud {
     matrix_type<N, N> p_mat;
 
     for (size_type i = 0; i < N; i++) {
-      size_type ref = element_getter_t()(P, 0, i);
+      auto ref = element_getter_t()(P, 0, i);
 
       for (size_type j = 0; j < N; j++) {
         if (ref != j) {

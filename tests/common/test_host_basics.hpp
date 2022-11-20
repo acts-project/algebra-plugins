@@ -423,6 +423,8 @@ TYPED_TEST_P(test_host_basics, matrix22) {
   algebra::getter::element(m66_small, 5, 4) = 0;
   algebra::getter::element(m66_small, 5, 5) = 89875.517874;
 
+  auto m66_small_det =
+      typename TypeParam::matrix_actor().determinant(m66_small);
   ASSERT_NEAR((m66_small_det - 4.30636e-11) / 4.30636e-11, 0,
               2 * this->m_isclose);
 }

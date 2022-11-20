@@ -380,8 +380,9 @@ TYPED_TEST_P(test_host_basics, matrix22) {
   algebra::getter::element(m66_small, 5, 5) = 89875.517874;
 
   // Test 6 X 6 small matrix determinant
-  auto m66_small_det = typename TypeParam::matrix_actor().determinant(m66_small);
-  //ASSERT_NEAR(m66_big_det, 216, this->m_isclose);
+  auto m66_small_det =
+      typename TypeParam::matrix_actor().determinant(m66_small);
+  // ASSERT_NEAR(m66_big_det, 216, this->m_isclose);
   printf("%.20lf \n", m66_small_det);
 
   // Test Zero

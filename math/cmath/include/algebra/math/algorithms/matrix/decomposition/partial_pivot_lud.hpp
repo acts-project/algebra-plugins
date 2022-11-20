@@ -5,13 +5,21 @@
  * Mozilla Public License Version 2.0
  */
 
+#pragma once
+
+// Project include(s).
+#include "algebra/qualifiers.hpp"
+
+// System include(s).
+#include <array>
+
 namespace algebra::cmath::matrix::decomposition {
 
 /// "Partial Pivot LU Decomposition", assuming a N X N matrix
 template <typename size_type,
           template <typename, size_type, size_type> class matrix_t,
           typename scalar_t, class element_getter_t, size_type... Ds>
-struct partial_pivot_LUD {
+struct partial_pivot_lud {
 
   using _dims = std::integer_sequence<size_type, Ds...>;
 
@@ -23,92 +31,101 @@ struct partial_pivot_LUD {
   using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
 
   template <size_type N>
-  struct LUD {
+  struct lud {
     matrix_type<N, N> lu;
-    matrix_type<N, N> P;
+    matrix_type<N, N> p_mat;
     int n_pivot = 0;
   };
 
   template <size_type N>
-  ALGEBRA_HOST_DEVICE inline LUD<N> operator()(
+  ALGEBRA_HOST_DEVICE inline lud<N> operator()(
       const matrix_type<N, N>& m) const {
-    // Reference: https://en.wikipedia.org/wiki/LU_decomposition
+    // LU decomposition matrix
+    matrix_type<N, N> lu = m;
 
     // Permutation
-    std::array<int, N> P;
+    std::array<size_type, N> P;
 
     // Max index and value
-    int max_idx;
+    size_type max_idx;
     scalar_t max_val;
     scalar_t abs_val;
 
     // Number of pivoting
-    int n_pivot = 0;
+    int n_pivot = N;
 
-    // Temp pointer to row
-    scalar_t* ptr;
+    // Rows for swapping
+    std::array<scalar_t, N> row_0;
+    std::array<scalar_t, N> row_1;
 
     // Unit permutation matrix, P[N] initialized with N
-    for (std::size_t i = 0; i <= N; i++) {
+    for (size_type i = 0; i < N; i++) {
       P[i] = i;
     }
 
-    for (std::size_t i = 0; i < N; i++) {
+    for (size_type i = 0; i < N; i++) {
       max_val = 0;
       max_idx = i;
 
-      for (std::size_t k = 0; k < N; k++) {
-        abs_val = std::abs(element_getter()(m, k, i));
+      for (size_type k = i; k < N; k++) {
+        abs_val = std::abs(element_getter()(lu, k, i));
 
         if (abs_val > max_val) {
+
           max_val = abs_val;
           max_idx = k;
         }
       }
 
-      if (imax != i) {
+      if (max_idx != i) {
         // Pivoting P
-        int j = P[i];
+        size_type j = P[i];
 
         P[i] = P[max_idx];
         P[max_idx] = j;
 
         // Pivoting rows of A
-        ptr = m[i];
-        m[i] = m[max_idx];
-        m[max_idx] = ptr;
+        for (size_type q = 0; q < N; q++) {
+          row_0[q] = element_getter_t()(lu, i, q);
+          row_1[q] = element_getter_t()(lu, max_idx, q);
+        }
+        for (size_type q = 0; q < N; q++) {
+          element_getter_t()(lu, i, q) = row_1[q];
+          element_getter_t()(lu, max_idx, q) = row_0[q];
+        }
 
         // counting pivots starting from N (for determinant)
         n_pivot++;
       }
 
-      for (std::size_t j = i + 1; j < N; j++) {
+      for (size_type j = i + 1; j < N; j++) {
         // m[j][i] /= m[i][i];
-        element_getter_t()(m, j, i) /= element_getter_t()(m, i, i);
+        element_getter_t()(lu, j, i) /= element_getter_t()(lu, i, i);
 
-        for (std::size_t k = i + 1; k < N; k++)
+        for (size_type k = i + 1; k < N; k++) {
           // m[j][k] -= m[j][i] * m[i][k];
-          element_getter_t()(m, j, k) -=
-              element_getter_t()(m, j, i) * element_getter_t()(m, i, k);
-      }
-    }
-
-    // Permutation matrix
-    matrix<N, N> p_mat;
-
-    for (std::size_t i = 0; i < N; i++) {
-      int ref = P[i];
-
-      for (std::size_t j = 0; j < N; j++) {
-        if (ref != j) {
-          element_getter_t()(m, i, j) = 0;
-        } else {
-          element_getter_t()(m, i, j) = 1;
+          element_getter_t()(lu, j, k) -=
+              element_getter_t()(lu, j, i) * element_getter_t()(lu, i, k);
         }
       }
     }
 
-    return {m, p_mat, n_pivot};
+    // Permutation matrix
+    matrix_type<N, N> p_mat;
+
+    for (size_type i = 0; i < N; i++) {
+      std::size_t ref = P[i];
+
+      for (size_type j = 0; j < N; j++) {
+        if (ref != j) {
+          element_getter_t()(p_mat, i, j) = 0;
+        } else {
+          element_getter_t()(p_mat, i, j) = 1;
+        }
+      }
+    }
+
+    return {lu, p_mat, n_pivot};
   }
 };
 

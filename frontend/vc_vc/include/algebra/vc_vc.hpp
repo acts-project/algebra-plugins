@@ -172,11 +172,10 @@ template <typename scalar_t, class... As>
 using actor =
     cmath::matrix::determinant::actor<size_type, matrix_type, scalar_t, As...>;
 
-// determinant::cofactor
+// determinant::partial_pivot_lud
 template <typename scalar_t, size_type... Ds>
-using cofactor =
-    cmath::matrix::determinant::cofactor<size_type, matrix_type, scalar_t,
-                                         element_getter<scalar_t>, Ds...>;
+using partial_pivot_lud = cmath::matrix::determinant::partial_pivot_lud<
+    size_type, matrix_type, scalar_t, element_getter<scalar_t>, Ds...>;
 
 // determinant::hard_coded
 template <typename scalar_t, size_type... Ds>
@@ -186,7 +185,8 @@ using hard_coded =
 
 // preset(s) as standard option(s) for user's convenience
 template <typename scalar_t>
-using preset0 = actor<scalar_t, cofactor<scalar_t>, hard_coded<scalar_t, 2, 4>>;
+using preset0 =
+    actor<scalar_t, partial_pivot_lud<scalar_t>, hard_coded<scalar_t, 2, 4>>;
 
 }  // namespace determinant
 
@@ -197,11 +197,11 @@ template <typename scalar_t, class... As>
 using actor =
     cmath::matrix::inverse::actor<size_type, matrix_type, scalar_t, As...>;
 
-// inverse::cofactor
+// inverse::partial_pivot_lud
 template <typename scalar_t, size_type... Ds>
-using cofactor =
-    cmath::matrix::inverse::cofactor<size_type, matrix_type, scalar_t,
-                                     element_getter<scalar_t>, Ds...>;
+using partial_pivot_lud =
+    cmath::matrix::inverse::partial_pivot_lud<size_type, matrix_type, scalar_t,
+                                              element_getter<scalar_t>, Ds...>;
 
 // inverse::hard_coded
 template <typename scalar_t, size_type... Ds>
@@ -211,7 +211,8 @@ using hard_coded =
 
 // preset(s) as standard option(s) for user's convenience
 template <typename scalar_t>
-using preset0 = actor<scalar_t, cofactor<scalar_t>, hard_coded<scalar_t, 2, 4>>;
+using preset0 =
+    actor<scalar_t, partial_pivot_lud<scalar_t>, hard_coded<scalar_t, 2, 4>>;
 
 }  // namespace inverse
 

@@ -79,7 +79,7 @@ struct partial_pivot_lud {
 
       if (max_idx != i) {
         // Pivoting P
-        size_type j = element_getter_t()(P, 0, i);
+        auto j = element_getter_t()(P, 0, i);
 
         element_getter_t()(P, 0, i) = element_getter_t()(P, 0, max_idx);
         element_getter_t()(P, 0, max_idx) = j;

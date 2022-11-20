@@ -114,7 +114,7 @@ struct partial_pivot_lud {
     matrix_type<N, N> p_mat;
 
     for (size_type i = 0; i < N; i++) {
-      std::size_t ref = P[i];
+      size_type ref = P[i];
 
       for (size_type j = 0; j < N; j++) {
         if (ref != j) {

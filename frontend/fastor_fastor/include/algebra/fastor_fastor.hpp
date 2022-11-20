@@ -37,7 +37,7 @@ ALGEBRA_HOST_DEVICE inline auto vector(
     std::size_t col) {
 
   return fastor::storage_type<scalar_t, SIZE>(
-      m(row, Fastor::fseq<col, col + SIZE>()));
+      m(row, Fastor::seq(col, col + SIZE)));
 }
 
 /// @name Getter functions on @c algebra::fastor::matrix_type

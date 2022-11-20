@@ -44,7 +44,7 @@ struct partial_pivot_lud {
     matrix_type<N, N> lu = m;
 
     // Permutation
-    std::array<size_type, N> P;
+    matrix_type<1, N> P;
 
     // Max index and value
     size_type max_idx;
@@ -55,12 +55,12 @@ struct partial_pivot_lud {
     int n_pivot = N;
 
     // Rows for swapping
-    std::array<scalar_t, N> row_0;
-    std::array<scalar_t, N> row_1;
+    matrix_type<1, N> row_0;
+    matrix_type<1, N> row_1;
 
     // Unit permutation matrix, P[N] initialized with N
     for (size_type i = 0; i < N; i++) {
-      P[i] = i;
+      element_getter_t()(P, 0, i) = i;
     }
 
     for (size_type i = 0; i < N; i++) {
@@ -79,19 +79,19 @@ struct partial_pivot_lud {
 
       if (max_idx != i) {
         // Pivoting P
-        size_type j = P[i];
+        size_type j = element_getter_t()(P, 0, i);
 
-        P[i] = P[max_idx];
-        P[max_idx] = j;
+        element_getter_t()(P, 0, i) = element_getter_t()(P, 0, max_idx);
+        element_getter_t()(P, 0, max_idx) = j;
 
         // Pivoting rows of A
         for (size_type q = 0; q < N; q++) {
-          row_0[q] = element_getter_t()(lu, i, q);
-          row_1[q] = element_getter_t()(lu, max_idx, q);
+          element_getter_t()(row_0, 0, q) = element_getter_t()(lu, i, q);
+          element_getter_t()(row_1, 0, q) = element_getter_t()(lu, max_idx, q);
         }
         for (size_type q = 0; q < N; q++) {
-          element_getter_t()(lu, i, q) = row_1[q];
-          element_getter_t()(lu, max_idx, q) = row_0[q];
+          element_getter_t()(lu, i, q) = element_getter_t()(row_1, 0, q);
+          element_getter_t()(lu, max_idx, q) = element_getter_t()(row_0, 0, q);
         }
 
         // counting pivots starting from N (for determinant)
@@ -114,7 +114,7 @@ struct partial_pivot_lud {
     matrix_type<N, N> p_mat;
 
     for (size_type i = 0; i < N; i++) {
-      size_type ref = P[i];
+      size_type ref = element_getter_t()(P, 0, i);
 
       for (size_type j = 0; j < N; j++) {
         if (ref != j) {

@@ -288,6 +288,50 @@ TYPED_TEST_P(test_host_basics, matrix22) {
   ASSERT_NEAR(algebra::getter::element(m33_inv, 2, 2), -10 / 20.,
               this->m_isclose);
 
+  // Test Zero
+  typename TypeParam::template matrix<2, 3> m23 =
+      typename TypeParam::matrix_actor().template zero<2, 3>();
+  algebra::getter::element(m23, 0, 0) += 2;
+  algebra::getter::element(m23, 0, 1) += 3;
+  algebra::getter::element(m23, 0, 2) += 4;
+  algebra::getter::element(m23, 1, 0) += 5;
+  algebra::getter::element(m23, 1, 1) += 6;
+  algebra::getter::element(m23, 1, 2) += 7;
+
+  // Test scalar X Matrix
+  m23 = 2. * m23;
+  ASSERT_NEAR(algebra::getter::element(m23, 0, 0), 4., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m23, 0, 1), 6., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m23, 0, 2), 8., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m23, 1, 0), 10., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m23, 1, 1), 12., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m23, 1, 2), 14., this->m_epsilon);
+
+  // Test Transpose
+  auto m32 = typename TypeParam::matrix_actor().transpose(m23);
+
+  // Test Identity and (Matrix + Matrix)
+  m32 = m32 + typename TypeParam::matrix_actor().template identity<3, 2>();
+
+  // Test Matrix X scalar
+  m32 = m32 * 2.;
+
+  ASSERT_NEAR(algebra::getter::element(m32, 0, 0), 10., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m32, 0, 1), 20., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m32, 1, 0), 12., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m32, 1, 1), 26., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m32, 2, 0), 16., this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(m32, 2, 1), 28., this->m_epsilon);
+
+  // Test Matrix multiplication
+  m22 = m22_inv * m23 * m33_inv * m32;
+
+  ASSERT_NEAR(algebra::getter::element(m22, 0, 0), 6.225, this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m22, 0, 1), 14.675, this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m22, 1, 0), -3.3, this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m22, 1, 1), -7.9, this->m_isclose);
+
+  // Test 6 X 6 big matrix determinant
   typename TypeParam::template matrix<6, 6> m66_big;
   algebra::getter::element(m66_big, 0, 0) = 1;
   algebra::getter::element(m66_big, 0, 1) = 0;
@@ -331,10 +375,10 @@ TYPED_TEST_P(test_host_basics, matrix22) {
   algebra::getter::element(m66_big, 5, 4) = -1;
   algebra::getter::element(m66_big, 5, 5) = -1;
 
-  // Test 6 X 6 big matrix determinant
   auto m66_big_det = typename TypeParam::matrix_actor().determinant(m66_big);
-  ASSERT_NEAR(m66_big_det, 216, this->m_isclose);
+  ASSERT_NEAR(m66_big_det, 216, 2 * this->m_isclose);
 
+  // Test 6 X 6 small matrix determinant
   typename TypeParam::template matrix<6, 6> m66_small;
 
   algebra::getter::element(m66_small, 0, 0) = 10.792386;
@@ -379,54 +423,8 @@ TYPED_TEST_P(test_host_basics, matrix22) {
   algebra::getter::element(m66_small, 5, 4) = 0;
   algebra::getter::element(m66_small, 5, 5) = 89875.517874;
 
-  // Test 6 X 6 small matrix determinant
-  auto m66_small_det =
-      typename TypeParam::matrix_actor().determinant(m66_small);
-  // ASSERT_NEAR(m66_big_det, 216, this->m_isclose);
-  printf("%.20lf \n", m66_small_det);
-
-  // Test Zero
-  typename TypeParam::template matrix<2, 3> m23 =
-      typename TypeParam::matrix_actor().template zero<2, 3>();
-  algebra::getter::element(m23, 0, 0) += 2;
-  algebra::getter::element(m23, 0, 1) += 3;
-  algebra::getter::element(m23, 0, 2) += 4;
-  algebra::getter::element(m23, 1, 0) += 5;
-  algebra::getter::element(m23, 1, 1) += 6;
-  algebra::getter::element(m23, 1, 2) += 7;
-
-  // Test scalar X Matrix
-  m23 = 2. * m23;
-  ASSERT_NEAR(algebra::getter::element(m23, 0, 0), 4., this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m23, 0, 1), 6., this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m23, 0, 2), 8., this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m23, 1, 0), 10., this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m23, 1, 1), 12., this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m23, 1, 2), 14., this->m_epsilon);
-
-  // Test Transpose
-  auto m32 = typename TypeParam::matrix_actor().transpose(m23);
-
-  // Test Identity and (Matrix + Matrix)
-  m32 = m32 + typename TypeParam::matrix_actor().template identity<3, 2>();
-
-  // Test Matrix X scalar
-  m32 = m32 * 2.;
-
-  ASSERT_NEAR(algebra::getter::element(m32, 0, 0), 10., this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m32, 0, 1), 20., this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m32, 1, 0), 12., this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m32, 1, 1), 26., this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m32, 2, 0), 16., this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m32, 2, 1), 28., this->m_epsilon);
-
-  // Test Matrix multiplication
-  m22 = m22_inv * m23 * m33_inv * m32;
-
-  ASSERT_NEAR(algebra::getter::element(m22, 0, 0), 6.225, this->m_isclose);
-  ASSERT_NEAR(algebra::getter::element(m22, 0, 1), 14.675, this->m_isclose);
-  ASSERT_NEAR(algebra::getter::element(m22, 1, 0), -3.3, this->m_isclose);
-  ASSERT_NEAR(algebra::getter::element(m22, 1, 1), -7.9, this->m_isclose);
+  ASSERT_NEAR((m66_small_det - 4.30636e-11) / 4.30636e-11, 0,
+              2 * this->m_isclose);
 }
 
 // This defines the vector operation test suite

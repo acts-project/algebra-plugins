@@ -77,8 +77,8 @@ struct actor {
   /// Operator setting a block with a vector
   template <size_ty ROWS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const vector_type<ROWS> &b,
-                                     size_ty row, size_ty col) {
+                                     const vector_type<ROWS> &b, size_ty row,
+                                     size_ty col) {
     m(Fastor::seq(row, row + ROWS), col) = b;
   }
 
@@ -96,18 +96,20 @@ struct actor {
     // for second order tensors. As such, I chose to use eye2() here because it
     // does less and hence would be faster.
 
-	// eye2() only works for square matrices. The idea is to take the largest
-	// dimension of the matrix, make an identity matrix of that dimension, and
-	// then return the appropriately sized submatrix of it.
-	if constexpr (ROWS >= COLS) {
-	  matrix_type<ROWS, ROWS> identity_matrix;
-	  identity_matrix.eye2();
-	  return matrix_type<ROWS, COLS>(identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>()));
-	} else {
-	  matrix_type<COLS, COLS> identity_matrix;
-	  identity_matrix.eye2();
-	  return matrix_type<ROWS, COLS>(identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>()));
-	}
+    // eye2() only works for square matrices. The idea is to take the largest
+    // dimension of the matrix, make an identity matrix of that dimension, and
+    // then return the appropriately sized submatrix of it.
+    if constexpr (ROWS >= COLS) {
+      matrix_type<ROWS, ROWS> identity_matrix;
+      identity_matrix.eye2();
+      return matrix_type<ROWS, COLS>(
+          identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>()));
+    } else {
+      matrix_type<COLS, COLS> identity_matrix;
+      identity_matrix.eye2();
+      return matrix_type<ROWS, COLS>(
+          identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>()));
+    }
   }
 
   // Set input matrix as zero matrix
@@ -121,18 +123,18 @@ struct actor {
   ALGEBRA_HOST_DEVICE inline void set_identity(
       matrix_type<ROWS, COLS> &m) const {
 
-	// eye2() only works for square matrices. The idea is to take the largest
-	// dimension of the matrix, make an identity matrix of that dimension, and
-	// then set the input matrix m to the appropriately sized submatrix of it.
-	if constexpr (ROWS >= COLS) {
-	  matrix_type<ROWS, ROWS> identity_matrix;
-	  identity_matrix.eye2();
-	  m = identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>());
-	} else {
-	  matrix_type<COLS, COLS> identity_matrix;
-	  identity_matrix.eye2();
-	  m = identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>());
-	}
+    // eye2() only works for square matrices. The idea is to take the largest
+    // dimension of the matrix, make an identity matrix of that dimension, and
+    // then set the input matrix m to the appropriately sized submatrix of it.
+    if constexpr (ROWS >= COLS) {
+      matrix_type<ROWS, ROWS> identity_matrix;
+      identity_matrix.eye2();
+      m = identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>());
+    } else {
+      matrix_type<COLS, COLS> identity_matrix;
+      identity_matrix.eye2();
+      m = identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>());
+    }
   }
 
   // Create transpose matrix
@@ -156,4 +158,4 @@ struct actor {
   }
 };
 
-}  // namespace algebra::fastor::math
+}  // namespace algebra::fastor::matrix

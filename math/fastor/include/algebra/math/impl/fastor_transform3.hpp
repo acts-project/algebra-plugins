@@ -77,9 +77,9 @@ struct transform3 {
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
              const vector3 &z, bool get_inverse = true) {
 
-  // The matrices need to be initialized to the identity matrix first.
-  _data.eye2();
-  _data_inv.eye2();
+    // The matrices need to be initialized to the identity matrix first.
+    _data.eye2();
+    _data_inv.eye2();
 
     _data(Fastor::fseq<0, 3>(), 0) = x;
     _data(Fastor::fseq<0, 3>(), 1) = y;
@@ -110,9 +110,9 @@ struct transform3 {
   ALGEBRA_HOST
   transform3(const vector3 &t) {
 
-  // The matrices need to be initialized to the identity matrix first.
-  _data.eye2();
-  _data_inv.eye2();
+    // The matrices need to be initialized to the identity matrix first.
+    _data.eye2();
+    _data_inv.eye2();
 
     _data(Fastor::fseq<0, 3>(), 3) = t;
 

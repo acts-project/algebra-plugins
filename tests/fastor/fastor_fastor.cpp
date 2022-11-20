@@ -15,8 +15,8 @@
 #include <gtest/gtest.h>
 
 // System include(s).
+#include <cstddef>  // for the std::size_t data type
 #include <string>
-#include <cstddef> // for the std::size_t data type
 
 /// Struct providing a readable name for the test
 struct test_specialisation_name {
@@ -41,7 +41,8 @@ typedef testing::Types<
                algebra::fastor::transform3<float>, std::size_t,
                algebra::fastor::matrix_type, algebra::matrix::actor<float>>,
     test_types<double, algebra::fastor::point2<double>,
-               algebra::fastor::point3<double>, algebra::fastor::vector2<double>,
+               algebra::fastor::point3<double>,
+               algebra::fastor::vector2<double>,
                algebra::fastor::vector3<double>,
                algebra::fastor::transform3<double>, std::size_t,
                algebra::fastor::matrix_type, algebra::matrix::actor<double>>>

@@ -17,7 +17,7 @@
 // System include(s).
 #include <cstddef>  // for the std::size_t type
 
-namespace algebra::fastor::math {
+namespace algebra::fastor::matrix {
 
 /// "Matrix actor", assuming an Fastor matrix
 template <typename scalar_t>
@@ -32,6 +32,10 @@ struct actor {
   /// 2D matrix type
   template <size_ty ROWS, size_ty COLS>
   using matrix_type = algebra::fastor::matrix_type<scalar_t, ROWS, COLS>;
+
+  /// Vector type
+  template <size_ty ROWS>
+  using vector_type = Fastor::Tensor<scalar_t, ROWS>;
 
   /// Array type
   template <size_ty N>
@@ -58,22 +62,30 @@ struct actor {
   template <size_ty ROWS, size_ty COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
                                                     size_ty row, size_ty col) {
-    // In Fastor::fseq, the last element is not included.
+    // In Fastor::seq, the last element is not included.
     return m(Fastor::seq(row, row + ROWS), Fastor::seq(col, col + COLS));
   }
 
-  /// Operator setting a block
+  /// Operator setting a block with a matrix
   template <size_ty ROWS, size_ty COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const matrix_type<ROWS, COLS> &b,
                                      size_ty row, size_ty col) {
-    m(Fastor::fseq<row, row + ROWS>(), Fastor::fseq<col, col + COLS>()) = b;
+    m(Fastor::seq(row, row + ROWS), Fastor::seq(col, col + COLS)) = b;
+  }
+
+  /// Operator setting a block with a vector
+  template <size_ty ROWS, class input_matrix_type>
+  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
+                                     const vector_type<ROWS> &b,
+                                     size_ty row, size_ty col) {
+    m(Fastor::seq(row, row + ROWS), col) = b;
   }
 
   // Create zero matrix
   template <size_ty ROWS, size_ty COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() {
-    return matrix_type<ROWS, COLS>().zeros();
+    return matrix_type<ROWS, COLS>(0);
   }
 
   // Create identity matrix
@@ -83,7 +95,19 @@ struct actor {
     // former is for arbitrary order tensors, whereas the latter is specifically
     // for second order tensors. As such, I chose to use eye2() here because it
     // does less and hence would be faster.
-    return matrix_type<ROWS, COLS>().eye2();
+
+	// eye2() only works for square matrices. The idea is to take the largest
+	// dimension of the matrix, make an identity matrix of that dimension, and
+	// then return the appropriately sized submatrix of it.
+	if constexpr (ROWS >= COLS) {
+	  matrix_type<ROWS, ROWS> identity_matrix;
+	  identity_matrix.eye2();
+	  return matrix_type<ROWS, COLS>(identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>()));
+	} else {
+	  matrix_type<COLS, COLS> identity_matrix;
+	  identity_matrix.eye2();
+	  return matrix_type<ROWS, COLS>(identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>()));
+	}
   }
 
   // Set input matrix as zero matrix
@@ -96,7 +120,19 @@ struct actor {
   template <size_ty ROWS, size_ty COLS>
   ALGEBRA_HOST_DEVICE inline void set_identity(
       matrix_type<ROWS, COLS> &m) const {
-    m.eye2();
+
+	// eye2() only works for square matrices. The idea is to take the largest
+	// dimension of the matrix, make an identity matrix of that dimension, and
+	// then set the input matrix m to the appropriately sized submatrix of it.
+	if constexpr (ROWS >= COLS) {
+	  matrix_type<ROWS, ROWS> identity_matrix;
+	  identity_matrix.eye2();
+	  m = identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>());
+	} else {
+	  matrix_type<COLS, COLS> identity_matrix;
+	  identity_matrix.eye2();
+	  m = identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>());
+	}
   }
 
   // Create transpose matrix

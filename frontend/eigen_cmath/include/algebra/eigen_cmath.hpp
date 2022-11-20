@@ -92,6 +92,12 @@ template <typename scalar_t, class... As>
 using actor =
     cmath::matrix::determinant::actor<size_type, matrix_type, scalar_t, As...>;
 
+// determinant::cofactor
+template <typename scalar_t, size_type... Ds>
+using cofactor =
+    cmath::matrix::determinant::cofactor<size_type, matrix_type, scalar_t,
+                                         element_getter, Ds...>;
+
 // determinant::partial_pivot_lud
 template <typename scalar_t, size_type... Ds>
 using partial_pivot_lud = cmath::matrix::determinant::partial_pivot_lud<
@@ -116,6 +122,12 @@ namespace inverse {
 template <typename scalar_t, class... As>
 using actor =
     cmath::matrix::inverse::actor<size_type, matrix_type, scalar_t, As...>;
+
+// inverse::cofactor
+template <typename scalar_t, size_type... Ds>
+using cofactor =
+    cmath::matrix::inverse::cofactor<size_type, matrix_type, scalar_t,
+                                     element_getter, Ds...>;
 
 // inverse::partial_pivot_lud
 template <typename scalar_t, size_type... Ds>

@@ -50,8 +50,9 @@ struct partial_pivot_lud {
     // Calculate inv(A) = inv(U) * inv(L) * P;
     for (size_type j = 0; j < N; j++) {
       for (size_type i = 0; i < N; i++) {
-        element_getter_t()(inv, i, j) =
-            element_getter_t()(P, 0, i) == j ? 1.0 : 0.0;
+        element_getter_t()(inv, i, j) = element_getter_t()(P, 0, i) == j
+                                            ? static_cast<scalar_t>(1.0)
+                                            : static_cast<scalar_t>(0.0);
 
         for (size_type k = 0; k < i; k++) {
           element_getter_t()(inv, i, j) -=

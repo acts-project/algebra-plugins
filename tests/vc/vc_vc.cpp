@@ -34,15 +34,15 @@ struct test_specialisation_name {
 
 // Instantiate the test(s).
 typedef testing::Types<
-    test_types<float, Vc::array<float, 2>, Vc::array<float, 3>,
-               Vc::array<float, 2>, Vc::array<float, 3>,
+    test_types<float, std::array<float, 2>, std::array<float, 3>,
+               std::array<float, 2>, std::array<float, 3>,
                algebra::vc::transform3<float>, std::size_t,
                algebra::vc::matrix_type,
                algebra::matrix::actor<
                    float, algebra::matrix::determinant::preset0<float>,
                    algebra::matrix::inverse::preset0<float>>>,
-    test_types<double, Vc::array<double, 2>, Vc::array<double, 3>,
-               Vc::array<double, 2>, Vc::array<double, 3>,
+    test_types<double, std::array<double, 2>, std::array<double, 3>,
+               std::array<double, 2>, std::array<double, 3>,
                algebra::vc::transform3<double>, std::size_t,
                algebra::vc::matrix_type,
                algebra::matrix::actor<

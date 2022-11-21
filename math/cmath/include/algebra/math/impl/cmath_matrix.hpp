@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/math/algorithms/utils/algorithm_finder.hpp"
+#include "algebra/math/impl/cmath_operators.hpp"
 #include "algebra/qualifiers.hpp"
 
 namespace algebra::cmath::matrix {
@@ -42,33 +43,30 @@ struct actor {
 
   /// Operator getting a reference to one element of a non-const matrix
   template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
-                                               size_type row,
-                                               size_type col) const {
+  ALGEBRA_HOST_DEVICE inline constexpr scalar_t &element(
+      matrix_type<ROWS, COLS> &m, size_type row, size_type col) const {
     return element_getter()(m, row, col);
   }
 
   /// Operator getting one value of a const matrix
   template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
-                                              size_type row,
-                                              size_type col) const {
+  ALGEBRA_HOST_DEVICE inline constexpr scalar_t element(
+      const matrix_type<ROWS, COLS> &m, size_type row, size_type col) const {
     return element_getter()(m, row, col);
   }
 
   /// Operator getting a block of a const matrix
   template <size_type ROWS, size_type COLS, class input_matrix_type>
-  ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
-                                                    size_type row,
-                                                    size_type col) {
+  ALGEBRA_HOST_DEVICE inline constexpr matrix_type<ROWS, COLS> block(
+      const input_matrix_type &m, size_type row, size_type col) const {
     return block_getter().template operator()<ROWS, COLS>(m, row, col);
   }
 
   /// Operator setting a block with a vector matrix
   template <size_type ROWS, size_type COLS, class input_matrix_type>
-  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const matrix_type<ROWS, COLS> &b, int row,
-                                     int col) {
+  ALGEBRA_HOST_DEVICE inline constexpr void set_block(
+      input_matrix_type &m, const matrix_type<ROWS, COLS> &b, int row,
+      int col) const {
     for (size_type i = 0; i < ROWS; ++i) {
       for (size_type j = 0; j < COLS; ++j) {
         element_getter()(m, i + row, j + col) = element_getter()(b, i, j);
@@ -79,9 +77,9 @@ struct actor {
   /// Operator setting a block with a vector
   template <size_type ROWS, template <typename, size_type> class vector_t,
             class input_matrix_type>
-  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const vector_t<scalar_t, ROWS> &b, int row,
-                                     int col) {
+  ALGEBRA_HOST_DEVICE inline constexpr void set_block(
+      input_matrix_type &m, const vector_t<scalar_t, ROWS> &b, int row,
+      int col) const {
     for (size_type i = 0; i < ROWS; ++i) {
       element_getter()(m, i + row, col) = b[i];
     }
@@ -89,7 +87,7 @@ struct actor {
 
   // Create zero matrix
   template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() const {
+  ALGEBRA_HOST_DEVICE inline constexpr matrix_type<ROWS, COLS> zero() const {
     matrix_type<ROWS, COLS> ret;
 
     for (size_type i = 0; i < ROWS; ++i) {
@@ -103,7 +101,8 @@ struct actor {
 
   // Create identity matrix
   template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() const {
+  ALGEBRA_HOST_DEVICE inline constexpr matrix_type<ROWS, COLS> identity()
+      const {
     matrix_type<ROWS, COLS> ret;
 
     for (size_type i = 0; i < ROWS; ++i) {
@@ -121,7 +120,8 @@ struct actor {
 
   // Set input matrix as zero matrix
   template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<ROWS, COLS> &m) const {
+  ALGEBRA_HOST_DEVICE inline constexpr void set_zero(
+      matrix_type<ROWS, COLS> &m) const {
 
     for (size_type i = 0; i < ROWS; ++i) {
       for (size_type j = 0; j < COLS; ++j) {
@@ -132,7 +132,7 @@ struct actor {
 
   // Set input matrix as identity matrix
   template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline void set_identity(
+  ALGEBRA_HOST_DEVICE inline constexpr void set_identity(
       matrix_type<ROWS, COLS> &m) const {
 
     for (size_type i = 0; i < ROWS; ++i) {
@@ -146,9 +146,26 @@ struct actor {
     }
   }
 
+  /// Multiply two matrices/expressions
+  template <size_type ROWSA, size_type COLSA, size_type ROWSB, size_type COLSB,
+            std::enable_if_t<COLSA == ROWSB, bool> = true>
+  ALGEBRA_HOST_DEVICE inline constexpr matrix_type<ROWSA, COLSB> mat_mul(
+      const matrix_type<ROWSA, COLSA> &a,
+      const matrix_type<ROWSB, COLSB> &b) const {
+    return a * b;
+  }
+
+  /// Multiply two matrices/expressions
+  template <size_type ROWSA, size_type COLSA, size_type ROWSB,
+            std::enable_if_t<COLSA == ROWSB, bool> = true>
+  ALGEBRA_HOST_DEVICE inline constexpr array_type<ROWSA> mat_mul(
+      const matrix_type<ROWSA, COLSA> &a, const array_type<ROWSB> &b) const {
+    return a * b;
+  }
+
   // Create transpose matrix
   template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<COLS, ROWS> transpose(
+  ALGEBRA_HOST_DEVICE inline constexpr matrix_type<COLS, ROWS> transpose(
       const matrix_type<ROWS, COLS> &m) const {
 
     matrix_type<COLS, ROWS> ret;
@@ -164,7 +181,7 @@ struct actor {
 
   // Get determinant
   template <size_type N>
-  ALGEBRA_HOST_DEVICE inline scalar_t determinant(
+  ALGEBRA_HOST_DEVICE inline constexpr scalar_t determinant(
       const matrix_type<N, N> &m) const {
 
     return determinant_actor_t()(m);
@@ -172,7 +189,7 @@ struct actor {
 
   // Create inverse matrix
   template <size_type N>
-  ALGEBRA_HOST_DEVICE inline matrix_type<N, N> inverse(
+  ALGEBRA_HOST_DEVICE inline constexpr matrix_type<N, N> inverse(
       const matrix_type<N, N> &m) const {
 
     return inverse_actor_t()(m);

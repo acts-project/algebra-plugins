@@ -118,7 +118,8 @@ TYPED_TEST_P(test_host_basics, vector3) {
   algebra::getter::element(m23, 1, 1) = 5;
   algebra::getter::element(m23, 1, 2) = 6;
 
-  typename TypeParam::vector2 v2 = m23 * vE;
+  typename TypeParam::vector2 v2 =
+      typename TypeParam::matrix_actor().mat_mul(m23, vE);
 
   ASSERT_NEAR(v2[0], 14, this->m_epsilon);
   ASSERT_NEAR(v2[1], 32, this->m_epsilon);
@@ -324,7 +325,8 @@ TYPED_TEST_P(test_host_basics, matrix22) {
   ASSERT_NEAR(algebra::getter::element(m32, 2, 1), 28., this->m_epsilon);
 
   // Test Matrix multiplication
-  m22 = m22_inv * m23 * m33_inv * m32;
+  const auto actor = typename TypeParam::matrix_actor{};
+  m22 = actor.mat_mul(m22_inv, actor.mat_mul(m23, actor.mat_mul(m33_inv, m32)));
 
   ASSERT_NEAR(algebra::getter::element(m22, 0, 0), 6.225, this->m_isclose);
   ASSERT_NEAR(algebra::getter::element(m22, 0, 1), 14.675, this->m_isclose);
@@ -486,14 +488,14 @@ TYPED_TEST_P(test_host_basics, global_transformations) {
   // vector should not change if transformed by a pure translation
   typename TypeParam::transform3 ttrf(t);
 
-  typename TypeParam::vector3 gvector = {1., 1., 1};
+  typename TypeParam::vector3 gvector = {1., 1., 1.};
   typename TypeParam::vector3 lvector = ttrf.vector_to_local(gvector);
   ASSERT_NEAR(gvector[0], lvector[0], this->m_isclose);
   ASSERT_NEAR(gvector[1], lvector[1], this->m_isclose);
   ASSERT_NEAR(gvector[2], lvector[2], this->m_isclose);
 
   // Check a round trip for vector
-  typename TypeParam::vector3 lvectorB = {7., 8., 9};
+  typename TypeParam::vector3 lvectorB = {7., 8., 9.};
   typename TypeParam::vector3 gvectorB = trf.vector_to_local(lvectorB);
   typename TypeParam::vector3 lvectorC = trf.vector_to_global(gvectorB);
   ASSERT_NEAR(lvectorB[0], lvectorC[0], this->m_isclose);

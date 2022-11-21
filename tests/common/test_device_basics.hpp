@@ -186,7 +186,9 @@ class test_device_basics : public test_base<T> {
     m32 = m32 * 2.;
 
     // Test Matrix multiplication
-    auto new_m22 = m22_inv * m23 * m33_inv * m32;
+    const auto actor = matrix_actor{};
+    auto new_m22 =
+        actor.mat_mul(m22_inv, actor.mat_mul(m23, actor.mat_mul(m33_inv, m32)));
 
     scalar result = 0;
     result += m22_det;

@@ -44,76 +44,118 @@ struct actor {
   using vector3 = array_type<3>;
 
   /// Operator getting a reference to one element of a non-const matrix
-  template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
-                                               int row, int col) const {
+  template <class Derived>
+  ALGEBRA_HOST_DEVICE inline constexpr scalar_t &element(
+      Eigen::MatrixBase<Derived> &m, int row, int col) const {
     return m(row, col);
   }
 
   /// Operator getting one value of a const matrix
-  template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
-                                              int row, int col) const {
+  template <class Derived>
+  ALGEBRA_HOST_DEVICE inline scalar_t constexpr element(
+      const Eigen::MatrixBase<Derived> &m, int row, int col) const {
+    return m(row, col);
+  }
+
+  /// Operator getting a reference to one element of a non-const matrix
+  template <typename Derived>
+  ALGEBRA_HOST_DEVICE inline scalar_t constexpr element(
+      Eigen::MatrixBase<Derived> &&m, int row, int col) const {
     return m(row, col);
   }
 
   /// Operator getting a block of a const matrix
-  template <int ROWS, int COLS, class input_matrix_type>
-  ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
-                                                    int row, int col) {
+  template <
+      int ROWS, int COLS, class Derived,
+      std::enable_if_t<ROWS <= Eigen::MatrixBase<Derived>::RowsAtCompileTime,
+                       bool> = true,
+      std::enable_if_t<COLS <= Eigen::MatrixBase<Derived>::ColsAtCompileTime,
+                       bool> = true>
+  ALGEBRA_HOST_DEVICE inline constexpr matrix_type<ROWS, COLS> block(
+      const Eigen::MatrixBase<Derived> &m, int row, int col) const {
     return m.template block<ROWS, COLS>(row, col);
   }
 
   /// Operator setting a block
-  template <int ROWS, int COLS, class input_matrix_type>
-  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const matrix_type<ROWS, COLS> &b, int row,
-                                     int col) {
-    m.template block<ROWS, COLS>(row, col) = b;
+  template <class DerivedA, class DerivedB,
+            std::enable_if_t<Eigen::MatrixBase<DerivedB>::RowsAtCompileTime <=
+                                 Eigen::MatrixBase<DerivedA>::RowsAtCompileTime,
+                             bool> = true,
+            std::enable_if_t<Eigen::MatrixBase<DerivedB>::ColsAtCompileTime <=
+                                 Eigen::MatrixBase<DerivedA>::ColsAtCompileTime,
+                             bool> = true>
+  ALGEBRA_HOST_DEVICE inline constexpr void set_block(
+      Eigen::MatrixBase<DerivedA> &m, const Eigen::MatrixBase<DerivedB> &b,
+      int row, int col) const {
+    m.template block<Eigen::MatrixBase<DerivedB>::RowsAtCompileTime,
+                     Eigen::MatrixBase<DerivedB>::ColsAtCompileTime>(row, col) =
+        b;
   }
 
-  // Create zero matrix
+  /// Create zero matrix
   template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() {
+  ALGEBRA_HOST_DEVICE inline constexpr matrix_type<ROWS, COLS> zero() const {
     return matrix_type<ROWS, COLS>::Zero();
   }
 
-  // Create identity matrix
+  /// Create identity matrix
   template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() {
+  ALGEBRA_HOST_DEVICE inline constexpr matrix_type<ROWS, COLS> identity()
+      const {
     return matrix_type<ROWS, COLS>::Identity();
   }
 
-  // Set input matrix as zero matrix
+  /// Set input matrix as zero matrix
   template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<ROWS, COLS> &m) const {
+  ALGEBRA_HOST_DEVICE inline constexpr void set_zero(
+      matrix_type<ROWS, COLS> &m) const {
     m.setZero();
   }
 
-  // Set input matrix as identity matrix
+  /// Set input matrix as identity matrix
   template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline void set_identity(
+  ALGEBRA_HOST_DEVICE inline constexpr void set_identity(
       matrix_type<ROWS, COLS> &m) const {
     m.setIdentity();
   }
 
-  // Create transpose matrix
-  template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<COLS, ROWS> transpose(
-      const matrix_type<ROWS, COLS> &m) {
+  /// Multiply two matrices/expressions
+  template <class DerivedA, class DerivedB,
+            std::enable_if_t<Eigen::MatrixBase<DerivedA>::ColsAtCompileTime ==
+                                 Eigen::MatrixBase<DerivedB>::RowsAtCompileTime,
+                             bool> = true>
+  ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) mat_mul(
+      const Eigen::MatrixBase<DerivedA> &a,
+      const Eigen::MatrixBase<DerivedB> &b) const {
+    return a * b;
+  }
+
+  /// Create transpose matrix
+  template <class Derived>
+  ALGEBRA_HOST_DEVICE inline constexpr matrix_type<
+      Eigen::MatrixBase<Derived>::ColsAtCompileTime,
+      Eigen::MatrixBase<Derived>::RowsAtCompileTime>
+  transpose(const Eigen::MatrixBase<Derived> &m) const {
     return m.transpose();
   }
 
-  // Get determinant
-  template <int N>
-  ALGEBRA_HOST_DEVICE inline scalar_t determinant(const matrix_type<N, N> &m) {
+  /// Get determinant
+  template <class Derived,
+            std::enable_if_t<Eigen::MatrixBase<Derived>::RowsAtCompileTime ==
+                                 Eigen::MatrixBase<Derived>::ColsAtCompileTime,
+                             bool> = true>
+  ALGEBRA_HOST_DEVICE inline constexpr scalar_t determinant(
+      const Eigen::MatrixBase<Derived> &m) {
     return m.determinant();
   }
 
-  // Create inverse matrix
-  template <int N>
-  ALGEBRA_HOST_DEVICE inline matrix_type<N, N> inverse(
-      const matrix_type<N, N> &m) {
+  /// Create inverse matrix
+  template <class Derived,
+            std::enable_if_t<Eigen::MatrixBase<Derived>::RowsAtCompileTime ==
+                                 Eigen::MatrixBase<Derived>::ColsAtCompileTime,
+                             bool> = true>
+  ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) inverse(
+      const Eigen::MatrixBase<Derived> &m) const {
     return m.inverse();
   }
 };

@@ -530,7 +530,7 @@ TYPED_TEST_P(test_host_basics, transform3) {
   auto m44 = trf2.matrix();
   typename TypeParam::transform3 trfm(m44);
 
-  // Make sure that algebra::getter:vector can be called.
+  // Make sure that algebra::getter::vector can be called.
   (void)algebra::getter::vector<3>(m44, 0, 0);
   (void)algebra::getter::vector<3>(m44, 0, 1);
   (void)algebra::getter::vector<3>(m44, 0, 2);
@@ -538,7 +538,7 @@ TYPED_TEST_P(test_host_basics, transform3) {
   // Test constructor from inverse matrix
   auto m44_inv = trf2.matrix_inverse();
 
-  // Make sure that algebra::getter:vector can be called.
+  // Make sure that algebra::getter::vector can be called.
   (void)algebra::getter::vector<3>(m44_inv, 0, 0);
   (void)algebra::getter::vector<3>(m44_inv, 0, 1);
   (void)algebra::getter::vector<3>(m44_inv, 0, 2);

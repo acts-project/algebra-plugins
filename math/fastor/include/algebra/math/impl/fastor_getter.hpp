@@ -50,7 +50,7 @@ template <typename scalar_t, auto N, std::enable_if_t<N >= 2, bool> = true>
 ALGEBRA_HOST inline scalar_t perp(
     const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
-  return algebra::math::sqrt(v[0] * v[0] + v[1] * v[1]);
+  return algebra::math::sqrt(Fastor::inner(v(Fastor::fseq<0, 2>()), v(Fastor::fseq<0, 2>())));
 }
 
 /** This method retrieves the norm of a vector, no dimension restriction

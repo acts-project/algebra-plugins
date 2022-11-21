@@ -50,6 +50,9 @@ jobs:
                  -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE
                  -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE
                  -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
+                 -DALGEBRA_PLUGINS_INCLUDE_FASTOR=TRUE
+                 -DALGEBRA_PLUGINS_SETUP_FASTOR=TRUE
+                 -DALGEBRA_PLUGINS_USE_SYSTEM_FASTOR=FALSE
                  -S ${{ github.workspace }} -B build
                  -G "${{ matrix.PLATFORM.GENERATOR }}"
     # Perform the build.

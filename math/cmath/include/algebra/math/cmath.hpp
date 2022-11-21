@@ -14,8 +14,11 @@
 #include "algebra/math/impl/cmath_transform3.hpp"
 #include "algebra/math/impl/cmath_vector.hpp"
 // Algorithms include(s).
+#include "algebra/math/algorithms/matrix/decomposition/partial_pivot_lud.hpp"
 #include "algebra/math/algorithms/matrix/determinant/cofactor.hpp"
 #include "algebra/math/algorithms/matrix/determinant/hard_coded.hpp"
+#include "algebra/math/algorithms/matrix/determinant/partial_pivot_lud.hpp"
 #include "algebra/math/algorithms/matrix/inverse/cofactor.hpp"
 #include "algebra/math/algorithms/matrix/inverse/hard_coded.hpp"
+#include "algebra/math/algorithms/matrix/inverse/partial_pivot_lud.hpp"
 #include "algebra/math/algorithms/utils/algorithm_finder.hpp"

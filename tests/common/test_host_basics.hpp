@@ -330,6 +330,139 @@ TYPED_TEST_P(test_host_basics, matrix22) {
   ASSERT_NEAR(algebra::getter::element(m22, 0, 1), 14.675, this->m_isclose);
   ASSERT_NEAR(algebra::getter::element(m22, 1, 0), -3.3, this->m_isclose);
   ASSERT_NEAR(algebra::getter::element(m22, 1, 1), -7.9, this->m_isclose);
+
+  // Test 6 X 6 big matrix determinant
+  typename TypeParam::template matrix<6, 6> m66_big;
+  algebra::getter::element(m66_big, 0, 0) = 1;
+  algebra::getter::element(m66_big, 0, 1) = 0;
+  algebra::getter::element(m66_big, 0, 2) = 3;
+  algebra::getter::element(m66_big, 0, 3) = 0;
+  algebra::getter::element(m66_big, 0, 4) = 0;
+  algebra::getter::element(m66_big, 0, 5) = 0;
+
+  algebra::getter::element(m66_big, 1, 0) = 0;
+  algebra::getter::element(m66_big, 1, 1) = -2;
+  algebra::getter::element(m66_big, 1, 2) = 4;
+  algebra::getter::element(m66_big, 1, 3) = 0;
+  algebra::getter::element(m66_big, 1, 4) = 5;
+  algebra::getter::element(m66_big, 1, 5) = 0;
+
+  algebra::getter::element(m66_big, 2, 0) = 0;
+  algebra::getter::element(m66_big, 2, 1) = 0;
+  algebra::getter::element(m66_big, 2, 2) = 3;
+  algebra::getter::element(m66_big, 2, 3) = 0;
+  algebra::getter::element(m66_big, 2, 4) = 0;
+  algebra::getter::element(m66_big, 2, 5) = 0;
+
+  algebra::getter::element(m66_big, 3, 0) = 0;
+  algebra::getter::element(m66_big, 3, 1) = 0;
+  algebra::getter::element(m66_big, 3, 2) = 0;
+  algebra::getter::element(m66_big, 3, 3) = 4;
+  algebra::getter::element(m66_big, 3, 4) = 0;
+  algebra::getter::element(m66_big, 3, 5) = 0;
+
+  algebra::getter::element(m66_big, 4, 0) = 0;
+  algebra::getter::element(m66_big, 4, 1) = 0;
+  algebra::getter::element(m66_big, 4, 2) = 0;
+  algebra::getter::element(m66_big, 4, 3) = 0;
+  algebra::getter::element(m66_big, 4, 4) = 9;
+  algebra::getter::element(m66_big, 4, 5) = 0;
+
+  algebra::getter::element(m66_big, 5, 0) = -1;
+  algebra::getter::element(m66_big, 5, 1) = -1;
+  algebra::getter::element(m66_big, 5, 2) = -1;
+  algebra::getter::element(m66_big, 5, 3) = -1;
+  algebra::getter::element(m66_big, 5, 4) = -1;
+  algebra::getter::element(m66_big, 5, 5) = -1;
+
+  auto m66_big_det = typename TypeParam::matrix_actor().determinant(m66_big);
+  ASSERT_NEAR(m66_big_det, 216, 2 * this->m_isclose);
+
+  // Test 6 X 6 small matrix determinant
+  typename TypeParam::template matrix<6, 6> m66_small;
+
+  algebra::getter::element(m66_small, 0, 0) =
+      static_cast<typename TypeParam::scalar>(10.792386);
+  algebra::getter::element(m66_small, 0, 1) =
+      static_cast<typename TypeParam::scalar>(0.216181);
+  algebra::getter::element(m66_small, 0, 2) =
+      static_cast<typename TypeParam::scalar>(0.057650);
+  algebra::getter::element(m66_small, 0, 3) =
+      static_cast<typename TypeParam::scalar>(-0.002764);
+  algebra::getter::element(m66_small, 0, 4) =
+      static_cast<typename TypeParam::scalar>(0.000001);
+  algebra::getter::element(m66_small, 0, 5) =
+      static_cast<typename TypeParam::scalar>(0);
+
+  algebra::getter::element(m66_small, 1, 0) =
+      static_cast<typename TypeParam::scalar>(43.909368);
+  algebra::getter::element(m66_small, 1, 1) =
+      static_cast<typename TypeParam::scalar>(10.372997);
+  algebra::getter::element(m66_small, 1, 2) =
+      static_cast<typename TypeParam::scalar>(0.231496);
+  algebra::getter::element(m66_small, 1, 3) =
+      static_cast<typename TypeParam::scalar>(-0.065972);
+  algebra::getter::element(m66_small, 1, 4) =
+      static_cast<typename TypeParam::scalar>(-0.000002);
+  algebra::getter::element(m66_small, 1, 5) =
+      static_cast<typename TypeParam::scalar>(0);
+
+  algebra::getter::element(m66_small, 2, 0) =
+      static_cast<typename TypeParam::scalar>(0.045474);
+  algebra::getter::element(m66_small, 2, 1) =
+      static_cast<typename TypeParam::scalar>(-0.001730);
+  algebra::getter::element(m66_small, 2, 2) =
+      static_cast<typename TypeParam::scalar>(0.000246);
+  algebra::getter::element(m66_small, 2, 3) =
+      static_cast<typename TypeParam::scalar>(0.000004);
+  algebra::getter::element(m66_small, 2, 4) =
+      static_cast<typename TypeParam::scalar>(0);
+  algebra::getter::element(m66_small, 2, 5) =
+      static_cast<typename TypeParam::scalar>(0);
+
+  algebra::getter::element(m66_small, 3, 0) =
+      static_cast<typename TypeParam::scalar>(-0.255134);
+  algebra::getter::element(m66_small, 3, 1) =
+      static_cast<typename TypeParam::scalar>(-0.059846);
+  algebra::getter::element(m66_small, 3, 2) =
+      static_cast<typename TypeParam::scalar>(-0.001345);
+  algebra::getter::element(m66_small, 3, 3) =
+      static_cast<typename TypeParam::scalar>(0.000383);
+  algebra::getter::element(m66_small, 3, 4) =
+      static_cast<typename TypeParam::scalar>(0);
+  algebra::getter::element(m66_small, 3, 5) =
+      static_cast<typename TypeParam::scalar>(0);
+
+  algebra::getter::element(m66_small, 4, 0) =
+      static_cast<typename TypeParam::scalar>(-0.001490);
+  algebra::getter::element(m66_small, 4, 1) =
+      static_cast<typename TypeParam::scalar>(-0.000057);
+  algebra::getter::element(m66_small, 4, 2) =
+      static_cast<typename TypeParam::scalar>(-0.000008);
+  algebra::getter::element(m66_small, 4, 3) =
+      static_cast<typename TypeParam::scalar>(0.000001);
+  algebra::getter::element(m66_small, 4, 4) =
+      static_cast<typename TypeParam::scalar>(0.000001);
+  algebra::getter::element(m66_small, 4, 5) =
+      static_cast<typename TypeParam::scalar>(0);
+
+  algebra::getter::element(m66_small, 5, 0) =
+      static_cast<typename TypeParam::scalar>(0);
+  algebra::getter::element(m66_small, 5, 1) =
+      static_cast<typename TypeParam::scalar>(0);
+  algebra::getter::element(m66_small, 5, 2) =
+      static_cast<typename TypeParam::scalar>(0);
+  algebra::getter::element(m66_small, 5, 3) =
+      static_cast<typename TypeParam::scalar>(0);
+  algebra::getter::element(m66_small, 5, 4) =
+      static_cast<typename TypeParam::scalar>(0);
+  algebra::getter::element(m66_small, 5, 5) =
+      static_cast<typename TypeParam::scalar>(89875.517874);
+
+  auto m66_small_det =
+      typename TypeParam::matrix_actor().determinant(m66_small);
+  ASSERT_NEAR((m66_small_det - 4.30636e-11) / 4.30636e-11, 0,
+              2 * this->m_isclose);
 }
 
 // This defines the vector operation test suite

@@ -5,7 +5,7 @@
 # Mozilla Public License Version 2.0
 
 # Set up the library.
-algebra_add_library( algebra_cmath_math cmath_math
+algebra_add_library(algebra_cmath_math cmath_math
    # impl include
    "include/algebra/math/cmath_operators.hpp"
    "include/algebra/math/cmath.hpp"
@@ -15,10 +15,13 @@ algebra_add_library( algebra_cmath_math cmath_math
    "include/algebra/math/impl/cmath_transform3.hpp"
    "include/algebra/math/impl/cmath_vector.hpp"
    # algorithms include
+   "include/algebra/math/algorithms/matrix/decomposition/partial_pivot_lud.hpp"
    "include/algebra/math/algorithms/matrix/determinant/cofactor.hpp"
    "include/algebra/math/algorithms/matrix/determinant/hard_coded.hpp"
+   "include/algebra/math/algorithms/matrix/determinant/partial_pivot_lud.hpp"
    "include/algebra/math/algorithms/matrix/inverse/cofactor.hpp"
    "include/algebra/math/algorithms/matrix/inverse/hard_coded.hpp"
-   "include/algebra/math/algorithms/utils/algorithm_finder.hpp" )
-target_link_libraries( algebra_cmath_math
-   INTERFACE algebra::common algebra::common_math )
+   "include/algebra/math/algorithms/matrix/inverse/partial_pivot_lud.hpp"
+   "include/algebra/math/algorithms/utils/algorithm_finder.hpp")
+target_link_libraries(algebra_cmath_math
+   INTERFACE algebra::common algebra::common_math)

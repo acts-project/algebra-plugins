@@ -218,8 +218,9 @@ class test_device_basics : public test_base<T> {
     vector3 gvec = tr2.vector_to_global(a);
     vector3 lvec = tr2.vector_to_local(b);
 
-    return {algebra::getter::norm(translation) + algebra::getter::perp(gpoint) +
-            algebra::getter::phi(lpoint) + algebra::vector::dot(gvec, lvec)};
+    //return {algebra::getter::norm(translation) + algebra::getter::perp(gpoint) +
+    //        algebra::getter::phi(lpoint) + algebra::vector::dot(gvec, lvec)};
+    return 0;
   }
 
 };  // class test_device_basics

@@ -32,8 +32,14 @@ struct partial_pivot_lud {
 
   template <size_type N>
   struct lud {
+    // LU decomposition matrix, equal to (L - I) + U, where the diagonal
+    // components of L is always 1
     matrix_type<N, N> lu;
-    matrix_type<N, N> p_mat;
+
+    // Permutation vector
+    matrix_type<1, N> P;
+
+    // Number of pivots
     int n_pivot = 0;
   };
 
@@ -110,22 +116,7 @@ struct partial_pivot_lud {
       }
     }
 
-    // Permutation matrix
-    matrix_type<N, N> p_mat;
-
-    for (size_type i = 0; i < N; i++) {
-      auto ref = element_getter_t()(P, 0, i);
-
-      for (size_type j = 0; j < N; j++) {
-        if (ref != j) {
-          element_getter_t()(p_mat, i, j) = 0;
-        } else {
-          element_getter_t()(p_mat, i, j) = 1;
-        }
-      }
-    }
-
-    return {lu, p_mat, n_pivot};
+    return {lu, P, n_pivot};
   }
 };
 

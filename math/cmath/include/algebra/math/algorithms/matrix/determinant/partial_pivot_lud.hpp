@@ -35,10 +35,11 @@ struct partial_pivot_lud {
   template <size_type N>
   ALGEBRA_HOST_DEVICE inline scalar_t operator()(
       const matrix_type<N, N>& m) const {
-    // Get the LUDecomposition matrix in the form of (L - I) + U
+
     const typename decomposition_t::template lud<N> decomp_res =
         decomposition_t()(m);
 
+    // Get the LU decomposition matrix equal to (L - I) + U
     const auto& lu = decomp_res.lu;
     const auto& n_pivot = decomp_res.n_pivot;
 

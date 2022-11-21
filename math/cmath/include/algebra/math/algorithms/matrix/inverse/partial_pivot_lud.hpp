@@ -35,23 +35,23 @@ struct partial_pivot_lud {
   template <size_type N>
   ALGEBRA_HOST_DEVICE inline matrix_type<N, N> operator()(
       const matrix_type<N, N>& m) const {
-    // Get the LUDecomposition matrix in the form of (L - I) + U
     const typename decomposition_t::template lud<N> decomp_res =
         decomposition_t()(m);
 
+    // Get the LU decomposition matrix equal to (L - I) + U
     const auto& lu = decomp_res.lu;
-    const auto& p_mat = decomp_res.p_mat;
+
+    // Permutation vector
+    const auto& P = decomp_res.P;
 
     // Inverse matrix
     matrix_type<N, N> inv;
 
+    // Calculate inv(A) = inv(U) * inv(L) * P;
     for (size_type j = 0; j < N; j++) {
       for (size_type i = 0; i < N; i++) {
-        if (element_getter_t()(p_mat, i, j) == 1) {
-          element_getter_t()(inv, i, j) = 1.0;
-        } else {
-          element_getter_t()(inv, i, j) = 0.0;
-        }
+        element_getter_t()(inv, i, j) =
+            element_getter_t()(P, 0, i) == j ? 1.0 : 0.0;
 
         for (size_type k = 0; k < i; k++) {
           element_getter_t()(inv, i, j) -=

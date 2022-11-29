@@ -110,7 +110,7 @@ option( ALGEBRA_PLUGINS_SETUP_EIGEN3
    "Set up the Eigen3 target(s) explicitly" FALSE )
 option( ALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3
    "Pick up an existing installation of Eigen3 from the build environment"
-   TRUE )
+   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
 if( ALGEBRA_PLUGINS_SETUP_EIGEN3 )
    if( ALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3 )
       find_package( Eigen3 REQUIRED )
@@ -124,7 +124,7 @@ option( ALGEBRA_PLUGINS_SETUP_VC
    "Set up the Vc target(s) explicitly" FALSE )
 option( ALGEBRA_PLUGINS_USE_SYSTEM_VC
    "Pick up an existing installation of Vc from the build environment"
-   TRUE )
+   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
 if( ALGEBRA_PLUGINS_SETUP_VC )
    if( ALGEBRA_PLUGINS_USE_SYSTEM_VC )
       find_package( Vc 1.4.2 REQUIRED )
@@ -146,7 +146,7 @@ option( ALGEBRA_PLUGINS_SETUP_FASTOR
    "Set up the Fastor target(s) explicitly" FALSE )
 option( ALGEBRA_PLUGINS_USE_SYSTEM_FASTOR
    "Pick up an existing installation of Fastor from the build environment"
-   TRUE )
+   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
 if( ALGEBRA_PLUGINS_SETUP_FASTOR )
    if( ALGEBRA_PLUGINS_USE_SYSTEM_FASTOR )
       find_package( Fastor 0.6.3 REQUIRED )

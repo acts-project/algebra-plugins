@@ -97,53 +97,55 @@ ALGEBRA_HOST_DEVICE inline auto eta(
 struct element_getter {
   /// Get non-const access to a matrix element
   template <
-      typename derived_type,
+      typename derived_type, typename size_type,
       std::enable_if_t<std::is_base_of<Eigen::DenseCoeffsBase<
                                            derived_type, Eigen::WriteAccessors>,
                                        Eigen::MatrixBase<derived_type> >::value,
                        bool> = true>
   ALGEBRA_HOST_DEVICE inline auto &operator()(
-      Eigen::MatrixBase<derived_type> &m, int row, int col) const {
+      Eigen::MatrixBase<derived_type> &m, size_type row, size_type col) const {
 
-    return m(row, col);
+    return m(static_cast<int>(row), static_cast<int>(col));
   }
   /// Get const access to a matrix element
-  template <typename derived_type>
+  template <typename derived_type, typename size_type>
   ALGEBRA_HOST_DEVICE inline auto operator()(
-      const Eigen::MatrixBase<derived_type> &m, int row, int col) const {
+      const Eigen::MatrixBase<derived_type> &m, size_type row,
+      size_type col) const {
 
-    return m(row, col);
+    return m(static_cast<int>(row), static_cast<int>(col));
   }
 };  // struct element_getter
 
 /// Function extracting an element from a matrix (const)
-template <typename derived_type>
+template <typename derived_type, typename size_type>
 ALGEBRA_HOST_DEVICE inline auto element(
-    const Eigen::MatrixBase<derived_type> &m, int row, int col) {
+    const Eigen::MatrixBase<derived_type> &m, size_type row, size_type col) {
 
-  return element_getter()(m, row, col);
+  return element_getter()(m, static_cast<int>(row), static_cast<int>(col));
 }
 
 /// Function extracting an element from a matrix (non-const)
 template <
-    typename derived_type,
+    typename derived_type, typename size_type,
     std::enable_if_t<std::is_base_of<Eigen::DenseCoeffsBase<
                                          derived_type, Eigen::WriteAccessors>,
                                      Eigen::MatrixBase<derived_type> >::value,
                      bool> = true>
 ALGEBRA_HOST_DEVICE inline auto &element(Eigen::MatrixBase<derived_type> &m,
-                                         int row, int col) {
+                                         size_type row, size_type col) {
 
-  return element_getter()(m, row, col);
+  return element_getter()(m, static_cast<int>(row), static_cast<int>(col));
 }
 
 /// Functor used to extract a block from Eigen matrices
 struct block_getter {
-  template <int kROWS, int kCOLS, typename matrix_type>
-  ALGEBRA_HOST_DEVICE auto operator()(const matrix_type &m, int row,
-                                      int col) const {
+  template <int kROWS, int kCOLS, typename matrix_type, typename size_type>
+  ALGEBRA_HOST_DEVICE auto operator()(const matrix_type &m, size_type row,
+                                      size_type col) const {
 
-    return m.template block<kROWS, kCOLS>(row, col);
+    return m.template block<kROWS, kCOLS>(static_cast<int>(row),
+                                          static_cast<int>(col));
   }
 };  // struct block_getter
 

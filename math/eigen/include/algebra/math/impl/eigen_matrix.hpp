@@ -44,35 +44,37 @@ struct actor {
   using vector3 = array_type<3>;
 
   /// Operator getting a reference to one element of a non-const matrix
-  template <int ROWS, int COLS, typename size_type>
+  template <int ROWS, int COLS, typename size_type_1, typename size_type_2>
   ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
-                                               size_type row,
-                                               size_type col) const {
+                                               size_type_1 row,
+                                               size_type_2 col) const {
     return m(static_cast<int>(row), static_cast<int>(col));
   }
 
   /// Operator getting one value of a const matrix
-  template <int ROWS, int COLS, typename size_type>
+  template <int ROWS, int COLS, typename size_type_1, typename size_type_2>
   ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
-                                              size_type row,
-                                              size_type col) const {
+                                              size_type_1 row,
+                                              size_type_2 col) const {
     return m(static_cast<int>(row), static_cast<int>(col));
   }
 
   /// Operator getting a block of a const matrix
-  template <int ROWS, int COLS, class input_matrix_type, typename size_type>
+  template <int ROWS, int COLS, class input_matrix_type, typename size_type_1,
+            typename size_type_2>
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
-                                                    size_type row,
-                                                    size_type col) {
+                                                    size_type_1 row,
+                                                    size_type_2 col) {
     return m.template block<ROWS, COLS>(static_cast<int>(row),
                                         static_cast<int>(col));
   }
 
   /// Operator setting a block
-  template <int ROWS, int COLS, class input_matrix_type, typename size_type>
+  template <int ROWS, int COLS, class input_matrix_type, typename size_type_1,
+            typename size_type_2>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const matrix_type<ROWS, COLS> &b,
-                                     size_type row, size_type col) {
+                                     size_type_1 row, size_type_2 col) {
     m.template block<ROWS, COLS>(static_cast<int>(row), static_cast<int>(col)) =
         b;
   }

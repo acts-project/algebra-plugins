@@ -48,7 +48,7 @@ struct actor {
   ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
                                                size_type_1 row,
                                                size_type_2 col) const {
-    return m(static_cast<int>(row), static_cast<int>(col));
+    return m(row, col);
   }
 
   /// Operator getting one value of a const matrix
@@ -56,7 +56,7 @@ struct actor {
   ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
                                               size_type_1 row,
                                               size_type_2 col) const {
-    return m(static_cast<int>(row), static_cast<int>(col));
+    return m(row, col);
   }
 
   /// Operator getting a block of a const matrix
@@ -65,8 +65,7 @@ struct actor {
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
                                                     size_type_1 row,
                                                     size_type_2 col) {
-    return m.template block<ROWS, COLS>(static_cast<int>(row),
-                                        static_cast<int>(col));
+    return m.template block<ROWS, COLS>(row, col);
   }
 
   /// Operator setting a block
@@ -75,8 +74,7 @@ struct actor {
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const matrix_type<ROWS, COLS> &b,
                                      size_type_1 row, size_type_2 col) {
-    m.template block<ROWS, COLS>(static_cast<int>(row), static_cast<int>(col)) =
-        b;
+    m.template block<ROWS, COLS>(row, col) = b;
   }
 
   // Create zero matrix

@@ -106,7 +106,7 @@ struct element_getter {
       Eigen::MatrixBase<derived_type> &m, size_type_1 row,
       size_type_2 col) const {
 
-    return m(static_cast<int>(row), static_cast<int>(col));
+    return m(row, col);
   }
   /// Get const access to a matrix element
   template <typename derived_type, typename size_type_1, typename size_type_2>
@@ -114,7 +114,7 @@ struct element_getter {
       const Eigen::MatrixBase<derived_type> &m, size_type_1 row,
       size_type_2 col) const {
 
-    return m(static_cast<int>(row), static_cast<int>(col));
+    return m(row, col);
   }
 };  // struct element_getter
 
@@ -124,7 +124,8 @@ ALGEBRA_HOST_DEVICE inline auto element(
     const Eigen::MatrixBase<derived_type> &m, size_type_1 row,
     size_type_2 col) {
 
-  return element_getter()(m, static_cast<int>(row), static_cast<int>(col));
+  return element_getter()(m, static_cast<Eigen::Index>(row),
+                          static_cast<Eigen::Index>(col));
 }
 
 /// Function extracting an element from a matrix (non-const)
@@ -137,7 +138,8 @@ template <
 ALGEBRA_HOST_DEVICE inline auto &element(Eigen::MatrixBase<derived_type> &m,
                                          size_type_1 row, size_type_2 col) {
 
-  return element_getter()(m, static_cast<int>(row), static_cast<int>(col));
+  return element_getter()(m, static_cast<Eigen::Index>(row),
+                          static_cast<Eigen::Index>(col));
 }
 
 /// Functor used to extract a block from Eigen matrices
@@ -147,8 +149,7 @@ struct block_getter {
   ALGEBRA_HOST_DEVICE auto operator()(const matrix_type &m, size_type_1 row,
                                       size_type_2 col) const {
 
-    return m.template block<kROWS, kCOLS>(static_cast<int>(row),
-                                          static_cast<int>(col));
+    return m.template block<kROWS, kCOLS>(row, col);
   }
 };  // struct block_getter
 

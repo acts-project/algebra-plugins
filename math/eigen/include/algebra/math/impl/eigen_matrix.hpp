@@ -44,31 +44,52 @@ struct actor {
   using vector3 = array_type<3>;
 
   /// Operator getting a reference to one element of a non-const matrix
-  template <int ROWS, int COLS>
+  template <int ROWS, int COLS, typename size_type_1, typename size_type_2,
+            std::enable_if_t<
+                std::is_convertible<size_type_1, Eigen::Index>::value &&
+                    std::is_convertible<size_type_2, Eigen::Index>::value,
+                bool> = true>
   ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
-                                               int row, int col) const {
+                                               size_type_1 row,
+                                               size_type_2 col) const {
     return m(row, col);
   }
 
   /// Operator getting one value of a const matrix
-  template <int ROWS, int COLS>
+  template <int ROWS, int COLS, typename size_type_1, typename size_type_2,
+            std::enable_if_t<
+                std::is_convertible<size_type_1, Eigen::Index>::value &&
+                    std::is_convertible<size_type_2, Eigen::Index>::value,
+                bool> = true>
   ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
-                                              int row, int col) const {
+                                              size_type_1 row,
+                                              size_type_2 col) const {
     return m(row, col);
   }
 
   /// Operator getting a block of a const matrix
-  template <int ROWS, int COLS, class input_matrix_type>
+  template <int ROWS, int COLS, class input_matrix_type, typename size_type_1,
+            typename size_type_2,
+            std::enable_if_t<
+                std::is_convertible<size_type_1, Eigen::Index>::value &&
+                    std::is_convertible<size_type_2, Eigen::Index>::value,
+                bool> = true>
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
-                                                    int row, int col) {
+                                                    size_type_1 row,
+                                                    size_type_2 col) {
     return m.template block<ROWS, COLS>(row, col);
   }
 
   /// Operator setting a block
-  template <int ROWS, int COLS, class input_matrix_type>
+  template <int ROWS, int COLS, class input_matrix_type, typename size_type_1,
+            typename size_type_2,
+            std::enable_if_t<
+                std::is_convertible<size_type_1, Eigen::Index>::value &&
+                    std::is_convertible<size_type_2, Eigen::Index>::value,
+                bool> = true>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const matrix_type<ROWS, COLS> &b, int row,
-                                     int col) {
+                                     const matrix_type<ROWS, COLS> &b,
+                                     size_type_1 row, size_type_2 col) {
     m.template block<ROWS, COLS>(row, col) = b;
   }
 

@@ -160,7 +160,7 @@ struct vector_getter {
       const matrix_type<ROWS, COLS> &m, std::size_t row, std::size_t col) {
 
     assert(col < COLS);
-    assert(row + SIZE < ROWS);
+    assert(row + SIZE <= ROWS);
     result_type subvector{};
     for (std::size_t irow = row; irow < row + SIZE; ++irow) {
       subvector[irow - row] = m[col][irow];

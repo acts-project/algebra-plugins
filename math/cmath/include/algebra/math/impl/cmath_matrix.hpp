@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022 CERN for the benefit of the ACTS project
+ * (c) 2022-2023 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -67,8 +67,8 @@ struct actor {
   /// Operator setting a block with a vector matrix
   template <size_type ROWS, size_type COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const matrix_type<ROWS, COLS> &b, int row,
-                                     int col) {
+                                     const matrix_type<ROWS, COLS> &b,
+                                     size_type row, size_type col) {
     for (size_type i = 0; i < ROWS; ++i) {
       for (size_type j = 0; j < COLS; ++j) {
         element_getter()(m, i + row, j + col) = element_getter()(b, i, j);
@@ -80,8 +80,8 @@ struct actor {
   template <size_type ROWS, template <typename, size_type> class vector_t,
             class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const vector_t<scalar_t, ROWS> &b, int row,
-                                     int col) {
+                                     const vector_t<scalar_t, ROWS> &b,
+                                     size_type row, size_type col) {
     for (size_type i = 0; i < ROWS; ++i) {
       element_getter()(m, i + row, col) = b[i];
     }

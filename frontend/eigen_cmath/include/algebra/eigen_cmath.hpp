@@ -43,7 +43,8 @@ template <unsigned int SIZE, typename derived_type>
 ALGEBRA_HOST_DEVICE inline auto vector(const Eigen::MatrixBase<derived_type>& m,
                                        std::size_t row, std::size_t col) {
 
-  return m.template block<SIZE, 1>(row, col);
+  return m.template block<SIZE, 1>(static_cast<Eigen::Index>(row),
+                                   static_cast<Eigen::Index>(col));
 }
 
 /// @name Getter functions on @c algebra::eigen::matrix_type

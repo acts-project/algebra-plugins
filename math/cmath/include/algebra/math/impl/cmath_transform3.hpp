@@ -191,8 +191,8 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   inline bool operator==(const transform3 &rhs) const {
 
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
+    for (size_type i = 0; i < 4; i++) {
+      for (size_type j = 0; j < 4; j++) {
         if (matrix_actor().element(_data, i, j) !=
             matrix_actor().element(rhs._data, i, j)) {
           return false;

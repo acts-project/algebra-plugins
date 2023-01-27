@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022 CERN for the benefit of the ACTS project
+ * (c) 2022-2023 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -52,7 +52,7 @@ struct actor {
   ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
                                                size_type_1 row,
                                                size_type_2 col) const {
-    return m(row, col);
+    return m(static_cast<Eigen::Index>(row), static_cast<Eigen::Index>(col));
   }
 
   /// Operator getting one value of a const matrix
@@ -64,7 +64,7 @@ struct actor {
   ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
                                               size_type_1 row,
                                               size_type_2 col) const {
-    return m(row, col);
+    return m(static_cast<Eigen::Index>(row), static_cast<Eigen::Index>(col));
   }
 
   /// Operator getting a block of a const matrix
@@ -77,7 +77,8 @@ struct actor {
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
                                                     size_type_1 row,
                                                     size_type_2 col) {
-    return m.template block<ROWS, COLS>(row, col);
+    return m.template block<ROWS, COLS>(static_cast<Eigen::Index>(row),
+                                        static_cast<Eigen::Index>(col));
   }
 
   /// Operator setting a block
@@ -90,7 +91,8 @@ struct actor {
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const matrix_type<ROWS, COLS> &b,
                                      size_type_1 row, size_type_2 col) {
-    m.template block<ROWS, COLS>(row, col) = b;
+    m.template block<ROWS, COLS>(static_cast<Eigen::Index>(row),
+                                 static_cast<Eigen::Index>(col)) = b;
   }
 
   // Create zero matrix

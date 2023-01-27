@@ -1,6 +1,6 @@
 /** Algebra plugins, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2020-2023 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -108,7 +108,7 @@ struct element_getter {
       Eigen::MatrixBase<derived_type> &m, size_type_1 row,
       size_type_2 col) const {
 
-    return m(row, col);
+    return m(static_cast<Eigen::Index>(row), static_cast<Eigen::Index>(col));
   }
   /// Get const access to a matrix element
   template <typename derived_type, typename size_type_1, typename size_type_2,
@@ -120,12 +120,16 @@ struct element_getter {
       const Eigen::MatrixBase<derived_type> &m, size_type_1 row,
       size_type_2 col) const {
 
-    return m(row, col);
+    return m(static_cast<Eigen::Index>(row), static_cast<Eigen::Index>(col));
   }
 };  // struct element_getter
 
 /// Function extracting an element from a matrix (const)
-template <typename derived_type, typename size_type_1, typename size_type_2>
+template <
+    typename derived_type, typename size_type_1, typename size_type_2,
+    std::enable_if_t<std::is_convertible<size_type_1, Eigen::Index>::value &&
+                         std::is_convertible<size_type_2, Eigen::Index>::value,
+                     bool> = true>
 ALGEBRA_HOST_DEVICE inline auto element(
     const Eigen::MatrixBase<derived_type> &m, size_type_1 row,
     size_type_2 col) {
@@ -134,12 +138,14 @@ ALGEBRA_HOST_DEVICE inline auto element(
 }
 
 /// Function extracting an element from a matrix (non-const)
-template <
-    typename derived_type, typename size_type_1, typename size_type_2,
-    std::enable_if_t<std::is_base_of<Eigen::DenseCoeffsBase<
-                                         derived_type, Eigen::WriteAccessors>,
-                                     Eigen::MatrixBase<derived_type> >::value,
-                     bool> = true>
+template <typename derived_type, typename size_type_1, typename size_type_2,
+          std::enable_if_t<
+              std::is_base_of<
+                  Eigen::DenseCoeffsBase<derived_type, Eigen::WriteAccessors>,
+                  Eigen::MatrixBase<derived_type> >::value &&
+                  std::is_convertible<size_type_1, Eigen::Index>::value &&
+                  std::is_convertible<size_type_2, Eigen::Index>::value,
+              bool> = true>
 ALGEBRA_HOST_DEVICE inline auto &element(Eigen::MatrixBase<derived_type> &m,
                                          size_type_1 row, size_type_2 col) {
 

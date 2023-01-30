@@ -151,7 +151,7 @@ TYPED_TEST_P(test_host_basics, matrix64) {
   for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
     for (typename TypeParam::size_type j = 0; j < COLS; ++j) {
       algebra::getter::element(m, i, j) =
-          static_cast<typename TypeParam::scalar>(0.5 * i + j);
+          0.5f * static_cast<typename TypeParam::scalar>(i + j);
     }
   }
 
@@ -160,7 +160,7 @@ TYPED_TEST_P(test_host_basics, matrix64) {
   for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
     for (typename TypeParam::size_type j = 0; j < COLS; ++j) {
       const typename TypeParam::scalar ref =
-          static_cast<typename TypeParam::scalar>(0.5 * i + j);
+          0.5f * static_cast<typename TypeParam::scalar>(i + j);
       ASSERT_NEAR(algebra::getter::element(m, i, j), ref, this->m_epsilon);
       ASSERT_NEAR(algebra::getter::element(m_const_ref, i, j), ref,
                   this->m_epsilon);
@@ -564,7 +564,7 @@ TYPED_TEST_P(test_host_basics, transform3) {
   std::array<typename TypeParam::scalar, 16> matray_helper = {
       1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0};
   typename TypeParam::transform3::template array_type<16> matray;
-  for (int i = 0; i < 16; ++i) {
+  for (unsigned int i = 0u; i < 16u; ++i) {
     matray[i] = matray_helper[i];
   }
   typename TypeParam::transform3 trfma(matray);

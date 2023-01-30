@@ -41,7 +41,7 @@ struct partial_pivot_lud {
 
     // Get the LU decomposition matrix equal to (L - I) + U
     const auto& lu = decomp_res.lu;
-    const auto& n_pivot = decomp_res.n_pivot;
+    const size_type n_pivot = static_cast<size_type>(decomp_res.n_pivot);
 
     scalar_t det = element_getter_t()(lu, 0, 0);
 

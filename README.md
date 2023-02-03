@@ -7,7 +7,7 @@ for the R&D projects [detray](https://github.com/acts-project/detray) and
 | Backend                                                                   | CPU | CUDA | SYCL |
 | ------------------------------------------------------------------- | --- | ---- | ---- |
 | cmath                                                               | ✅  | ✅   | ✅   |
-| [Eigen](https://eigen.tuxfamily.org)                                | ✅  | ✅   | 🟡   |
+| [Eigen](https://eigen.tuxfamily.org)                                | ✅  | ✅   | ✅   |
 | [SMatrix](https://root.cern.ch/doc/master/group__SMatrixGroup.html) | ✅  | ⚪   | ⚪   |
 | [VC](https://github.com/VcDevel/Vc)                                 | ✅  | ⚪   | ⚪   |
 

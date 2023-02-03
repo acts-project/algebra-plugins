@@ -1,6 +1,6 @@
 # Algebra plugins library, part of the ACTS project (R&D line)
 #
-# (c) 2021-2022 CERN for the benefit of the ACTS project
+# (c) 2021-2023 CERN for the benefit of the ACTS project
 #
 # Mozilla Public License Version 2.0
 
@@ -13,7 +13,7 @@ message( STATUS "Building VecMem as part of the Algebra Plugins project" )
 
 # Declare where to get VecMem from.
 set( ALGEBRA_PLUGINS_VECMEM_SOURCE
-   "URL;https://github.com/acts-project/vecmem/archive/refs/tags/v0.10.0.tar.gz;URL_MD5;712888e704d2e4c915ac1f25f28da467"
+   "URL;https://github.com/acts-project/vecmem/archive/refs/tags/v0.22.0.tar.gz;URL_MD5;f074994adb7f9b13c67485df73e6c971"
    CACHE STRING "Source for VecMem, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_VECMEM_SOURCE )
 FetchContent_Declare( VecMem ${ALGEBRA_PLUGINS_VECMEM_SOURCE} )

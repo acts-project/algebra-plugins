@@ -7,6 +7,9 @@
 
 #pragma once
 
+// Project include(s).
+#include "algebra/storage/impl/fastor_matrix.hpp"
+
 // System include(s).
 #include <cstddef>
 
@@ -19,7 +22,8 @@ template <typename T, size_type N>
 using storage_type = Fastor::Tensor<T, N>;
 /// Matrix type used in the Fastor storage model
 template <typename T, size_type ROWS, size_type COLS>
-using matrix_type = Fastor::Tensor<T, ROWS, COLS>;
+//using matrix_type = Fastor::Tensor<T, ROWS, COLS>;
+using matrix_type = Matrix<T, ROWS, COLS>;
 
 /// 3-element "vector" type, using @c Fastor::Tensor
 template <typename T>

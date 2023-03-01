@@ -6,6 +6,7 @@
 
 # Set up the library.
 algebra_add_library( algebra_fastor_storage fastor_storage
-   "include/algebra/storage/fastor.hpp" )
+   "include/algebra/storage/fastor.hpp"
+   "include/algebra/storage/impl/fastor_matrix.hpp" )
 target_link_libraries( algebra_fastor_storage
 	INTERFACE algebra::common )

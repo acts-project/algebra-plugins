@@ -19,7 +19,7 @@
 
 namespace algebra::fastor::matrix {
 
-/// "Matrix actor", assuming an Fastor matrix
+/// "Matrix actor", assuming a Fastor matrix
 template <typename scalar_t>
 struct actor {
 

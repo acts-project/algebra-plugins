@@ -47,14 +47,14 @@ struct actor {
   /// Operator getting a reference to one element of a non-const matrix
   template <size_ty ROWS, size_ty COLS>
   ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
-                                               int row, int col) const {
+                                               size_ty row, size_ty col) const {
     return m(row, col);
   }
 
   /// Operator getting one value of a const matrix
   template <size_ty ROWS, size_ty COLS>
   ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
-                                              int row, int col) const {
+                                              size_ty row, size_ty col) const {
     return m(row, col);
   }
 
@@ -62,8 +62,11 @@ struct actor {
   template <size_ty ROWS, size_ty COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
                                                     size_ty row, size_ty col) {
-    // In Fastor::seq, the last element is not included.
-    return m(Fastor::seq(row, row + ROWS), Fastor::seq(col, col + COLS));
+    // In `Fastor::seq`, the last element is not included.
+    // `Fastor::seq` takes `int`s as input, but `row`, `col`, `ROWS`, and `COLS`
+    // have type `size_ty`, which is `std::size_t`.
+    return m(Fastor::seq(static_cast<int>(row), static_cast<int>(row + ROWS)),
+             Fastor::seq(static_cast<int>(col), static_cast<int>(col + COLS)));
   }
 
   /// Operator setting a block with a matrix
@@ -71,7 +74,11 @@ struct actor {
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const matrix_type<ROWS, COLS> &b,
                                      size_ty row, size_ty col) {
-    m(Fastor::seq(row, row + ROWS), Fastor::seq(col, col + COLS)) = b;
+    // In `Fastor::seq`, the last element is not included.
+    // `Fastor::seq` takes `int`s as input, but `ROWS` and `COLS` have type
+    // `size_ty`, which is `std::size_t`.
+    m(Fastor::seq(static_cast<int>(row), static_cast<int>(row + ROWS)),
+      Fastor::seq(static_cast<int>(col), static_cast<int>(col + COLS))) = b;
   }
 
   /// Operator setting a block with a vector
@@ -79,7 +86,11 @@ struct actor {
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const vector_type<ROWS> &b, size_ty row,
                                      size_ty col) {
-    m(Fastor::seq(row, row + ROWS), col) = b;
+    // In `Fastor::seq`, the last element is not included.
+    // `Fastor::seq` takes `int`s as input, but `ROWS` and `COLS` have type
+    // `size_ty`, which is `std::size_t`.
+    m(Fastor::seq(static_cast<int>(row), static_cast<int>(row + ROWS)),
+      static_cast<int>(col)) = b;
   }
 
   // Create zero matrix

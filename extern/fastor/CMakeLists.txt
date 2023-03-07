@@ -15,7 +15,7 @@ message( STATUS "Building Fastor as part of the Algebra Plugins project" )
 # We need to use this alternative syntax for FetchContent_Declare because the
 # latest release for Fastor does not have a CMakeLists.txt file.
 set( ALGEBRA_PLUGINS_FASTOR_SOURCE
-   "fastor;GIT_REPOSITORY;https://github.com/romeric/Fastor.git;GIT_TAG;6d7216f304d60d92b9b042566d4d6e94c65086a3"
+   "fastor;GIT_REPOSITORY;https://github.com/romeric/Fastor.git;GIT_TAG;e96e63fe8a05898d732d0b9faba3667d9a25a38f"
    CACHE STRING "Source for Fastor, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_FASTOR_SOURCE )
 FetchContent_Declare( fastor ${ALGEBRA_PLUGINS_FASTOR_SOURCE} )

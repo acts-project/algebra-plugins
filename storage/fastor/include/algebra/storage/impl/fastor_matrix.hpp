@@ -8,7 +8,13 @@
 #pragma once
 
 // Fastor include(s).
+#ifdef _MSC_VER
+#pragma warning(disable : 4244 4701 4702)
+#endif  // MSVC
 #include <Fastor/Fastor.h>
+#ifdef _MSC_VER
+#pragma warning(default : 4244 4701 4702)
+#endif  // MSVC
 
 // System include(s).
 #include <cstddef>

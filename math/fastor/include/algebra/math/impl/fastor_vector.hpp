@@ -29,7 +29,7 @@ template <typename scalar_t, auto N>
 ALGEBRA_HOST inline Fastor::Tensor<scalar_t, N> normalize(
     const Fastor::Tensor<scalar_t, N> &v) {
 
-  return v / Fastor::norm(v);
+  return (static_cast<scalar_t>(1.0) / Fastor::norm(v)) * v;
 }
 
 /** Dot product between two input vectors

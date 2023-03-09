@@ -192,7 +192,6 @@ struct transform3 {
   ALGEBRA_HOST
   inline matrix44 matrix_inverse() const { return _data_inv; }
 
-  /// start editing from here
   /** This method transform from a point from the local 3D cartesian frame to
    * the global 3D cartesian frame */
   ALGEBRA_HOST

@@ -107,7 +107,7 @@ struct actor {
 
   // Create identity matrix
   template <size_ty ROWS, size_ty COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() {
+  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() const {
     // There are 2 identity tensor methods in Fastor, eye() and eye2(). The
     // former is for arbitrary order tensors, whereas the latter is specifically
     // for second order tensors. As such, I chose to use eye2() here because it
@@ -140,18 +140,7 @@ struct actor {
   ALGEBRA_HOST_DEVICE inline void set_identity(
       matrix_type<ROWS, COLS> &m) const {
 
-    // eye2() only works for square matrices. The idea is to take the largest
-    // dimension of the matrix, make an identity matrix of that dimension, and
-    // then set the input matrix m to the appropriately sized submatrix of it.
-    if constexpr (ROWS >= COLS) {
-      matrix_type<ROWS, ROWS> identity_matrix;
-      identity_matrix.eye2();
-      m = identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>());
-    } else {
-      matrix_type<COLS, COLS> identity_matrix;
-      identity_matrix.eye2();
-      m = identity_matrix(Fastor::fseq<0, ROWS>(), Fastor::fseq<0, COLS>());
-    }
+    m = identity<ROWS, COLS>();
   }
 
   // Create transpose matrix

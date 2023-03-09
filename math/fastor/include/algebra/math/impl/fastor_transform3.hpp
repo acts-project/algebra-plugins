@@ -83,7 +83,11 @@ struct transform3 {
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
              const vector3 &z, bool get_inverse = true) {
 
-    // The matrices need to be initialized to the identity matrix first.
+    // The matrix needs to be initialized to the identity matrix first. We only
+    // modify the top 4x3 portion of the matrix, so it doesn't matter what
+    // values it initially had. However, the bottom row is required to have the
+    // values of [0, 0, 0, 1], so that's why we set `_data` to the identity
+    // matrix first.
     _data.eye2();
 
     _data(Fastor::fseq<0, 3>(), 0) = x;
@@ -115,7 +119,10 @@ struct transform3 {
   ALGEBRA_HOST
   transform3(const vector3 &t) {
 
-    // The matrix needs to be initialized to the identity matrix first.
+    // The matrix needs to be initialized to the identity matrix first. In this
+    // case, the `transform3` requires `_data` to look just like an identity
+    // matrix except for the third column, which is the one we are modifying
+    // here.
     _data.eye2();
 
     _data(Fastor::fseq<0, 3>(), 3) = t;

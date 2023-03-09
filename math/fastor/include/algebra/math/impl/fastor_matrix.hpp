@@ -67,7 +67,8 @@ struct actor {
   /// Operator getting a block of a const matrix
   template <size_ty ROWS, size_ty COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
-                                                    size_ty row, size_ty col) {
+                                                    size_ty row,
+                                                    size_ty col) const {
     // In `Fastor::seq`, the last element is not included.
     // `Fastor::seq` takes `int`s as input, but `row`, `col`, `ROWS`, and `COLS`
     // have type `size_ty`, which is `std::size_t`.
@@ -79,7 +80,7 @@ struct actor {
   template <size_ty ROWS, size_ty COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const matrix_type<ROWS, COLS> &b,
-                                     size_ty row, size_ty col) {
+                                     size_ty row, size_ty col) const {
     // In `Fastor::seq`, the last element is not included.
     // `Fastor::seq` takes `int`s as input, but `ROWS` and `COLS` have type
     // `size_ty`, which is `std::size_t`.
@@ -91,7 +92,7 @@ struct actor {
   template <size_ty ROWS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const vector_type<ROWS> &b, size_ty row,
-                                     size_ty col) {
+                                     size_ty col) const {
     // In `Fastor::seq`, the last element is not included.
     // `Fastor::seq` takes `int`s as input, but `ROWS` and `COLS` have type
     // `size_ty`, which is `std::size_t`.
@@ -101,7 +102,7 @@ struct actor {
 
   // Create zero matrix
   template <size_ty ROWS, size_ty COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() {
+  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() const {
     return matrix_type<ROWS, COLS>(0);
   }
 
@@ -146,20 +147,21 @@ struct actor {
   // Create transpose matrix
   template <size_ty ROWS, size_ty COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<COLS, ROWS> transpose(
-      const matrix_type<ROWS, COLS> &m) {
+      const matrix_type<ROWS, COLS> &m) const {
     return Fastor::transpose(m);
   }
 
   // Get determinant
   template <size_ty N>
-  ALGEBRA_HOST_DEVICE inline scalar_t determinant(const matrix_type<N, N> &m) {
+  ALGEBRA_HOST_DEVICE inline scalar_t determinant(
+      const matrix_type<N, N> &m) const {
     return Fastor::determinant(m);
   }
 
   // Create inverse matrix
   template <size_ty N>
   ALGEBRA_HOST_DEVICE inline matrix_type<N, N> inverse(
-      const matrix_type<N, N> &m) {
+      const matrix_type<N, N> &m) const {
     return Fastor::inverse(m);
   }
 };

@@ -55,7 +55,7 @@ class Matrix : public Fastor::Tensor<T, M1, N> {
   /// that we wish to interpret the `Matrix` object as a `Fastor::Tensor` here.
   template <typename U, std::size_t M2,
             std::enable_if_t<std::is_convertible_v<U, T>, bool> = true>
-  inline Matrix<T, M1, M2> operator*(const Matrix<U, N, M2>& other) {
+  inline Matrix<T, M1, M2> operator*(const Matrix<U, N, M2>& other) const {
     return Fastor::matmul(static_cast<Fastor::Tensor<T, M1, N>>(*this),
                           static_cast<Fastor::Tensor<T, N, M2>>(other));
   }
@@ -73,7 +73,8 @@ class Matrix : public Fastor::Tensor<T, M1, N> {
   /// that we wish to interpret the `Matrix` object as a `Fastor::Tensor` here.
   template <typename U,
             std::enable_if_t<std::is_convertible_v<U, T>, bool> = true>
-  inline Fastor::Tensor<T, M1> operator*(const Fastor::Tensor<U, N>& other) {
+  inline Fastor::Tensor<T, M1> operator*(
+      const Fastor::Tensor<U, N>& other) const {
     return Fastor::matmul(static_cast<Fastor::Tensor<T, M1, N>>(*this),
                           static_cast<Fastor::Tensor<T, N>>(other));
   }

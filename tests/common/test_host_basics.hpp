@@ -531,17 +531,21 @@ TYPED_TEST_P(test_host_basics, transform3) {
   typename TypeParam::transform3 trfm(m44);
 
   // Make sure that algebra::getter:vector can be called.
-  (void)algebra::getter::vector<3>(m44, 0, 0);
-  (void)algebra::getter::vector<3>(m44, 0, 1);
-  (void)algebra::getter::vector<3>(m44, 0, 2);
+  [[maybe_unused]] typename TypeParam::vector3
+      test_vector;  // we need to declare a variable in order to use the
+                    // [[maybe_unused]] attribute here
+
+  test_vector = algebra::getter::vector<3>(m44, 0, 0);
+  test_vector = algebra::getter::vector<3>(m44, 0, 1);
+  test_vector = algebra::getter::vector<3>(m44, 0, 2);
 
   // Test constructor from inverse matrix
   auto m44_inv = trf2.matrix_inverse();
 
   // Make sure that algebra::getter:vector can be called.
-  (void)algebra::getter::vector<3>(m44_inv, 0, 0);
-  (void)algebra::getter::vector<3>(m44_inv, 0, 1);
-  (void)algebra::getter::vector<3>(m44_inv, 0, 2);
+  test_vector = algebra::getter::vector<3>(m44_inv, 0, 0);
+  test_vector = algebra::getter::vector<3>(m44_inv, 0, 1);
+  test_vector = algebra::getter::vector<3>(m44_inv, 0, 2);
 
   // Re-evaluate rot and trn
   auto rotm = trfm.rotation();
@@ -595,8 +599,7 @@ TYPED_TEST_P(test_host_basics, global_transformations) {
       algebra::vector::normalize(typename TypeParam::vector3{3., 2., 1.});
   typename TypeParam::vector3 x =
       algebra::vector::normalize(typename TypeParam::vector3{2., -3., 0.});
-  typename TypeParam::vector3 y = algebra::vector::cross(z, x);
-  (void)y;
+  [[maybe_unused]] typename TypeParam::vector3 y = algebra::vector::cross(z, x);
   typename TypeParam::point3 t = {2., 3., 4.};
   typename TypeParam::transform3 trf(t, z, x);
 

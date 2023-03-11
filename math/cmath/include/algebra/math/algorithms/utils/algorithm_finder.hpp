@@ -13,9 +13,8 @@
 namespace algebra::cmath {
 
 template <typename size_type, size_type... Is>
-constexpr bool is_in(size_type i, std::integer_sequence<size_type, Is...>) {
-  // suppress unused parameter warning
-  (void)i;
+constexpr bool is_in([[maybe_unused]] size_type i,
+                     std::integer_sequence<size_type, Is...>) {
   return ((i == Is) || ...);
 }
 

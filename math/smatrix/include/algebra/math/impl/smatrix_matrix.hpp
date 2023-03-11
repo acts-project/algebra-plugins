@@ -57,7 +57,7 @@ struct actor {
   template <unsigned int ROWS, unsigned int COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
                                                     unsigned int row,
-                                                    unsigned int col) {
+                                                    unsigned int col) const {
     return m.template Sub<matrix_type<ROWS, COLS> >(row, col);
   }
 
@@ -65,7 +65,7 @@ struct actor {
   template <unsigned int ROWS, unsigned int COLS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const matrix_type<ROWS, COLS> &b,
-                                     unsigned int row, unsigned int col) {
+                                     unsigned int row, unsigned int col) const {
     for (unsigned int i = 0; i < ROWS; ++i) {
       for (unsigned int j = 0; j < COLS; ++j) {
         m(i + row, j + col) = b(i, j);
@@ -77,7 +77,7 @@ struct actor {
   template <unsigned int ROWS, class input_matrix_type>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const vector_type<ROWS> &b,
-                                     unsigned int row, unsigned int col) {
+                                     unsigned int row, unsigned int col) const {
     for (unsigned int i = 0; i < ROWS; ++i) {
       m(i + row, col) = b[i];
     }
@@ -85,13 +85,13 @@ struct actor {
 
   // Create zero matrix
   template <unsigned int ROWS, unsigned int COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() {
+  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() const {
     return matrix_type<ROWS, COLS>();
   }
 
   // Create identity matrix
   template <unsigned int ROWS, unsigned int COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() {
+  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() const {
     return matrix_type<ROWS, COLS>(ROOT::Math::SMatrixIdentity());
   }
 
@@ -125,13 +125,13 @@ struct actor {
   // Create transpose matrix
   template <unsigned int ROWS, unsigned int COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<COLS, ROWS> transpose(
-      const matrix_type<ROWS, COLS> &m) {
+      const matrix_type<ROWS, COLS> &m) const {
     return ROOT::Math::Transpose(m);
   }
 
   // Get determinant
   template <unsigned int N>
-  ALGEBRA_HOST_DEVICE inline scalar_t determinant(const matrix_type<N, N> &m) {
+  ALGEBRA_HOST_DEVICE inline scalar_t determinant(const matrix_type<N, N> &m) const {
     scalar_t det;
     bool success = m.Det2(det);
 
@@ -144,7 +144,7 @@ struct actor {
   // Create inverse matrix
   template <unsigned int N>
   ALGEBRA_HOST_DEVICE inline matrix_type<N, N> inverse(
-      const matrix_type<N, N> &m) {
+      const matrix_type<N, N> &m) const {
     int ifail = 0;
     return m.Inverse(ifail);
   }

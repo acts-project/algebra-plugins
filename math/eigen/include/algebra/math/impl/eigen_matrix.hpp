@@ -76,7 +76,7 @@ struct actor {
                 bool> = true>
   ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
                                                     size_type_1 row,
-                                                    size_type_2 col) {
+                                                    size_type_2 col) const {
     return m.template block<ROWS, COLS>(static_cast<Eigen::Index>(row),
                                         static_cast<Eigen::Index>(col));
   }
@@ -90,20 +90,20 @@ struct actor {
                 bool> = true>
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const matrix_type<ROWS, COLS> &b,
-                                     size_type_1 row, size_type_2 col) {
+                                     size_type_1 row, size_type_2 col) const {
     m.template block<ROWS, COLS>(static_cast<Eigen::Index>(row),
                                  static_cast<Eigen::Index>(col)) = b;
   }
 
   // Create zero matrix
   template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() {
+  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() const {
     return matrix_type<ROWS, COLS>::Zero();
   }
 
   // Create identity matrix
   template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() {
+  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() const {
     return matrix_type<ROWS, COLS>::Identity();
   }
 
@@ -123,20 +123,20 @@ struct actor {
   // Create transpose matrix
   template <int ROWS, int COLS>
   ALGEBRA_HOST_DEVICE inline matrix_type<COLS, ROWS> transpose(
-      const matrix_type<ROWS, COLS> &m) {
+      const matrix_type<ROWS, COLS> &m) const {
     return m.transpose();
   }
 
   // Get determinant
   template <int N>
-  ALGEBRA_HOST_DEVICE inline scalar_t determinant(const matrix_type<N, N> &m) {
+  ALGEBRA_HOST_DEVICE inline scalar_t determinant(const matrix_type<N, N> &m) const {
     return m.determinant();
   }
 
   // Create inverse matrix
   template <int N>
   ALGEBRA_HOST_DEVICE inline matrix_type<N, N> inverse(
-      const matrix_type<N, N> &m) {
+      const matrix_type<N, N> &m) const {
     return m.inverse();
   }
 };

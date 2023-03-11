@@ -129,7 +129,8 @@ struct actor {
 
   // Get determinant
   template <int N>
-  ALGEBRA_HOST_DEVICE inline scalar_t determinant(const matrix_type<N, N> &m) const {
+  ALGEBRA_HOST_DEVICE inline scalar_t determinant(
+      const matrix_type<N, N> &m) const {
     return m.determinant();
   }
 

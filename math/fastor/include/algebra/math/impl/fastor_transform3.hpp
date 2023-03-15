@@ -1,6 +1,6 @@
-/** Algebra plugins library, part of the ACTS project
+/** Algebra plugins, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2022 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,27 +8,33 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/impl/smatrix_errorcheck.hpp"
 #include "algebra/qualifiers.hpp"
 
-// ROOT/Smatrix include(s).
-#include "Math/SMatrix.h"
-#include "Math/SVector.h"
+// Fastor include(s).
+#ifdef _MSC_VER
+#pragma warning(disable : 4244 4701 4702)
+#endif  // MSVC
+#include <Fastor/Fastor.h>
+#ifdef _MSC_VER
+#pragma warning(default : 4244 4701 4702)
+#endif  // MSVC
 
-namespace algebra::smatrix::math {
+// System include(s).
+#include <cstddef>
 
-/** Transform wrapper class to ensure standard API within differnt plugins
+namespace algebra::fastor::math {
+
+/** Transform wrapper class to ensure standard API within different plugins
  *
  **/
 template <typename scalar_t, typename matrix_actor_t>
 struct transform3 {
-
   /// @name Type definitions for the struct
   /// @{
 
   /// Array type used by the transform
-  template <unsigned int N>
-  using array_type = ROOT::Math::SVector<scalar_t, N>;
+  template <std::size_t N>
+  using array_type = Fastor::Tensor<scalar_t, N>;
   /// Scalar type used by the transform
   using scalar_type = scalar_t;
 
@@ -40,10 +46,10 @@ struct transform3 {
   using point2 = array_type<2>;
 
   /// 4x4 matrix type
-  using matrix44 = ROOT::Math::SMatrix<scalar_type, 4, 4>;
+  using matrix44 = Fastor::Tensor<scalar_type, 4UL, 4UL>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = algebra::smatrix::math::element_getter<scalar_t>;
+  using element_getter = algebra::fastor::math::element_getter<scalar_t>;
 
   /// Size type
   using size_type = typename matrix_actor_t::size_ty;
@@ -60,8 +66,8 @@ struct transform3 {
   /// @name Data objects
   /// @{
 
-  matrix44 _data = ROOT::Math::SMatrixIdentity();
-  matrix44 _data_inv = ROOT::Math::SMatrixIdentity();
+  matrix44 _data;
+  matrix44 _data_inv;
 
   /// @}
 
@@ -76,23 +82,21 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
              const vector3 &z, bool get_inverse = true) {
-    _data(0, 0) = x[0];
-    _data(1, 0) = x[1];
-    _data(2, 0) = x[2];
-    _data(0, 1) = y[0];
-    _data(1, 1) = y[1];
-    _data(2, 1) = y[2];
-    _data(0, 2) = z[0];
-    _data(1, 2) = z[1];
-    _data(2, 2) = z[2];
-    _data(0, 3) = t[0];
-    _data(1, 3) = t[1];
-    _data(2, 3) = t[2];
+
+    // The matrix needs to be initialized to the identity matrix first. We only
+    // modify the top 4x3 portion of the matrix, so it doesn't matter what
+    // values it initially had. However, the bottom row is required to have the
+    // values of [0, 0, 0, 1], so that's why we set `_data` to the identity
+    // matrix first.
+    _data.eye2();
+
+    _data(Fastor::fseq<0, 3>(), 0) = x;
+    _data(Fastor::fseq<0, 3>(), 1) = y;
+    _data(Fastor::fseq<0, 3>(), 2) = z;
+    _data(Fastor::fseq<0, 3>(), 3) = t;
 
     if (get_inverse) {
-      int ifail = 0;
-      _data_inv = _data.Inverse(ifail);
-      SMATRIX_CHECK(ifail);
+      _data_inv = Fastor::inverse(_data);
     }
   }
 
@@ -106,7 +110,7 @@ struct transform3 {
   ALGEBRA_HOST
   transform3(const vector3 &t, const vector3 &z, const vector3 &x,
              bool get_inverse = true)
-      : transform3(t, x, ROOT::Math::Cross(z, x), z, get_inverse) {}
+      : transform3(t, x, Fastor::cross(z, x), z, get_inverse) {}
 
   /** Constructor with arguments: translation
    *
@@ -115,13 +119,15 @@ struct transform3 {
   ALGEBRA_HOST
   transform3(const vector3 &t) {
 
-    _data(0, 3) = t[0];
-    _data(1, 3) = t[1];
-    _data(2, 3) = t[2];
+    // The matrix needs to be initialized to the identity matrix first. In this
+    // case, the `transform3` requires `_data` to look just like an identity
+    // matrix except for the third column, which is the one we are modifying
+    // here.
+    _data.eye2();
 
-    int ifail = 0;
-    _data_inv = _data.Inverse(ifail);
-    SMATRIX_CHECK(ifail);
+    _data(Fastor::fseq<0, 3>(), 3) = t;
+
+    _data_inv = Fastor::inverse(_data);
   }
 
   /** Constructor with arguments: matrix
@@ -132,40 +138,19 @@ struct transform3 {
   transform3(const matrix44 &m) {
     _data = m;
 
-    int ifail = 0;
-    _data_inv = _data.Inverse(ifail);
-    SMATRIX_CHECK(ifail);
+    _data_inv = Fastor::inverse(_data);
   }
 
-  /** Constructor with arguments: matrix as ROOT::Math::SVector<scalar_t, 16> of
+  /** Constructor with arguments: matrix as Fastor::Tensor<scalar_t, 16> of
    * scalars
    *
    * @param ma is the full 4x4 matrix as a 16-element array
    **/
   ALGEBRA_HOST
   transform3(const array_type<16> &ma) {
+    _data = ma;
 
-    _data(0, 0) = ma[0];
-    _data(1, 0) = ma[4];
-    _data(2, 0) = ma[8];
-    _data(3, 0) = ma[12];
-    _data(0, 1) = ma[1];
-    _data(1, 1) = ma[5];
-    _data(2, 1) = ma[9];
-    _data(3, 1) = ma[13];
-    _data(0, 2) = ma[2];
-    _data(1, 2) = ma[6];
-    _data(2, 2) = ma[10];
-    _data(3, 2) = ma[14];
-    _data(0, 3) = ma[3];
-    _data(1, 3) = ma[7];
-    _data(2, 3) = ma[11];
-    _data(3, 3) = ma[15];
-
-    int ifail = 0;
-    _data_inv = _data.Inverse(ifail);
-    // Ignore failures here, since the unit test does manage to trigger an error
-    // from ROOT in this place...
+    _data_inv = Fastor::inverse(_data);
   }
 
   /** Default contructors */
@@ -177,34 +162,32 @@ struct transform3 {
   ALGEBRA_HOST
   inline bool operator==(const transform3 &rhs) const {
 
-    return _data == rhs._data;
+    return Fastor::isequal(_data, rhs._data);
   }
 
   /** This method retrieves the rotation of a transform */
   ALGEBRA_HOST
   inline auto rotation() const {
 
-    return (_data.template Sub<ROOT::Math::SMatrix<scalar_type, 3, 3> >(0, 0));
+    return Fastor::Tensor<scalar_t, 3, 3>(
+        _data(Fastor::fseq<0, 3>(), Fastor::fseq<0, 3>()));
   }
 
   /** This method retrieves x axis */
   ALGEBRA_HOST_DEVICE
-  inline point3 x() const { return (_data.template SubCol<vector3>(0, 0)); }
+  inline point3 x() const { return _data(Fastor::fseq<0, 3>(), 0); }
 
   /** This method retrieves y axis */
   ALGEBRA_HOST_DEVICE
-  inline point3 y() const { return (_data.template SubCol<vector3>(1, 0)); }
+  inline point3 y() const { return _data(Fastor::fseq<0, 3>(), 1); }
 
   /** This method retrieves z axis */
   ALGEBRA_HOST_DEVICE
-  inline point3 z() const { return (_data.template SubCol<vector3>(2, 0)); }
+  inline point3 z() const { return _data(Fastor::fseq<0, 3>(), 2); }
 
   /** This method retrieves the translation of a transform */
   ALGEBRA_HOST
-  inline vector3 translation() const {
-
-    return (_data.template SubCol<vector3>(3, 0));
-  }
+  inline vector3 translation() const { return _data(Fastor::fseq<0, 3>(), 3); }
 
   /** This method retrieves the 4x4 matrix of a transform */
   ALGEBRA_HOST
@@ -219,11 +202,11 @@ struct transform3 {
   ALGEBRA_HOST
   inline const point3 point_to_global(const point3 &v) const {
 
-    ROOT::Math::SVector<scalar_type, 4> vector_4;
-    vector_4.Place_at(v, 0);
+    Fastor::Tensor<scalar_type, 4> vector_4;
+    vector_4(Fastor::fseq<0, 3>()) = v;
     vector_4[3] = static_cast<scalar_type>(1);
-    return ROOT::Math::SVector<scalar_type, 4>(_data * vector_4)
-        .template Sub<point3>(0);
+    return Fastor::Tensor<scalar_type, 3>(
+        Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
   }
 
   /** This method transform from a vector from the global 3D cartesian frame
@@ -231,11 +214,11 @@ struct transform3 {
   ALGEBRA_HOST
   inline const point3 point_to_local(const point3 &v) const {
 
-    ROOT::Math::SVector<scalar_type, 4> vector_4;
-    vector_4.Place_at(v, 0);
+    Fastor::Tensor<scalar_type, 4> vector_4;
+    vector_4(Fastor::fseq<0, 3>()) = v;
     vector_4[3] = static_cast<scalar_type>(1);
-    return ROOT::Math::SVector<scalar_type, 4>(_data_inv * vector_4)
-        .template Sub<point3>(0);
+    return Fastor::Tensor<scalar_type, 3>(
+        Fastor::matmul(_data_inv, vector_4)(Fastor::fseq<0, 3>()));
   }
 
   /** This method transform from a vector from the local 3D cartesian frame to
@@ -243,10 +226,11 @@ struct transform3 {
   ALGEBRA_HOST
   inline const point3 vector_to_global(const vector3 &v) const {
 
-    ROOT::Math::SVector<scalar_type, 4> vector_4;
-    vector_4.Place_at(v, 0);
-    return ROOT::Math::SVector<scalar_type, 4>(_data * vector_4)
-        .template Sub<point3>(0);
+    Fastor::Tensor<scalar_type, 4> vector_4;
+    vector_4(Fastor::fseq<0, 3>()) = v;
+    vector_4[3] = static_cast<scalar_type>(0);
+    return Fastor::Tensor<scalar_type, 3>(
+        Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
   }
 
   /** This method transform from a vector from the global 3D cartesian frame
@@ -254,11 +238,12 @@ struct transform3 {
   ALGEBRA_HOST
   inline const point3 vector_to_local(const vector3 &v) const {
 
-    ROOT::Math::SVector<scalar_type, 4> vector_4;
-    vector_4.Place_at(v, 0);
-    return ROOT::Math::SVector<scalar_type, 4>(_data_inv * vector_4)
-        .template Sub<point3>(0);
+    Fastor::Tensor<scalar_type, 4> vector_4;
+    vector_4(Fastor::fseq<0, 3>()) = v;
+    vector_4[3] = static_cast<scalar_type>(0);
+    return Fastor::Tensor<scalar_type, 3>(
+        Fastor::matmul(_data_inv, vector_4)(Fastor::fseq<0, 3>()));
   }
 };  // struct transform3
 
-}  // namespace algebra::smatrix::math
+}  // namespace algebra::fastor::math

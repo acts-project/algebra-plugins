@@ -15,7 +15,7 @@
 
 namespace algebra::smatrix::matrix {
 
-/// "Matrix actor", assuming an Eigen matrix
+/// "Matrix actor", assuming an SMatrix matrix
 template <typename scalar_t>
 struct actor {
 

@@ -54,7 +54,7 @@ ALGEBRA_HOST_DEVICE inline auto theta(
                               v[2]);
 }
 
-/** This method retrieves the perpenticular magnitude of a vector with rows >= 2
+/** This method retrieves the perpendicular magnitude of a vector with rows >= 2
  *
  * @param v the input vector
  **/
@@ -79,7 +79,7 @@ ALGEBRA_HOST_DEVICE inline auto norm(const Eigen::MatrixBase<derived_type> &v) {
 }
 
 /** This method retrieves the pseudo-rapidity from a vector or vector base with
- *rows >= 3
+ * rows >= 3
  *
  * @param v the input vector
  **/

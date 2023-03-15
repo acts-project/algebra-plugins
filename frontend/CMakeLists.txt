@@ -22,6 +22,10 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
    add_subdirectory( vc_vc )
 endif()
 
+if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )
+   add_subdirectory( fastor_fastor )
+endif()
+
 if( ALGEBRA_PLUGINS_INCLUDE_VECMEM )
    add_subdirectory( vecmem_cmath )
 endif()

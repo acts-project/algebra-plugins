@@ -622,14 +622,14 @@ TYPED_TEST_P(test_host_basics, global_transformations) {
   // vector should not change if transformed by a pure translation
   typename TypeParam::transform3 ttrf(t);
 
-  typename TypeParam::vector3 gvector = {1., 1., 1};
+  typename TypeParam::vector3 gvector = {1., 1., 1.};
   typename TypeParam::vector3 lvector = ttrf.vector_to_local(gvector);
   ASSERT_NEAR(gvector[0], lvector[0], this->m_isclose);
   ASSERT_NEAR(gvector[1], lvector[1], this->m_isclose);
   ASSERT_NEAR(gvector[2], lvector[2], this->m_isclose);
 
   // Check a round trip for vector
-  typename TypeParam::vector3 lvectorB = {7., 8., 9};
+  typename TypeParam::vector3 lvectorB = {7., 8., 9.};
   typename TypeParam::vector3 gvectorB = trf.vector_to_local(lvectorB);
   typename TypeParam::vector3 lvectorC = trf.vector_to_global(gvectorB);
   ASSERT_NEAR(lvectorB[0], lvectorC[0], this->m_isclose);

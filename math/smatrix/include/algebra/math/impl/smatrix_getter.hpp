@@ -81,7 +81,7 @@ ALGEBRA_HOST inline scalar_t norm(
 }
 
 /** This method retrieves the pseudo-rapidity from a vector or vector base with
- *rows >= 3
+ * rows >= 3
  *
  * @param v the input vector
  **/
@@ -100,7 +100,7 @@ ALGEBRA_HOST inline scalar_t eta(
   return static_cast<scalar_t>(TMath::ATanH(v.apply(2) / norm(v)));
 }
 
-/** This method retrieves the perpenticular magnitude of a vector with rows >= 2
+/** This method retrieves the perpendicular magnitude of a vector with rows >= 2
  *
  * @param v the input vector
  **/
@@ -120,7 +120,7 @@ ALGEBRA_HOST inline scalar_t perp(
       TMath::Sqrt(v.apply(0) * v.apply(0) + v.apply(1) * v.apply(1)));
 }
 
-/// Functor used to access elements of Vc matrices
+/// Functor used to access elements of SMatrix matrices
 template <typename scalar_t>
 struct element_getter {
 

@@ -16,6 +16,7 @@ set( CMAKE_CUDA_EXTENSIONS FALSE CACHE BOOL "Disable (CUDA) C++ extensions" )
 set( CMAKE_SYCL_STANDARD 17 CACHE STRING "The (SYCL) C++ standard to use" )
 
 # Standard CMake include(s).
+include( CTest )
 include( GNUInstallDirs )
 
 # Flags controlling the meta-build system.
@@ -34,10 +35,6 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY
    "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}" CACHE PATH
    "Directory for the built static libraries" )
 
-# Include the Algebra Plugins CMake code.
-list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
-include( algebra-plugins-functions )
-
 # Flags controlling how the Algebra Plugins code should behave.
 option( ALGEBRA_PLUGINS_INCLUDE_EIGEN
    "Include Eigen types in Algebra Plugins" FALSE )
@@ -53,6 +50,10 @@ option( ALGEBRA_PLUGINS_BUILD_TESTING "Build the unit tests of Algebra Plugins"
    TRUE )
 option( ALGEBRA_PLUGINS_BUILD_BENCHMARKS "Build the benchmark suite of Algebra Plugins"
 	FALSE )
+
+# Include the Algebra Plugins CMake code.
+list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
+include( algebra-plugins-functions )
 
 # Suppress developer warnings for all of the externals by default.
 # Unless the user explicitly requested otherwise.
@@ -168,7 +169,6 @@ add_subdirectory( math )
 add_subdirectory( frontend )
 
 # Set up the test(s).
-include( CTest )
 if( BUILD_TESTING AND ALGEBRA_PLUGINS_BUILD_TESTING )
   add_subdirectory( tests )
 endif()

@@ -50,6 +50,8 @@ option( ALGEBRA_PLUGINS_BUILD_TESTING "Build the unit tests of Algebra Plugins"
    TRUE )
 option( ALGEBRA_PLUGINS_BUILD_BENCHMARKS "Build the benchmark suite of Algebra Plugins"
 	FALSE )
+option( ALGEBRA_PLUGINS_FAIL_ON_WARNINGS
+   "Make the build fail on compiler/linker warnings" FALSE )
 
 # Include the Algebra Plugins CMake code.
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )

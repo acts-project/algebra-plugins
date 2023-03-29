@@ -53,6 +53,8 @@ jobs:
                  -DALGEBRA_PLUGINS_INCLUDE_FASTOR=TRUE
                  -DALGEBRA_PLUGINS_SETUP_FASTOR=TRUE
                  -DALGEBRA_PLUGINS_USE_SYSTEM_FASTOR=FALSE
+                 -DALGEBRA_PLUGINS_BUILD_BENCHMARKS=TRUE
+                 -DALGEBRA_PLUGINS_FAIL_ON_WARNINGS=TRUE
                  -S ${{ github.workspace }} -B build
                  -G "${{ matrix.PLATFORM.GENERATOR }}"
     # Perform the build.
@@ -111,7 +113,7 @@ jobs:
     - name: Configure
       run: |
         source ${GITHUB_WORKSPACE}/.github/ci_setup.sh ${{ matrix.PLATFORM.NAME }}
-        cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }} ${{ matrix.PLATFORM.OPTIONS }} -DALGEBRA_PLUGINS_BUILD_BENCHMARKS=TRUE -S ${GITHUB_WORKSPACE} -B build
+        cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }} ${{ matrix.PLATFORM.OPTIONS }} -DALGEBRA_PLUGINS_BUILD_BENCHMARKS=TRUE -DALGEBRA_PLUGINS_FAIL_ON_WARNINGS=TRUE -S ${GITHUB_WORKSPACE} -B build
     # Perform the build.
     - name: Build
       run: |

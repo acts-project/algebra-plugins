@@ -111,7 +111,7 @@ jobs:
     - name: Configure
       run: |
         source ${GITHUB_WORKSPACE}/.github/ci_setup.sh ${{ matrix.PLATFORM.NAME }}
-        cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }} ${{ matrix.PLATFORM.OPTIONS }} -S ${GITHUB_WORKSPACE} -B build
+        cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }} ${{ matrix.PLATFORM.OPTIONS }} -DALGEBRA_PLUGINS_BUILD_BENCHMARKS=TRUE -S ${GITHUB_WORKSPACE} -B build
     # Perform the build.
     - name: Build
       run: |

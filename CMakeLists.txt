@@ -175,5 +175,10 @@ if( BUILD_TESTING AND ALGEBRA_PLUGINS_BUILD_TESTING )
   add_subdirectory( tests )
 endif()
 
+# Set up the benchmarks.
+if( ALGEBRA_PLUGINS_BUILD_BENCHMARKS )
+  add_subdirectory( benchmarks )
+endif()
+
 # Set up the packaging of the project.
 include( algebra-plugins-packaging )

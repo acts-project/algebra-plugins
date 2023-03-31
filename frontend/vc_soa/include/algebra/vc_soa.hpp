@@ -28,10 +28,11 @@ using algebra::storage::operator+;
 namespace algebra {
 namespace vc_soa {
 
-/// @name Vc based transforms on @c algebra::vc::storage_type
+/// @name Vc based transforms on @c algebra::vc_soa types
 /// @{
 
-//@todo
+template <typename T>
+using transform3 = math::transform3<T>;
 
 /// @}
 

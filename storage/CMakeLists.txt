@@ -6,6 +6,7 @@
 
 # Set up all enabled libraries.
 add_subdirectory( array )
+add_subdirectory( common )
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
    add_subdirectory( eigen )
 endif()
@@ -14,6 +15,9 @@ if( ALGEBRA_PLUGINS_INCLUDE_SMATRIX )
 endif()
 if( ALGEBRA_PLUGINS_INCLUDE_VC )
    add_subdirectory( vc )
+   if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang" )
+      add_subdirectory( vc_soa )
+   endif()
 endif()
 if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )
    add_subdirectory( fastor )

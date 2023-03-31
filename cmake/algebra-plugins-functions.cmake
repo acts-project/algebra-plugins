@@ -107,6 +107,25 @@ function( algebra_add_test name )
 
 endfunction( algebra_add_test )
 
+# Helper function for setting up the algebra plugin benchmarks.
+#
+# Usage: algebra_add_benchmark( array source1.cpp source2.cpp
+#                               LINK_LIBRARIES algebra::array )
+#
+function( algebra_add_benchmark name )
+
+   # Parse the function's options.
+   cmake_parse_arguments( ARG "" "" "LINK_LIBRARIES" ${ARGN} )
+
+   # Create the test executable.
+   set( bench_exe_name "algebra_benchmark_${name}" )
+   add_executable( ${bench_exe_name} ${ARG_UNPARSED_ARGUMENTS} )
+   if( ARG_LINK_LIBRARIES )
+      target_link_libraries( ${bench_exe_name} PRIVATE ${ARG_LINK_LIBRARIES} )
+   endif()
+
+endfunction( algebra_add_benchmark )
+
 # Helper function for adding individual flags to "flag variables".
 #
 # Usage: algebra_add_flag( CMAKE_CXX_FLAGS "-Wall" )

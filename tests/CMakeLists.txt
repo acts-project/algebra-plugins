@@ -41,7 +41,14 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
    algebra_add_test( vc
       "vc/vc_cmath.cpp" "vc/vc_vc.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
-                     algebra::vc_cmath algebra::vc_vc )
+                      algebra::vc_storage algebra::vc_cmath algebra::vc_vc )
+
+   if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang" )
+      algebra_add_test( vc_soa
+         "vc_soa/vc_soa.cpp"
+         LINK_LIBRARIES GTest::gtest_main algebra::vc_soa_storage 
+                        algebra::vc_soa )
+   endif()
 endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )

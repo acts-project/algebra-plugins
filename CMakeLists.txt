@@ -6,7 +6,7 @@
 
 # Set up the project.
 cmake_minimum_required( VERSION 3.14 )
-project( algebra-plugins VERSION 0.19 LANGUAGES CXX )
+project( algebra-plugins VERSION 0.20 LANGUAGES CXX )
 
 # Set up the used C++ standard.
 set( CMAKE_CXX_STANDARD 17 CACHE STRING "The (host) C++ standard to use" )

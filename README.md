@@ -31,7 +31,7 @@ Available options:
   * `EIGEN`: Plugin using [Eigen](https://eigen.tuxfamily.org)
     (`OFF` by default)
   * `SMATRIX`: Plugin using
-    [Smatrix](https://root.cern/doc/master/group__SMatrixGroup.html)
+    [SMatrix](https://root.cern/doc/master/group__SMatrixGroup.html)
     (`OFF` by default)
   * `VC`: Plugin using [Vc](https://github.com/VcDevel/Vc)
     (`OFF` by default)
@@ -39,6 +39,7 @@ Available options:
     (`OFF` by default)
   * `VECMEM`: Plugin using [VecMem](https://github.com/acts-project/vecmem)
     (`OFF` by default)
+- `ALGEBRA_PLUGINS_USE_SYSTEM_LIBS`: Boolean configuring whether to search for all external libraries "on the system" or not
 - `ALGEBRA_PLUGINS_SETUP_<XXX>`: Boolean to turn on/off the explicit "setup" of
   the external libraries (`GOOGLETEST`, [`BENCHMARK`](https://github.com/google/benchmark), `EIGEN3`, `VC`, `FASTOR`, and `VECMEM`)
 - `ALGEBRA_PLUGINS_USE_SYSTEM_<XXX>`: Boolean configuring how to set up a given

@@ -24,8 +24,6 @@ cmake --build algebra-plugins-build
 
 Available options:
 
-- `ALGEBRA_PLUGINS_CUSTOM_SCALARTYPE`: Scalar value type
-  (`float` or `double`, `double` by default)
 - `ALGEBRA_PLUGINS_INCLUDE_<XXX>`: Boolean to turn on/off the build of one of
   the following plugins:
   * `EIGEN`: Plugin using [Eigen](https://eigen.tuxfamily.org)

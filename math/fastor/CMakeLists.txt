@@ -4,6 +4,9 @@
 #
 # Mozilla Public License Version 2.0
 
+# Find the required dependencies.
+find_package( Fastor REQUIRED )
+
 # Set up the library.
 algebra_add_library(algebra_fastor_math fastor_math
    "include/algebra/math/fastor.hpp"

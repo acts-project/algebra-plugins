@@ -4,6 +4,9 @@
 #
 # Mozilla Public License Version 2.0
 
+# Find the required dependencies.
+find_package( vecmem REQUIRED )
+
 # Set up the library.
 algebra_add_library( algebra_vecmem_storage vecmem_storage
    "include/algebra/storage/vecmem.hpp" )

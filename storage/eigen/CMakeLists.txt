@@ -4,6 +4,9 @@
 #
 # Mozilla Public License Version 2.0
 
+# Find the required dependencies.
+find_package( Eigen3 REQUIRED )
+
 # Set up the library.
 algebra_add_library( algebra_eigen_storage eigen_storage
    "include/algebra/storage/eigen.hpp"

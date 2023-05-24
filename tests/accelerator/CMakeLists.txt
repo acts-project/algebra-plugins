@@ -4,6 +4,12 @@
 #
 # Mozilla Public License Version 2.0
 
+# Find the required dependencies.
+find_package( vecmem REQUIRED COMPONENTS LANGUAGE )
+
+# Make the "VecMem language code" available.
+include( "${VECMEM_LANGUAGE_DIR}/vecmem-check-language.cmake" )
+
 # Set up a "common library" for the device tests.
 add_library( algebra_tests_accel_common INTERFACE )
 target_include_directories( algebra_tests_accel_common INTERFACE

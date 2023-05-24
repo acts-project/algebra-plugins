@@ -1,22 +1,20 @@
 # Algebra plugins library, part of the ACTS project (R&D line)
 #
-# (c) 2021-2022 CERN for the benefit of the ACTS project
+# (c) 2021-2023 CERN for the benefit of the ACTS project
 #
 # Mozilla Public License Version 2.0
 
 # CMake include(s).
-cmake_minimum_required( VERSION 3.14 )
+cmake_minimum_required( VERSION 3.24 )
 include( FetchContent )
 
-# Tell the user what's happening.
-message( STATUS "Building Eigen3 as part of the Algebra Plugins project" )
-
-# Declare where to get Eigen3 from.
+# Declare where to get Eigen3 from, in case it is not found with find_package.
 set( ALGEBRA_PLUGINS_EIGEN_SOURCE
    "URL;https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2;URL_MD5;132dde48fe2b563211675626d29f1707"
    CACHE STRING "Source for Eigen, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_EIGEN_SOURCE )
-FetchContent_Declare( Eigen3 ${ALGEBRA_PLUGINS_EIGEN_SOURCE} )
+FetchContent_Declare( Eigen3 ${ALGEBRA_PLUGINS_EIGEN_SOURCE}
+   FIND_PACKAGE_ARGS )
 
 # Turn off the unit tests for Eigen3.
 if( DEFINED CACHE{BUILD_TESTING} )
@@ -24,7 +22,7 @@ if( DEFINED CACHE{BUILD_TESTING} )
 endif()
 set( BUILD_TESTING FALSE CACHE INTERNAL "Forceful setting of BUILD_TESTING" )
 
-# Get it into the current directory.
+# Set it up.
 FetchContent_MakeAvailable( Eigen3 )
 
 # Reset the BUILD_TESTING variable.
@@ -37,8 +35,10 @@ else()
 endif()
 
 # Treat the Eigen headers as "system headers", to avoid getting warnings from
-# them.
-get_target_property( _incDirs eigen INTERFACE_INCLUDE_DIRECTORIES )
-target_include_directories( eigen
-   SYSTEM INTERFACE ${_incDirs} )
-unset( _incDirs )
+# them. But only bother about this when building Eigen as part of this project.
+if( TARGET eigen )
+   get_target_property( _incDirs eigen INTERFACE_INCLUDE_DIRECTORIES )
+   target_include_directories( eigen
+      SYSTEM INTERFACE ${_incDirs} )
+   unset( _incDirs )
+endif()

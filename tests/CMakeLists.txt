@@ -1,8 +1,11 @@
 # Algebra plugins library, part of the ACTS project (R&D line)
 #
-# (c) 2021-2022 CERN for the benefit of the ACTS project
+# (c) 2021-2023 CERN for the benefit of the ACTS project
 #
 # Mozilla Public License Version 2.0
+
+# Find the required dependencies.
+find_package( GTest REQUIRED )
 
 # Set the default C++ compiler flags.
 include( algebra-plugins-compiler-options-cpp )
@@ -45,7 +48,7 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
 endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )
-   algebra_add_test( fastor 
+   algebra_add_test( fastor
       "fastor/fastor_fastor.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                      algebra::fastor_fastor )

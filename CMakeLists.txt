@@ -19,9 +19,6 @@ set( CMAKE_SYCL_STANDARD 17 CACHE STRING "The (SYCL) C++ standard to use" )
 include( CTest )
 include( GNUInstallDirs )
 
-# Flags controlling the meta-build system.
-option( ALGEBRA_PLUGINS_USE_SYSTEM_LIBS "Use system libraries be default" FALSE )
-
 # Explicitly set the output directory for the binaries. Such that if this
 # project is included by another project, the main project's configuration would
 # win out.
@@ -57,83 +54,21 @@ option( ALGEBRA_PLUGINS_FAIL_ON_WARNINGS
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 include( algebra-plugins-functions )
 
-# Suppress developer warnings for all of the externals by default.
-# Unless the user explicitly requested otherwise.
-if( NOT DEFINED CMAKE_SUPPRESS_DEVELOPER_WARNINGS )
-   set( CMAKE_SUPPRESS_DEVELOPER_WARNINGS TRUE )
-   set( _unsetDevWarningFlag TRUE )
+# Set up all "buildable" externals.
+if( ALGEBRA_PLUGINS_BUILD_BENCHMARKS )
+   add_subdirectory( extern/benchmark )
 endif()
-
-# Set up VecMem.
-option( ALGEBRA_PLUGINS_SETUP_VECMEM
-   "Set up the VecMem target(s) explicitly" TRUE )
-option( ALGEBRA_PLUGINS_USE_SYSTEM_VECMEM
-   "Pick up an existing installation of VecMem from the build environment"
-   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
-if( ALGEBRA_PLUGINS_SETUP_VECMEM )
-   if( ALGEBRA_PLUGINS_USE_SYSTEM_VECMEM )
-      find_package( vecmem 0.7.0 REQUIRED COMPONENTS LANGUAGE )
-   else()
-      add_subdirectory( extern/vecmem )
-      # Make the "VecMem language code" available for the whole project.
-      include( "${VECMEM_LANGUAGE_DIR}/vecmem-check-language.cmake" )
-   endif()
+if( BUILD_TESTING AND ALGEBRA_PLUGINS_BUILD_TESTING )
+   add_subdirectory( extern/googletest )
 endif()
-
-# Set up GoogleTest.
-option( ALGEBRA_PLUGINS_SETUP_GOOGLETEST
-   "Set up the GoogleTest target(s) explicitly" TRUE )
-option( ALGEBRA_PLUGINS_USE_SYSTEM_GOOGLETEST
-   "Pick up an existing installation of GoogleTest from the build environment"
-   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
-if( ALGEBRA_PLUGINS_SETUP_GOOGLETEST )
-   if( ALGEBRA_PLUGINS_USE_SYSTEM_GOOGLETEST )
-      find_package( GTest REQUIRED )
-   else()
-      add_subdirectory( extern/googletest )
-   endif()
+if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
+   add_subdirectory( extern/eigen3 )
 endif()
-
-# Set up Google Benchmark
-option( ALGEBRA_PLUGINS_SETUP_BENCHMARK
-   "Set up the Google Benchmark target(s) explicitly" TRUE )
-option( ALGEBRA_PLUGINS_USE_SYSTEM_BENCHMARK
-   "Pick up an existing installation of Google Benchmark from the build environment"
-   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
-if( ALGEBRA_PLUGINS_SETUP_BENCHMARK )
-   if( ALGEBRA_PLUGINS_USE_SYSTEM_BENCHMARK )
-      find_package( benchmark REQUIRED )
-   else()
-      add_subdirectory( extern/benchmark )
-   endif()
+if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )
+   add_subdirectory( extern/fastor )
 endif()
-
-# Set up Eigen3.
-option( ALGEBRA_PLUGINS_SETUP_EIGEN3
-   "Set up the Eigen3 target(s) explicitly" FALSE )
-option( ALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3
-   "Pick up an existing installation of Eigen3 from the build environment"
-   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
-if( ALGEBRA_PLUGINS_SETUP_EIGEN3 )
-   if( ALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3 )
-      find_package( Eigen3 REQUIRED )
-   else()
-      add_subdirectory( extern/eigen3 )
-   endif()
-endif()
-
-# Set up Vc.
-option( ALGEBRA_PLUGINS_SETUP_VC
-   "Set up the Vc target(s) explicitly" FALSE )
-option( ALGEBRA_PLUGINS_USE_SYSTEM_VC
-   "Pick up an existing installation of Vc from the build environment"
-   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
-if( ALGEBRA_PLUGINS_SETUP_VC )
-   if( ALGEBRA_PLUGINS_USE_SYSTEM_VC )
-      find_package( Vc 1.4.2 REQUIRED )
-   else()
-      add_subdirectory( extern/vc )
-   endif()
+if( ALGEBRA_PLUGINS_INCLUDE_VC )
+   add_subdirectory( extern/vc )
    if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC" )
       # Use the preferred compiler flags from Vc for the entire project. Do not
       # set them on the libraries individually, as the clients of the libraries
@@ -143,26 +78,7 @@ if( ALGEBRA_PLUGINS_SETUP_VC )
       add_compile_options( ${Vc_COMPILE_FLAGS} ${Vc_ARCHITECTURE_FLAGS} )
    endif()
 endif()
-
-# Set up Fastor.
-option( ALGEBRA_PLUGINS_SETUP_FASTOR
-   "Set up the Fastor target(s) explicitly" FALSE )
-option( ALGEBRA_PLUGINS_USE_SYSTEM_FASTOR
-   "Pick up an existing installation of Fastor from the build environment"
-   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
-if( ALGEBRA_PLUGINS_SETUP_FASTOR )
-   if( ALGEBRA_PLUGINS_USE_SYSTEM_FASTOR )
-      find_package( Fastor 0.6.3 REQUIRED )
-   else()
-      add_subdirectory( extern/fastor )
-   endif()
-endif()
-
-# Undo the developer flag suppression.
-if( _unsetDevWarningFlag )
-   unset( CMAKE_SUPPRESS_DEVELOPER_WARNINGS )
-   unset( _unsetDevWarningFlag )
-endif()
+add_subdirectory( extern/vecmem ) # VecMem is always needed.
 
 # Set up the Algebra Plugin libraries.
 add_subdirectory( common )

@@ -4,6 +4,9 @@
 #
 # Mozilla Public License Version 2.0
 
+# Find the required dependencies.
+find_package( Vc REQUIRED )
+
 # Set up the library.
 algebra_add_library( algebra_vc_math vc_math
    "include/algebra/math/vc.hpp"

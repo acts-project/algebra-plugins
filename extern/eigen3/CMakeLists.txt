@@ -13,7 +13,7 @@ message( STATUS "Building Eigen3 as part of the Algebra Plugins project" )
 
 # Declare where to get Eigen3 from.
 set( ALGEBRA_PLUGINS_EIGEN_SOURCE
-   "URL;https://gitlab.com/libeigen/eigen/-/archive/3.4.1/eigen-3.4.1.tar.bz2;URL_MD5;a109fd10e83c7033a75d68974955e6ff"
+   "URL;https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2;URL_MD5;132dde48fe2b563211675626d29f1707"
    CACHE STRING "Source for Eigen, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_EIGEN_SOURCE )
 FetchContent_Declare( Eigen3 ${ALGEBRA_PLUGINS_EIGEN_SOURCE} )

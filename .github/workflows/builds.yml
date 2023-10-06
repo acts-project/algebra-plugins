@@ -40,21 +40,7 @@ jobs:
     - uses: actions/checkout@v2
     # Run the CMake configuration.
     - name: Configure
-      run: cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }}
-                 -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE
-                 -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE
-                 -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=FALSE
-                 -DALGEBRA_PLUGINS_INCLUDE_VC=TRUE
-                 -DALGEBRA_PLUGINS_SETUP_VC=TRUE
-                 -DALGEBRA_PLUGINS_USE_SYSTEM_VC=FALSE
-                 -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE
-                 -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE
-                 -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
-                 -DALGEBRA_PLUGINS_INCLUDE_FASTOR=TRUE
-                 -DALGEBRA_PLUGINS_SETUP_FASTOR=TRUE
-                 -DALGEBRA_PLUGINS_USE_SYSTEM_FASTOR=FALSE
-                 -DALGEBRA_PLUGINS_BUILD_BENCHMARKS=TRUE
-                 -DALGEBRA_PLUGINS_FAIL_ON_WARNINGS=TRUE
+      run: cmake --preset default
                  -S ${{ github.workspace }} -B build
                  -G "${{ matrix.PLATFORM.GENERATOR }}"
     # Perform the build.
@@ -75,26 +61,29 @@ jobs:
         BUILD_TYPE: ["Release", "Debug"]
         PLATFORM:
           - NAME: "HOST"
-            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v13"
-            OPTIONS: -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=TRUE
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v43"
+            OPTIONS: --preset eigen -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=TRUE
           - NAME: "HOST"
-            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v13"
-            OPTIONS: -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=FALSE
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v43"
+            OPTIONS: --preset eigen
           - NAME: "HOST"
-            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v13"
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v43"
             OPTIONS: -DALGEBRA_PLUGINS_INCLUDE_SMATRIX=TRUE
           - NAME: "HOST"
-            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v13"
-            OPTIONS: -DALGEBRA_PLUGINS_INCLUDE_VC=TRUE -DALGEBRA_PLUGINS_SETUP_VC=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VC=FALSE
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v43"
+            OPTIONS: --preset vc
           - NAME: "HOST"
-            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v13"
-            OPTIONS: -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v43"
+            OPTIONS: --preset vecmem
+          - NAME: "HOST"
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004:v43"
+            OPTIONS: --preset fastor
           - NAME: "CUDA"
-            CONTAINER: "ghcr.io/acts-project/ubuntu2004_cuda:v13"
-            OPTIONS: -DALGEBRA_PLUGINS_TEST_CUDA=TRUE -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=FALSE -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004_cuda:v43"
+            OPTIONS: --preset cuda
           - NAME: "SYCL"
-            CONTAINER: "ghcr.io/acts-project/ubuntu2004_oneapi:v13"
-            OPTIONS: -DALGEBRA_PLUGINS_TEST_SYCL=TRUE -DALGEBRA_PLUGINS_INCLUDE_EIGEN=TRUE -DALGEBRA_PLUGINS_SETUP_EIGEN3=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=FALSE -DALGEBRA_PLUGINS_INCLUDE_VECMEM=TRUE -DALGEBRA_PLUGINS_SETUP_VECMEM=TRUE -DALGEBRA_PLUGINS_USE_SYSTEM_VECMEM=FALSE
+            CONTAINER: "ghcr.io/acts-project/ubuntu2004_oneapi:v43"
+            OPTIONS: --preset sycl
 
     # The system to run on.
     runs-on: ubuntu-latest
@@ -113,7 +102,7 @@ jobs:
     - name: Configure
       run: |
         source ${GITHUB_WORKSPACE}/.github/ci_setup.sh ${{ matrix.PLATFORM.NAME }}
-        cmake -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }} ${{ matrix.PLATFORM.OPTIONS }} -DALGEBRA_PLUGINS_BUILD_BENCHMARKS=TRUE -DALGEBRA_PLUGINS_FAIL_ON_WARNINGS=TRUE -S ${GITHUB_WORKSPACE} -B build
+        cmake ${{ matrix.PLATFORM.OPTIONS }} -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }} -S ${GITHUB_WORKSPACE} -B build
     # Perform the build.
     - name: Build
       run: |

@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2020-2023 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -42,6 +42,13 @@ TYPED_TEST_SUITE_P(test_sycl_basics);
 /// Test for some basic 2D "vector operations"
 TYPED_TEST_P(test_sycl_basics, vector_2d_ops) {
 
+  // Don't run the test at double precision, if the SYCL device doesn't
+  // support it.
+  if ((typeid(typename TypeParam::scalar) == typeid(double)) &&
+      (this->m_queue.get_device().has(cl::sycl::aspect::fp64) == false)) {
+    GTEST_SKIP();
+  }
+
   // Run the test on the host, and on the/a device.
   execute_host_test<vector_2d_ops_functor<TypeParam> >(
       this->m_p1->size(), vecmem::get_data(*(this->m_p1)),
@@ -58,6 +65,13 @@ TYPED_TEST_P(test_sycl_basics, vector_2d_ops) {
 
 /// Test for some basic 3D "vector operations"
 TYPED_TEST_P(test_sycl_basics, vector_3d_ops) {
+
+  // Don't run the test at double precision, if the SYCL device doesn't
+  // support it.
+  if ((typeid(typename TypeParam::scalar) == typeid(double)) &&
+      (this->m_queue.get_device().has(cl::sycl::aspect::fp64) == false)) {
+    GTEST_SKIP();
+  }
 
   // This test is just not numerically stable at float precision in optimized
   // mode on some backends. :-( (Cough... HIP... cough...)
@@ -84,6 +98,13 @@ TYPED_TEST_P(test_sycl_basics, vector_3d_ops) {
 /// Test for handling matrices
 TYPED_TEST_P(test_sycl_basics, matrix64_ops) {
 
+  // Don't run the test at double precision, if the SYCL device doesn't
+  // support it.
+  if ((typeid(typename TypeParam::scalar) == typeid(double)) &&
+      (this->m_queue.get_device().has(cl::sycl::aspect::fp64) == false)) {
+    GTEST_SKIP();
+  }
+
   // Run the test on the host, and on the/a device.
   execute_host_test<matrix64_ops_functor<TypeParam> >(
       this->m_m1->size(), vecmem::get_data(*(this->m_m1)),
@@ -99,6 +120,13 @@ TYPED_TEST_P(test_sycl_basics, matrix64_ops) {
 /// Test for handling matrices
 TYPED_TEST_P(test_sycl_basics, matrix22_ops) {
 
+  // Don't run the test at double precision, if the SYCL device doesn't
+  // support it.
+  if ((typeid(typename TypeParam::scalar) == typeid(double)) &&
+      (this->m_queue.get_device().has(cl::sycl::aspect::fp64) == false)) {
+    GTEST_SKIP();
+  }
+
   // Run the test on the host, and on the/a device.
   execute_host_test<matrix22_ops_functor<TypeParam> >(
       this->m_m2->size(), vecmem::get_data(*(this->m_m2)),
@@ -113,6 +141,13 @@ TYPED_TEST_P(test_sycl_basics, matrix22_ops) {
 
 /// Test for some operations with @c transform3
 TYPED_TEST_P(test_sycl_basics, transform3) {
+
+  // Don't run the test at double precision, if the SYCL device doesn't
+  // support it.
+  if ((typeid(typename TypeParam::scalar) == typeid(double)) &&
+      (this->m_queue.get_device().has(cl::sycl::aspect::fp64) == false)) {
+    GTEST_SKIP();
+  }
 
   // Run the test on the host, and on the/a device.
   execute_host_test<transform3_ops_functor<TypeParam> >(

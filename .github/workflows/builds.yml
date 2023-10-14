@@ -40,7 +40,7 @@ jobs:
     - uses: actions/checkout@v2
     # Run the CMake configuration.
     - name: Configure
-      run: cmake --preset default
+      run: cmake --preset default-x86-64
                  -S ${{ github.workspace }} -B build
                  -G "${{ matrix.PLATFORM.GENERATOR }}"
     # Perform the build.

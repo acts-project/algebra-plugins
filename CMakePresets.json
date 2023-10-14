@@ -52,9 +52,14 @@
          }
       },
       {
-         "name" : "default",
-         "displayName" : "Default Developer Configuration",
+         "name" : "default-x86-64",
+         "displayName" : "Default Developer Configuration for x86_64",
          "inherits" : [ "vecmem", "eigen", "vc", "fastor" ]
+      },
+      {
+         "name" : "default-aarch64",
+         "displayName" : "Default Developer Configuration for ARM64",
+         "inherits" : [ "vecmem", "eigen", "vc" ]
       },
       {
          "name" : "cuda",

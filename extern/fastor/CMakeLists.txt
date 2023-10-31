@@ -1,6 +1,6 @@
 # Algebra plugins library, part of the ACTS project (R&D line)
 #
-# (c) 2022 CERN for the benefit of the ACTS project
+# (c) 2022-2023 CERN for the benefit of the ACTS project
 #
 # Mozilla Public License Version 2.0
 
@@ -10,6 +10,11 @@ include( FetchContent )
 
 # Tell the user what's happening.
 message( STATUS "Building Fastor as part of the Algebra Plugins project" )
+
+# Warn the user, if they are not on an x86 platform.
+if( NOT "${CMAKE_SYSTEM_PROCESSOR}" MATCHES "x86_64" )
+   message( WARNING "Fastor is only supported on the x86 platforms" )
+endif()
 
 # Declare where to get Fastor from.
 # We need to use this alternative syntax for FetchContent_Declare because the
@@ -40,8 +45,8 @@ endif()
 
 # Treat the Fastor headers as "system headers", to avoid getting warnings from
 # them.
-get_target_property( _incDirs Fastor INTERFACE_INCLUDE_DIRECTORIES ) 
-target_include_directories( Fastor  
+get_target_property( _incDirs Fastor INTERFACE_INCLUDE_DIRECTORIES )
+target_include_directories( Fastor
    SYSTEM INTERFACE ${_incDirs} )
 unset( _incDirs )
 

@@ -13,6 +13,7 @@ algebra_add_library(algebra_cmath_math cmath_math
    "include/algebra/math/impl/cmath_operators.hpp"
    "include/algebra/math/impl/cmath_transform3.hpp"
    "include/algebra/math/impl/cmath_vector.hpp"
+   "include/algebra/math/impl/cmath_vector_soa.hpp"
    # algorithms include
    "include/algebra/math/algorithms/matrix/decomposition/partial_pivot_lud.hpp"
    "include/algebra/math/algorithms/matrix/determinant/cofactor.hpp"

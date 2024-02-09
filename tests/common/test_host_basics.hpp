@@ -493,7 +493,7 @@ TYPED_TEST_P(test_host_basics, getter) {
 // This defines the transform3 test suite
 TYPED_TEST_P(test_host_basics, transform3) {
 
-  // Preparatioon work
+  // Preparation work
   typename TypeParam::vector3 z =
       algebra::vector::normalize(typename TypeParam::vector3{3., 2., 1.});
   typename TypeParam::vector3 x =

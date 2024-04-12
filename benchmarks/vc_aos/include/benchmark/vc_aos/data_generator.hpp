@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s)
-#include "algebra/vc_vc.hpp"
+#include "algebra/vc_aos.hpp"
 
 // System include(s)
 #include <algorithm>

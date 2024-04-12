@@ -23,7 +23,7 @@
 #pragma warning(pop)
 #endif  // MSVC
 
-namespace algebra::vc {
+namespace algebra::vc_aos {
 
 /// size type for Vc storage model
 using size_type = std::size_t;
@@ -59,4 +59,4 @@ using vector6 = vector_type<T, 6>;
 template <typename T>
 using vector8 = vector_type<T, 8>;
 
-}  // namespace algebra::vc
+}  // namespace algebra::vc_aos

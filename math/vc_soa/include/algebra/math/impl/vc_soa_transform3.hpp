@@ -190,6 +190,18 @@ struct transform3 {
     return m.x * v[0] + m.y * v[1] + m.z * v[2];
   }
 
+  /// This method retrieves x axis
+  ALGEBRA_HOST_DEVICE
+  inline const auto &x() const { return _data.x; }
+
+  /// This method retrieves y axis
+  ALGEBRA_HOST_DEVICE
+  inline const auto &y() const { return _data.y; }
+
+  /// This method retrieves z axis
+  ALGEBRA_HOST_DEVICE
+  inline const auto &z() const { return _data.z; }
+
   /// @returns the translation of the transform
   ALGEBRA_HOST_DEVICE
   inline point3 translation() const { return _data.t; }

@@ -9,7 +9,7 @@
 
 // Project include(s).
 #include "algebra/math/common.hpp"
-#include "algebra/math/impl/vc_vector.hpp"
+#include "algebra/math/impl/vc_aos_vector.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/vector.hpp"
 
@@ -22,7 +22,7 @@
 #pragma warning(pop)
 #endif  // MSVC
 
-namespace algebra::vc::math {
+namespace algebra::vc_aos::math {
 
 /// This method retrieves phi from a vector, vector base with rows >= 2
 ///
@@ -85,4 +85,4 @@ ALGEBRA_HOST_DEVICE inline auto eta(const vector_type &v) noexcept {
   return algebra::math::atanh(v[2] / norm(v));
 }
 
-}  // namespace algebra::vc::math
+}  // namespace algebra::vc_aos::math

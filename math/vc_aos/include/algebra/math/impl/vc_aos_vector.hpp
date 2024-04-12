@@ -25,7 +25,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace algebra::vc::math {
+namespace algebra::vc_aos::math {
 
 /// Dot product between two input vectors
 ///
@@ -87,4 +87,4 @@ ALGEBRA_HOST_DEVICE inline auto cross(const vector_type1 &a,
           a[0] * b[1] - b[0] * a[1], 0.f};
 }
 
-}  // namespace algebra::vc::math
+}  // namespace algebra::vc_aos::math

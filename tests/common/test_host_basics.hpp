@@ -62,14 +62,14 @@ TYPED_TEST_P(test_host_basics_vector, local_vectors) {
   ASSERT_NEAR(phi, M_PI_4, this->m_epsilon);
 
   typename TypeParam::scalar perp = algebra::getter::perp(vD);
-  ASSERT_NEAR(perp, std::sqrt(2.f), this->m_epsilon);
+  ASSERT_NEAR(perp, std::sqrt(2.), this->m_epsilon);
 
   typename TypeParam::scalar norm = algebra::getter::norm(vD);
-  ASSERT_NEAR(norm, std::sqrt(2.f), this->m_epsilon);
+  ASSERT_NEAR(norm, std::sqrt(2.), this->m_epsilon);
 
   typename TypeParam::vector2 vDnorm = algebra::vector::normalize(vD);
-  ASSERT_NEAR(vDnorm[0], 1.f / std::sqrt(2.f), this->m_epsilon);
-  ASSERT_NEAR(vDnorm[1], 1.f / std::sqrt(2.f), this->m_epsilon);
+  ASSERT_NEAR(vDnorm[0], 1. / std::sqrt(2.), this->m_epsilon);
+  ASSERT_NEAR(vDnorm[1], 1. / std::sqrt(2.), this->m_epsilon);
 }
 
 // This defines the vector3 test suite
@@ -105,16 +105,16 @@ TYPED_TEST_P(test_host_basics_vector, vector3) {
   ASSERT_NEAR(phi, M_PI_4, this->m_epsilon);
 
   typename TypeParam::scalar theta = algebra::getter::theta(vD);
-  ASSERT_NEAR(theta, std::atan2(std::sqrt(2.f), 1.f), this->m_epsilon);
+  ASSERT_NEAR(theta, std::atan2(std::sqrt(2.), 1.), this->m_epsilon);
 
   typename TypeParam::scalar eta = algebra::getter::eta(vD);
   ASSERT_NEAR(eta, 0.65847891569137573, this->m_isclose);
 
   typename TypeParam::scalar perp = algebra::getter::perp(vD);
-  ASSERT_NEAR(perp, std::sqrt(2.f), this->m_epsilon);
+  ASSERT_NEAR(perp, std::sqrt(2.), this->m_epsilon);
 
   typename TypeParam::scalar norm = algebra::getter::norm(vD);
-  ASSERT_NEAR(norm, std::sqrt(3.f), this->m_epsilon);
+  ASSERT_NEAR(norm, std::sqrt(3.), this->m_epsilon);
 }
 
 // This defines the vector operation test suite
@@ -124,9 +124,9 @@ TYPED_TEST_P(test_host_basics_vector, getter) {
 
   // Normalization
   typename TypeParam::vector3 v3n = algebra::vector::normalize(v3);
-  ASSERT_NEAR(v3n[0], 1.f / std::sqrt(3.f), this->m_epsilon);
-  ASSERT_NEAR(v3n[1], 1.f / std::sqrt(3.f), this->m_epsilon);
-  ASSERT_NEAR(v3n[2], 1.f / std::sqrt(3.f), this->m_epsilon);
+  ASSERT_NEAR(v3n[0], 1. / std::sqrt(3.), this->m_epsilon);
+  ASSERT_NEAR(v3n[1], 1. / std::sqrt(3.), this->m_epsilon);
+  ASSERT_NEAR(v3n[2], 1. / std::sqrt(3.), this->m_epsilon);
 
   // Cross product
   typename TypeParam::vector3 z =

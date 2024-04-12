@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022 CERN for the benefit of the ACTS project
+ * (c) 2022-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -26,6 +26,12 @@ namespace math_ns = cl::sycl;
 #else
 namespace math_ns = std;
 #endif  // SYCL
+
+/// Absolute value of arg
+template <typename scalar_t>
+ALGEBRA_HOST_DEVICE inline scalar_t fabs(scalar_t arg) {
+  return math_ns::fabs(arg);
+}
 
 /// Arc tangent of y/x
 template <typename scalar_t>

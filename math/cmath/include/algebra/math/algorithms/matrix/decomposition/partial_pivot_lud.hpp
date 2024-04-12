@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022 CERN for the benefit of the ACTS project
+ * (c) 2022-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
 // System include(s).
@@ -74,7 +75,7 @@ struct partial_pivot_lud {
       max_idx = i;
 
       for (size_type k = i; k < N; k++) {
-        abs_val = std::abs(element_getter()(lu, k, i));
+        abs_val = math::fabs(element_getter()(lu, k, i));
 
         if (abs_val > max_val) {
 

@@ -135,10 +135,10 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
              const vector3 &z, bool get_inverse = true) {
-    _data.x = {x[0], x[1], x[2], 0.};
-    _data.y = {y[0], y[1], y[2], 0.};
-    _data.z = {z[0], z[1], z[2], 0.};
-    _data.t = {t[0], t[1], t[2], 1.};
+    _data.x = {x[0], x[1], x[2], 0.f};
+    _data.y = {y[0], y[1], y[2], 0.f};
+    _data.z = {z[0], z[1], z[2], 0.f};
+    _data.t = {t[0], t[1], t[2], 1.f};
 
     if (get_inverse) {
       _data_inv = invert(_data);
@@ -163,10 +163,10 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t) {
 
-    _data.x = {1., 0., 0., 0.};
-    _data.y = {0., 1., 0., 0.};
-    _data.z = {0., 0., 1., 0.};
-    _data.t = {t[0], t[1], t[2], 1.};
+    _data.x = {1.f, 0.f, 0.f, 0.f};
+    _data.y = {0.f, 1.f, 0.f, 0.f};
+    _data.z = {0.f, 0.f, 1.f, 0.f};
+    _data.t = {t[0], t[1], t[2], 1.f};
 
     _data_inv = invert(_data);
   }
@@ -199,10 +199,10 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3() {
 
-    _data.x = {1., 0., 0., 0.};
-    _data.y = {0., 1., 0., 0.};
-    _data.z = {0., 0., 1., 0.};
-    _data.t = {0., 0., 0., 1.};
+    _data.x = {1.f, 0.f, 0.f, 0.f};
+    _data.y = {0.f, 1.f, 0.f, 0.f};
+    _data.z = {0.f, 0.f, 1.f, 0.f};
+    _data.t = {0.f, 0.f, 0.f, 1.f};
 
     _data_inv = _data;
   }

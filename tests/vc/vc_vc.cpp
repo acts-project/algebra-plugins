@@ -32,6 +32,14 @@ struct test_specialisation_name {
   }
 };
 
+// Register the tests
+REGISTER_TYPED_TEST_SUITE_P(test_host_basics_vector, local_vectors, vector3,
+                            getter);
+/*REGISTER_TYPED_TEST_SUITE_P(test_host_basics_matrix, matrix3, matrix64,
+ * matrix22);*/
+REGISTER_TYPED_TEST_SUITE_P(test_host_basics_transform, transform3,
+                            global_transformations);
+
 // Instantiate the test(s).
 typedef testing::Types<
     test_types<float, algebra::vc::point2<float>, algebra::vc::point3<float>,
@@ -43,5 +51,10 @@ typedef testing::Types<
                algebra::vc::transform3<double>, std::size_t,
                algebra::vc::matrix_type, double>>
     vc_vc_types;
-INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics, vc_vc_types,
-                               test_specialisation_name);
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
+                               vc_vc_types, test_specialisation_name);
+// @TODO: Implement
+/*INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_matrix,
+                               array_cmath_types, test_specialisation_name);*/
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_transform,
+                               vc_vc_types, test_specialisation_name);

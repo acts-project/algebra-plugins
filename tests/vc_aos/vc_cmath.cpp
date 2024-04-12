@@ -41,14 +41,16 @@ matrix22); REGISTER_TYPED_TEST_SUITE_P(test_host_basics_transform, transform3,
 
 // Instantiate the test(s).
 typedef testing::Types<
-    test_types<float, algebra::vc::point2<float>, algebra::vc::point3<float>,
-               algebra::vc::vector2<float>, algebra::vc::vector3<float>,
-               algebra::vc::transform3<float>, std::size_t,
-               algebra::vc::matrix_type, float>,
-    test_types<double, algebra::vc::point2<double>, algebra::vc::point3<double>,
-               algebra::vc::vector2<double>, algebra::vc::vector3<double>,
-               algebra::vc::transform3<double>, std::size_t,
-               algebra::vc::matrix_type, double>>
+    test_types<float, algebra::vc_aos::point2<float>,
+               algebra::vc_aos::point3<float>, algebra::vc_aos::vector2<float>,
+               algebra::vc_aos::vector3<float>,
+               algebra::vc_aos::transform3<float>, std::size_t,
+               algebra::vc_aos::matrix_type, float>,
+    test_types<
+        double, algebra::vc_aos::point2<double>,
+        algebra::vc_aos::point3<double>, algebra::vc_aos::vector2<double>,
+        algebra::vc_aos::vector3<double>, algebra::vc_aos::transform3<double>,
+        std::size_t, algebra::vc_aos::matrix_type, double>>
     vc_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
                                vc_cmath_types, test_specialisation_name);

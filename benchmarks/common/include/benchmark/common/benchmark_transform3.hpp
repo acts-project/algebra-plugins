@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023 CERN for the benefit of the ACTS project
+ * (c) 2023-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -41,9 +41,7 @@ struct transform3_bm : public vector_bm<typename transform3_t::vector3> {
   /// Construct from an externally provided configuration @param cfg
   transform3_bm(benchmark_base::configuration cfg) : base_type{cfg} {
 
-    const std::size_t n_data{this->m_cfg.n_samples() + this->m_cfg.n_warmup()};
-
-    trfs.reserve(n_data);
+    trfs.reserve(this->m_cfg.n_samples());
 
     fill_random_trf(trfs);
   }
@@ -54,30 +52,24 @@ struct transform3_bm : public vector_bm<typename transform3_t::vector3> {
   /// Benchmark case
   void operator()(::benchmark::State &state) override {
 
-    const std::size_t n_samples{this->m_cfg.n_samples()};
-    const std::size_t n_warmup{this->m_cfg.n_warmup()};
+    using vector_t = typename transform3_t::vector3;
+    using point_t = typename transform3_t::point3;
 
-    // Spin down before benchmark (Thread zero is counting the clock)
-    if (state.thread_index() == 0 && this->m_cfg.do_sleep()) {
-      std::this_thread::sleep_for(std::chrono::seconds(this->m_cfg.n_sleep()));
-    }
+    const std::size_t n_samples{this->m_cfg.n_samples()};
 
     // Run the benchmark
     for (auto _ : state) {
-      // Warm-up
-      state.PauseTiming();
-      if (this->m_cfg.do_warmup()) {
-        for (std::size_t i{0u}; i < n_warmup; ++i) {
-          ::benchmark::DoNotOptimize(
-              this->trfs[i].vector_to_global(this->a[i]));
-          benchmark::ClobberMemory();
-        }
-      }
-      state.ResumeTiming();
+      for (std::size_t i{0}; i < n_samples; ++i) {
 
-      for (std::size_t i{n_warmup}; i < n_samples + n_warmup; ++i) {
-        ::benchmark::DoNotOptimize(this->trfs[i].vector_to_global(this->a[i]));
-        benchmark::ClobberMemory();
+        point_t result1 = this->trfs[i].point_to_global(this->a[i]);
+        point_t result2 = this->trfs[i].point_to_local(this->a[i]);
+        vector_t result3 = this->trfs[i].vector_to_global(this->a[i]);
+        vector_t result4 = this->trfs[i].vector_to_local(this->a[i]);
+
+        ::benchmark::DoNotOptimize(result1);
+        ::benchmark::DoNotOptimize(result2);
+        ::benchmark::DoNotOptimize(result3);
+        ::benchmark::DoNotOptimize(result4);
       }
     }
   }

@@ -9,7 +9,7 @@
 
 // Project include(s).
 #include "algebra/math/cmath.hpp"
-#include "algebra/math/impl/vc_vector.hpp"
+#include "algebra/math/impl/vc_aos_vector.hpp"
 #include "algebra/qualifiers.hpp"
 
 // Vc include(s).
@@ -24,11 +24,11 @@
 // System include(s).
 #include <cassert>
 
-namespace algebra::vc::math {
+namespace algebra::vc_aos::math {
 
 namespace internal {
 
-/// 4x4 matrix type used by @c algebra::vc::math::transform3
+/// 4x4 matrix type used by @c algebra::vc_aos::math::transform3
 template <typename scalar_t>
 struct matrix44 {
 
@@ -135,10 +135,14 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
              const vector3 &z, bool get_inverse = true) {
-    _data.x = {x[0], x[1], x[2], 0.f};
-    _data.y = {y[0], y[1], y[2], 0.f};
-    _data.z = {z[0], z[1], z[2], 0.f};
-    _data.t = {t[0], t[1], t[2], 1.f};
+    _data.x = x;
+    _data.y = y;
+    _data.z = z;
+    _data.t = t;
+    _data.x[3] = 0.f;
+    _data.y[3] = 0.f;
+    _data.z[3] = 0.f;
+    _data.t[3] = 1.f;
 
     if (get_inverse) {
       _data_inv = invert(_data);
@@ -166,7 +170,8 @@ struct transform3 {
     _data.x = {1.f, 0.f, 0.f, 0.f};
     _data.y = {0.f, 1.f, 0.f, 0.f};
     _data.z = {0.f, 0.f, 1.f, 0.f};
-    _data.t = {t[0], t[1], t[2], 1.f};
+    _data.t = t;
+    _data.t[3] = 1.f;
 
     _data_inv = invert(_data);
   }
@@ -320,8 +325,9 @@ struct transform3 {
   ///
   /// @param m is the rotation matrix
   /// @param v is the vector to be rotated
-  ALGEBRA_HOST_DEVICE
-  static inline auto rotate(const matrix44 &m, const vector3 &v) {
+  template <typename vector3_type>
+  ALGEBRA_HOST_DEVICE static inline auto rotate(const matrix44 &m,
+                                                const vector3_type &v) {
 
     return m.x * v[0] + m.y * v[1] + m.z * v[2];
   }
@@ -339,9 +345,21 @@ struct transform3 {
     return submatrix;
   }
 
-  /// This method retrieves the translation of a transform
+  /// This method retrieves x axis
   ALGEBRA_HOST_DEVICE
-  inline point3 translation() const { return _data.t; }
+  inline const auto &x() const { return _data.x; }
+
+  /// This method retrieves y axis
+  ALGEBRA_HOST_DEVICE
+  inline const auto &y() const { return _data.y; }
+
+  /// This method retrieves z axis
+  ALGEBRA_HOST_DEVICE
+  inline const auto &z() const { return _data.z; }
+
+  /// This method retrieves the translation
+  ALGEBRA_HOST_DEVICE
+  inline const auto &translation() const { return _data.t; }
 
   /// This method retrieves the 4x4 matrix of a transform
   ALGEBRA_HOST_DEVICE
@@ -359,7 +377,8 @@ struct transform3 {
   /// @param v is the point to be transformed
   ///
   /// @return a global point
-  ALGEBRA_HOST_DEVICE inline auto point_to_global(const point3 &p) const {
+  template <typename point3_type>
+  ALGEBRA_HOST_DEVICE inline auto point_to_global(const point3_type &p) const {
 
     return _data.x * p[0] + _data.y * p[1] + _data.z * p[2] + _data.t;
   }
@@ -372,7 +391,8 @@ struct transform3 {
   /// @param v is the point to be transformed
   ///
   /// @return a local point
-  ALGEBRA_HOST_DEVICE inline auto point_to_local(const point3 &p) const {
+  template <typename point3_type>
+  ALGEBRA_HOST_DEVICE inline auto point_to_local(const point3_type &p) const {
 
     return _data_inv.x * p[0] + _data_inv.y * p[1] + _data_inv.z * p[2] +
            _data_inv.t;
@@ -381,12 +401,14 @@ struct transform3 {
   /// This method transform from a vector from the local 3D cartesian frame
   ///  to the global 3D cartesian frame
   ///
-  /// @tparam vector_type 3D vector
+  /// @tparam vector3_type 3D vector
   ///
   /// @param v is the vector to be transformed
   ///
   /// @return a vector in global coordinates
-  ALGEBRA_HOST_DEVICE inline auto vector_to_global(const vector3 &v) const {
+  template <typename vector3_type>
+  ALGEBRA_HOST_DEVICE inline auto vector_to_global(
+      const vector3_type &v) const {
 
     return rotate(_data, v);
   }
@@ -394,15 +416,16 @@ struct transform3 {
   /// This method transform from a vector from the global 3D cartesian frame
   ///  into the local 3D cartesian frame
   ///
-  /// @tparam vector_type 3D vector
+  /// @tparam vector3_type 3D vector
   ///
   /// @param v is the vector to be transformed
   ///
   /// @return a vector in global coordinates
-  ALGEBRA_HOST_DEVICE inline auto vector_to_local(const vector3 &v) const {
+  template <typename vector3_type>
+  ALGEBRA_HOST_DEVICE inline auto vector_to_local(const vector3_type &v) const {
 
     return rotate(_data_inv, v);
   }
 };  // struct transform3
 
-}  // namespace algebra::vc::math
+}  // namespace algebra::vc_aos::math

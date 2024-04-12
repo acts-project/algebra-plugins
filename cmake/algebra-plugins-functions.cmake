@@ -120,6 +120,10 @@ function( algebra_add_benchmark name )
    # Create the test executable.
    set( bench_exe_name "algebra_benchmark_${name}" )
    add_executable( ${bench_exe_name} ${ARG_UNPARSED_ARGUMENTS} )
+
+   target_compile_options( algebra_benchmark_${name} PRIVATE
+   "-march=native" "-ftree-vectorize")
+
    if( ARG_LINK_LIBRARIES )
       target_link_libraries( ${bench_exe_name} PRIVATE ${ARG_LINK_LIBRARIES} )
    endif()

@@ -44,13 +44,13 @@ class test_device_basics : public test_base<T> {
     point2 c = a + b;
     point2 c2 = c * 2.0;
 
-    scalar phi = algebra::getter::phi(c2);
-    scalar perp = algebra::getter::perp(c2);
-    scalar norm1 = algebra::getter::norm(c2);
+    scalar phi = algebra::vector::phi(c2);
+    scalar perp = algebra::vector::perp(c2);
+    scalar norm1 = algebra::vector::norm(c2);
 
     scalar dot = algebra::vector::dot(a, b);
     point2 norm2 = algebra::vector::normalize(c);
-    scalar norm3 = algebra::getter::norm(norm2);
+    scalar norm3 = algebra::vector::norm(norm2);
 
     return (phi + perp + norm1 + dot + norm3);
   }
@@ -62,15 +62,15 @@ class test_device_basics : public test_base<T> {
     vector3 c = a + b;
     vector3 c2 = c * 2.0;
 
-    scalar phi = algebra::getter::phi(c2);
-    scalar perp = algebra::getter::perp(c2);
-    scalar norm1 = algebra::getter::norm(c2);
+    scalar phi = algebra::vector::phi(c2);
+    scalar perp = algebra::vector::perp(c2);
+    scalar norm1 = algebra::vector::norm(c2);
 
     vector3 d = algebra::vector::cross(a, b);
 
     scalar dot = algebra::vector::dot(a, d);
     vector3 norm2 = algebra::vector::normalize(c);
-    scalar norm3 = algebra::getter::norm(norm2);
+    scalar norm3 = algebra::vector::norm(norm2);
 
     return (phi + perp + norm1 + dot + norm3);
   }
@@ -111,14 +111,14 @@ class test_device_basics : public test_base<T> {
     }
 
     // Test block operations
-    auto b13 = algebra::matrix::block<1, 3>(m2, 0, 0);
+    auto b13 = algebra::getter::block<1, 3>(m2, 0, 0);
     auto b13_tp = algebra::matrix::transpose(b13);
     algebra::getter::element(b13_tp, 0, 0) = 1;
     algebra::getter::element(b13_tp, 1, 0) = 2;
     algebra::getter::element(b13_tp, 2, 0) = 3;
-    algebra::matrix::set_block(m2, b13_tp, 0, 0);
+    algebra::getter::set_block(m2, b13_tp, 0, 0);
 
-    auto b32 = algebra::matrix::block<3, 2>(m2, 2, 2);
+    auto b32 = algebra::getter::block<3, 2>(m2, 2, 2);
     algebra::getter::element(b32, 0, 0) = 4;
     algebra::getter::element(b32, 0, 1) = 3;
     algebra::getter::element(b32, 1, 0) = 12;
@@ -126,7 +126,7 @@ class test_device_basics : public test_base<T> {
     algebra::getter::element(b32, 2, 0) = 5;
     algebra::getter::element(b32, 2, 1) = 6;
 
-    algebra::matrix::set_block(m2, b32, 2, 2);
+    algebra::getter::set_block(m2, b32, 2, 2);
     for (size_type i = 0; i < 6; ++i) {
       for (size_type j = 0; j < 4; ++j) {
         result += 0.57f * algebra::getter::element(m2, i, j);
@@ -215,8 +215,8 @@ class test_device_basics : public test_base<T> {
     vector3 gvec = tr2.vector_to_global(a);
     vector3 lvec = tr2.vector_to_local(b);
 
-    return {algebra::getter::norm(translation) + algebra::getter::perp(gpoint) +
-            algebra::getter::phi(lpoint) + algebra::vector::dot(gvec, lvec)};
+    return {algebra::vector::norm(translation) + algebra::vector::perp(gpoint) +
+            algebra::vector::phi(lpoint) + algebra::vector::dot(gvec, lvec)};
   }
 
 };  // class test_device_basics

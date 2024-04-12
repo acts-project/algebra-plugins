@@ -14,9 +14,7 @@
 
 namespace algebra::vc_soa::math {
 
-using storage::block;
 using storage::identity;
-using storage::set_block;
 using storage::set_identity;
 using storage::set_zero;
 using storage::transpose;

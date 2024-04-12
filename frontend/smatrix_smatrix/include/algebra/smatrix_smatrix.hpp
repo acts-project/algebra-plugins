@@ -15,32 +15,13 @@ namespace algebra {
 
 namespace getter {
 
-/// @name Getter functions on @c algebra::smatrix::storage_type
-/// @{
-
-using smatrix::math::eta;
-using smatrix::math::norm;
-using smatrix::math::perp;
-using smatrix::math::phi;
-using smatrix::math::theta;
-
-/// @}
-
-/// Function extracting a slice from the matrix used by
-/// @c algebra::smatrix::transform3
-template <unsigned int SIZE, unsigned int ROWS, unsigned int COLS,
-          typename scalar_t>
-ALGEBRA_HOST_DEVICE inline auto vector(
-    const ROOT::Math::SMatrix<scalar_t, ROWS, COLS>& m, unsigned int row,
-    unsigned int col) {
-
-  return m.template SubCol<smatrix::storage_type<scalar_t, SIZE>>(col, row);
-}
-
 /// @name Getter functions on @c algebra::smatrix::matrix_type
 /// @{
 
-using smatrix::math::element;
+using smatrix::storage::block;
+using smatrix::storage::element;
+using smatrix::storage::set_block;
+using smatrix::storage::vector;
 
 /// @}
 
@@ -53,7 +34,12 @@ namespace vector {
 
 using smatrix::math::cross;
 using smatrix::math::dot;
+using smatrix::math::eta;
+using smatrix::math::norm;
 using smatrix::math::normalize;
+using smatrix::math::perp;
+using smatrix::math::phi;
+using smatrix::math::theta;
 
 /// @}
 
@@ -61,15 +47,18 @@ using smatrix::math::normalize;
 
 namespace matrix {
 
-using smatrix::math::block;
+/// @name Matrix functions on @c algebra::smatrix::storage_type
+/// @{
+
 using smatrix::math::determinant;
 using smatrix::math::identity;
 using smatrix::math::inverse;
-using smatrix::math::set_block;
 using smatrix::math::set_identity;
 using smatrix::math::set_zero;
 using smatrix::math::transpose;
 using smatrix::math::zero;
+
+/// @}
 
 }  // namespace matrix
 

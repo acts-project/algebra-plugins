@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/storage/impl/vc_soa_getter.hpp"
 #include "algebra/storage/matrix.hpp"
 #include "algebra/storage/vector.hpp"
 #include "algebra/type_traits.hpp"
@@ -39,10 +40,11 @@ template <typename T>
 using value_type = Vc::Vector<T>;
 /// Vector type used in the Vc SoA storage model
 template <typename T, std::size_t N>
-using vector_type = storage::vector<N, value_type<T>, storage_type>;
+using vector_type = algebra::storage::vector<N, value_type<T>, storage_type>;
 /// Matrix type used in the Vc SoA storage model
 template <typename T, size_type ROWS, size_type COLS>
-using matrix_type = storage::matrix<storage_type, value_type<T>, ROWS, COLS>;
+using matrix_type =
+    algebra::storage::matrix<storage_type, value_type<T>, ROWS, COLS>;
 
 /// 2-element "vector" type, using @c Vc::Vector in every element
 template <typename T>
@@ -69,34 +71,104 @@ namespace trait {
 
 /// Type trait specializations
 /// @{
+
+/// Index
+/// @{
 template <typename T, std::size_t ROWS, std::size_t COLS>
-struct index<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
+struct index<algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
   using type = algebra::vc_soa::size_type;
 };
+/// @}
 
+/// Dimension
+/// @{
 template <typename T, std::size_t ROWS, std::size_t COLS>
-struct dimensions<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
+struct dimensions<
+    algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
 
   using size_type =
-      index_t<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>>;
+      index_t<algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>>;
 
+  static constexpr size_type dim{2};
   static constexpr size_type rows{ROWS};
   static constexpr size_type columns{COLS};
 };
+/// @}
 
+/// Value/Scalar
+/// @{
 template <typename T, std::size_t ROWS, std::size_t COLS>
-struct value<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
+struct value<algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
   using type = T;
 };
 
 template <typename T, std::size_t ROWS, std::size_t COLS>
-struct scalar<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
+struct scalar<algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
   using type = Vc::Vector<T>;
+};
+/// @}
+
+/// Vector
+/// @{
+template <typename T, std::size_t N>
+struct vector<algebra::storage::vector<N, Vc::Vector<T>, std::array>> {
+
+  template <typename other_T, std::size_t other_N>
+  using other_type =
+      algebra::storage::vector<other_N, Vc::Vector<other_T>, std::array>;
+
+  using type = other_type<T, N>;
 };
 
 template <typename T, std::size_t ROWS, std::size_t COLS>
-struct vector<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
-  using type = storage::vector<ROWS, Vc::Vector<T>, std::array>;
+struct vector<algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
+
+  template <typename other_T, std::size_t other_N>
+  using other_type =
+      algebra::storage::vector<other_N, Vc::Vector<other_T>, std::array>;
+
+  using type = other_type<T, ROWS>;
+};
+/// @}
+
+/// Matrix
+/// @{
+template <typename T, std::size_t ROWS, std::size_t COLS>
+struct matrix<algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
+  template <typename other_T, std::size_t other_ROWS, std::size_t other_COLS>
+  using other_type = algebra::storage::matrix<std::array, Vc::Vector<other_T>,
+                                              other_ROWS, other_COLS>;
+
+  using type = algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>;
+};
+
+template <typename T, int N>
+struct matrix<algebra::storage::vector<N, Vc::Vector<T>, std::array>> {
+  template <typename other_T, int other_ROWS, int other_COLS>
+  using other_type = algebra::storage::matrix<std::array, Vc::Vector<other_T>,
+                                              other_ROWS, other_COLS>;
+
+  using type = other_type<T, N, 1>;
+};
+/// @}
+
+/// Elemet/Block Getter
+/// @{
+template <typename T, std::size_t N>
+struct element_getter<algebra::storage::vector<N, Vc::Vector<T>, std::array>> {
+  using type = algebra::storage::element_getter;
+};
+
+template <typename T, std::size_t ROWS, std::size_t COLS>
+struct element_getter<
+    algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
+  using type = algebra::storage::element_getter;
+};
+
+template <typename T, std::size_t ROWS, std::size_t COLS>
+struct block_getter<
+    algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
+  using type = algebra::storage::block_getter;
 };
 /// @}
 

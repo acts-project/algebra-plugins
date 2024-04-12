@@ -55,7 +55,7 @@ inline void fill_random_trf(std::vector<transform3_t> &collection) {
     t = vector::normalize(t);
 
     // Gram-Schmidt projection
-    simd_vector_t coeff = vector::dot(x_axis, z_axis) / getter::norm(x_axis);
+    simd_vector_t coeff = vector::dot(x_axis, z_axis) / vector::norm(x_axis);
     z_axis = x_axis - coeff * z_axis;
 
     return transform3_t{t, x_axis, vector::normalize(z_axis)};

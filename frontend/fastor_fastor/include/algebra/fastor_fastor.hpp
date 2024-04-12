@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022 CERN for the benefit of the ACTS project
+ * (c) 2022-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/cmath.hpp"
 #include "algebra/math/fastor.hpp"
+#include "algebra/math/generic.hpp"
 #include "algebra/storage/fastor.hpp"
 
 // Fastor include(s).
@@ -25,34 +25,13 @@ namespace algebra {
 
 namespace getter {
 
-/// @name Getter functions on @c algebra::fastor::storage_type
-/// @{
-
-using fastor::math::eta;
-using fastor::math::norm;
-using fastor::math::perp;
-using fastor::math::phi;
-using fastor::math::theta;
-
-/// @}
-
-/// Function extracting a slice from the matrix used by
-/// @c algebra::fastor::transform3
-template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
-          typename scalar_t>
-ALGEBRA_HOST_DEVICE inline auto vector(
-    const Fastor::Tensor<scalar_t, ROWS, COLS>& m, std::size_t row,
-    std::size_t col) {
-
-  return fastor::storage_type<scalar_t, SIZE>(
-      m(Fastor::seq(static_cast<int>(row), static_cast<int>(row + SIZE)),
-        static_cast<int>(col)));
-}
-
 /// @name Getter functions on @c algebra::fastor::matrix_type
 /// @{
 
-using fastor::math::element;
+using fastor::storage::block;
+using fastor::storage::element;
+using fastor::storage::set_block;
+using fastor::storage::vector;
 
 /// @}
 
@@ -65,7 +44,13 @@ namespace vector {
 
 using fastor::math::cross;
 using fastor::math::dot;
+using fastor::math::eta;
+using fastor::math::norm;
 using fastor::math::normalize;
+using fastor::math::perp;
+using fastor::math::theta;
+
+using generic::math::phi;
 
 /// @}
 
@@ -73,22 +58,30 @@ using fastor::math::normalize;
 
 namespace matrix {
 
-using fastor::math::block;
+/// @name Matrix functions on @c algebra::fastor::storage_type
+/// @{
+
 using fastor::math::determinant;
 using fastor::math::identity;
 using fastor::math::inverse;
-using fastor::math::set_block;
 using fastor::math::set_identity;
 using fastor::math::set_zero;
 using fastor::math::transpose;
 using fastor::math::zero;
 
+/// @}
+
 }  // namespace matrix
 
 namespace fastor {
 
+/// @name Transform on @c algebra::fastor::storage_type
+/// @{
+
 template <typename T>
 using transform3 = math::transform3<T>;
+
+/// @}
 
 }  // namespace fastor
 

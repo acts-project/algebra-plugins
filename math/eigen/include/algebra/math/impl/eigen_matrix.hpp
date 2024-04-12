@@ -29,70 +29,32 @@
 
 namespace algebra::eigen::math {
 
-/// Operator getting a block of a const matrix
-template <int ROWS, int COLS, class derived_type, typename size_type_1,
-          typename size_type_2>
-requires(std::is_convertible_v<size_type_1, Eigen::Index>
-             &&std::is_convertible_v<size_type_2, Eigen::Index>)
-    ALGEBRA_HOST_DEVICE auto block(const Eigen::MatrixBase<derived_type> &m,
-                                   size_type_1 row, size_type_2 col) {
-  return m.template block<ROWS, COLS>(static_cast<Eigen::Index>(row),
-                                      static_cast<Eigen::Index>(col));
-}
-
-/// Operator getting a block of a const matrix
-template <int ROWS, int COLS, class derived_type, typename size_type_1,
-          typename size_type_2>
-requires(std::is_convertible_v<size_type_1, Eigen::Index>
-             &&std::is_convertible_v<size_type_2, Eigen::Index>)
-    ALGEBRA_HOST_DEVICE auto block(Eigen::MatrixBase<derived_type> &m,
-                                   size_type_1 row, size_type_2 col) {
-  return m.template block<ROWS, COLS>(static_cast<Eigen::Index>(row),
-                                      static_cast<Eigen::Index>(col));
-}
-
-/// Operator setting a block
-template <typename derived_type1, typename derived_type2, typename size_type_1,
-          typename size_type_2>
-requires(std::is_convertible_v<size_type_1, Eigen::Index>
-             &&std::is_convertible_v<size_type_2, Eigen::Index>)
-    ALGEBRA_HOST_DEVICE
-    void set_block(Eigen::MatrixBase<derived_type1> &m,
-                   const Eigen::MatrixBase<derived_type2> &b, size_type_1 row,
-                   size_type_2 col) {
-  using block_t = Eigen::MatrixBase<derived_type2>;
-  constexpr auto R{block_t::RowsAtCompileTime};
-  constexpr auto C{block_t::ColsAtCompileTime};
-  m.template block<R, C>(static_cast<Eigen::Index>(row),
-                         static_cast<Eigen::Index>(col)) = b;
-}
-
-// Create zero matrix
+/// Create zero matrix
 template <typename matrix_t>
 ALGEBRA_HOST_DEVICE inline matrix_t zero() {
   return matrix_t::Zero();
 }
 
-// Create identity matrix
+/// Create identity matrix
 template <typename matrix_t>
 ALGEBRA_HOST_DEVICE inline matrix_t identity() {
   return matrix_t::Identity();
 }
 
-// Set input matrix as zero matrix
+/// Set input matrix as zero matrix
 template <typename derived_type>
 ALGEBRA_HOST_DEVICE inline void set_zero(Eigen::MatrixBase<derived_type> &m) {
   m.setZero();
 }
 
-// Set input matrix as identity matrix
+/// Set input matrix as identity matrix
 template <typename derived_type>
 ALGEBRA_HOST_DEVICE inline void set_identity(
     Eigen::MatrixBase<derived_type> &m) {
   m.setIdentity();
 }
 
-// Create transpose matrix
+/// Create transpose matrix
 template <typename derived_type>
 ALGEBRA_HOST_DEVICE inline matrix_type<
     typename Eigen::MatrixBase<derived_type>::value_type,

@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s)
+#include "algebra/storage/impl/smatrix_getter.hpp"
 #include "algebra/type_traits.hpp"
 
 // ROOT/Smatrix include(s).
@@ -49,28 +50,92 @@ namespace trait {
 
 /// Type trait specializations
 /// @{
+
+/// Index
+/// @{
+template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
+struct index<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
+  using type = unsigned int;
+};
+/// @}
+
+/// Dimension
+/// @{
 template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
 struct dimensions<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
 
   using size_type = unsigned int;
 
+  static constexpr size_type dim{2};
   static constexpr size_type rows{ROWS};
   static constexpr size_type columns{COLS};
 };
+/// @}
 
+/// Value
+/// @{
 template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
 struct value<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
   using type = T;
 };
+/// @}
 
+/// Vector
+/// @{
 template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
-struct index<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
-  using type = unsigned int;
+struct vector<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
+
+  template <typename other_T, unsigned int other_N>
+  using other_type = ROOT::Math::SVector<other_T, other_N>;
+
+  using type = other_type<T, ROWS>;
+};
+
+template <typename T, unsigned int N>
+struct vector<ROOT::Math::SVector<T, N>> {
+  using type = ROOT::Math::SVector<T, N>;
+
+  template <typename other_T, unsigned int other_N>
+  using other_type = ROOT::Math::SVector<other_T, other_N>;
+
+  using type = other_type<T, N>;
+};
+/// @}
+
+/// Matrix
+/// @{
+template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
+struct matrix<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
+  template <typename other_T, unsigned int other_ROWS, unsigned int other_COLS>
+  using other_type = ROOT::Math::SMatrix<other_T, other_ROWS, other_COLS, expr>;
+
+  using type = ROOT::Math::SMatrix<T, ROWS, COLS, expr>;
+};
+
+template <typename T, int N>
+struct matrix<ROOT::Math::SVector<T, N>> {
+  template <typename other_T, int other_ROWS, int other_COLS>
+  using other_type = ROOT::Math::SMatrix<other_T, other_ROWS, other_COLS>;
+
+  using type = other_type<T, N, 1>;
+};
+/// @}
+
+/// Elemet/Block Getter
+/// @{
+template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
+struct element_getter<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
+  using type = smatrix::storage::element_getter;
+};
+
+template <typename T, unsigned int N>
+struct element_getter<ROOT::Math::SVector<T, N>> {
+  using type = smatrix::storage::element_getter;
 };
 
 template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
-struct vector<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
-  using type = ROOT::Math::SVector<T, ROWS>;
+struct block_getter<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
+  using type = smatrix::storage::block_getter;
 };
 /// @}
 

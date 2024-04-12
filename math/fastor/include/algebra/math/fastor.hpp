@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/impl/fastor_getter.hpp"
 #include "algebra/math/impl/fastor_matrix.hpp"
 #include "algebra/math/impl/fastor_transform3.hpp"
 #include "algebra/math/impl/fastor_vector.hpp"

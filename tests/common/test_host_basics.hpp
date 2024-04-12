@@ -58,13 +58,13 @@ TYPED_TEST_P(test_host_basics_vector, local_vectors) {
 
   // Cast operations to phi, theta, eta, perp
   typename TypeParam::vector2 vD{1.f, 1.f};
-  typename TypeParam::scalar phi = algebra::getter::phi(vD);
+  typename TypeParam::scalar phi = algebra::vector::phi(vD);
   ASSERT_NEAR(phi, M_PI_4, this->m_epsilon);
 
-  typename TypeParam::scalar perp = algebra::getter::perp(vD);
+  typename TypeParam::scalar perp = algebra::vector::perp(vD);
   ASSERT_NEAR(perp, std::sqrt(2.), this->m_epsilon);
 
-  typename TypeParam::scalar norm = algebra::getter::norm(vD);
+  typename TypeParam::scalar norm = algebra::vector::norm(vD);
   ASSERT_NEAR(norm, std::sqrt(2.), this->m_epsilon);
 
   typename TypeParam::vector2 vDnorm = algebra::vector::normalize(vD);
@@ -101,19 +101,19 @@ TYPED_TEST_P(test_host_basics_vector, vector3) {
 
   // Cast operations to phi, theta, eta, perp
   typename TypeParam::vector3 vD{1.f, 1.f, 1.f};
-  typename TypeParam::scalar phi = algebra::getter::phi(vD);
+  typename TypeParam::scalar phi = algebra::vector::phi(vD);
   ASSERT_NEAR(phi, M_PI_4, this->m_epsilon);
 
-  typename TypeParam::scalar theta = algebra::getter::theta(vD);
+  typename TypeParam::scalar theta = algebra::vector::theta(vD);
   ASSERT_NEAR(theta, std::atan2(std::sqrt(2.), 1.), this->m_epsilon);
 
-  typename TypeParam::scalar eta = algebra::getter::eta(vD);
+  typename TypeParam::scalar eta = algebra::vector::eta(vD);
   ASSERT_NEAR(eta, 0.65847891569137573, this->m_isclose);
 
-  typename TypeParam::scalar perp = algebra::getter::perp(vD);
+  typename TypeParam::scalar perp = algebra::vector::perp(vD);
   ASSERT_NEAR(perp, std::sqrt(2.), this->m_epsilon);
 
-  typename TypeParam::scalar norm = algebra::getter::norm(vD);
+  typename TypeParam::scalar norm = algebra::vector::norm(vD);
   ASSERT_NEAR(norm, std::sqrt(3.), this->m_epsilon);
 }
 
@@ -269,7 +269,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   }
 
   // Test block operations
-  auto b13 = algebra::matrix::block<1, 3>(m, 0, 0);
+  auto b13 = algebra::getter::block<1, 3>(m, 0, 0);
   ASSERT_NEAR(algebra::getter::element(b13, 0, 0), 1.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b13, 0, 1), 0.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b13, 0, 2), 0.f, this->m_epsilon);
@@ -279,7 +279,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   ASSERT_NEAR(algebra::getter::element(b13_tp, 1, 0), 0.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b13_tp, 2, 0), 0.f, this->m_epsilon);
 
-  auto b32 = algebra::matrix::block<3, 2>(m, 2, 2);
+  auto b32 = algebra::getter::block<3, 2>(m, 2, 2);
   ASSERT_NEAR(algebra::getter::element(b32, 0, 0), 1.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b32, 0, 1), 0.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b32, 1, 0), 0.f, this->m_epsilon);
@@ -294,7 +294,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   algebra::getter::element(b32, 2, 0) = 5.f;
   algebra::getter::element(b32, 2, 1) = 6.f;
 
-  algebra::matrix::set_block(m, b32, 2, 2);
+  algebra::getter::set_block(m, b32, 2, 2);
   ASSERT_NEAR(algebra::getter::element(m, 2, 2), 4.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 2, 3), 3.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 3, 2), 12.f, this->m_epsilon);
@@ -303,7 +303,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   ASSERT_NEAR(algebra::getter::element(m, 4, 3), 6.f, this->m_epsilon);
 
   typename TypeParam::vector3 v = {10.f, 20.f, 30.f};
-  algebra::matrix::set_block(m, v, 0, 2);
+  algebra::getter::set_block(m, v, 0, 2);
   ASSERT_NEAR(algebra::getter::element(m, 0, 2), 10., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 1, 2), 20., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 2, 2), 30., this->m_epsilon);

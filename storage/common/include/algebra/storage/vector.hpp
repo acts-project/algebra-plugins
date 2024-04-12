@@ -75,7 +75,8 @@ class alignas(
   /// zeroes if too few arguments are given.
   template <typename... Values>
   requires(std::conjunction_v<std::is_convertible<Values, value_type>...> &&
-           sizeof...(Values) <= N && simd_size() != 4) ALGEBRA_HOST_DEVICE
+           sizeof...(Values) <= N && !(N == 3 && simd_size() == 4) &&
+           !(N == 6 && simd_size() == 8)) ALGEBRA_HOST_DEVICE
       constexpr vector(Values &&... vals)
       : m_data{std::forward<Values>(vals)...} {
     // Fill the uninitialized part of the vector register with zero

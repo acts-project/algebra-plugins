@@ -1,11 +1,14 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2020-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
 
 #pragma once
+
+// Project include(s)
+#include "algebra/type_traits.hpp"
 
 // ROOT/Smatrix include(s).
 #include <Math/SMatrix.h>
@@ -14,7 +17,9 @@
 // System include(s).
 #include <cstddef>
 
-namespace algebra::smatrix {
+namespace algebra {
+
+namespace smatrix {
 
 /// size type for SMatrix storage model
 using size_type = unsigned int;
@@ -38,4 +43,37 @@ using vector2 = storage_type<T, 2>;
 template <typename T>
 using point2 = vector2<T>;
 
-}  // namespace algebra::smatrix
+}  // namespace smatrix
+
+namespace trait {
+
+/// Type trait specializations
+/// @{
+template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
+struct dimensions<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
+
+  using size_type = unsigned int;
+
+  static constexpr size_type rows{ROWS};
+  static constexpr size_type columns{COLS};
+};
+
+template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
+struct value<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
+  using type = T;
+};
+
+template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
+struct index<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
+  using type = unsigned int;
+};
+
+template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
+struct vector<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
+  using type = ROOT::Math::SVector<T, ROWS>;
+};
+/// @}
+
+}  // namespace trait
+
+}  // namespace algebra

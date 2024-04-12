@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022 CERN for the benefit of the ACTS project
+ * (c) 2022-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -10,6 +10,7 @@
 // Project include(s).
 #include "algebra/math/algorithms/matrix/determinant/cofactor.hpp"
 #include "algebra/qualifiers.hpp"
+#include "algebra/type_traits.hpp"
 
 // System include(s)
 #include <type_traits>
@@ -19,22 +20,17 @@ namespace algebra::cmath::matrix {
 namespace adjoint {
 
 /// "Adjoint getter", assuming a N X N matrix
-template <typename size_type,
-          template <typename, size_type, size_type> class matrix_t,
-          typename scalar_t, class element_getter_t>
+template <class matrix_t, class element_getter_t>
 struct cofactor {
+
+  using scalar_type = algebra::trait::value_t<matrix_t>;
+  using size_type = algebra::trait::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
 
-  /// 2D matrix type
-  template <size_type ROWS, size_type COLS>
-  using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
-
-  template <size_type N>
-  ALGEBRA_HOST_DEVICE inline matrix_type<N, N> operator()(
-      const matrix_type<N, N> &m) const {
-    return adjoint_getter_helper<N>()(m);
+  ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t &m) const {
+    return adjoint_getter_helper<algebra::trait::rank<matrix_t>>()(m);
   }
 
   template <size_type N, typename Enable = void>
@@ -42,10 +38,9 @@ struct cofactor {
 
   template <size_type N>
   struct adjoint_getter_helper<N, typename std::enable_if_t<N == 1>> {
-
-    ALGEBRA_HOST_DEVICE inline matrix_type<N, N> operator()(
-        const matrix_type<N, N> & /*m*/) const {
-      matrix_type<N, N> ret;
+    ALGEBRA_HOST_DEVICE inline matrix_t operator()(
+        const matrix_t & /*m*/) const {
+      matrix_t ret;
       element_getter()(ret, 0, 0) = 1;
       return ret;
     }
@@ -55,18 +50,17 @@ struct cofactor {
   struct adjoint_getter_helper<N, typename std::enable_if_t<N != 1>> {
 
     using determinant_getter =
-        determinant::cofactor<size_type, matrix_t, scalar_t, element_getter_t>;
+        determinant::cofactor<matrix_t, element_getter_t>;
 
-    ALGEBRA_HOST_DEVICE inline matrix_type<N, N> operator()(
-        const matrix_type<N, N> &m) const {
+    ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t &m) const {
 
-      matrix_type<N, N> adj;
+      matrix_t adj;
 
       // temp is used to store cofactors of m
       int sign = 1;
 
       // To store cofactors
-      matrix_type<N, N> temp;
+      matrix_t temp;
 
       for (size_type i = 0; i < N; i++) {
         for (size_type j = 0; j < N; j++) {
@@ -97,34 +91,27 @@ struct cofactor {
 namespace inverse {
 
 /// "inverse getter", assuming a N X N matrix
-template <typename size_type,
-          template <typename, size_type, size_type> class matrix_t,
-          typename scalar_t, class element_getter_t, size_type... Ds>
+template <class matrix_t, class element_getter_t>
 struct cofactor {
 
-  using _dims = std::integer_sequence<size_type, Ds...>;
+  using scalar_type = algebra::trait::value_t<matrix_t>;
+  using size_type = algebra::trait::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
 
-  /// 2D matrix type
-  template <size_type ROWS, size_type COLS>
-  using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
+  using determinant_getter = determinant::cofactor<matrix_t, element_getter_t>;
 
-  using determinant_getter =
-      determinant::cofactor<size_type, matrix_t, scalar_t, element_getter_t>;
+  using adjoint_getter = adjoint::cofactor<matrix_t, element_getter_t>;
 
-  using adjoint_getter =
-      adjoint::cofactor<size_type, matrix_t, scalar_t, element_getter_t>;
+  ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t &m) const {
 
-  template <size_type N>
-  ALGEBRA_HOST_DEVICE inline matrix_type<N, N> operator()(
-      const matrix_type<N, N> &m) const {
+    constexpr size_type N{algebra::trait::rank<matrix_t>};
 
-    matrix_type<N, N> ret;
+    matrix_t ret;
 
     // Find determinant of A
-    scalar_t det = determinant_getter()(m);
+    scalar_type det = determinant_getter()(m);
 
     // TODO: handle singular matrix error
     // if (det == 0) {

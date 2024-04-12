@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2023 CERN for the benefit of the ACTS project
+ * (c) 2020-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -35,17 +35,27 @@
 namespace algebra::eigen::math {
 
 /** Transform wrapper class to ensure standard API within differnt plugins */
-template <typename scalar_t, typename matrix_actor_t>
+template <typename scalar_t>
 struct transform3 {
 
   /// @name Type definitions for the struct
   /// @{
+  /// Size type
+  using size_type = int;
+  /// Scalar type used by the transform
+  using scalar_type = scalar_t;
+
+  /// 2D Matrix type
+  template <size_type ROWS, size_type COLS>
+  using matrix_type = Eigen::Matrix<scalar_t, ROWS, COLS, 0, ROWS, COLS>;
+
+  /// 4x4 matrix type
+  using matrix44 =
+      typename Eigen::Transform<scalar_type, 3, Eigen::Affine>::MatrixType;
 
   /// Array type used by the transform
   template <int N>
   using array_type = Eigen::Matrix<scalar_t, N, 1, 0, N, 1>;
-  /// Scalar type used by the transform
-  using scalar_type = scalar_t;
 
   /// 3-element "vector" type
   using vector3 = array_type<3>;
@@ -53,23 +63,6 @@ struct transform3 {
   using point3 = vector3;
   /// Point in 2D space
   using point2 = array_type<2>;
-
-  /// 4x4 matrix type
-  using matrix44 =
-      typename Eigen::Transform<scalar_type, 3, Eigen::Affine>::MatrixType;
-
-  /// Function (object) used for accessing a matrix element
-  using element_getter = algebra::eigen::math::element_getter;
-
-  /// Size type
-  using size_type = typename matrix_actor_t::size_ty;
-
-  /// Matrix actor
-  using matrix_actor = matrix_actor_t;
-
-  /// 2D Matrix type
-  template <size_type ROWS, size_type COLS>
-  using matrix_type = typename matrix_actor::template matrix_type<ROWS, COLS>;
 
   /// @}
 
@@ -122,7 +115,7 @@ struct transform3 {
    * @param t is the transform
    **/
   ALGEBRA_HOST_DEVICE
-  transform3(const vector3 &t) {
+  explicit transform3(const vector3 &t) {
     _data.setIdentity();
 
     auto &matrix = _data.matrix();
@@ -136,7 +129,7 @@ struct transform3 {
    * @param m is the full 4x4 matrix
    **/
   ALGEBRA_HOST_DEVICE
-  transform3(const matrix44 &m) {
+  explicit transform3(const matrix44 &m) {
 
     _data.matrix() = m;
 
@@ -148,7 +141,7 @@ struct transform3 {
    * @param ma is the full 4x4 matrix as a 16 array
    **/
   ALGEBRA_HOST_DEVICE
-  transform3(const array_type<16> &ma) {
+  explicit transform3(const array_type<16> &ma) {
 
     _data.matrix() << ma[0], ma[1], ma[2], ma[3], ma[4], ma[5], ma[6], ma[7],
         ma[8], ma[9], ma[10], ma[11], ma[12], ma[13], ma[14], ma[15];

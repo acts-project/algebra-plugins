@@ -8,10 +8,10 @@
 #pragma once
 
 /// Simple struct holding the types that describe a given plugin
-template <
-    typename scalar_t, typename point2_t, typename point3_t, typename vector2_t,
-    typename vector3_t, typename transform3_t, typename size_ty,
-    template <typename, size_ty, size_ty> class matrix_t, class matrix_actor_t>
+template <typename scalar_t, typename point2_t, typename point3_t,
+          typename vector2_t, typename vector3_t, typename transform3_t,
+          typename size_ty,
+          template <typename, size_ty, size_ty> class matrix_t>
 struct test_types {
 
   using scalar = scalar_t;
@@ -23,6 +23,5 @@ struct test_types {
   using size_type = size_ty;
   template <size_type ROWS, size_type COLS>
   using matrix = matrix_t<scalar, ROWS, COLS>;
-  using matrix_actor = matrix_actor_t;
 
 };  // struct test_types

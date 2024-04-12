@@ -87,4 +87,27 @@ normalize(const storage::vector<N, Vc::Vector<scalar_t>, array_t> &v) {
   // return Vc::rsqrt(dot(v, v)) * v;
 }
 
+/// Elementwise sum
+///
+/// @tparam N dimension of the vector
+/// @tparam scalar_t scalar type
+/// @tparam array_t array type that holds the vector elements
+///
+/// @param v the vector whose elements should be summed
+///
+/// @return the sum of the elements
+template <std::size_t N, typename scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline Vc::Vector<scalar_t> sum(
+    const storage::vector<N, Vc::Vector<scalar_t>, array_t> &v) {
+
+  Vc::Vector<scalar_t> res{v[0]};
+
+  for (std::size_t i = 1u; i < Vc::Vector<scalar_t>::size(); ++i) {
+    res = res + v[i];
+  }
+
+  return res;
+}
+
 }  // namespace algebra::vc_soa::math

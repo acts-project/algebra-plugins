@@ -46,13 +46,12 @@ typedef testing::Types<
                algebra::fastor::point3<float>, algebra::fastor::vector2<float>,
                algebra::fastor::vector3<float>,
                algebra::fastor::transform3<float>, std::size_t,
-               algebra::fastor::matrix_type, algebra::matrix::actor<float>>,
-    test_types<double, algebra::fastor::point2<double>,
-               algebra::fastor::point3<double>,
-               algebra::fastor::vector2<double>,
-               algebra::fastor::vector3<double>,
-               algebra::fastor::transform3<double>, std::size_t,
-               algebra::fastor::matrix_type, algebra::matrix::actor<double>>>
+               algebra::fastor::matrix_type>,
+    test_types<
+        double, algebra::fastor::point2<double>,
+        algebra::fastor::point3<double>, algebra::fastor::vector2<double>,
+        algebra::fastor::vector3<double>, algebra::fastor::transform3<double>,
+        std::size_t, algebra::fastor::matrix_type>>
     fastor_fastor_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
                                fastor_fastor_types, test_specialisation_name);

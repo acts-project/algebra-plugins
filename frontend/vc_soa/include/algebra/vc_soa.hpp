@@ -68,16 +68,18 @@ using vc_soa::math::normalize;
 }  // namespace vector
 
 // Produces clash with matrix typedefs in other plugins
-/*namespace matrix {
+namespace matrix {
 
-using size_type = vc_soa::size_type;
+using vc_soa::math::block;
+using vc_soa::math::determinant;
+using vc_soa::math::identity;
+using vc_soa::math::inverse;
+using vc_soa::math::set_block;
+using vc_soa::math::set_identity;
+using vc_soa::math::set_zero;
+using vc_soa::math::transpose;
+using vc_soa::math::zero;
 
-template <typename T, size_type N>
-using array_type = vc_soa::storage_type<T, N>;
-
-template <typename T, size_type ROWS, size_type COLS>
-using matrix_type = vc_soa::matrix_type<T, ROWS, COLS>;
-
-}*/  // namespace matrix
+}  // namespace matrix
 
 }  // namespace algebra

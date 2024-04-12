@@ -14,6 +14,10 @@ find_package( CUDAToolkit REQUIRED )
 # Set the default CUDA compiler flags.
 include( algebra-plugins-compiler-options-cuda )
 
+if(${CMAKE_CUDA_STANDARD} LESS 20)
+   message(SEND_ERROR "CMAKE_CUDA_STANDARD=${CMAKE_CUDA_STANDARD}, but algebra-plugins requires C++>=20")
+endif()
+
 # Helper library for the CUDA tests.
 add_library( algebra_tests_cuda_common STATIC
    "common/cuda_error_check.hpp" "common/cuda_error_check.cpp"
@@ -58,4 +62,6 @@ if( ALGEBRA_PLUGINS_INCLUDE_VECMEM )
    algebra_add_test( vecmem_cuda "vecmem_cmath.cu"
       LINK_LIBRARIES algebra::vecmem_cmath
                      algebra::tests_cuda_common GTest::gtest_main )
+   target_compile_options( algebra_test_vecmem_cuda
+      PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )
 endif()

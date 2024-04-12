@@ -39,3 +39,6 @@
 
 # VSCode build directory.
 out/
+
+# Local folders
+build/

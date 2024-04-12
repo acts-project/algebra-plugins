@@ -25,6 +25,7 @@ namespace algebra::vc {
  * size of the array.
  *
  * @tparam scalar_t scalar type used in the SimdArray
+ * @todo replace by @c algebra::storage::vector
  */
 template <typename scalar_t>
 struct array4 {

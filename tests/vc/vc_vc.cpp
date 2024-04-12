@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2020-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -34,20 +34,14 @@ struct test_specialisation_name {
 
 // Instantiate the test(s).
 typedef testing::Types<
-    test_types<float, Vc::array<float, 2>, Vc::array<float, 3>,
-               Vc::array<float, 2>, Vc::array<float, 3>,
+    test_types<float, algebra::vc::point2<float>, algebra::vc::point3<float>,
+               algebra::vc::vector2<float>, algebra::vc::vector3<float>,
                algebra::vc::transform3<float>, std::size_t,
-               algebra::vc::matrix_type,
-               algebra::matrix::actor<
-                   float, algebra::matrix::determinant::preset0<float>,
-                   algebra::matrix::inverse::preset0<float>>>,
-    test_types<double, Vc::array<double, 2>, Vc::array<double, 3>,
-               Vc::array<double, 2>, Vc::array<double, 3>,
+               algebra::vc::matrix_type, float>,
+    test_types<double, algebra::vc::point2<double>, algebra::vc::point3<double>,
+               algebra::vc::vector2<double>, algebra::vc::vector3<double>,
                algebra::vc::transform3<double>, std::size_t,
-               algebra::vc::matrix_type,
-               algebra::matrix::actor<
-                   double, algebra::matrix::determinant::preset0<double>,
-                   algebra::matrix::inverse::preset0<double>>>>
+               algebra::vc::matrix_type, double>>
     vc_vc_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics, vc_vc_types,
                                test_specialisation_name);

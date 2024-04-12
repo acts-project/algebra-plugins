@@ -64,14 +64,13 @@ using vc::math::theta;
 /// Function extracting a slice from the matrix used by
 /// @c algebra::vc::transform3<float>
 template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline Vc::array<float, 3> vector(
-    const vc::transform3<float>::matrix44& m,
-    std::size_t
+ALGEBRA_HOST_DEVICE inline auto vector(const vc::transform3<float>::matrix44& m,
+                                       std::size_t
 #ifndef NDEBUG
-        row
+                                           row
 #endif  // not NDEBUG
-    ,
-    std::size_t col) {
+                                       ,
+                                       std::size_t col) {
 
   assert(row == 0);
   assert(col < 4);
@@ -92,7 +91,7 @@ ALGEBRA_HOST_DEVICE inline Vc::array<float, 3> vector(
 /// Function extracting a slice from the matrix used by
 /// @c algebra::vc::transform3<double>
 template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline Vc::array<double, 3> vector(
+ALGEBRA_HOST_DEVICE inline auto vector(
     const vc::transform3<double>::matrix44& m,
     std::size_t
 #ifndef NDEBUG
@@ -151,7 +150,7 @@ using array_type = vc::storage_type<T, N>;
 template <typename T, size_type ROWS, size_type COLS>
 using matrix_type = vc::matrix_type<T, ROWS, COLS>;
 
-template <typename scalar_t>
+/*template <typename scalar_t>
 using element_getter = cmath::element_getter<size_type, Vc::array, scalar_t>;
 
 template <typename scalar_t>
@@ -163,12 +162,12 @@ template <typename scalar_t, typename determinant_actor_t,
 using actor =
     cmath::matrix::actor<size_type, array_type, matrix_type, scalar_t,
                          determinant_actor_t, inverse_actor_t,
-                         element_getter<scalar_t>, block_getter<scalar_t>>;
+                         element_getter<scalar_t>, block_getter<scalar_t>>;*/
 
 namespace determinant {
 
 // determinant aggregation
-template <typename scalar_t, class... As>
+/*template <typename scalar_t, class... As>
 using actor =
     cmath::matrix::determinant::actor<size_type, matrix_type, scalar_t, As...>;
 
@@ -224,9 +223,9 @@ using hard_coded =
 // preset(s) as standard option(s) for user's convenience
 template <typename scalar_t>
 using preset0 =
-    actor<scalar_t, partial_pivot_lud<scalar_t>, hard_coded<scalar_t, 2, 4>>;
+    actor<scalar_t, partial_pivot_lud<scalar_t>, hard_coded<scalar_t, 2, 4>>;*/
 
-}  // namespace inverse
+}  // namespace determinant
 
 }  // namespace matrix
 }  // namespace algebra

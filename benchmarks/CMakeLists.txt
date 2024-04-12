@@ -61,6 +61,27 @@ if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
 endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_VC )
+   add_library( algebra_bench_vc_aos INTERFACE )
+   target_include_directories( algebra_bench_vc_aos INTERFACE 
+      "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vc_aos/include>" )
+   target_link_libraries(algebra_bench_vc_aos INTERFACE
+                                                   algebra::vc_vc
+                                                   algebra::common_storage)
+   add_library( algebra::bench_vc_aos ALIAS algebra_bench_vc_aos )
+
+   algebra_add_benchmark( vc_aos_getter
+      "vc_aos/vc_aos_getter.cpp"
+      LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                     algebra::bench_vc_aos algebra::vc_vc )
+   algebra_add_benchmark( vc_aos_vector
+      "vc_aos/vc_aos_vector.cpp"
+      LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                     algebra::bench_vc_aos algebra::vc_vc )
+   algebra_add_benchmark( vc_aos_transform3
+      "vc_aos/vc_aos_transform3.cpp"
+      LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                     algebra::bench_vc_aos algebra::vc_vc )
+
    if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang" )
       add_library( algebra_bench_vc_soa INTERFACE )
       target_include_directories( algebra_bench_vc_soa INTERFACE 

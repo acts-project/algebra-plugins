@@ -11,7 +11,7 @@ algebra_add_library( algebra_vc_math vc_math
    "include/algebra/math/impl/vc_transform3.hpp"
    "include/algebra/math/impl/vc_vector.hpp" )
 target_link_libraries( algebra_vc_math
-   INTERFACE Vc::Vc algebra::common algebra::common_math
+   INTERFACE Vc::Vc algebra::common algebra::common_math algebra::vc_storage
              algebra::cmath_math )
 algebra_test_public_headers( algebra_vc_math
    "algebra/math/vc.hpp" )

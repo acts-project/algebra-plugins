@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2020-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -16,24 +16,11 @@
 #include <cassert>
 #include <type_traits>
 
-/// @name Operators on @c algebra::vc types
-/// @{
-
-using algebra::cmath::operator*;
-using algebra::cmath::operator-;
-using algebra::cmath::operator+;
-
-/// @}
-
 namespace algebra {
 namespace vc {
 
 /// @name Vc based transforms on @c algebra::vc::storage_type
 /// @{
-
-// Pull in the definitions needed by the cmath transforms, into this namespace.
-using math::perp;
-using math::phi;
 
 template <typename T>
 using transform3 = math::transform3<storage_type, T, vector3<T>, point2<T>>;
@@ -47,12 +34,6 @@ namespace getter {
 /// @name Getter functions on @c algebra::vc types
 /// @{
 
-using cmath::eta;
-using cmath::norm;
-using cmath::perp;
-using cmath::phi;
-using cmath::theta;
-
 using vc::math::eta;
 using vc::math::norm;
 using vc::math::perp;
@@ -64,13 +45,14 @@ using vc::math::theta;
 /// Function extracting a slice from the matrix used by
 /// @c algebra::vc::transform3<float>
 template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline auto vector(const vc::transform3<float>::matrix44& m,
-                                       std::size_t
+ALGEBRA_HOST_DEVICE inline vc::vector3<float> vector(
+    const vc::transform3<float>::matrix44& m,
+    std::size_t
 #ifndef NDEBUG
-                                           row
+        row
 #endif  // not NDEBUG
-                                       ,
-                                       std::size_t col) {
+    ,
+    std::size_t col) {
 
   assert(row == 0);
   assert(col < 4);
@@ -91,7 +73,7 @@ ALGEBRA_HOST_DEVICE inline auto vector(const vc::transform3<float>::matrix44& m,
 /// Function extracting a slice from the matrix used by
 /// @c algebra::vc::transform3<double>
 template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline auto vector(
+ALGEBRA_HOST_DEVICE inline vc::vector3<double> vector(
     const vc::transform3<double>::matrix44& m,
     std::size_t
 #ifndef NDEBUG
@@ -130,8 +112,6 @@ namespace vector {
 /// @name Vector functions on @c algebra::vc types
 /// @{
 
-using cmath::dot;
-using cmath::normalize;
 using vc::math::cross;
 using vc::math::dot;
 using vc::math::normalize;
@@ -149,83 +129,6 @@ using array_type = vc::storage_type<T, N>;
 
 template <typename T, size_type ROWS, size_type COLS>
 using matrix_type = vc::matrix_type<T, ROWS, COLS>;
-
-/*template <typename scalar_t>
-using element_getter = cmath::element_getter<size_type, Vc::array, scalar_t>;
-
-template <typename scalar_t>
-using block_getter = cmath::block_getter<size_type, Vc::array, scalar_t>;
-
-// matrix actor
-template <typename scalar_t, typename determinant_actor_t,
-          typename inverse_actor_t>
-using actor =
-    cmath::matrix::actor<size_type, array_type, matrix_type, scalar_t,
-                         determinant_actor_t, inverse_actor_t,
-                         element_getter<scalar_t>, block_getter<scalar_t>>;*/
-
-namespace determinant {
-
-// determinant aggregation
-/*template <typename scalar_t, class... As>
-using actor =
-    cmath::matrix::determinant::actor<size_type, matrix_type, scalar_t, As...>;
-
-// determinant::cofactor
-template <typename scalar_t, size_type... Ds>
-using cofactor =
-    cmath::matrix::determinant::cofactor<size_type, matrix_type, scalar_t,
-                                         element_getter<scalar_t>, Ds...>;
-
-// determinant::partial_pivot_lud
-template <typename scalar_t, size_type... Ds>
-using partial_pivot_lud = cmath::matrix::determinant::partial_pivot_lud<
-    size_type, matrix_type, scalar_t, element_getter<scalar_t>, Ds...>;
-
-// determinant::hard_coded
-template <typename scalar_t, size_type... Ds>
-using hard_coded =
-    cmath::matrix::determinant::hard_coded<size_type, matrix_type, scalar_t,
-                                           element_getter<scalar_t>, Ds...>;
-
-// preset(s) as standard option(s) for user's convenience
-template <typename scalar_t>
-using preset0 =
-    actor<scalar_t, partial_pivot_lud<scalar_t>, hard_coded<scalar_t, 2, 4>>;
-
-}  // namespace determinant
-
-namespace inverse {
-
-// inverion aggregation
-template <typename scalar_t, class... As>
-using actor =
-    cmath::matrix::inverse::actor<size_type, matrix_type, scalar_t, As...>;
-
-// inverse::cofactor
-template <typename scalar_t, size_type... Ds>
-using cofactor =
-    cmath::matrix::inverse::cofactor<size_type, matrix_type, scalar_t,
-                                     element_getter<scalar_t>, Ds...>;
-
-// inverse::partial_pivot_lud
-template <typename scalar_t, size_type... Ds>
-using partial_pivot_lud =
-    cmath::matrix::inverse::partial_pivot_lud<size_type, matrix_type, scalar_t,
-                                              element_getter<scalar_t>, Ds...>;
-
-// inverse::hard_coded
-template <typename scalar_t, size_type... Ds>
-using hard_coded =
-    cmath::matrix::inverse::hard_coded<size_type, matrix_type, scalar_t,
-                                       element_getter<scalar_t>, Ds...>;
-
-// preset(s) as standard option(s) for user's convenience
-template <typename scalar_t>
-using preset0 =
-    actor<scalar_t, partial_pivot_lud<scalar_t>, hard_coded<scalar_t, 2, 4>>;*/
-
-}  // namespace determinant
 
 }  // namespace matrix
 }  // namespace algebra

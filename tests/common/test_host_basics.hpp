@@ -226,6 +226,22 @@ TYPED_TEST_P(test_host_basics, matrix64) {
   ASSERT_NEAR(algebra::getter::element(m, 0, 2), 10., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 1, 2), 20., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 2, 2), 30., this->m_epsilon);
+
+  typename TypeParam::template matrix<3, 3> m33;
+  algebra::getter::element(m33, 0, 0) = 1;
+  algebra::getter::element(m33, 1, 0) = 2;
+  algebra::getter::element(m33, 2, 0) = 3;
+  algebra::getter::element(m33, 0, 1) = 5;
+  algebra::getter::element(m33, 1, 1) = 6;
+  algebra::getter::element(m33, 2, 1) = 7;
+  algebra::getter::element(m33, 0, 2) = 9;
+  algebra::getter::element(m33, 1, 2) = 10;
+  algebra::getter::element(m33, 2, 2) = 11;
+
+  const typename TypeParam::vector3 v2 = m33 * v;
+  ASSERT_NEAR(v2[0], 380., this->m_epsilon);
+  ASSERT_NEAR(v2[1], 440., this->m_epsilon);
+  ASSERT_NEAR(v2[2], 500., this->m_epsilon);
 }
 
 // Test matrix operations with 3x3 matrix

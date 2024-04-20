@@ -69,8 +69,8 @@ struct actor {
   ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                      const matrix_type<ROWS, COLS> &b,
                                      size_type row, size_type col) const {
-    for (size_type i = 0; i < ROWS; ++i) {
-      for (size_type j = 0; j < COLS; ++j) {
+    for (size_type j = 0; j < COLS; ++j) {
+      for (size_type i = 0; i < ROWS; ++i) {
         element_getter()(m, i + row, j + col) = element_getter()(b, i, j);
       }
     }
@@ -92,8 +92,8 @@ struct actor {
   ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() const {
     matrix_type<ROWS, COLS> ret;
 
-    for (size_type i = 0; i < ROWS; ++i) {
-      for (size_type j = 0; j < COLS; ++j) {
+    for (size_type j = 0; j < COLS; ++j) {
+      for (size_type i = 0; i < ROWS; ++i) {
         element_getter()(ret, i, j) = 0;
       }
     }
@@ -106,8 +106,8 @@ struct actor {
   ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() const {
     matrix_type<ROWS, COLS> ret;
 
-    for (size_type i = 0; i < ROWS; ++i) {
-      for (size_type j = 0; j < COLS; ++j) {
+    for (size_type j = 0; j < COLS; ++j) {
+      for (size_type i = 0; i < ROWS; ++i) {
         if (i == j) {
           element_getter()(ret, i, j) = 1;
         } else {
@@ -123,8 +123,8 @@ struct actor {
   template <size_type ROWS, size_type COLS>
   ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<ROWS, COLS> &m) const {
 
-    for (size_type i = 0; i < ROWS; ++i) {
-      for (size_type j = 0; j < COLS; ++j) {
+    for (size_type j = 0; j < COLS; ++j) {
+      for (size_type i = 0; i < ROWS; ++i) {
         element_getter()(m, i, j) = 0;
       }
     }
@@ -135,8 +135,8 @@ struct actor {
   ALGEBRA_HOST_DEVICE inline void set_identity(
       matrix_type<ROWS, COLS> &m) const {
 
-    for (size_type i = 0; i < ROWS; ++i) {
-      for (size_type j = 0; j < COLS; ++j) {
+    for (size_type j = 0; j < COLS; ++j) {
+      for (size_type i = 0; i < ROWS; ++i) {
         if (i == j) {
           element_getter()(m, i, j) = 1;
         } else {

@@ -137,8 +137,8 @@ ALGEBRA_HOST_DEVICE inline array_t<array_t<scalar_t, ROWS>, COLS> operator*(
 
   array_t<array_t<scalar_t, ROWS>, COLS> ret;
 
-  for (size_type i = 0; i < ROWS; ++i) {
-    for (size_type j = 0; j < COLS; ++j) {
+  for (size_type j = 0; j < COLS; ++j) {
+    for (size_type i = 0; i < ROWS; ++i) {
       ret[j][i] = a[j][i] * static_cast<scalar_t>(s);
     }
   }
@@ -154,8 +154,8 @@ ALGEBRA_HOST_DEVICE inline array_t<array_t<scalar_t, ROWS>, COLS> operator*(
 
   array_t<array_t<scalar_t, ROWS>, COLS> ret;
 
-  for (size_type i = 0; i < ROWS; ++i) {
-    for (size_type j = 0; j < COLS; ++j) {
+  for (size_type j = 0; j < COLS; ++j) {
+    for (size_type i = 0; i < ROWS; ++i) {
       ret[j][i] = a[j][i] * static_cast<scalar_t>(s);
     }
   }
@@ -171,8 +171,8 @@ ALGEBRA_HOST_DEVICE inline array_t<array_t<scalar_t, ROWS>, COLS> operator*(
 
   array_t<array_t<scalar_t, ROWS>, COLS> ret;
 
-  for (size_type i = 0; i < ROWS; ++i) {
-    for (size_type j = 0; j < COLS; ++j) {
+  for (size_type j = 0; j < COLS; ++j) {
+    for (size_type i = 0; i < ROWS; ++i) {
       ret[j][i] = a[j][i] * static_cast<scalar_t>(s);
     }
   }
@@ -188,8 +188,8 @@ ALGEBRA_HOST_DEVICE inline array_t<array_t<scalar_t, ROWS>, COLS> operator*(
 
   array_t<array_t<scalar_t, ROWS>, COLS> ret;
 
-  for (size_type i = 0; i < ROWS; ++i) {
-    for (size_type j = 0; j < COLS; ++j) {
+  for (size_type j = 0; j < COLS; ++j) {
+    for (size_type i = 0; i < ROWS; ++i) {
       ret[j][i] = a[j][i] * static_cast<scalar_t>(s);
     }
   }
@@ -206,16 +206,17 @@ ALGEBRA_HOST_DEVICE inline array_t<array_t<scalar_t, M>, O> operator*(
 
   array_t<array_t<scalar_t, M>, O> C;
 
-  for (size_type i = 0; i < M; ++i) {
+  for (size_type j = 0; j < O; ++j) {
+    for (size_type i = 0; i < M; ++i) {
+      C[j][i] = 0.f;
+    }
+  }
+
+  for (size_type i = 0; i < N; ++i) {
     for (size_type j = 0; j < O; ++j) {
-
-      scalar_t val = 0;
-
-      for (size_type k = 0; k < N; ++k) {
-        val += A[k][i] * B[j][k];
+      for (size_type k = 0; k < M; ++k) {
+        C[j][k] += A[i][k] * B[j][i];
       }
-
-      C[j][i] = val;
     }
   }
 
@@ -231,8 +232,8 @@ ALGEBRA_HOST_DEVICE inline array_t<array_t<scalar_t, ROWS>, COLS> operator+(
 
   array_t<array_t<scalar_t, ROWS>, COLS> C;
 
-  for (size_type i = 0; i < ROWS; ++i) {
-    for (size_type j = 0; j < COLS; ++j) {
+  for (size_type j = 0; j < COLS; ++j) {
+    for (size_type i = 0; i < ROWS; ++i) {
       C[j][i] = A[j][i] + B[j][i];
     }
   }
@@ -249,8 +250,8 @@ ALGEBRA_HOST_DEVICE inline array_t<array_t<scalar_t, ROWS>, COLS> operator-(
 
   array_t<array_t<scalar_t, ROWS>, COLS> C;
 
-  for (size_type i = 0; i < ROWS; ++i) {
-    for (size_type j = 0; j < COLS; ++j) {
+  for (size_type j = 0; j < COLS; ++j) {
+    for (size_type i = 0; i < ROWS; ++i) {
       C[j][i] = A[j][i] - B[j][i];
     }
   }
@@ -272,8 +273,8 @@ ALGEBRA_HOST_DEVICE inline array_t<scalar_t, ROWS> operator*(
 
   array_t<scalar_t, ROWS> ret{0};
 
-  for (size_type i = 0; i < ROWS; ++i) {
-    for (size_type j = 0; j < COLS; ++j) {
+  for (size_type j = 0; j < COLS; ++j) {
+    for (size_type i = 0; i < ROWS; ++i) {
       ret[i] += a[j][i] * b[j];
     }
   }

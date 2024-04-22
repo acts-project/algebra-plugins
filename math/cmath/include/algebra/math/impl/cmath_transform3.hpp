@@ -191,8 +191,8 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   inline bool operator==(const transform3 &rhs) const {
 
-    for (size_type i = 0; i < 4; i++) {
-      for (size_type j = 0; j < 4; j++) {
+    for (size_type j = 0; j < 4; j++) {
+      for (size_type i = 0; i < 4; i++) {
         if (matrix_actor().element(_data, i, j) !=
             matrix_actor().element(rhs._data, i, j)) {
           return false;
@@ -235,15 +235,21 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   static inline vector3 rotate(const matrix44 &m, const vector3 &v) {
 
-    return {matrix_actor().element(m, 0, 0) * v[0] +
-                matrix_actor().element(m, 0, 1) * v[1] +
-                matrix_actor().element(m, 0, 2) * v[2],
-            matrix_actor().element(m, 1, 0) * v[0] +
-                matrix_actor().element(m, 1, 1) * v[1] +
-                matrix_actor().element(m, 1, 2) * v[2],
-            matrix_actor().element(m, 2, 0) * v[0] +
-                matrix_actor().element(m, 2, 1) * v[1] +
-                matrix_actor().element(m, 2, 2) * v[2]};
+    vector3 ret{0.f, 0.f, 0.f};
+
+    ret[0] += matrix_actor().element(m, 0, 0) * v[0];
+    ret[1] += matrix_actor().element(m, 1, 0) * v[0];
+    ret[2] += matrix_actor().element(m, 2, 0) * v[0];
+
+    ret[0] += matrix_actor().element(m, 0, 1) * v[1];
+    ret[1] += matrix_actor().element(m, 1, 1) * v[1];
+    ret[2] += matrix_actor().element(m, 2, 1) * v[1];
+
+    ret[0] += matrix_actor().element(m, 0, 2) * v[2];
+    ret[1] += matrix_actor().element(m, 1, 2) * v[2];
+    ret[2] += matrix_actor().element(m, 2, 2) * v[2];
+
+    return ret;
   }
 
   /** This method retrieves the rotation of a transform */

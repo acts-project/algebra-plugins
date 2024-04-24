@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023 CERN for the benefit of the ACTS project
+ * (c) 2023-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -35,10 +35,10 @@ template <typename T>
 using value_type = Vc::Vector<T>;
 /// Vector type used in the Vc SoA storage model
 template <typename T, std::size_t N>
-using vector_type = storage::vector<N, value_type<T>, storage_type>;
+using vector_type = storage::vector<N, value_type<T>, std::array>;
 /// Matrix type used in the Vc SoA storage model
 template <typename T, size_type ROWS, size_type COLS>
-using matrix_type = storage::vector<ROWS * COLS, value_type<T>, storage_type>;
+using matrix_type = storage::vector<ROWS * COLS, value_type<T>, std::array>;
 
 /// 2-element "vector" type, using @c Vc::Vector in every element
 template <typename T>

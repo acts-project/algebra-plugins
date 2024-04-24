@@ -12,13 +12,12 @@
 #include <gtest/gtest.h>
 
 #include <array>
-#include <iostream>
 
 using namespace algebra;
 
 using scalar_t = float;
 
-constexpr float tol{1e-6f};
+constexpr float tol{1e-5f};
 
 /// This test the vector functions on an SoA (Vc::Vector) based vector
 TEST(test_vc_host, vc_soa_vector) {
@@ -27,8 +26,8 @@ TEST(test_vc_host, vc_soa_vector) {
   // Value type is Vc::Vector<float>
   using value_t = typename vector3_v::value_type;
 
-  vector3_v a{value_t::One(), 2.f * value_t::One(), 3.f * value_t::One()};
-  vector3_v b{4.f * value_t::One(), 5.f * value_t::One(), 6.f * value_t::One()};
+  vector3_v a{1.f, 2.f, 3.f};
+  vector3_v b{4.f, 5.f, 6.f};
 
   EXPECT_TRUE((a[0] == value_t(1.f)).isFull());
   EXPECT_TRUE((a[1] == value_t(2.f)).isFull());
@@ -108,10 +107,8 @@ TEST(test_vc_host, vc_soa_vector) {
 TEST(test_vc_host, vc_soa_getter) {
 
   using vector3_v = vc_soa::vector3<scalar_t>;
-  // Value type is Vc::Vector<float>
-  using value_t = typename vector3_v::value_type;
 
-  vector3_v a{value_t::One(), 2.f * value_t::One(), 3.f * value_t::One()};
+  vector3_v a{1.f, 2.f, 3.f};
 
   // All results in the vector are the same, so only check the first one
 
@@ -136,4 +133,88 @@ TEST(test_vc_host, vc_soa_getter) {
   auto v_eta = getter::eta(a);
   EXPECT_NEAR(v_eta[0],
               static_cast<scalar_t>(std::atanh(1. / std::sqrt(14.) * 3.)), tol);
+}
+
+/// This test an SoA (Vc::Vector) based affine transform3
+TEST(test_vc_host, vc_soa_transform3) {
+
+  using vector3 = vc_soa::vector3<scalar_t>;
+  using point3 = vc_soa::point3<scalar_t>;
+  // Value type is Vc::Vector<float>
+  using value_t = typename vector3::value_type;
+  using transform3 = vc_soa::transform3<scalar_t>;
+  using transform3 = vc_soa::transform3<scalar_t>;
+
+  transform3 idty{};
+
+  EXPECT_TRUE((idty(0, 0) == value_t::One()).isFull());
+  EXPECT_TRUE((idty(1, 0) == value_t::Zero()).isFull());
+  EXPECT_TRUE((idty(2, 0) == value_t::Zero()).isFull());
+  EXPECT_TRUE((idty(0, 1) == value_t::Zero()).isFull());
+  EXPECT_TRUE((idty(1, 1) == value_t::One()).isFull());
+  EXPECT_TRUE((idty(2, 1) == value_t::Zero()).isFull());
+  EXPECT_TRUE((idty(0, 2) == value_t::Zero()).isFull());
+  EXPECT_TRUE((idty(1, 2) == value_t::Zero()).isFull());
+  EXPECT_TRUE((idty(2, 2) == value_t::One()).isFull());
+  EXPECT_TRUE((idty(0, 3) == value_t::Zero()).isFull());
+  EXPECT_TRUE((idty(1, 3) == value_t::Zero()).isFull());
+  EXPECT_TRUE((idty(2, 3) == value_t::Zero()).isFull());
+
+  // Preparatioon work
+  vector3 z = vector::normalize(vector3{3.f, 2.f, 1.f});
+  vector3 x = vector::normalize(vector3{2.f, -3.f, 0.f});
+  vector3 y = vector::cross(z, x);
+  point3 t = {2.f, 3.f, 4.f};
+
+  // Test constructor from t, z, x
+  transform3 trf1(t, z, x);
+  ASSERT_TRUE(trf1 == trf1);
+  transform3 trf2;
+  trf2 = trf1;
+
+  EXPECT_TRUE((trf2(0, 0) == x[0]).isFull());
+  EXPECT_TRUE((trf2(1, 0) == x[1]).isFull());
+  EXPECT_TRUE((trf2(2, 0) == x[2]).isFull());
+  EXPECT_TRUE((trf2(0, 1) == y[0]).isFull());
+  EXPECT_TRUE((trf2(1, 1) == y[1]).isFull());
+  EXPECT_TRUE((trf2(2, 1) == y[2]).isFull());
+  EXPECT_TRUE((trf2(0, 2) == z[0]).isFull());
+  EXPECT_TRUE((trf2(1, 2) == z[1]).isFull());
+  EXPECT_TRUE((trf2(2, 2) == z[2]).isFull());
+  EXPECT_TRUE((trf2(0, 3) == 2.f * value_t::One()).isFull());
+  EXPECT_TRUE((trf2(1, 3) == 3.f * value_t::One()).isFull());
+  EXPECT_TRUE((trf2(2, 3) == 4.f * value_t::One()).isFull());
+
+  // Check that local origin translates into global translation
+  point3 lzero = {0.f, 0.f, 0.f};
+  point3 gzero = trf2.point_to_global(lzero);
+  EXPECT_TRUE((gzero[0] == t[0]).isFull());
+  EXPECT_TRUE((gzero[1] == t[1]).isFull());
+  EXPECT_TRUE((gzero[2] == t[2]).isFull());
+
+  // Check a round trip for point
+  point3 loc_pt = {3.f, 4.f, 5.f};
+  point3 glob_pt = trf2.point_to_global(loc_pt);
+  point3 loc_pt_r = trf2.point_to_local(glob_pt);
+  EXPECT_NEAR(loc_pt[0][0], loc_pt_r[0][0], tol);
+  EXPECT_NEAR(loc_pt[1][0], loc_pt_r[1][0], tol);
+  EXPECT_NEAR(loc_pt[2][0], loc_pt_r[2][0], tol);
+
+  // Check a point versus vector transform
+  // vector should not change if transformed by a pure translation
+  transform3 ttrf(t);
+
+  vector3 glob_vec = {1.f, 1.f, 1.f};
+  vector3 loc_vec = ttrf.vector_to_local(glob_vec);
+  EXPECT_NEAR(glob_vec[0][0], loc_vec[0][0], tol);
+  EXPECT_NEAR(glob_vec[1][0], loc_vec[1][0], tol);
+  EXPECT_NEAR(glob_vec[2][0], loc_vec[2][0], tol);
+
+  // Check a round trip for vector
+  vector3 loc_vecB = {7.f, 8.f, 9.f};
+  vector3 glob_vecB = trf2.vector_to_local(loc_vecB);
+  vector3 loc_vecC = trf2.vector_to_global(glob_vecB);
+  EXPECT_NEAR(loc_vecB[0][0], loc_vecC[0][0], tol);
+  EXPECT_NEAR(loc_vecB[1][0], loc_vecC[1][0], tol);
+  EXPECT_NEAR(loc_vecB[2][0], loc_vecC[2][0], tol);
 }

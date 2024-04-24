@@ -20,7 +20,7 @@
 namespace algebra {
 
 template <typename vector_t>
-void fill_random(std::vector<vector_t> &);
+void fill_random_vec(std::vector<vector_t> &);
 
 /// Benchmark for vector operations
 template <typename vector_t>
@@ -42,8 +42,8 @@ struct vector_bm : public benchmark_base {
     a.reserve(n_data);
     b.reserve(n_data);
 
-    fill_random(a);
-    fill_random(b);
+    fill_random_vec(a);
+    fill_random_vec(b);
   }
 
   /// Clear state

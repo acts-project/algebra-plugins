@@ -23,20 +23,18 @@ target_include_directories( algebra_bench_array INTERFACE
    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/array/include>" )
 target_link_libraries(algebra_bench_array INTERFACE algebra::array_cmath 
                                                     algebra::common_storage)
-add_library( algebra::bench_array ALIAS algebra_bench_array )
-
 algebra_add_benchmark( array_getter
    "array/array_getter.cpp"
    LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                   algebra::bench_array algebra::array_cmath )
+                   algebra_bench_array algebra::array_cmath )
 algebra_add_benchmark( array_vector
    "array/array_vector.cpp"
    LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                   algebra::bench_array algebra::array_cmath )
+                   algebra_bench_array algebra::array_cmath )
 algebra_add_benchmark( array_transform3
    "array/array_transform3.cpp"
    LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                   algebra::bench_array algebra::array_cmath )
+                   algebra_bench_array algebra::array_cmath )
 
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
    add_library( algebra_bench_eigen INTERFACE )
@@ -44,20 +42,18 @@ if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
       "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/eigen/include>" )
    target_link_libraries(algebra_bench_eigen INTERFACE algebra::eigen_eigen
                                                     algebra::common_storage)
-   add_library( algebra::bench_eigen ALIAS algebra_bench_eigen )
-
    algebra_add_benchmark( eigen_getter
       "eigen/eigen_getter.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra::bench_eigen algebra::eigen_eigen )
+                     algebra_bench_eigen algebra::eigen_eigen )
    algebra_add_benchmark( eigen_vector
       "eigen/eigen_vector.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra::bench_eigen algebra::eigen_eigen )
+                     algebra_bench_eigen algebra::eigen_eigen )
    algebra_add_benchmark( eigen_transform3
       "eigen/eigen_transform3.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra::bench_eigen algebra::eigen_eigen )
+                     algebra_bench_eigen algebra::eigen_eigen )
 endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_VC )
@@ -67,20 +63,18 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
    target_link_libraries(algebra_bench_vc_aos INTERFACE
                                                    algebra::vc_aos
                                                    algebra::common_storage)
-   add_library( algebra::bench_vc_aos ALIAS algebra_bench_vc_aos )
-
    algebra_add_benchmark( vc_aos_getter
       "vc_aos/vc_aos_getter.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra::bench_vc_aos algebra::vc_aos )
+                     algebra_bench_vc_aos algebra::vc_aos )
    algebra_add_benchmark( vc_aos_vector
       "vc_aos/vc_aos_vector.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra::bench_vc_aos algebra::vc_aos )
+                     algebra_bench_vc_aos algebra::vc_aos )
    algebra_add_benchmark( vc_aos_transform3
       "vc_aos/vc_aos_transform3.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra::bench_vc_aos algebra::vc_aos )
+                     algebra_bench_vc_aos algebra::vc_aos )
 
    if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang" )
       add_library( algebra_bench_vc_soa INTERFACE )
@@ -89,19 +83,17 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
       target_link_libraries(algebra_bench_vc_soa INTERFACE
                                                       algebra::vc_soa
                                                       algebra::common_storage)
-      add_library( algebra::bench_vc_soa ALIAS algebra_bench_vc_soa )
-
       algebra_add_benchmark( vc_soa_getter
          "vc_soa/vc_soa_getter.cpp"
          LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                        algebra::bench_vc_soa algebra::vc_soa )
+                        algebra_bench_vc_soa algebra::vc_soa )
       algebra_add_benchmark( vc_soa_vector
          "vc_soa/vc_soa_vector.cpp"
          LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                        algebra::bench_vc_soa algebra::vc_soa )
+                        algebra_bench_vc_soa algebra::vc_soa )
       algebra_add_benchmark( vc_soa_transform3
          "vc_soa/vc_soa_transform3.cpp"
          LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                        algebra::bench_vc_soa algebra::vc_soa )
+                        algebra_bench_vc_soa algebra::vc_soa )
    endif()
 endif()

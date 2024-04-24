@@ -84,6 +84,8 @@ class vector {
   constexpr operator const array_type &() const { return m_data; }
   /// @}
 
+  constexpr const auto &get() const { return m_data; }
+
   /// Subscript operator[]
   /// @{
   constexpr decltype(auto) operator[](std::size_t i) { return m_data[i]; }

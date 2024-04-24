@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/storage/matrix44.hpp"
 #include "algebra/storage/vector.hpp"
 
 // System include(s).

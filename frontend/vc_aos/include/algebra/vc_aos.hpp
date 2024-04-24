@@ -23,7 +23,7 @@ namespace vc_aos {
 /// @{
 
 template <typename T>
-using transform3 = math::transform3<storage_type, T, vector3<T>, point2<T>>;
+using transform3 = math::transform3<storage_type, T>;
 
 /// @}
 
@@ -42,66 +42,76 @@ using vc_aos::math::theta;
 
 /// @}
 
-/// Function extracting a slice from the matrix used by
-/// @c algebra::vc_aos::transform3<float>
-template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline vc_aos::vector3<float> vector(
-    const vc_aos::transform3<float>::matrix44& m,
-    std::size_t
-#ifndef NDEBUG
-        row
-#endif  // not NDEBUG
-    ,
-    std::size_t col) {
-
-  assert(row == 0);
-  assert(col < 4);
-  switch (col) {
-    case 0:
-      return m.x;
-    case 1:
-      return m.y;
-    case 2:
-      return m.z;
-    case 3:
-      return m.t;
-    default:
-      return m.x;
-  }
-}
-
-/// Function extracting a slice from the matrix used by
-/// @c algebra::vc_aos::transform3<double>
-template <std::size_t SIZE, std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline vc_aos::vector3<double> vector(
-    const vc_aos::transform3<double>::matrix44& m,
-    std::size_t
-#ifndef NDEBUG
-        row
-#endif  // not NDEBUG
-    ,
-    std::size_t col) {
-
-  assert(row == 0);
-  assert(col < 4);
-  switch (col) {
-    case 0:
-      return m.x;
-    case 1:
-      return m.y;
-    case 2:
-      return m.z;
-    case 3:
-      return m.t;
-    default:
-      return m.x;
-  }
-}
-
 /// @name Getter functions on @c algebra::vc_aos::matrix_type
 /// @{
 
 using cmath::element;
+
+/// Function extracting a slice from matrix44 - const
+template <std::size_t SIZE, template <typename, std::size_t> class array_t,
+          typename value_t, std::size_t N,
+          std::enable_if_t<SIZE <= 4, bool> = true>
+ALGEBRA_HOST_DEVICE inline const auto& vector(
+    const storage::matrix44<array_t, value_t, N>& m,
+    std::size_t
+#ifndef NDEBUG
+        row
+#endif  // not NDEBUG
+    ,
+    std::size_t col) {
+
+  assert(row == 0);
+  assert(col < 4);
+  switch (col) {
+    case 0:
+      return m.x;
+    case 1:
+      return m.y;
+    case 2:
+      return m.z;
+    case 3:
+      return m.t;
+    default:
+#ifndef _MSC_VER
+      __builtin_unreachable();
+#else
+      return m.x;
+#endif
+  }
+}
+
+/// Function extracting a slice from matrix44 - non-const
+template <std::size_t SIZE, template <typename, std::size_t> class array_t,
+          typename value_t, std::size_t N,
+          std::enable_if_t<SIZE <= 4, bool> = true>
+ALGEBRA_HOST_DEVICE inline auto& vector(
+    storage::matrix44<array_t, value_t, N>& m,
+    std::size_t
+#ifndef NDEBUG
+        row
+#endif  // not NDEBUG
+    ,
+    std::size_t col) {
+
+  assert(row == 0);
+  assert(col < 4);
+  switch (col) {
+    case 0:
+      return m.x;
+    case 1:
+      return m.y;
+    case 2:
+      return m.z;
+    case 3:
+      return m.t;
+    default:
+#ifndef _MSC_VER
+      __builtin_unreachable();
+#else
+      return m.x;
+#endif
+  }
+}
 
 /// @}
 

@@ -23,7 +23,8 @@ namespace algebra::cmath {
  * @param v the input vector
  **/
 template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N, std::enable_if_t<N >= 2, bool> = true>
+          typename scalar_t, size_type N,
+          std::enable_if_t<(N >= 2) && std::is_scalar_v<scalar_t>, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t phi(
     const array_t<scalar_t, N> &v) noexcept {
 
@@ -35,7 +36,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t phi(
  * @param v the input vector
  **/
 template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N, std::enable_if_t<N >= 3, bool> = true>
+          typename scalar_t, size_type N,
+          std::enable_if_t<(N >= 3) && std::is_scalar_v<scalar_t>, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t theta(
     const array_t<scalar_t, N> &v) noexcept {
 
@@ -48,7 +50,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t theta(
  * @param v the input vector
  **/
 template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N, std::enable_if_t<N >= 2, bool> = true>
+          typename scalar_t, size_type N,
+          std::enable_if_t<(N >= 2) && std::is_scalar_v<scalar_t>, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t perp(
     const array_t<scalar_t, N> &v) noexcept {
 
@@ -60,7 +63,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t perp(
  * @param v the input vector
  **/
 template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N, std::enable_if_t<N == 2, bool> = true>
+          typename scalar_t, size_type N,
+          std::enable_if_t<(N == 2) && std::is_scalar_v<scalar_t>, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, N> &v) {
 
   return perp(v);
@@ -71,7 +75,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, N> &v) {
  * @param v the input vector
  **/
 template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N, std::enable_if_t<N >= 3, bool> = true>
+          typename scalar_t, size_type N,
+          std::enable_if_t<(N >= 3) && std::is_scalar_v<scalar_t>, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, N> &v) {
 
   return algebra::math::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
@@ -83,7 +88,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, N> &v) {
  * @param v the input vector
  **/
 template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N, std::enable_if_t<N >= 3, bool> = true>
+          typename scalar_t, size_type N,
+          std::enable_if_t<(N >= 3) && std::is_scalar_v<scalar_t>, bool> = true>
 ALGEBRA_HOST_DEVICE inline scalar_t eta(
     const array_t<scalar_t, N> &v) noexcept {
 

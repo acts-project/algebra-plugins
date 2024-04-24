@@ -8,9 +8,10 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/cmath.hpp"
-#include "algebra/math/impl/vc_aos_vector.hpp"
+#include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
+#include "algebra/storage/matrix44.hpp"
+#include "algebra/storage/vector.hpp"
 
 // Vc include(s).
 #ifdef _MSC_VER
@@ -26,95 +27,46 @@
 
 namespace algebra::vc_aos::math {
 
-namespace internal {
-
-/// 4x4 matrix type used by @c algebra::vc_aos::math::transform3
-template <typename scalar_t>
-struct matrix44 {
-
-  /// Equality operator between two matrices
-  bool operator==(const matrix44 &rhs) const {
-    return ((x == rhs.x).isFull() && (y == rhs.y).isFull() &&
-            (z == rhs.z).isFull() && (t == rhs.t).isFull());
-  }
-
-  /// Data variables
-  Vc::SimdArray<scalar_t, 4> x, y, z, t;
-
-};  // struct matrix44
-
-/// Functor used to access elements of Vc matrices
-template <template <std::size_t> class array_t, typename scalar_t>
-struct element_getter {
-
-  /// Get const access to a matrix element
-  ALGEBRA_HOST inline scalar_t operator()(const array_t<16> &m,
-                                          unsigned int row,
-                                          unsigned int col) const {
-
-    // Make sure that the indices are valid.
-    assert(row < 4);
-    assert(col < 4);
-
-    // Return the selected element.
-    return m[col * 4 + row];
-  }
-
-  /// Get const access to a matrix element
-  ALGEBRA_HOST inline scalar_t operator()(const matrix44<scalar_t> &m,
-                                          unsigned int row,
-                                          unsigned int col) const {
-
-    // Make sure that the indices are valid.
-    assert(row < 4);
-    assert(col < 4);
-
-    // Return the selected element.
-    switch (row) {
-      case 0:
-        return m.x[col];
-      case 1:
-        return m.y[col];
-      case 2:
-        return m.z[col];
-      case 3:
-        return m.t[col];
-      default:
-        return 0;
-    }
-  }
-
-};  // struct element_getter
-
-}  // namespace internal
+using algebra::storage::operator*;
+using algebra::storage::operator/;
+using algebra::storage::operator-;
+using algebra::storage::operator+;
 
 /// Transform wrapper class to ensure standard API within differnt plugins
-template <template <typename, std::size_t> class array_t, typename scalar_t,
-          typename vector3_t = array_t<scalar_t, 3>,
-          typename point2_t = array_t<scalar_t, 2>>
+template <template <typename, std::size_t> class array_t, typename scalar_t>
 struct transform3 {
 
   /// @name Type definitions for the struct
   /// @{
 
-  /// Array type used by the transform
-  template <std::size_t N>
-  using array_type = array_t<scalar_t, N>;
   /// Scalar type used by the transform
   using scalar_type = scalar_t;
+  /// The type of the matrix elements (scalar for AoS, Vc::Vector for SoA)
+  using value_type =
+      std::conditional_t<Vc::is_simd_vector<array_t<scalar_t, 4>>::value,
+                         scalar_t, Vc::Vector<scalar_t>>;
 
-  /// 3-element "vector" type
-  using vector3 = vector3_t;
-  /// Point in 3D space
+  // AoS stores four elements per vector for alignment
+  using storage_dim =
+      std::conditional_t<Vc::is_simd_vector<value_type>::value,
+                         std::integral_constant<std::size_t, 3u>,
+                         std::integral_constant<std::size_t, 4u>>;
+
+  template <std::size_t N>
+  using array_type = array_t<value_type, N>;
+
+  /// 3-element "vector" type (does not observe translations)
+  using vector3 = storage::vector<storage_dim::value, value_type, array_t>;
+  /// Point in 3D space (does observe translations)
   using point3 = vector3;
   /// Point in 2D space
-  using point2 = point2_t;
+  using point2 = storage::vector<2, value_type, array_t>;
 
   /// 4x4 matrix type
-  using matrix44 = internal::matrix44<scalar_type>;
+  using matrix44 = storage::matrix44<array_t, value_type, storage_dim::value>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = internal::element_getter<array_type, scalar_type>;
+  using element_getter = storage::element_getter;
 
   /// @}
 
@@ -125,6 +77,9 @@ struct transform3 {
   matrix44 _data_inv;
 
   /// @}
+  /// Default constructor: identity
+  ALGEBRA_HOST_DEVICE
+  transform3() = default;
 
   /// Contructor with arguments: t, x, y, z
   ///
@@ -134,20 +89,8 @@ struct transform3 {
   /// @param z the z axis of the new frame, normal vector for planes
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
-             const vector3 &z, bool get_inverse = true) {
-    _data.x = x;
-    _data.y = y;
-    _data.z = z;
-    _data.t = t;
-    _data.x[3] = 0.f;
-    _data.y[3] = 0.f;
-    _data.z[3] = 0.f;
-    _data.t[3] = 1.f;
-
-    if (get_inverse) {
-      _data_inv = invert(_data);
-    }
-  }
+             const vector3 &z, [[maybe_unused]] bool get_inverse = true)
+      : _data{x, y, z, t}, _data_inv{invert(_data)} {}
 
   /// Contructor with arguments: t, z, x
   ///
@@ -159,32 +102,22 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &z, const vector3 &x,
              bool get_inverse = true)
-      : transform3(t, x, cross(z, x), z, get_inverse) {}
+      : transform3(t, x,
+                   vector3(z[1] * x[2] - x[1] * z[2], z[2] * x[0] - x[2] * z[0],
+                           z[0] * x[1] - x[0] * z[1]),
+                   z, get_inverse) {}
 
   /// Constructor with arguments: translation
   ///
   /// @param t is the transform
   ALGEBRA_HOST_DEVICE
-  transform3(const vector3 &t) {
-
-    _data.x = {1.f, 0.f, 0.f, 0.f};
-    _data.y = {0.f, 1.f, 0.f, 0.f};
-    _data.z = {0.f, 0.f, 1.f, 0.f};
-    _data.t = t;
-    _data.t[3] = 1.f;
-
-    _data_inv = invert(_data);
-  }
+  transform3(const vector3 &t) : _data{t}, _data_inv{invert(_data)} {}
 
   /// Constructor with arguments: matrix
   ///
-  /// @param m is the full 4x4 matrix
+  /// @param m is the full 4x4 matrix with simd-vector elements
   ALGEBRA_HOST_DEVICE
-  transform3(const matrix44 &m) {
-
-    _data = m;
-    _data_inv = invert(_data);
-  }
+  transform3(const matrix44 &m) : _data{m}, _data_inv{invert(_data)} {}
 
   /// Constructor with arguments: matrix as std::aray of scalar
   ///
@@ -192,34 +125,33 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const array_type<16> &ma) {
 
-    _data.x = {ma[0], ma[4], ma[8], ma[12]};
-    _data.y = {ma[1], ma[5], ma[9], ma[13]};
-    _data.z = {ma[2], ma[6], ma[10], ma[14]};
-    _data.t = {ma[3], ma[7], ma[11], ma[15]};
-
+    // The values that are not set here, are known to be zero or one
+    // and never used explicitly
+    _data.x = typename matrix44::vector_type{ma[0], ma[4], ma[8]};
+    _data.y = typename matrix44::vector_type{ma[1], ma[5], ma[9]};
+    _data.z = typename matrix44::vector_type{ma[2], ma[6], ma[10]};
+    _data.t = typename matrix44::vector_type{ma[3], ma[7], ma[11]};
     _data_inv = invert(_data);
   }
 
-  /// Constructor with arguments: identity
-  ALGEBRA_HOST_DEVICE
-  transform3() {
-
-    _data.x = {1.f, 0.f, 0.f, 0.f};
-    _data.y = {0.f, 1.f, 0.f, 0.f};
-    _data.z = {0.f, 0.f, 1.f, 0.f};
-    _data.t = {0.f, 0.f, 0.f, 1.f};
-
-    _data_inv = _data;
-  }
-
-  /// Default contructors
+  /// Defaults
   transform3(const transform3 &rhs) = default;
   ~transform3() = default;
 
   /// Equality operator
   ALGEBRA_HOST_DEVICE
-  inline bool operator==(const transform3 &rhs) const {
+  inline constexpr bool operator==(const transform3 &rhs) const {
     return (_data == rhs._data);
+  }
+
+  /// Matrix access operator
+  ALGEBRA_HOST_DEVICE
+  inline const value_type &operator()(std::size_t i, std::size_t j) const {
+    return element_getter{}(_data, i, j);
+  }
+  ALGEBRA_HOST_DEVICE
+  inline value_type &operator()(std::size_t i, std::size_t j) {
+    return element_getter{}(_data, i, j);
   }
 
   /// The determinant of a 4x4 matrix
@@ -228,31 +160,10 @@ struct transform3 {
   ///
   /// @return a sacalar determinant - no checking done
   ALGEBRA_HOST_DEVICE
-  static inline scalar_type determinant(const matrix44 &m) {
-    return m.t[0] * m.z[1] * m.y[2] * m.x[3] -
-           m.z[0] * m.t[1] * m.y[2] * m.x[3] -
-           m.t[0] * m.y[1] * m.z[2] * m.x[3] +
-           m.y[0] * m.t[1] * m.z[2] * m.x[3] +
-           m.z[0] * m.y[1] * m.t[2] * m.x[3] -
-           m.y[0] * m.z[1] * m.t[2] * m.x[3] -
-           m.t[0] * m.z[1] * m.x[2] * m.y[3] +
-           m.z[0] * m.t[1] * m.x[2] * m.y[3] +
-           m.t[0] * m.x[1] * m.z[2] * m.y[3] -
-           m.x[0] * m.t[1] * m.z[2] * m.y[3] -
-           m.z[0] * m.x[1] * m.t[2] * m.y[3] +
-           m.x[0] * m.z[1] * m.t[2] * m.y[3] +
-           m.t[0] * m.y[1] * m.x[2] * m.z[3] -
-           m.y[0] * m.t[1] * m.x[2] * m.z[3] -
-           m.t[0] * m.x[1] * m.y[2] * m.z[3] +
-           m.x[0] * m.t[1] * m.y[2] * m.z[3] +
-           m.y[0] * m.x[1] * m.t[2] * m.z[3] -
-           m.x[0] * m.y[1] * m.t[2] * m.z[3] -
-           m.z[0] * m.y[1] * m.x[2] * m.t[3] +
-           m.y[0] * m.z[1] * m.x[2] * m.t[3] +
-           m.z[0] * m.x[1] * m.y[2] * m.t[3] -
-           m.x[0] * m.z[1] * m.y[2] * m.t[3] -
-           m.y[0] * m.x[1] * m.z[2] * m.t[3] +
-           m.x[0] * m.y[1] * m.z[2] * m.t[3];
+  inline constexpr value_type determinant(const matrix44 &m) const {
+    return -m.z[0] * m.y[1] * m.x[2] + m.y[0] * m.z[1] * m.x[2] +
+           m.z[0] * m.x[1] * m.y[2] - m.x[0] * m.z[1] * m.y[2] -
+           m.y[0] * m.x[1] * m.z[2] + m.x[0] * m.y[1] * m.z[2];
   }
 
   /// The inverse of a 4x4 matrix
@@ -261,44 +172,20 @@ struct transform3 {
   ///
   /// @return an inverse matrix
   ALGEBRA_HOST_DEVICE
-  static inline matrix44 invert(const matrix44 &m) {
+  inline constexpr matrix44 invert(const matrix44 &m) const {
     matrix44 i;
-    i.x[0] = m.z[1] * m.t[2] * m.y[3] - m.t[1] * m.z[2] * m.y[3] +
-             m.t[1] * m.y[2] * m.z[3] - m.y[1] * m.t[2] * m.z[3] -
-             m.z[1] * m.y[2] * m.t[3] + m.y[1] * m.z[2] * m.t[3];
-    i.x[1] = m.t[1] * m.z[2] * m.x[3] - m.z[1] * m.t[2] * m.x[3] -
-             m.t[1] * m.x[2] * m.z[3] + m.x[1] * m.t[2] * m.z[3] +
-             m.z[1] * m.x[2] * m.t[3] - m.x[1] * m.z[2] * m.t[3];
-    i.x[2] = m.y[1] * m.t[2] * m.x[3] - m.t[1] * m.y[2] * m.x[3] +
-             m.t[1] * m.x[2] * m.y[3] - m.x[1] * m.t[2] * m.y[3] -
-             m.y[1] * m.x[2] * m.t[3] + m.x[1] * m.y[2] * m.t[3];
-    i.x[3] = m.z[1] * m.y[2] * m.x[3] - m.y[1] * m.z[2] * m.x[3] -
-             m.z[1] * m.x[2] * m.y[3] + m.x[1] * m.z[2] * m.y[3] +
-             m.y[1] * m.x[2] * m.z[3] - m.x[1] * m.y[2] * m.z[3];
-    i.y[0] = m.t[0] * m.z[2] * m.y[3] - m.z[0] * m.t[2] * m.y[3] -
-             m.t[0] * m.y[2] * m.z[3] + m.y[0] * m.t[2] * m.z[3] +
-             m.z[0] * m.y[2] * m.t[3] - m.y[0] * m.z[2] * m.t[3];
-    i.y[1] = m.z[0] * m.t[2] * m.x[3] - m.t[0] * m.z[2] * m.x[3] +
-             m.t[0] * m.x[2] * m.z[3] - m.x[0] * m.t[2] * m.z[3] -
-             m.z[0] * m.x[2] * m.t[3] + m.x[0] * m.z[2] * m.t[3];
-    i.y[2] = m.t[0] * m.y[2] * m.x[3] - m.y[0] * m.t[2] * m.x[3] -
-             m.t[0] * m.x[2] * m.y[3] + m.x[0] * m.t[2] * m.y[3] +
-             m.y[0] * m.x[2] * m.t[3] - m.x[0] * m.y[2] * m.t[3];
-    i.y[3] = m.y[0] * m.z[2] * m.x[3] - m.z[0] * m.y[2] * m.x[3] +
-             m.z[0] * m.x[2] * m.y[3] - m.x[0] * m.z[2] * m.y[3] -
-             m.y[0] * m.x[2] * m.z[3] + m.x[0] * m.y[2] * m.z[3];
-    i.z[0] = m.z[0] * m.t[1] * m.y[3] - m.t[0] * m.z[1] * m.y[3] +
-             m.t[0] * m.y[1] * m.z[3] - m.y[0] * m.t[1] * m.z[3] -
-             m.z[0] * m.y[1] * m.t[3] + m.y[0] * m.z[1] * m.t[3];
-    i.z[1] = m.t[0] * m.z[1] * m.x[3] - m.z[0] * m.t[1] * m.x[3] -
-             m.t[0] * m.x[1] * m.z[3] + m.x[0] * m.t[1] * m.z[3] +
-             m.z[0] * m.x[1] * m.t[3] - m.x[0] * m.z[1] * m.t[3];
-    i.z[2] = m.y[0] * m.t[1] * m.x[3] - m.t[0] * m.y[1] * m.x[3] +
-             m.t[0] * m.x[1] * m.y[3] - m.x[0] * m.t[1] * m.y[3] -
-             m.y[0] * m.x[1] * m.t[3] + m.x[0] * m.y[1] * m.t[3];
-    i.z[3] = m.z[0] * m.y[1] * m.x[3] - m.y[0] * m.z[1] * m.x[3] -
-             m.z[0] * m.x[1] * m.y[3] + m.x[0] * m.z[1] * m.y[3] +
-             m.y[0] * m.x[1] * m.z[3] - m.x[0] * m.y[1] * m.z[3];
+    i.x[0] = -m.z[1] * m.y[2] + m.y[1] * m.z[2];
+    i.x[1] = m.z[1] * m.x[2] - m.x[1] * m.z[2];
+    i.x[2] = -m.y[1] * m.x[2] + m.x[1] * m.y[2];
+    // i.x[3] = 0;
+    i.y[0] = m.z[0] * m.y[2] - m.y[0] * m.z[2];
+    i.y[1] = -m.z[0] * m.x[2] + m.x[0] * m.z[2];
+    i.y[2] = m.y[0] * m.x[2] - m.x[0] * m.y[2];
+    // i.y[3] = 0;
+    i.z[0] = -m.z[0] * m.y[1] + m.y[0] * m.z[1];
+    i.z[1] = m.z[0] * m.x[1] - m.x[0] * m.z[1];
+    i.z[2] = -m.y[0] * m.x[1] + m.x[0] * m.y[1];
+    // i.z[3] = 0;
     i.t[0] = m.t[0] * m.z[1] * m.y[2] - m.z[0] * m.t[1] * m.y[2] -
              m.t[0] * m.y[1] * m.z[2] + m.y[0] * m.t[1] * m.z[2] +
              m.z[0] * m.y[1] * m.t[2] - m.y[0] * m.z[1] * m.t[2];
@@ -308,15 +195,13 @@ struct transform3 {
     i.t[2] = m.t[0] * m.y[1] * m.x[2] - m.y[0] * m.t[1] * m.x[2] -
              m.t[0] * m.x[1] * m.y[2] + m.x[0] * m.t[1] * m.y[2] +
              m.y[0] * m.x[1] * m.t[2] - m.x[0] * m.y[1] * m.t[2];
-    i.t[3] = m.y[0] * m.z[1] * m.x[2] - m.z[0] * m.y[1] * m.x[2] +
-             m.z[0] * m.x[1] * m.y[2] - m.x[0] * m.z[1] * m.y[2] -
-             m.y[0] * m.x[1] * m.z[2] + m.x[0] * m.y[1] * m.z[2];
-    scalar_type idet = static_cast<scalar_type>(1.) / determinant(i);
+    // i.t[3] = 1;
+    const value_type idet{value_type(1.f) / determinant(i)};
 
-    i.x *= idet;
-    i.y *= idet;
-    i.z *= idet;
-    i.t *= idet;
+    i.x = i.x * idet;
+    i.y = i.y * idet;
+    i.z = i.z * idet;
+    i.t = i.t * idet;
 
     return i;
   }
@@ -325,9 +210,8 @@ struct transform3 {
   ///
   /// @param m is the rotation matrix
   /// @param v is the vector to be rotated
-  template <typename vector3_type>
-  ALGEBRA_HOST_DEVICE static inline auto rotate(const matrix44 &m,
-                                                const vector3_type &v) {
+  ALGEBRA_HOST_DEVICE
+  inline constexpr auto rotate(const matrix44 &m, const vector3 &v) const {
 
     return m.x * v[0] + m.y * v[1] + m.z * v[2];
   }

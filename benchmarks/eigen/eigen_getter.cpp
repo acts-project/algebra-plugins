@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023 CERN for the benefit of the ACTS project
+ * (c) 2023-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,6 +8,7 @@
 // Project include(s)
 #include "algebra/eigen_eigen.hpp"
 #include "benchmark/common/benchmark_getter.hpp"
+#include "benchmark/common/register_benchmark.hpp"
 #include "benchmark/eigen/data_generator.hpp"
 
 // Benchmark include
@@ -21,71 +22,42 @@ using namespace algebra;
 /// Run vector benchmarks
 int main(int argc, char** argv) {
 
-  constexpr std::size_t n_samples{160000};
-  constexpr std::size_t n_warmup{static_cast<std::size_t>(0.1 * n_samples)};
-
   //
   // Prepare benchmarks
   //
   algebra::benchmark_base::configuration cfg{};
-  cfg.n_samples(n_samples).n_warmup(n_warmup);
-  cfg.do_sleep(false);
+  cfg.n_samples(100000);
 
-  vector_unaryOP_bm<eigen::vector3, float, bench_op::phi> v_phi_s{cfg};
-  vector_unaryOP_bm<eigen::vector3, float, bench_op::theta> v_theta_s{cfg};
-  vector_unaryOP_bm<eigen::vector3, float, bench_op::perp> v_perp_s{cfg};
-  vector_unaryOP_bm<eigen::vector3, float, bench_op::norm> v_norm_s{cfg};
-  vector_unaryOP_bm<eigen::vector3, float, bench_op::eta> v_eta_s{cfg};
+  using phi_f_t = vector_unaryOP_bm<eigen::vector3, float, bench_op::phi>;
+  using theta_f_t = vector_unaryOP_bm<eigen::vector3, float, bench_op::theta>;
+  using perp_f_t = vector_unaryOP_bm<eigen::vector3, float, bench_op::perp>;
+  using norm_f_t = vector_unaryOP_bm<eigen::vector3, float, bench_op::norm>;
+  using eta_f_t = vector_unaryOP_bm<eigen::vector3, float, bench_op::eta>;
 
-  vector_unaryOP_bm<eigen::vector3, double, bench_op::phi> v_phi_d{cfg};
-  vector_unaryOP_bm<eigen::vector3, double, bench_op::theta> v_theta_d{cfg};
-  vector_unaryOP_bm<eigen::vector3, double, bench_op::perp> v_perp_d{cfg};
-  vector_unaryOP_bm<eigen::vector3, double, bench_op::norm> v_norm_d{cfg};
-  vector_unaryOP_bm<eigen::vector3, double, bench_op::eta> v_eta_d{cfg};
+  using phi_d_t = vector_unaryOP_bm<eigen::vector3, double, bench_op::phi>;
+  using theta_d_t = vector_unaryOP_bm<eigen::vector3, double, bench_op::theta>;
+  using perp_d_t = vector_unaryOP_bm<eigen::vector3, double, bench_op::perp>;
+  using norm_d_t = vector_unaryOP_bm<eigen::vector3, double, bench_op::norm>;
+  using eta_d_t = vector_unaryOP_bm<eigen::vector3, double, bench_op::eta>;
 
-  std::cout << "Algebra-Plugins 'getter' benchmark (Eigen)\n"
+  std::cout << "------------------------------------------\n"
+            << "Algebra-Plugins 'getter' benchmark (Eigen)\n"
             << "------------------------------------------\n\n"
             << cfg;
 
   //
   // Register all benchmarks
   //
-  ::benchmark::RegisterBenchmark((v_phi_s.name() + "_single").c_str(), v_phi_s)
-      ->MeasureProcessCPUTime()
-      ->ThreadPerCpu();
-  ::benchmark::RegisterBenchmark((v_phi_d.name() + "_double").c_str(), v_phi_d)
-      ->MeasureProcessCPUTime()
-      ->ThreadPerCpu();
-  ::benchmark::RegisterBenchmark((v_theta_s.name() + "_single").c_str(),
-                                 v_theta_s)
-      ->MeasureProcessCPUTime()
-      ->ThreadPerCpu();
-  ::benchmark::RegisterBenchmark((v_theta_d.name() + "_double").c_str(),
-                                 v_theta_d)
-      ->MeasureProcessCPUTime()
-      ->ThreadPerCpu();
-  ::benchmark::RegisterBenchmark((v_perp_s.name() + "_single").c_str(),
-                                 v_perp_s)
-      ->MeasureProcessCPUTime()
-      ->ThreadPerCpu();
-  ::benchmark::RegisterBenchmark((v_perp_d.name() + "_double").c_str(),
-                                 v_perp_d)
-      ->MeasureProcessCPUTime()
-      ->ThreadPerCpu();
-  ::benchmark::RegisterBenchmark((v_norm_s.name() + "_single").c_str(),
-                                 v_norm_s)
-      ->MeasureProcessCPUTime()
-      ->ThreadPerCpu();
-  ::benchmark::RegisterBenchmark((v_norm_d.name() + "_double").c_str(),
-                                 v_norm_d)
-      ->MeasureProcessCPUTime()
-      ->ThreadPerCpu();
-  ::benchmark::RegisterBenchmark((v_eta_s.name() + "_single").c_str(), v_eta_s)
-      ->MeasureProcessCPUTime()
-      ->ThreadPerCpu();
-  ::benchmark::RegisterBenchmark((v_eta_d.name() + "_double").c_str(), v_eta_d)
-      ->MeasureProcessCPUTime()
-      ->ThreadPerCpu();
+  algebra::register_benchmark<phi_f_t>(cfg, "_single");
+  algebra::register_benchmark<phi_d_t>(cfg, "_double");
+  algebra::register_benchmark<theta_f_t>(cfg, "_single");
+  algebra::register_benchmark<theta_d_t>(cfg, "_double");
+  algebra::register_benchmark<perp_f_t>(cfg, "_single");
+  algebra::register_benchmark<perp_d_t>(cfg, "_double");
+  algebra::register_benchmark<norm_f_t>(cfg, "_single");
+  algebra::register_benchmark<norm_d_t>(cfg, "_double");
+  algebra::register_benchmark<eta_f_t>(cfg, "_single");
+  algebra::register_benchmark<eta_d_t>(cfg, "_double");
 
   ::benchmark::Initialize(&argc, argv);
   ::benchmark::RunSpecifiedBenchmarks();

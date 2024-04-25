@@ -22,28 +22,15 @@ struct benchmark_base {
   struct configuration {
     /// Size of data sample to be used in benchmark
     std::size_t m_samples{100u};
-    /// Run a number of operations before the benchmark
-    bool m_warmup = true;
     // Sleep after building data sample
     bool m_sleep = false;
-    // Size of data in warm-up round
-    std::size_t m_n_warmup{static_cast<std::size_t>(0.1f * m_samples)};
-    // Size of data in warm-up round
+    // Number of seconds to sleep
     std::size_t m_n_sleep{1u};
 
     /// Setters
     /// @{
     configuration& n_samples(std::size_t n) {
       m_samples = n;
-      return *this;
-    }
-    configuration& do_warmup(bool b) {
-      m_warmup = b;
-      return *this;
-    }
-    configuration& n_warmup(std::size_t n) {
-      m_n_warmup = n;
-      m_warmup = true;
       return *this;
     }
     configuration& do_sleep(bool b) {
@@ -60,8 +47,6 @@ struct benchmark_base {
     /// Getters
     /// @{
     std::size_t n_samples() const { return m_samples; }
-    constexpr bool do_warmup() const { return m_warmup; }
-    constexpr std::size_t n_warmup() const { return m_n_warmup; }
     constexpr bool do_sleep() const { return m_sleep; }
     constexpr std::size_t n_sleep() const { return m_n_sleep; }
     /// @}
@@ -95,9 +80,6 @@ struct benchmark_base {
 std::ostream& operator<<(std::ostream& os,
                          const benchmark_base::configuration& cfg) {
   os << " -> running:\t " << cfg.n_samples() << " samples" << std::endl;
-  if (cfg.do_warmup()) {
-    os << " -> warmup: \t " << cfg.n_warmup() << " samples" << std::endl;
-  }
   if (cfg.do_sleep()) {
     os << " -> cool down:\t " << cfg.n_sleep() << "s" << std::endl;
   }

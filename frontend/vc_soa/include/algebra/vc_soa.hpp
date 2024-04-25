@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023 CERN for the benefit of the ACTS project
+ * (c) 2023-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/impl/vc_aos_transform3.hpp"
 #include "algebra/math/vc_soa.hpp"
 #include "algebra/storage/vc_soa.hpp"
 
@@ -32,7 +33,7 @@ namespace vc_soa {
 /// @{
 
 template <typename T>
-using transform3 = math::transform3<T>;
+using transform3 = algebra::vc_aos::math::transform3<storage_type, T>;
 
 /// @}
 

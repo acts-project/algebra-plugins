@@ -16,21 +16,6 @@
 
 namespace algebra {
 
-// @todo Leave for later
-
-/// Fill a @c Vc::SimdArray based vector with random values
-/*template <typename vector_t>
-inline void fill_random_vec(
-    std::vector<vector3_s<value_t>, allocator_t<vector3_s<value_t>>>
-        &collection) {
-
-  using vector_t = vector3_s<value_t>;
-  // Generate a vector of the right type with random values
-  auto rand_obj = [&]() { return vector_t{vector_t::array_type::Random()}; };
-
-  std::generate(collection.begin(), collection.end(), rand_obj);
-}*/
-
 /// Fill a @c Vc::Vector based vector with random values
 template <typename vector_soa_t>
 inline void fill_random_vec(std::vector<vector_soa_t> &collection) {

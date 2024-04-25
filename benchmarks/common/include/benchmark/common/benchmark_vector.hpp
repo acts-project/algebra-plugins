@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023 CERN for the benefit of the ACTS project
+ * (c) 2023-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -37,7 +37,7 @@ struct vector_bm : public benchmark_base {
   /// Construct from an externally provided configuration @param cfg
   vector_bm(benchmark_base::configuration cfg) : benchmark_base{cfg} {
 
-    const std::size_t n_data{this->m_cfg.n_samples() + this->m_cfg.n_warmup()};
+    const std::size_t n_data{this->m_cfg.n_samples()};
 
     a.reserve(n_data);
     b.reserve(n_data);
@@ -67,29 +67,15 @@ struct vector_unaryOP_bm : public vector_bm<vector_t<scalar_t>> {
 
   void operator()(::benchmark::State &state) override {
 
-    const std::size_t n_samples{this->m_cfg.n_samples()};
-    const std::size_t n_warmup{this->m_cfg.n_warmup()};
+    using result_t = std::invoke_result_t<unaryOP, vector_t<scalar_t>>;
 
-    // Spin down before benchmark (Thread zero is counting the clock)
-    if (state.thread_index() == 0 && this->m_cfg.do_sleep()) {
-      std::this_thread::sleep_for(std::chrono::seconds(this->m_cfg.n_sleep()));
-    }
+    const std::size_t n_samples{this->m_cfg.n_samples()};
 
     // Run the benchmark
     for (auto _ : state) {
-      // Warm-up
-      state.PauseTiming();
-      if (this->m_cfg.do_warmup()) {
-        for (std::size_t i{0u}; i < n_warmup; ++i) {
-          ::benchmark::DoNotOptimize(unaryOP{}(this->a[i]));
-          benchmark::ClobberMemory();
-        }
-      }
-      state.ResumeTiming();
-
-      for (std::size_t i{n_warmup}; i < n_samples + n_warmup; ++i) {
-        ::benchmark::DoNotOptimize(unaryOP{}(this->a[i]));
-        benchmark::ClobberMemory();
+      for (std::size_t i{0}; i < n_samples; ++i) {
+        result_t result = unaryOP{}(this->a[i]);
+        ::benchmark::DoNotOptimize(const_cast<const result_t &>(result));
       }
     }
   }
@@ -109,29 +95,16 @@ struct vector_binaryOP_bm : public vector_bm<vector_t<scalar_t>> {
 
   void operator()(::benchmark::State &state) override {
 
-    const std::size_t n_samples{this->m_cfg.n_samples()};
-    const std::size_t n_warmup{this->m_cfg.n_warmup()};
+    using result_t =
+        std::invoke_result_t<binaryOP, vector_t<scalar_t>, vector_t<scalar_t>>;
 
-    // Spin down before benchmark (Thread zero is counting the clock)
-    if ((state.thread_index() == 0) && this->m_cfg.do_sleep()) {
-      std::this_thread::sleep_for(std::chrono::seconds(this->m_cfg.n_sleep()));
-    }
+    const std::size_t n_samples{this->m_cfg.n_samples()};
 
     // Run the benchmark
     for (auto _ : state) {
-      // Warm-up
-      state.PauseTiming();
-      if (this->m_cfg.do_warmup()) {
-        for (std::size_t i{0u}; i < n_warmup; ++i) {
-          ::benchmark::DoNotOptimize(binaryOP{}(this->a[i], this->b[i]));
-          benchmark::ClobberMemory();
-        }
-      }
-      state.ResumeTiming();
-
-      for (std::size_t i{n_warmup}; i < n_samples + n_warmup; ++i) {
-        ::benchmark::DoNotOptimize(binaryOP{}(this->a[i], this->b[i]));
-        benchmark::ClobberMemory();
+      for (std::size_t i{0}; i < n_samples; ++i) {
+        result_t result = binaryOP{}(this->a[i], this->b[i]);
+        ::benchmark::DoNotOptimize(const_cast<const result_t &>(result));
       }
     }
   }

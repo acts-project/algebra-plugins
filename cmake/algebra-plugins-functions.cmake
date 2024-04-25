@@ -123,6 +123,8 @@ function( algebra_add_benchmark name )
    if( ARG_LINK_LIBRARIES )
       target_link_libraries( ${bench_exe_name} PRIVATE ${ARG_LINK_LIBRARIES} )
    endif()
+   target_compile_options( algebra_benchmark_${name} PRIVATE
+   "-march=native" "-ftree-vectorize")
 
 endfunction( algebra_add_benchmark )
 

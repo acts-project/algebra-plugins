@@ -9,10 +9,10 @@
 
 // Project include(s).
 #include "algebra/math/cmath.hpp"
-#include "algebra/math/vc.hpp"
-#include "algebra/storage/vc.hpp"
+#include "algebra/math/vc_aos.hpp"
+#include "algebra/storage/vc_aos.hpp"
 
-/// @name Operators on @c algebra::vc types
+/// @name Operators on @c algebra::vc_aos types
 /// @{
 
 using algebra::cmath::operator*;
@@ -24,7 +24,7 @@ using algebra::cmath::operator+;
 namespace algebra {
 namespace getter {
 
-/// @name Getter functions on @c algebra::vc types
+/// @name Getter functions on @c algebra::vc_aos types
 /// @{
 
 using cmath::eta;
@@ -33,27 +33,27 @@ using cmath::perp;
 using cmath::phi;
 using cmath::theta;
 
-using vc::math::eta;
-using vc::math::norm;
-using vc::math::perp;
-using vc::math::phi;
-using vc::math::theta;
+using vc_aos::math::eta;
+using vc_aos::math::norm;
+using vc_aos::math::perp;
+using vc_aos::math::phi;
+using vc_aos::math::theta;
 
 /// @|
 
 /// Function extracting a slice from the matrix used by
-/// @c algebra::vc::transform3
+/// @c algebra::vc_aos::transform3
 template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
           typename scalar_t>
 ALGEBRA_HOST_DEVICE inline Vc::array<scalar_t, SIZE> vector(
-    const vc::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
+    const vc_aos::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
     std::size_t col) {
 
   return cmath::vector_getter<std::size_t, Vc::array, scalar_t, SIZE,
                               Vc::array<scalar_t, SIZE>>()(m, row, col);
 }
 
-/// @name Getter functions on @c algebra::vc::matrix_type
+/// @name Getter functions on @c algebra::vc_aos::matrix_type
 /// @{
 
 using cmath::element;
@@ -64,16 +64,16 @@ using cmath::element;
 
 namespace vector {
 
-/// @name Vector functions on @c algebra::vc::storage_type
+/// @name Vector functions on @c algebra::vc_aos::storage_type
 /// @{
 
 using cmath::cross;
 using cmath::dot;
 using cmath::normalize;
 
-using vc::math::cross;
-using vc::math::dot;
-using vc::math::normalize;
+using vc_aos::math::cross;
+using vc_aos::math::dot;
+using vc_aos::math::normalize;
 
 /// @}
 
@@ -81,13 +81,13 @@ using vc::math::normalize;
 
 namespace matrix {
 
-using size_type = vc::size_type;
+using size_type = vc_aos::size_type;
 
 template <typename T, size_type N>
 using array_type = Vc::array<T, N>;
 
 template <typename T, size_type ROWS, size_type COLS>
-using matrix_type = vc::matrix_type<T, ROWS, COLS>;
+using matrix_type = vc_aos::matrix_type<T, ROWS, COLS>;
 
 template <typename scalar_t>
 using element_getter = cmath::element_getter<size_type, array_type, scalar_t>;
@@ -168,7 +168,7 @@ using preset0 =
 
 }  // namespace matrix
 
-namespace vc {
+namespace vc_aos {
 
 /// @name cmath based transforms on @c algebra::matrix::actor
 /// @{
@@ -182,6 +182,6 @@ using transform3 = cmath::transform3<transform3_actor<T>>;
 
 /// @}
 
-}  // namespace vc
+}  // namespace vc_aos
 
 }  // namespace algebra

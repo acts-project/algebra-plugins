@@ -33,6 +33,7 @@ struct test_specialisation_name {
   }
 };
 
+// test
 // Instantiate the test(s).
 typedef testing::Types<
     test_types<float, algebra::fastor::point2<float>,

@@ -35,28 +35,29 @@ struct test_specialisation_name {
 // Register the tests
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics_vector, local_vectors, vector3,
                             getter);
-/*REGISTER_TYPED_TEST_SUITE_P(test_host_basics_matrix, matrix3, matrix64,
- * matrix22);*/
+REGISTER_TYPED_TEST_SUITE_P(test_host_basics_matrix, matrix3, matrix64,
+                            matrix22);
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics_transform, transform3,
                             global_transformations);
 
 // Instantiate the test(s).
 typedef testing::Types<
-    test_types<float, algebra::vc_aos::point2<float>,
-               algebra::vc_aos::point3<float>, algebra::vc_aos::vector2<float>,
-               algebra::vc_aos::vector3<float>,
-               algebra::vc_aos::transform3<float>, std::size_t,
-               algebra::vc_aos::matrix_type, float>,
+    test_types<
+        float, algebra::vc_aos::point2<float>, algebra::vc_aos::point3<float>,
+        algebra::vc_aos::vector2<float>, algebra::vc_aos::vector3<float>,
+        algebra::vc_aos::transform3<float>, std::size_t,
+        algebra::vc_aos::matrix_type,
+        algebra::vc_aos::matrix::actor<algebra::vc_aos::storage_type, float>>,
     test_types<
         double, algebra::vc_aos::point2<double>,
         algebra::vc_aos::point3<double>, algebra::vc_aos::vector2<double>,
         algebra::vc_aos::vector3<double>, algebra::vc_aos::transform3<double>,
-        std::size_t, algebra::vc_aos::matrix_type, double>>
+        std::size_t, algebra::vc_aos::matrix_type,
+        algebra::vc_aos::matrix::actor<algebra::vc_aos::storage_type, double>>>
     vc_aos_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
                                vc_aos_types, test_specialisation_name);
-// @TODO: Implement
-/*INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_matrix,
-                               array_cmath_types, test_specialisation_name);*/
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_matrix,
+                               vc_aos_types, test_specialisation_name);
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_transform,
                                vc_aos_types, test_specialisation_name);

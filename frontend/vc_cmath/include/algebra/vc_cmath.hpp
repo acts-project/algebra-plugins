@@ -174,8 +174,9 @@ namespace vc_aos {
 /// @{
 
 template <typename T>
-using transform3_actor = matrix::actor<T, matrix::determinant::preset0<T>,
-                                       matrix::inverse::preset0<T>>;
+using transform3_actor =
+    algebra::matrix::actor<T, algebra::matrix::determinant::preset0<T>,
+                           algebra::matrix::inverse::preset0<T>>;
 
 template <typename T>
 using transform3 = cmath::transform3<transform3_actor<T>>;

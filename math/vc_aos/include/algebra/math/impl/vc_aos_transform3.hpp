@@ -58,20 +58,20 @@ struct transform3 {
   using storage_dim =
       std::conditional_t<Vc::is_simd_vector<value_type>::value,
                          std::integral_constant<std::size_t, 3u>,
-                         std::integral_constant<std::size_t, 4u>>;
+                         std::integral_constant<std::size_t, 3u>>;
 
   template <std::size_t N>
   using array_type = array_t<value_type, N>;
 
   /// 3-element "vector" type (does not observe translations)
-  using vector3 = storage::vector<storage_dim::value, value_type, array_t>;
+  using vector3 = storage::vector<3u, value_type, array_t>;
   /// Point in 3D space (does observe translations)
   using point3 = vector3;
   /// Point in 2D space
-  using point2 = storage::vector<2, value_type, array_t>;
+  using point2 = storage::vector<2u, value_type, array_t>;
 
   /// 4x4 matrix type
-  using matrix44 = storage::matrix<array_t, value_type, storage_dim::value, 4u>;
+  using matrix44 = storage::matrix<array_t, value_type, 3u, 4u>;
   using column_t = typename matrix44::vector_type;
 
   /// Function (object) used for accessing a matrix element
@@ -88,7 +88,9 @@ struct transform3 {
   /// @}
   /// Default constructor: identity
   ALGEBRA_HOST_DEVICE
-  transform3() = default;
+  constexpr transform3()
+      : _data{storage::identity<matrix44>()},
+        _data_inv{storage::identity<matrix44>()} {}
 
   /// Contructor with arguments: t, x, y, z
   ///
@@ -120,7 +122,7 @@ struct transform3 {
   ///
   /// @param t is the transform
   ALGEBRA_HOST_DEVICE
-  transform3(const vector3 &t)
+  explicit transform3(const vector3 &t)
       : _data{column_t{1.f, 0.f, 0.f}, column_t{0.f, 1.f, 0.f},
               column_t{0.f, 0.f, 1.f}, t},
         _data_inv{invert(_data)} {}
@@ -129,13 +131,13 @@ struct transform3 {
   ///
   /// @param m is the full 4x4 matrix with simd-vector elements
   ALGEBRA_HOST_DEVICE
-  transform3(const matrix44 &m) : _data{m}, _data_inv{invert(_data)} {}
+  explicit transform3(const matrix44 &m) : _data{m}, _data_inv{invert(_data)} {}
 
   /// Constructor with arguments: matrix as std::aray of scalar
   ///
   /// @param ma is the full 4x4 matrix 16 array
   ALGEBRA_HOST_DEVICE
-  transform3(const array_type<16> &ma) {
+  explicit transform3(const array_type<16> &ma) {
 
     // The values that are not set here, are known to be zero or one
     // and never used explicitly
@@ -143,6 +145,7 @@ struct transform3 {
     _data[e_y] = column_t{ma[1], ma[5], ma[9]};
     _data[e_z] = column_t{ma[2], ma[6], ma[10]};
     _data[e_t] = column_t{ma[3], ma[7], ma[11]};
+
     _data_inv = invert(_data);
   }
 
@@ -247,15 +250,15 @@ struct transform3 {
     return submatrix;
   }
 
-  /// This method retrieves x axis
+  /// This method retrieves the new x-axis
   ALGEBRA_HOST_DEVICE
   inline const auto &x() const { return _data[e_x]; }
 
-  /// This method retrieves y axis
+  /// This method retrieves the new y-axis
   ALGEBRA_HOST_DEVICE
   inline const auto &y() const { return _data[e_y]; }
 
-  /// This method retrieves z axis
+  /// This method retrieves the new z-axis
   ALGEBRA_HOST_DEVICE
   inline const auto &z() const { return _data[e_z]; }
 

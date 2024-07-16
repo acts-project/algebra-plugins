@@ -9,5 +9,6 @@
 
 // Project include(s).
 #include "algebra/math/impl/vc_aos_getter.hpp"
+#include "algebra/math/impl/vc_aos_matrix.hpp"
 #include "algebra/math/impl/vc_aos_transform3.hpp"
 #include "algebra/math/impl/vc_aos_vector.hpp"

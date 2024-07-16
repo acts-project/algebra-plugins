@@ -49,66 +49,30 @@ using cmath::element;
 
 /// Function extracting a slice from matrix44 - const
 template <std::size_t SIZE, template <typename, std::size_t> class array_t,
-          typename value_t, std::size_t N>
+          typename value_t, std::size_t ROW, std::size_t COL>
 requires(SIZE <= 4) ALGEBRA_HOST_DEVICE inline const
-    auto& vector(const storage::matrix44<array_t, value_t, N>& m,
-                 std::size_t
-#ifndef NDEBUG
-                     row
-#endif  // not NDEBUG
-                 ,
-                 std::size_t col) {
+    auto& vector(
+    const storage::matrix<array_t, value_t, ROW, COL>& m,
+    [[maybe_unused]] std::size_t row, [[maybe_unused]] std::size_t col) {
 
   assert(row == 0);
-  assert(col < 4);
-  switch (col) {
-    case 0:
-      return m.x;
-    case 1:
-      return m.y;
-    case 2:
-      return m.z;
-    case 3:
-      return m.t;
-    default:
-#ifndef _MSC_VER
-      __builtin_unreachable();
-#else
-      return m.x;
-#endif
-  }
+  assert(col < COL);
+
+  return m[COL];
 }
 
 /// Function extracting a slice from matrix44 - non-const
 template <std::size_t SIZE, template <typename, std::size_t> class array_t,
-          typename value_t, std::size_t N>
+          typename value_t, std::size_t ROW, std::size_t COL>
 requires(SIZE <= 4) ALGEBRA_HOST_DEVICE
-    inline auto& vector(storage::matrix44<array_t, value_t, N>& m,
-                        std::size_t
-#ifndef NDEBUG
-                            row
-#endif  // not NDEBUG
-                        ,
-                        std::size_t col) {
+    inline auto& vector(
+    storage::matrix<array_t, value_t, ROW, COL>& m,
+    [[maybe_unused]] std::size_t row, [[maybe_unused]]  std::size_t col) {
 
   assert(row == 0);
-  assert(col < 4);
-  switch (col) {
-    case 0:
-      return m.x;
-    case 1:
-      return m.y;
-    case 2:
-      return m.z;
-    case 3:
-      return m.t;
-    default:
-#ifndef _MSC_VER
-      __builtin_unreachable();
-#else
-      return m.x;
-#endif
-  }
+  assert(col < COL);
+
+  return m[COL];
 }
 
 /// @}

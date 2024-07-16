@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/cmath.hpp"
 #include "algebra/math/vc_aos.hpp"
 #include "algebra/storage/vc_aos.hpp"
 
@@ -23,7 +22,7 @@ namespace vc_aos {
 /// @{
 
 template <typename T>
-using transform3 = math::transform3<storage_type, T>;
+using transform3 = math::transform3<vc_aos::storage_type, T>;
 
 /// @}
 
@@ -45,7 +44,7 @@ using vc_aos::math::theta;
 /// @name Getter functions on @c algebra::vc_aos::matrix_type
 /// @{
 
-using cmath::element;
+using vc_aos::math::element;
 
 /// Function extracting a slice from matrix44 - const
 template <std::size_t SIZE, template <typename, std::size_t> class array_t,
@@ -91,5 +90,12 @@ using vc_aos::math::normalize;
 /// @}
 
 }  // namespace vector
+
+namespace matrix {
+
+template <typename scalar_t>
+using actor = vc_aos::matrix::actor<vc_aos::storage_type, scalar_t>;
+
+}  // namespace matrix
 
 }  // namespace algebra

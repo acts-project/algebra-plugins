@@ -20,43 +20,64 @@ namespace algebra {
 
 namespace storage {
 
+namespace detail {
+/// Make sure the vector/matrix dimension aligns with simd sizes
+/// @see
+/// https://gitlab.in2p3.fr/CodeursIntensifs/Fast5x5/-/blob/master/fast5x5.hpp?ref_type=heads
+constexpr std::size_t nearest_power_of_two(std::size_t min_value,
+                                           std::size_t current_value) {
+  // Computes the nearest power of two relative to `min_value` starting from the
+  // power of two `current_value`
+  return min_value <= current_value
+             ? current_value
+             : nearest_power_of_two(min_value, current_value * 2u);
+}
+
+}  // namespace detail
+
 /// Vector wrapper for AoS vs interleaved SoA data. @c value_t can e.g. be a
 /// SIMD vector.
 template <std::size_t N, typename value_t,
           template <typename, std::size_t> class array_t>
 class vector {
+  static constexpr std::size_t simd_size() {
+    return std::is_scalar_v<value_t> ? detail::nearest_power_of_two(N, 2u) : N;
+  }
+
  public:
   // Value type is a simd vector in SoA and a scalar in AoS
   using value_type = value_t;
   /// Underlying data array type
-  using array_type = array_t<value_t, N>;
+  using array_type = array_t<value_t, simd_size()>;
 
   /// Default contructor sets all entries to zero.
-  constexpr vector() { zero_fill(std::make_index_sequence<N>{}); }
+  constexpr vector() { zero_fill(std::make_index_sequence<simd_size()>{}); }
 
   /// Construct from element values @param vals .
   ///
   /// In order to avoid uninitialized values, which deteriorate the performance
   /// in explicitely vectorized code, the underlying data array is filled with
   /// zeroes if too few arguments are given.
-  template <typename... Values,
-            std::enable_if_t<std::conjunction_v<
-                                 std::is_convertible<Values, value_type>...> &&
-                                 sizeof...(Values) <= N && N != 4,
-                             bool> = true>
-  constexpr vector(Values &&... vals) : m_data{std::forward<Values>(vals)...} {
-    if constexpr ((sizeof...(Values) < N) &&
+  template <
+      typename... Values,
+      std::enable_if_t<
+          std::conjunction_v<std::is_convertible<Values, value_type>...> &&
+              sizeof...(Values) <= simd_size() && simd_size() != 4,
+          bool> = true>
+  constexpr vector(Values &&...vals) : m_data{std::forward<Values>(vals)...} {
+    if constexpr ((sizeof...(Values) < simd_size()) &&
                   (!std::conjunction_v<std::is_same<array_type, Values>...>)) {
-      zero_fill(std::make_index_sequence<N - sizeof...(Values) - 1>{});
+      zero_fill(
+          std::make_index_sequence<simd_size() - sizeof...(Values) - 1>{});
     }
   }
 
   template <typename... Values,
             std::enable_if_t<std::conjunction_v<
                                  std::is_convertible<Values, value_type>...> &&
-                                 N == 4,
+                                 simd_size() == 4,
                              bool> = true>
-  constexpr vector(Values &&... vals)
+  constexpr vector(Values &&...vals)
       : m_data{std::forward<Values>(vals)..., 0.f} {}
 
   /// Construct from existing array storage @param vals .
@@ -136,7 +157,7 @@ class vector {
   }
 
   /// Holds the data value for every vector element
-  array_t<value_t, N> m_data;
+  array_t<value_t, simd_size()> m_data;
 
  private:
   /// Sets the trailing uninitialized values to zero.
@@ -194,55 +215,55 @@ constexpr bool operator==(const vector<N, value_t, array_t> &lhs,
 /// @}
 
 /// Macro declaring all instances of a specific arithmetic operator
-#define DECLARE_vector_OPERATORS(OP)                                           \
-  template <std::size_t N, typename value_t, typename scalar_t,                \
-            template <typename, std::size_t> class array_t,                    \
-            std::enable_if_t<std::is_scalar_v<scalar_t>, bool> = true>         \
-  inline constexpr decltype(auto) operator OP(                                 \
-      const vector<N, value_t, array_t> &lhs, scalar_t rhs) noexcept {         \
-    return lhs.m_data OP static_cast<value_t>(rhs);                            \
-  }                                                                            \
-  template <std::size_t N, typename value_t, typename scalar_t,                \
-            template <typename, std::size_t> class array_t,                    \
-            std::enable_if_t<std::is_scalar_v<scalar_t>, bool> = true>         \
-  inline decltype(auto) operator OP(                                           \
-      scalar_t lhs, const vector<N, value_t, array_t> &rhs) noexcept {         \
-    return static_cast<value_t>(lhs) OP rhs.m_data;                            \
-  }                                                                            \
-  template <std::size_t N, typename value_t,                                   \
-            template <typename, std::size_t> class array_t>                    \
-  inline constexpr decltype(auto) operator OP(                                 \
-      const vector<N, value_t, array_t> &lhs,                                  \
-      const vector<N, value_t, array_t> &rhs) noexcept {                       \
-    return lhs.m_data OP rhs.m_data;                                           \
-  }                                                                            \
-  template <                                                                   \
-      std::size_t N, typename value_t,                                         \
-      template <typename, std::size_t> class array_t, typename other_type,     \
-      std::enable_if_t<                                                        \
-          std::is_object<decltype(                                             \
-              std::declval<typename vector<N, value_t, array_t>::array_type>() \
-                  OP std::declval<other_type>())>::value &&                    \
-              !std::is_scalar_v<other_type>,                                   \
-          bool> = true>                                                        \
-  inline constexpr decltype(auto) operator OP(                                 \
-      const vector<N, value_t, array_t> &lhs,                                  \
-      const other_type &rhs) noexcept {                                        \
-    return lhs.m_data OP rhs;                                                  \
-  }                                                                            \
-  template <                                                                   \
-      std::size_t N, typename value_t,                                         \
-      template <typename, std::size_t> class array_t, typename other_type,     \
-      std::enable_if_t<                                                        \
-          std::is_object<decltype(                                             \
-              std::declval<typename vector<N, value_t, array_t>::array_type>() \
-                  OP std::declval<other_type>())>::value &&                    \
-              !std::is_scalar_v<other_type>,                                   \
-          bool> = true>                                                        \
-  inline constexpr decltype(auto) operator OP(                                 \
-      const other_type &lhs,                                                   \
-      const vector<N, value_t, array_t> &rhs) noexcept {                       \
-    return lhs OP rhs.m_data;                                                  \
+#define DECLARE_vector_OPERATORS(OP)                                         \
+  template <std::size_t N, typename value_t, typename scalar_t,              \
+            template <typename, std::size_t> class array_t,                  \
+            std::enable_if_t<std::is_scalar_v<scalar_t>, bool> = true>       \
+  inline constexpr decltype(auto) operator OP(                               \
+      const vector<N, value_t, array_t> &lhs, scalar_t rhs) noexcept {       \
+    return lhs.m_data OP static_cast<value_t>(rhs);                          \
+  }                                                                          \
+  template <std::size_t N, typename value_t, typename scalar_t,              \
+            template <typename, std::size_t> class array_t,                  \
+            std::enable_if_t<std::is_scalar_v<scalar_t>, bool> = true>       \
+  inline decltype(auto) operator OP(                                         \
+      scalar_t lhs, const vector<N, value_t, array_t> &rhs) noexcept {       \
+    return static_cast<value_t>(lhs) OP rhs.m_data;                          \
+  }                                                                          \
+  template <std::size_t N, typename value_t,                                 \
+            template <typename, std::size_t> class array_t>                  \
+  inline constexpr decltype(auto) operator OP(                               \
+      const vector<N, value_t, array_t> &lhs,                                \
+      const vector<N, value_t, array_t> &rhs) noexcept {                     \
+    return lhs.m_data OP rhs.m_data;                                         \
+  }                                                                          \
+  template <                                                                 \
+      std::size_t N, typename value_t,                                       \
+      template <typename, std::size_t> class array_t, typename other_type,   \
+      std::enable_if_t<                                                      \
+          std::is_object<decltype(std::declval<typename vector<              \
+                                      N, value_t, array_t>::array_type>() OP \
+                                      std::declval<other_type>())>::value && \
+              !std::is_scalar_v<other_type>,                                 \
+          bool> = true>                                                      \
+  inline constexpr decltype(auto) operator OP(                               \
+      const vector<N, value_t, array_t> &lhs,                                \
+      const other_type &rhs) noexcept {                                      \
+    return lhs.m_data OP rhs;                                                \
+  }                                                                          \
+  template <                                                                 \
+      std::size_t N, typename value_t,                                       \
+      template <typename, std::size_t> class array_t, typename other_type,   \
+      std::enable_if_t<                                                      \
+          std::is_object<decltype(std::declval<typename vector<              \
+                                      N, value_t, array_t>::array_type>() OP \
+                                      std::declval<other_type>())>::value && \
+              !std::is_scalar_v<other_type>,                                 \
+          bool> = true>                                                      \
+  inline constexpr decltype(auto) operator OP(                               \
+      const other_type &lhs,                                                 \
+      const vector<N, value_t, array_t> &rhs) noexcept {                     \
+    return lhs OP rhs.m_data;                                                \
   }
 
 // Implement all arithmetic operations on top of @c vector.

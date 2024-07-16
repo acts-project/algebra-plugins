@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/storage/matrix44.hpp"
+#include "algebra/storage/matrix.hpp"
 #include "algebra/storage/vector.hpp"
 
 // System include(s).
@@ -31,15 +31,15 @@ using size_type = std::size_t;
 /// Array type used to store Vc::Vectors
 template <typename T, size_type N>
 using storage_type = Vc::SimdArray<T, N>;
-/// value type in a linear algebra vector: SoA layout
+/// value type in a linear algebra vector: AoS layout
 template <typename T>
 using value_type = T;
-/// Vector type used in the Vc SoA storage model
+/// Vector type used in the Vc AoS storage model
 template <typename T, std::size_t N>
 using vector_type = storage::vector<N, T, storage_type>;
-/// Matrix type used in the Vc SoA storage model
+/// Matrix type used in the Vc AoS storage model
 template <typename T, size_type ROWS, size_type COLS>
-using matrix_type = storage::vector<ROWS * COLS, T, storage_type>;
+using matrix_type = storage::matrix<storage_type, T, ROWS, COLS>;
 
 /// 2-element "vector" type, using @c Vc::SimdArray
 template <typename T>

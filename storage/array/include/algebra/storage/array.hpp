@@ -18,6 +18,9 @@ using size_type = std::size_t;
 /// Array type used in the Array storage model
 template <typename T, size_type N>
 using storage_type = std::array<T, N>;
+/// Vector type used in the Array storage model
+template <typename T, std::size_t N>
+using vector_type = storage_type<T, N>;
 /// Matrix type used in the Array storage model
 template <typename T, size_type ROWS, size_type COLS>
 using matrix_type = storage_type<storage_type<T, ROWS>, COLS>;

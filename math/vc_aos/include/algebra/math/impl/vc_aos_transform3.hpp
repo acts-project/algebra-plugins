@@ -54,12 +54,6 @@ struct transform3 {
       std::conditional_t<Vc::is_simd_vector<array_t<scalar_t, 4>>::value,
                          scalar_t, Vc::Vector<scalar_t>>;
 
-  // AoS stores four elements per vector for alignment
-  using storage_dim =
-      std::conditional_t<Vc::is_simd_vector<value_type>::value,
-                         std::integral_constant<std::size_t, 3u>,
-                         std::integral_constant<std::size_t, 3u>>;
-
   template <std::size_t N>
   using array_type = array_t<value_type, N>;
 
@@ -100,7 +94,7 @@ struct transform3 {
   /// @param z the z axis of the new frame, normal vector for planes
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
-             const vector3 &z, [[maybe_unused]] bool get_inverse = true)
+             const vector3 &z)
       : _data{x, y, z, t}, _data_inv{invert(_data)} {}
 
   /// Contructor with arguments: t, z, x
@@ -111,12 +105,12 @@ struct transform3 {
   ///
   /// @note y will be constructed by cross product
   ALGEBRA_HOST_DEVICE
-  transform3(const vector3 &t, const vector3 &z, const vector3 &x,
-             bool get_inverse = true)
-      : transform3(t, x,
-                   vector3(z[1] * x[2] - x[1] * z[2], z[2] * x[0] - x[2] * z[0],
-                           z[0] * x[1] - x[0] * z[1]),
-                   z, get_inverse) {}
+  transform3(const vector3 &t, const vector3 &z, const vector3 &x)
+      : transform3(
+            t, x,
+            column_t(z[1] * x[2] - x[1] * z[2], z[2] * x[0] - x[2] * z[0],
+                     z[0] * x[1] - x[0] * z[1]),
+            z) {}
 
   /// Constructor with arguments: translation
   ///

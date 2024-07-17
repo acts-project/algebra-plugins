@@ -37,6 +37,10 @@ algebra_add_benchmark( array_transform3
    "array/array_transform3.cpp"
    LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                    algebra::bench_array algebra::array_cmath )
+algebra_add_benchmark( array_matrix
+   "array/array_matrix.cpp"
+   LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                   algebra::bench_array algebra::array_cmath )
 
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
    add_library( algebra_bench_eigen INTERFACE )
@@ -56,6 +60,10 @@ if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
                      algebra::bench_eigen algebra::eigen_eigen )
    algebra_add_benchmark( eigen_transform3
       "eigen/eigen_transform3.cpp"
+      LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                     algebra::bench_eigen algebra::eigen_eigen )
+   algebra_add_benchmark( eigen_matrix
+      "eigen/eigen_matrix.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                      algebra::bench_eigen algebra::eigen_eigen )
 endif()
@@ -81,6 +89,10 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
       "vc_aos/vc_aos_transform3.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                      algebra::bench_vc_aos algebra::vc_aos )
+   algebra_add_benchmark( vc_aos_matrix
+      "vc_aos/vc_aos_matrix.cpp"
+      LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                     algebra::bench_vc_aos algebra::vc_aos )
 
    if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang" )
       add_library( algebra_bench_vc_soa INTERFACE )
@@ -101,6 +113,10 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
                         algebra::bench_vc_soa algebra::vc_soa )
       algebra_add_benchmark( vc_soa_transform3
          "vc_soa/vc_soa_transform3.cpp"
+         LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                        algebra::bench_vc_soa algebra::vc_soa )
+      algebra_add_benchmark( vc_soa_matrix
+         "vc_soa/vc_soa_matrix.cpp"
          LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                         algebra::bench_vc_soa algebra::vc_soa )
    endif()

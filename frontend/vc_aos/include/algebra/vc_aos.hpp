@@ -62,7 +62,7 @@ ALGEBRA_HOST_DEVICE inline const auto& vector(
   assert(row == 0);
   assert(col < COL);
 
-  return m[COL];
+  return m[col];
 }
 
 /// Function extracting a slice from matrix44 - non-const
@@ -81,7 +81,7 @@ ALGEBRA_HOST_DEVICE inline auto& vector(
   assert(row == 0);
   assert(col < COL);
 
-  return m[COL];
+  return m[col];
 }
 
 /// @}
@@ -105,6 +105,10 @@ namespace matrix {
 
 template <typename scalar_t>
 using actor = vc_aos::matrix::actor<vc_aos::storage_type, scalar_t>;
+
+using storage::identity;
+using storage::transpose;
+using storage::zero;
 
 }  // namespace matrix
 

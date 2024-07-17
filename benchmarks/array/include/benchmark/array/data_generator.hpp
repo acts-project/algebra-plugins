@@ -32,7 +32,7 @@ inline void fill_random_vec(std::vector<vector_t> &collection) {
   std::generate(collection.begin(), collection.end(), rand_obj);
 }
 
-/// Fill a @c Vc::Vector based transform3 with random values
+/// Fill a @c std::array based transform3 with random values
 template <typename transform3_t>
 inline void fill_random_trf(std::vector<transform3_t> &collection) {
 
@@ -57,6 +57,32 @@ inline void fill_random_trf(std::vector<transform3_t> &collection) {
     z_axis = x_axis - coeff * z_axis;
 
     return transform3_t{t, x_axis, vector::normalize(z_axis)};
+  };
+
+  collection.resize(collection.capacity());
+  std::generate(collection.begin(), collection.end(), rand_obj);
+}
+
+/// Fill a @c std::array based matrix with random values
+template <typename matrix_t>
+inline void fill_random_matrix(std::vector<matrix_t> &collection) {
+
+  using scalar_t = typename matrix_t::value_type::value_type;
+
+  // Generate a random, but valid affine transformation
+  std::random_device rd;
+  std::mt19937 mt(rd());
+  std::uniform_real_distribution<scalar_t> dist(0.f, 1.f);
+  auto rand_obj = [&]() {
+    matrix_t m;
+
+    for (std::size_t j = 0u; j < m.size(); ++j) {
+      for (std::size_t i = 0u; i < m[0].size(); ++i) {
+        m[j][i] = dist(mt);
+      }
+    }
+
+    return m;
   };
 
   collection.resize(collection.capacity());

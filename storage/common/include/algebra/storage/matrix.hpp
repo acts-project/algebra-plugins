@@ -6,6 +6,11 @@
  */
 #pragma once
 
+// @TODO: Remove this when Vc fixes their false positives.
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
+
 // Project include(s).
 #include "algebra/storage/vector.hpp"
 
@@ -18,15 +23,15 @@ namespace algebra::storage {
 /// Generic matrix type that can take vectors as columns
 template <template <typename, std::size_t> class array_t, typename value_t,
           std::size_t ROW, std::size_t COL>
-struct matrix {
+struct alignas(alignof(storage::vector<ROW, value_t, array_t>)) matrix {
 
   // The matrix consists of column vectors
   using vector_type = storage::vector<ROW, value_t, array_t>;
   // Value type: Can be simd types
   using value_type = value_t;
 
-  /// Default constructor: Zero matrix
-  constexpr matrix() : m_storage{} {}
+  /// Default constructor
+  constexpr matrix() = default;
 
   /// Construct from given column vectors @param v
   template <typename... vector_t,
@@ -40,10 +45,12 @@ struct matrix {
 
   /// Subscript operator
   /// @{
-  constexpr decltype(auto) operator[](const std::size_t i) const {
+  constexpr const vector_type &operator[](const std::size_t i) const {
+    assert(i < COL);
     return m_storage[i];
   }
-  constexpr decltype(auto) operator[](const std::size_t i) {
+  constexpr vector_type &operator[](const std::size_t i) {
+    assert(i < COL);
     return m_storage[i];
   }
   /// @}
@@ -52,7 +59,9 @@ struct matrix {
   static constexpr std::size_t rows() { return ROW; }
 
   /// @returns the number of rows of the underlying vector storage
-  static constexpr std::size_t storage_rows() { return vector_type::size(); }
+  static constexpr std::size_t storage_rows() {
+    return vector_type::simd_size();
+  }
 
   /// @returns the number of columns
   static constexpr std::size_t columns() { return COL; }
@@ -127,18 +136,28 @@ struct element_getter {
 
 };  // struct element_getter
 
-/// Build a zero matrix
+/// Build an identity matrix
 template <typename matrix_t>
-constexpr matrix_t zero() noexcept {
-  return {};
+ALGEBRA_HOST_DEVICE constexpr matrix_t zero() noexcept {
+
+  // Zero initialized
+  matrix_t m;
+
+  for (std::size_t j = 0u; j < matrix_t::columns(); ++j) {
+    // Fill zero initialized vector
+    m[j] = typename matrix_t::vector_type{};
+  }
+
+  return m;
 }
 
 /// Build an identity matrix
 template <typename matrix_t, std::size_t... I>
-constexpr matrix_t identity(std::index_sequence<I...>) noexcept {
+ALGEBRA_HOST_DEVICE constexpr matrix_t identity(
+    std::index_sequence<I...>) noexcept {
 
   // Zero initialized
-  matrix_t m{};
+  matrix_t m{zero<matrix_t>()};
 
   ((m[I][I] = typename matrix_t::value_type(1)), ...);
 
@@ -147,7 +166,7 @@ constexpr matrix_t identity(std::index_sequence<I...>) noexcept {
 
 /// Build an identity matrix
 template <typename matrix_t>
-constexpr matrix_t identity() noexcept {
+ALGEBRA_HOST_DEVICE constexpr matrix_t identity() noexcept {
 
   return identity<matrix_t>(std::make_index_sequence<std::min(
                                 matrix_t::rows(), matrix_t::columns())>());
@@ -155,61 +174,145 @@ constexpr matrix_t identity() noexcept {
 
 /// Transpose the matrix @param m
 template <std::size_t ROW, std::size_t COL, typename value_t,
-          template <typename, std::size_t> class array_t>
-constexpr auto transpose(const matrix<array_t, value_t, ROW, COL> &m) noexcept {
+          template <typename, std::size_t> class array_t, std::size_t... I>
+ALGEBRA_HOST_DEVICE constexpr auto transpose(
+    const matrix<array_t, value_t, ROW, COL> &m,
+    std::index_sequence<I...>) noexcept {
 
-  matrix<array_t, value_t, COL, ROW> res_m;
+  using matrix_T_t = matrix<array_t, value_t, COL, ROW>;
+  using column_t = typename matrix_T_t::vector_type;
+
+  matrix_T_t res_m;
+
+  for (std::size_t j = 0u; j < ROW; ++j) {
+    res_m[j] = column_t{m[I][j]...};
+  }
+
+  return res_m;
+}
+
+/// Build an identity matrix
+template <typename matrix_t>
+ALGEBRA_HOST_DEVICE constexpr auto transpose(const matrix_t &m) noexcept {
+
+  return transpose(m, std::make_index_sequence<matrix_t::columns()>());
+}
+
+/// Get a block of a const matrix
+template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
+          std::size_t mCOL, typename value_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline constexpr auto block(
+    const matrix<array_t, value_t, mROW, mCOL> &m, const std::size_t row,
+    const std::size_t col) noexcept {
+  static_assert(ROWS <= mROW);
+  static_assert(COLS <= mCOL);
+  assert(row + ROWS <= mROW);
+  assert(col + COLS <= mCOL);
+
+  using input_matrix_t = matrix<array_t, value_t, mROW, mCOL>;
+  using matrix_t = matrix<array_t, value_t, ROWS, COLS>;
+
+  matrix_t res_m;
+
+  // Don't access single elements in underlying vectors unless necessary
+  if constexpr (matrix_t::storage_rows() == input_matrix_t::storage_rows()) {
+    if (row == 0u) {
+      for (std::size_t j = col; j < col + COLS; ++j) {
+        res_m[j - col] = m[j];
+      }
+      return;
+    }
+  } else {
+    for (std::size_t j = col; j < col + COLS; ++j) {
+      for (std::size_t i = row; i < row + ROWS; ++i) {
+        res_m[j - col][i - row] = m[j][i];
+      }
+    }
+  }
 
   return res_m;
 }
 
 /// Get a block of a const matrix
-/*template <std::size_t ROWS, std::size_t COLS, typename matrix_t>
-ALGEBRA_HOST_DEVICE inline constexpr auto block(const matrix_t &m,
-                                                  std::size_t row,
-                                                  std::size_t col) noexcept {
-  return block_getter().template operator()<ROWS, COLS>(m, row, col);
-}
+template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
+          std::size_t mCOL, typename value_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline constexpr void set_block(
+    matrix<array_t, value_t, mROW, mCOL> &m,
+    const matrix<array_t, value_t, ROWS, COLS> &b, const std::size_t row,
+    const std::size_t col) noexcept {
+  static_assert(ROWS <= mROW);
+  static_assert(COLS <= mCOL);
+  assert(row + ROWS <= mROW);
+  assert(col + COLS <= mCOL);
 
-/// Operator setting a block with a vector matrix
-template <std::size_t ROWS, std::size_t COLS, class input_matrix_type>
-ALGEBRA_HOST_DEVICE inline constexpr void set_block(input_matrix_type &m,
-                                    const matrix_type<ROWS, COLS> &b,
-                                    std::size_t row, std::size_t col) noexcept {
-  for (std::size_t j = 0; j < COLS; ++j) {
-    for (std::size_t i = 0; i < ROWS; ++i) {
-      element_getter()(m, i + row, j + col) = element_getter()(b, i, j);
+  using input_matrix_t = matrix<array_t, value_t, mROW, mCOL>;
+  using matrix_t = matrix<array_t, value_t, ROWS, COLS>;
+
+  // Don't access single elements in underlying vectors unless necessary
+  if constexpr (matrix_t::storage_rows() == input_matrix_t::storage_rows()) {
+    if (row == 0u) {
+      for (std::size_t j = col; j < mCOL; ++j) {
+        m[j] = b[j - col];
+      }
+      return;
+    }
+  }
+  for (std::size_t j = col; j < col + COLS; ++j) {
+    for (std::size_t i = row; i < row + ROWS; ++i) {
+      m[j][i] = b[j - col][i - row];
     }
   }
 }
 
 /// Operator setting a block with a vector
-template <size_t ROWS, template <typename, size_t> class vector_t,
-          class input_matrix_type>
-ALGEBRA_HOST_DEVICE inline constexpr void set_block(input_matrix_type &m,
-                                    const vector_t<scalar_t, ROWS> &b,
-                                    std::size_t row, std::size_t col) noexcept {
-  for (std::size_t i = 0; i < ROWS; ++i) {
-    element_getter()(m, i + row, col) = b[i];
+template <class matrix_t, std::size_t ROW, typename value_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline constexpr void set_block(
+    matrix_t &m, const storage::vector<ROW, value_t, array_t> &b,
+    std::size_t row, std::size_t col) noexcept {
+  assert(row < ROW);
+  assert(row < matrix_t::rows());
+  assert(col < matrix_t::columns());
+
+  if constexpr (matrix_t::storage_rows() == ROW) {
+    if (row == 0u) {
+      m[col] = b;
+      return;
+    }
   }
-}*/
+  for (std::size_t i = row; i < ROW; ++i) {
+    m[col][i] = b[i - row];
+  }
+}
 
 /// Scalar multiplication
+template <typename matrix_t, typename scalar_t, std::size_t... J,
+          std::enable_if_t<
+              std::is_scalar_v<scalar_t> ||
+                  std::is_same_v<typename matrix_t::value_type, scalar_t>,
+              bool> = true>
+ALGEBRA_HOST_DEVICE inline constexpr matrix_t matrix_scalar_mul(
+    scalar_t a, const matrix_t &rhs, std::index_sequence<J...>) noexcept {
+
+  return matrix_t{(a * rhs[J])...};
+}
+
 template <std::size_t ROW, std::size_t COL, typename value_t, typename scalar_t,
           template <typename, std::size_t> class array_t,
           std::enable_if_t<std::is_scalar_v<scalar_t> ||
                                std::is_same_v<value_t, scalar_t>,
                            bool> = true>
-inline constexpr decltype(auto) operator*(
+ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator*(
     scalar_t a, const matrix<array_t, value_t, ROW, COL> &rhs) noexcept {
 
-  matrix<array_t, value_t, ROW, COL> res_m;
+  using matrix_t = matrix<array_t, value_t, ROW, COL>;
 
-  for (std::size_t j = 0; j < COL; ++j) {
-    res_m[j] = a * rhs[j];
-  }
-  return res_m;
+  return matrix_scalar_mul(a, rhs,
+                           std::make_index_sequence<matrix_t::columns()>());
 }
+
 template <std::size_t ROW, std::size_t COL, typename value_t, typename scalar_t,
           template <typename, std::size_t> class array_t,
           std::enable_if_t<std::is_scalar_v<scalar_t> ||
@@ -221,40 +324,48 @@ inline constexpr decltype(auto) operator*(
 }
 
 /// Matrix addition
-template <std::size_t ROW, std::size_t COL, typename value_t,
-          template <typename, std::size_t> class array_t>
-inline constexpr decltype(auto) operator+(
-    const matrix<array_t, value_t, ROW, COL> &lhs,
-    const matrix<array_t, value_t, ROW, COL> &rhs) noexcept {
+template <typename matrix_t, std::size_t... J>
+ALGEBRA_HOST_DEVICE inline constexpr matrix_t matrix_add(
+    const matrix_t &lhs, const matrix_t &rhs,
+    std::index_sequence<J...>) noexcept {
 
-  matrix<array_t, value_t, ROW, COL> res_m;
-
-  for (std::size_t j = 0; j < COL; ++j) {
-    res_m[j] = lhs[j] + rhs[j];
-  }
-
-  return res_m;
+  return matrix_t{(lhs[J] + rhs[J])...};
 }
 
 template <std::size_t ROW, std::size_t COL, typename value_t,
           template <typename, std::size_t> class array_t>
-inline constexpr decltype(auto) operator-(
+ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator+(
     const matrix<array_t, value_t, ROW, COL> &lhs,
     const matrix<array_t, value_t, ROW, COL> &rhs) noexcept {
 
-  matrix<array_t, value_t, ROW, COL> res_m;
+  using matrix_t = matrix<array_t, value_t, ROW, COL>;
 
-  for (std::size_t j = 0; j < COL; ++j) {
-    res_m[j] = lhs[j] - rhs[j];
-  }
+  return matrix_add(lhs, rhs, std::make_index_sequence<matrix_t::columns()>());
+}
 
-  return res_m;
+template <typename matrix_t, std::size_t... J>
+ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) matrix_sub(
+    const matrix_t &lhs, const matrix_t &rhs,
+    std::index_sequence<J...>) noexcept {
+
+  return matrix_t{(lhs[J] - rhs[J])...};
+}
+
+template <std::size_t ROW, std::size_t COL, typename value_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator-(
+    const matrix<array_t, value_t, ROW, COL> &lhs,
+    const matrix<array_t, value_t, ROW, COL> &rhs) noexcept {
+
+  using matrix_t = matrix<array_t, value_t, ROW, COL>;
+
+  return matrix_sub(lhs, rhs, std::make_index_sequence<matrix_t::columns()>());
 }
 
 /// Matrix-vector multiplication
 template <std::size_t ROW, std::size_t COL, typename value_t,
           template <typename, std::size_t> class array_t>
-inline constexpr decltype(auto) operator*(
+ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator*(
     const matrix<array_t, value_t, ROW, COL> &lhs,
     const vector<COL, value_t, array_t> &v) noexcept {
 
@@ -263,6 +374,7 @@ inline constexpr decltype(auto) operator*(
 
   // Add the rest per column
   for (std::size_t j = 1u; j < COL; ++j) {
+    // fma
     res_v = res_v + v[j] * lhs[j];
   }
 
@@ -272,7 +384,7 @@ inline constexpr decltype(auto) operator*(
 /// Matrix-matrix multiplication
 template <std::size_t LROW, std::size_t COL, std::size_t RCOL, typename value_t,
           template <typename, std::size_t> class array_t>
-inline constexpr decltype(auto) operator*(
+ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator*(
     const matrix<array_t, value_t, LROW, COL> &lhs,
     const matrix<array_t, value_t, COL, RCOL> &rhs) noexcept {
 
@@ -284,6 +396,7 @@ inline constexpr decltype(auto) operator*(
 
     // Add the rest per column
     for (std::size_t i = 1u; i < COL; ++i) {
+      // fma
       res_m[j] = res_m[j] + rhs[j][i] * lhs[i];
     }
   }

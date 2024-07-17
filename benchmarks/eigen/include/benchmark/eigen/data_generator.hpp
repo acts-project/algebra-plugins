@@ -51,4 +51,14 @@ inline void fill_random_trf(std::vector<transform3_t> &collection) {
   std::generate(collection.begin(), collection.end(), rand_obj);
 }
 
+/// Fill a @c Eigen3 based matrix with random values
+template <typename matrix_t>
+inline void fill_random_matrix(std::vector<matrix_t> &collection) {
+
+  auto rand_obj = []() { return matrix_t::Random(); };
+
+  collection.resize(collection.capacity());
+  std::generate(collection.begin(), collection.end(), rand_obj);
+}
+
 }  // namespace algebra

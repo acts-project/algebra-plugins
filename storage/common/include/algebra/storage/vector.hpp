@@ -6,6 +6,11 @@
  */
 #pragma once
 
+// @TODO: Remove this when Vc fixes their false positives.
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
+
 // Project include(s)
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/array_operators.hpp"
@@ -39,46 +44,75 @@ constexpr std::size_t nearest_power_of_two(std::size_t min_value,
 /// SIMD vector.
 template <std::size_t N, typename value_t,
           template <typename, std::size_t> class array_t>
-class vector {
+class alignas(
+    alignof(array_t<value_t, detail::nearest_power_of_two(N, 2u)>)) vector {
+
+ public:
+  /// @returns the required size of the underlying array storage
   static constexpr std::size_t simd_size() {
     return std::is_scalar_v<value_t> ? detail::nearest_power_of_two(N, 2u) : N;
   }
 
- public:
   // Value type is a simd vector in SoA and a scalar in AoS
   using value_type = value_t;
   /// Underlying data array type
   using array_type = array_t<value_t, simd_size()>;
 
   /// Default contructor sets all entries to zero.
-  constexpr vector() { zero_fill(std::make_index_sequence<simd_size()>{}); }
+  constexpr vector() {
+    if constexpr (std::is_scalar_v<value_type>) {
+      zero_fill(std::make_index_sequence<simd_size()>{});
+    }
+  }
 
   /// Construct from element values @param vals .
   ///
   /// In order to avoid uninitialized values, which deteriorate the performance
   /// in explicitely vectorized code, the underlying data array is filled with
   /// zeroes if too few arguments are given.
-  template <
-      typename... Values,
-      std::enable_if_t<
-          std::conjunction_v<std::is_convertible<Values, value_type>...> &&
-              sizeof...(Values) <= simd_size() && simd_size() != 4,
-          bool> = true>
+  /*template <typename... Values,
+            std::enable_if_t<std::conjunction_v<
+                                 std::is_convertible<Values, value_type>...> &&
+                                 sizeof...(Values) <= N,
+                             bool> = true>
   constexpr vector(Values &&...vals) : m_data{std::forward<Values>(vals)...} {
+    // Fill the uninitialized part of the vector register with zero
     if constexpr ((sizeof...(Values) < simd_size()) &&
+  std::is_scalar_v<value_type> &&
                   (!std::conjunction_v<std::is_same<array_type, Values>...>)) {
       zero_fill(
-          std::make_index_sequence<simd_size() - sizeof...(Values) - 1>{});
+          std::make_index_sequence<simd_size() - sizeof...(Values)>{});
+    }
+  }*/
+  template <typename... Values,
+            std::enable_if_t<std::conjunction_v<
+                                 std::is_convertible<Values, value_type>...> &&
+                                 sizeof...(Values) <= N && simd_size() != 4,
+                             bool> = true>
+  constexpr vector(Values &&...vals) : m_data{std::forward<Values>(vals)...} {
+    // Fill the uninitialized part of the vector register with zero
+    if constexpr ((sizeof...(Values) < simd_size()) &&
+                  std::is_scalar_v<value_type> &&
+                  (!std::conjunction_v<std::is_same<array_type, Values>...>)) {
+      zero_fill(std::make_index_sequence<simd_size() - sizeof...(Values)>{});
     }
   }
 
   template <typename... Values,
             std::enable_if_t<std::conjunction_v<
                                  std::is_convertible<Values, value_type>...> &&
-                                 simd_size() == 4,
+                                 N == 3 && simd_size() == 4,
                              bool> = true>
   constexpr vector(Values &&...vals)
       : m_data{std::forward<Values>(vals)..., 0.f} {}
+
+  template <typename... Values,
+            std::enable_if_t<std::conjunction_v<
+                                 std::is_convertible<Values, value_type>...> &&
+                                 N == 6 && simd_size() == 8,
+                             bool> = true>
+  constexpr vector(Values &&...vals)
+      : m_data{std::forward<Values>(vals)..., 0.f, 0.f} {}
 
   /// Construct from existing array storage @param vals .
   constexpr vector(const array_type &vals) : m_data{vals} {}
@@ -163,7 +197,7 @@ class vector {
   /// Sets the trailing uninitialized values to zero.
   template <std::size_t... Is>
   constexpr void zero_fill(std::index_sequence<Is...>) noexcept {
-    //((m_data[N - sizeof...(Is) + Is] = value_t(0)), ...);
+    ((m_data[simd_size() - sizeof...(Is) + Is] = value_t(0)), ...);
   }
 };
 

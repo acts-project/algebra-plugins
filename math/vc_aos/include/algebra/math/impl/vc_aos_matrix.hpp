@@ -11,7 +11,9 @@
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/matrix.hpp"
 
-namespace algebra::vc_aos::matrix {
+namespace algebra::vc_aos {
+
+namespace matrix {
 
 /// Explicitly vectorized matrix implementation
 template <template <typename, std::size_t> class array_t, typename scalar_t>
@@ -19,6 +21,7 @@ struct actor {
 
   /// Size type
   using size_type = std::size_t;
+  using size_ty = size_type;
 
   /// Scalar type
   using scalar_type = scalar_t;
@@ -30,10 +33,6 @@ struct actor {
   /// 2D matrix type
   template <std::size_t ROWS, std::size_t COLS>
   using matrix_type = storage::matrix<array_t, value_type, ROWS, COLS>;
-
-  /// vector type
-  // template <std::size_t N>
-  // using array_type = array_t<value_type, N>;
 
   /// Operator getting a reference to one element of a non-const matrix
   template <std::size_t ROWS, std::size_t COLS>
@@ -50,34 +49,28 @@ struct actor {
   }
 
   /// Operator getting a block of a const matrix
-  /*template <std::size_t ROWS, std::size_t COLS, class input_matrix_type>
-  ALGEBRA_HOST_DEVICE static constexpr matrix_type<ROWS, COLS> block(const
-  input_matrix_type &m, std::size_t row, std::size_t col) { return
-  block_getter().template operator()<ROWS, COLS>(m, row, col);
+  template <std::size_t ROWS, std::size_t COLS, class input_matrix_t>
+  ALGEBRA_HOST_DEVICE static constexpr matrix_type<ROWS, COLS> block(
+      const input_matrix_t &m, std::size_t row, std::size_t col) {
+    return storage::block<ROWS, COLS>(m, row, col);
   }
 
   /// Operator setting a block with a vector matrix
-  template <std::size_t ROWS, std::size_t COLS, class input_matrix_type>
-  ALGEBRA_HOST_DEVICE static constexpr void set_block(input_matrix_type &m,
-                                     const matrix_type<ROWS, COLS> &b,
-                                     std::size_t row, std::size_t col) {
-    for (std::size_t j = 0; j < COLS; ++j) {
-      for (std::size_t i = 0; i < ROWS; ++i) {
-        element_getter()(m, i + row, j + col) = element_getter()(b, i, j);
-      }
-    }
+  template <std::size_t ROWS, std::size_t COLS, class input_matrix_t>
+  ALGEBRA_HOST_DEVICE static constexpr void set_block(
+      input_matrix_t &m, const matrix_type<ROWS, COLS> &b, std::size_t row,
+      std::size_t col) {
+    storage::set_block(m, b, row, col);
   }
 
   /// Operator setting a block with a vector
-  template <size_t ROWS, template <typename, size_t> class vector_t,
-            class input_matrix_type>
-  ALGEBRA_HOST_DEVICE static constexpr void set_block(input_matrix_type &m,
-                                     const vector_t<scalar_t, ROWS> &b,
-                                     std::size_t row, std::size_t col) {
-    for (std::size_t i = 0; i < ROWS; ++i) {
-      element_getter()(m, i + row, col) = b[i];
-    }
-  }*/
+  template <class input_matrix_t, class vector_t>
+  ALGEBRA_HOST_DEVICE static constexpr void set_block(input_matrix_t &m,
+                                                      const vector_t &b,
+                                                      std::size_t row,
+                                                      std::size_t col) {
+    storage::set_block(m, b, row, col);
+  }
 
   // Create zero matrix
   template <std::size_t ROWS, std::size_t COLS>
@@ -102,7 +95,7 @@ struct actor {
   template <std::size_t ROWS, std::size_t COLS>
   ALGEBRA_HOST_DEVICE static constexpr void set_identity(
       matrix_type<ROWS, COLS> &m) {
-    m = storage::identity<matrix_type<ROWS, COLS>>();
+    m = identity<ROWS, COLS>();
   }
 
   /// Create transpose matrix
@@ -129,4 +122,6 @@ struct actor {
   }*/
 };
 
-}  // namespace algebra::vc_aos::matrix
+}  // namespace matrix
+
+}  // namespace algebra::vc_aos

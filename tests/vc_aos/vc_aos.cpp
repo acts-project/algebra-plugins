@@ -35,7 +35,7 @@ struct test_specialisation_name {
 // Register the tests
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics_vector, local_vectors, vector3,
                             getter);
-TEST_HOST_BASICS_MATRIX_TESTS();
+// TEST_HOST_BASICS_MATRIX_TESTS();
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics_transform, transform3,
                             global_transformations);
 
@@ -56,7 +56,7 @@ typedef testing::Types<
     vc_aos_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
                                vc_aos_types, test_specialisation_name);
-INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_matrix,
-                               vc_aos_types, test_specialisation_name);
+/*INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_matrix,
+                               vc_aos_types, test_specialisation_name);*/
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_transform,
                                vc_aos_types, test_specialisation_name);

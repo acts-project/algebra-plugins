@@ -20,7 +20,7 @@
 namespace algebra {
 
 template <typename transform3_t>
-void fill_random_trf(std::vector<transform3_t> &);
+void fill_random_trf(std::vector<transform3_t>&);
 
 /// Benchmark for vector operations
 template <typename transform3_t>
@@ -36,21 +36,23 @@ struct transform3_bm : public vector_bm<typename transform3_t::vector3> {
 
   /// No default construction: Cannot prepare data
   transform3_bm() = delete;
-  std::string name() const override { return base_type::name + "_" + bm_name; }
-
   /// Construct from an externally provided configuration @param cfg
-  transform3_bm(benchmark_base::configuration cfg) : base_type{cfg} {
+  explicit transform3_bm(benchmark_base::configuration cfg) : base_type{cfg} {
 
     trfs.reserve(this->m_cfg.n_samples());
 
     fill_random_trf(trfs);
   }
+  transform3_bm(const transform3_bm& bm) = default;
+  transform3_bm& operator=(transform3_bm& other) = default;
 
   /// Clear state
-  virtual ~transform3_bm() { trfs.clear(); }
+  ~transform3_bm() override { trfs.clear(); }
+
+  std::string name() const override { return base_type::name + "_" + bm_name; }
 
   /// Benchmark case
-  void operator()(::benchmark::State &state) override {
+  void operator()(::benchmark::State& state) override {
 
     using vector_t = typename transform3_t::vector3;
     using point_t = typename transform3_t::point3;

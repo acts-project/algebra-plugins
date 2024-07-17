@@ -35,7 +35,7 @@ struct vector_bm : public benchmark_base {
   vector_bm() = delete;
 
   /// Construct from an externally provided configuration @param cfg
-  vector_bm(benchmark_base::configuration cfg) : benchmark_base{cfg} {
+  explicit vector_bm(benchmark_base::configuration cfg) : benchmark_base{cfg} {
 
     const std::size_t n_data{this->m_cfg.n_samples()};
 
@@ -45,9 +45,11 @@ struct vector_bm : public benchmark_base {
     fill_random_vec(a);
     fill_random_vec(b);
   }
+  vector_bm(const vector_bm &bm) = default;
+  vector_bm &operator=(vector_bm &other) = default;
 
   /// Clear state
-  virtual ~vector_bm() {
+  ~vector_bm() override {
     a.clear();
     b.clear();
   }
@@ -60,7 +62,11 @@ struct vector_unaryOP_bm : public vector_bm<vector_t<scalar_t>> {
   using base_type = vector_bm<vector_t<scalar_t>>;
 
   vector_unaryOP_bm() = delete;
-  vector_unaryOP_bm(benchmark_base::configuration cfg) : base_type{cfg} {}
+  explicit vector_unaryOP_bm(benchmark_base::configuration cfg)
+      : base_type{cfg} {}
+  vector_unaryOP_bm(const vector_unaryOP_bm &bm) = default;
+  vector_unaryOP_bm &operator=(vector_unaryOP_bm &other) = default;
+
   std::string name() const override {
     return base_type::name + "_" + unaryOP::name;
   }
@@ -88,7 +94,11 @@ struct vector_binaryOP_bm : public vector_bm<vector_t<scalar_t>> {
   using base_type = vector_bm<vector_t<scalar_t>>;
 
   vector_binaryOP_bm() = delete;
-  vector_binaryOP_bm(benchmark_base::configuration cfg) : base_type{cfg} {}
+  explicit vector_binaryOP_bm(benchmark_base::configuration cfg)
+      : base_type{cfg} {}
+  vector_binaryOP_bm(const vector_binaryOP_bm &bm) = default;
+  vector_binaryOP_bm &operator=(vector_binaryOP_bm &other) = default;
+
   std::string name() const override {
     return base_type::name + "_" + binaryOP::name;
   }

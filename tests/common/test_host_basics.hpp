@@ -163,7 +163,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_2x3) {
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_3x1) {
   // Cross product on vector3 and matrix<3,1>
-  /*typename TypeParam::template matrix<3, 1> vF;
+  typename TypeParam::template matrix<3, 1> vF;
   algebra::getter::element(vF, 0, 0) = 5.f;
   algebra::getter::element(vF, 1, 0) = 6.f;
   algebra::getter::element(vF, 2, 0) = 13.f;
@@ -176,7 +176,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_3x1) {
 
   // Dot product on vector3 and matrix<3,1>
   auto dot = algebra::vector::dot(vG, vF);
-  ASSERT_NEAR(dot, 0.f, this->m_epsilon);*/
+  ASSERT_NEAR(dot, 0.f, this->m_epsilon);
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
@@ -227,7 +227,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   }
 
   // Test block operations
-  /*auto b13 = typename TypeParam::matrix_actor().template block<1, 3>(m, 0, 0);
+  auto b13 = typename TypeParam::matrix_actor().template block<1, 3>(m, 0, 0);
   ASSERT_NEAR(algebra::getter::element(b13, 0, 0), 1.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b13, 0, 1), 0.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b13, 0, 2), 0.f, this->m_epsilon);
@@ -258,17 +258,17 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   ASSERT_NEAR(algebra::getter::element(m, 3, 2), 12.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 3, 3), 13.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 4, 2), 5.f, this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m, 4, 3), 6.f, this->m_epsilon);*/
+  ASSERT_NEAR(algebra::getter::element(m, 4, 3), 6.f, this->m_epsilon);
 
-  /*typename TypeParam::vector3 v = {10.f, 20.f, 30.f};
+  typename TypeParam::vector3 v = {10.f, 20.f, 30.f};
   typename TypeParam::matrix_actor().set_block(m, v, 0, 2);
   ASSERT_NEAR(algebra::getter::element(m, 0, 2), 10., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 1, 2), 20., this->m_epsilon);
-  ASSERT_NEAR(algebra::getter::element(m, 2, 2), 30., this->m_epsilon);*/
+  ASSERT_NEAR(algebra::getter::element(m, 2, 2), 30., this->m_epsilon);
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_3x3) {
-  /*{
+  {
     typename TypeParam::vector3 v = {10.f, 20.f, 30.f};
     typename TypeParam::template matrix<3, 3> m33;
     algebra::getter::element(m33, 0, 0) = 1;
@@ -323,12 +323,12 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_3x3) {
                 this->m_isclose);
     ASSERT_NEAR(algebra::getter::element(m33_inv, 2, 2), -10.f / 20.f,
                 this->m_isclose);
-  }*/
+  }
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_2x2) {
 
-  /*typename TypeParam::template matrix<2, 2> m22;
+  typename TypeParam::template matrix<2, 2> m22;
   algebra::getter::element(m22, 0, 0) = 4.f;
   algebra::getter::element(m22, 0, 1) = 3.f;
   algebra::getter::element(m22, 1, 0) = 12.f;
@@ -347,13 +347,13 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_2x2) {
   ASSERT_NEAR(algebra::getter::element(m22_inv, 1, 0), -12.f / 16.f,
               this->m_isclose);
   ASSERT_NEAR(algebra::getter::element(m22_inv, 1, 1), 4.f / 16.f,
-              this->m_isclose);*/
+              this->m_isclose);
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_6x6) {
 
   // Test 6 X 6 big matrix determinant
-  /*typename TypeParam::template matrix<6, 6> m66_big;
+  typename TypeParam::template matrix<6, 6> m66_big;
   algebra::getter::element(m66_big, 0, 0) = 1.f;
   algebra::getter::element(m66_big, 0, 1) = 0.f;
   algebra::getter::element(m66_big, 0, 2) = 3.f;
@@ -483,12 +483,12 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x6) {
   auto m66_small_det =
       typename TypeParam::matrix_actor().determinant(m66_small);
   ASSERT_NEAR((m66_small_det - 4.30636e-11f) / 4.30636e-11f, 0.f,
-              2.f * this->m_isclose);*/
+              2.f * this->m_isclose);
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {
 
-  /*typename TypeParam::template matrix<2, 2> m22;
+  typename TypeParam::template matrix<2, 2> m22;
   algebra::getter::element(m22, 0, 0) = 4.f;
   algebra::getter::element(m22, 0, 1) = 3.f;
   algebra::getter::element(m22, 1, 0) = 12.f;
@@ -559,7 +559,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {
   ASSERT_NEAR(algebra::getter::element(m22, 0, 0), 6.225f, this->m_isclose);
   ASSERT_NEAR(algebra::getter::element(m22, 0, 1), 14.675f, this->m_isclose);
   ASSERT_NEAR(algebra::getter::element(m22, 1, 0), -3.3f, this->m_isclose);
-  ASSERT_NEAR(algebra::getter::element(m22, 1, 1), -7.9f, this->m_isclose);*/
+  ASSERT_NEAR(algebra::getter::element(m22, 1, 1), -7.9f, this->m_isclose);
 }
 
 // clang-format off

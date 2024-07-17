@@ -50,28 +50,28 @@ using vc_aos::math::element;
 template <std::size_t SIZE, template <typename, std::size_t> class array_t,
           typename value_t, std::size_t ROW, std::size_t COL>
 requires(SIZE <= 4) ALGEBRA_HOST_DEVICE inline const
-    auto& vector(
-    const storage::matrix<array_t, value_t, ROW, COL>& m,
-    [[maybe_unused]] std::size_t row, [[maybe_unused]] std::size_t col) {
+    auto& vector(const storage::matrix<array_t, value_t, ROW, COL>& m,
+                 [[maybe_unused]] std::size_t row,
+                 [[maybe_unused]] std::size_t col) {
 
   assert(row == 0);
   assert(col < COL);
 
-  return m[COL];
+  return m[col];
 }
 
 /// Function extracting a slice from matrix44 - non-const
 template <std::size_t SIZE, template <typename, std::size_t> class array_t,
           typename value_t, std::size_t ROW, std::size_t COL>
 requires(SIZE <= 4) ALGEBRA_HOST_DEVICE
-    inline auto& vector(
-    storage::matrix<array_t, value_t, ROW, COL>& m,
-    [[maybe_unused]] std::size_t row, [[maybe_unused]]  std::size_t col) {
+    inline auto& vector(storage::matrix<array_t, value_t, ROW, COL>& m,
+                        [[maybe_unused]] std::size_t row,
+                        [[maybe_unused]] std::size_t col) {
 
   assert(row == 0);
   assert(col < COL);
 
-  return m[COL];
+  return m[col];
 }
 
 /// @}
@@ -95,6 +95,10 @@ namespace matrix {
 
 template <typename scalar_t>
 using actor = vc_aos::matrix::actor<vc_aos::storage_type, scalar_t>;
+
+using storage::identity;
+using storage::transpose;
+using storage::zero;
 
 }  // namespace matrix
 

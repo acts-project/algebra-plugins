@@ -52,7 +52,7 @@ target_include_directories( Vc
 # Disable a warning for GCC which the Vc build turns on explicitly for that
 # compiler, just to then go and trigger it... :-/
 if( "${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" )
-   target_compile_options( Vc PRIVATE "-Wno-old-style-cast" )
+   target_compile_options( Vc PRIVATE "-Wno-old-style-cast -Wdeprecated-enum-enum-conversion -Wdeprecated-declarations" )
 endif()
 
 # Set up an alias for the Vc target, with the same name that it will have

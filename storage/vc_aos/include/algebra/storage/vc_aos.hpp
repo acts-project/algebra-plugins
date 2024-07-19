@@ -10,6 +10,7 @@
 // Project include(s).
 #include "algebra/storage/matrix.hpp"
 #include "algebra/storage/vector.hpp"
+#include "algebra/type_traits.hpp"
 
 // System include(s).
 #include <array>
@@ -24,7 +25,9 @@
 #pragma warning(pop)
 #endif  // MSVC
 
-namespace algebra::vc_aos {
+namespace algebra {
+
+namespace vc_aos {
 
 /// size type for Vc storage model
 using size_type = std::size_t;
@@ -55,9 +58,42 @@ template <typename T>
 using point3 = vector3<T>;
 /// 6-element "vector" type, using @c Vc::SimdArray
 template <typename T>
-using vector6 = vector_type<T, 8>;
+using vector6 = vector_type<T, 6>;
 /// 8-element "vector" type, using @c Vc::SimdArray
 template <typename T>
 using vector8 = vector_type<T, 8>;
 
-}  // namespace algebra::vc_aos
+}  // namespace vc_aos
+
+namespace trait {
+
+/// Type trait specializations
+/// @{
+template <typename T, std::size_t ROWS, std::size_t COLS>
+struct index<storage::matrix<vc_aos::storage_type, T, ROWS, COLS>> {
+  using type = algebra::vc_aos::size_type;
+};
+
+template <typename T, std::size_t ROWS, std::size_t COLS>
+struct dimensions<storage::matrix<vc_aos::storage_type, T, ROWS, COLS>> {
+
+  using size_type =
+      index_t<storage::matrix<vc_aos::storage_type, T, ROWS, COLS>>;
+
+  static constexpr size_type rows{ROWS};
+  static constexpr size_type columns{COLS};
+};
+
+template <typename T, std::size_t ROWS, std::size_t COLS>
+struct value<storage::matrix<vc_aos::storage_type, T, ROWS, COLS>> {
+  using type = T;
+};
+
+template <typename T, std::size_t ROWS, std::size_t COLS>
+struct vector<storage::matrix<vc_aos::storage_type, T, ROWS, COLS>> {
+  using type = storage::vector<ROWS, T, vc_aos::storage_type>;
+};
+/// @}
+}  // namespace trait
+
+}  // namespace algebra

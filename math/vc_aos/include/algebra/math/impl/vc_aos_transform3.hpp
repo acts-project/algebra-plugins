@@ -46,7 +46,8 @@ struct transform3 {
 
   /// @name Type definitions for the struct
   /// @{
-
+  /// Index type
+  using size_type = std::size_t;
   /// Scalar type used by the transform
   using scalar_type = scalar_t;
   /// The type of the matrix elements (scalar for AoS, Vc::Vector for SoA)
@@ -233,13 +234,13 @@ struct transform3 {
 
   /// This method retrieves the rotation of a transform
   ALGEBRA_HOST_DEVICE
-  inline array_type<16> rotation() const {
+  inline auto rotation() const {
 
-    array_type<16> submatrix;
-    for (unsigned int irow = 0; irow < 3; ++irow) {
-      for (unsigned int icol = 0; icol < 3; ++icol) {
-        submatrix[icol + irow * 4] = _data[icol][irow];
-      }
+    using matrix_t = storage::matrix<array_t, value_type, 3u, 3u>;
+
+    matrix_t submatrix;
+    for (unsigned int icol = 0; icol < 3; ++icol) {
+      submatrix[icol] = _data[icol];
     }
     return submatrix;
   }

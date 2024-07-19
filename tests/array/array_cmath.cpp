@@ -46,18 +46,12 @@ typedef testing::Types<
                algebra::array::point3<float>, algebra::array::vector2<float>,
                algebra::array::vector3<float>,
                algebra::array::transform3<float>, std::size_t,
-               algebra::array::matrix_type,
-               algebra::matrix::actor<
-                   float, algebra::matrix::determinant::preset0<float>,
-                   algebra::matrix::inverse::preset0<float>>>,
+               algebra::array::matrix_type>,
     test_types<double, algebra::array::point2<double>,
                algebra::array::point3<double>, algebra::array::vector2<double>,
                algebra::array::vector3<double>,
                algebra::array::transform3<double>, std::size_t,
-               algebra::array::matrix_type,
-               algebra::matrix::actor<
-                   double, algebra::matrix::determinant::preset0<double>,
-                   algebra::matrix::inverse::preset0<double>>>>
+               algebra::array::matrix_type>>
     array_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
                                array_cmath_types, test_specialisation_name);

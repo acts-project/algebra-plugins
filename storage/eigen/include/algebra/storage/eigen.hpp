@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2020-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -9,11 +9,14 @@
 
 // Project include(s).
 #include "algebra/storage/impl/eigen_array.hpp"
+#include "algebra/type_traits.hpp"
 
 // System include(s).
 #include <cstddef>
 
-namespace algebra::eigen {
+namespace algebra {
+
+namespace eigen {
 
 /// size type for Eigen storage model
 using size_type = int;
@@ -41,4 +44,65 @@ using vector2 = storage_type<T, 2>;
 template <typename T>
 using point2 = vector2<T>;
 
-}  // namespace algebra::eigen
+}  // namespace eigen
+
+namespace trait {
+
+/// Type trait specializations
+/// @{
+template <typename derived_t>
+struct index<Eigen::MatrixBase<derived_t>> {
+  using type = algebra::eigen::size_type;
+};
+
+template <typename derived_t>
+struct dimensions<Eigen::MatrixBase<derived_t>> {
+
+  using size_type = index_t<Eigen::MatrixBase<derived_t>>;
+
+  static constexpr size_type rows{
+      Eigen::MatrixBase<derived_t>::RowsAtCompileTime};
+  static constexpr size_type columns{
+      Eigen::MatrixBase<derived_t>::ColsAtCompileTime};
+};
+
+template <typename derived_t>
+struct value<Eigen::MatrixBase<derived_t>> {
+  using type = typename Eigen::MatrixBase<derived_t>::value_type;
+};
+
+template <typename derived_t>
+struct vector<Eigen::MatrixBase<derived_t>> {
+  using type = algebra::eigen::array<value_t<Eigen::MatrixBase<derived_t>>,
+                                     rows<Eigen::MatrixBase<derived_t>>>;
+};
+
+template <typename T, int ROWS, int COLS>
+struct index<Eigen::Matrix<T, ROWS, COLS, (ROWS == 1), ROWS, COLS>> {
+  using type = algebra::eigen::size_type;
+};
+
+template <typename T, int ROWS, int COLS>
+struct dimensions<Eigen::Matrix<T, ROWS, COLS, (ROWS == 1), ROWS, COLS>> {
+
+  using size_type =
+      index_t<Eigen::Matrix<T, ROWS, COLS, (ROWS == 1), ROWS, COLS>>;
+
+  static constexpr size_type rows{ROWS};
+  static constexpr size_type columns{COLS};
+};
+
+template <typename T, int ROWS, int COLS>
+struct value<Eigen::Matrix<T, ROWS, COLS, (ROWS == 1), ROWS, COLS>> {
+  using type = T;
+};
+
+template <typename T, int ROWS, int COLS>
+struct vector<Eigen::Matrix<T, ROWS, COLS, (ROWS == 1), ROWS, COLS>> {
+  using type = algebra::eigen::array<T, ROWS>;
+};
+/// @}
+
+}  // namespace trait
+
+}  // namespace algebra

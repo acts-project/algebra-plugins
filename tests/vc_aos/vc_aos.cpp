@@ -42,18 +42,16 @@ REGISTER_TYPED_TEST_SUITE_P(test_host_basics_transform, transform3,
 
 // Instantiate the test(s).
 typedef testing::Types<
-    test_types<
-        float, algebra::vc_aos::point2<float>, algebra::vc_aos::point3<float>,
-        algebra::vc_aos::vector2<float>, algebra::vc_aos::vector3<float>,
-        algebra::vc_aos::transform3<float>, std::size_t,
-        algebra::vc_aos::matrix_type,
-        algebra::vc_aos::matrix::actor<algebra::vc_aos::storage_type, float>>,
+    test_types<float, algebra::vc_aos::point2<float>,
+               algebra::vc_aos::point3<float>, algebra::vc_aos::vector2<float>,
+               algebra::vc_aos::vector3<float>,
+               algebra::vc_aos::transform3<float>, std::size_t,
+               algebra::vc_aos::matrix_type>,
     test_types<
         double, algebra::vc_aos::point2<double>,
         algebra::vc_aos::point3<double>, algebra::vc_aos::vector2<double>,
         algebra::vc_aos::vector3<double>, algebra::vc_aos::transform3<double>,
-        std::size_t, algebra::vc_aos::matrix_type,
-        algebra::vc_aos::matrix::actor<algebra::vc_aos::storage_type, double>>>
+        std::size_t, algebra::vc_aos::matrix_type>>
     vc_aos_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
                                vc_aos_types, test_specialisation_name);

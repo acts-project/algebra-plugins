@@ -87,4 +87,19 @@ ALGEBRA_HOST_DEVICE inline auto cross(const vector_type1 &a,
           a[0] * b[1] - b[0] * a[1], 0.f};
 }
 
+/// Elementwise sum
+///
+/// @tparam vector_type generic input vector type
+///
+/// @param v the vector whose elements should be summed
+///
+/// @return the sum of the elements
+template <typename vector_type,
+          std::enable_if_t<(Vc::is_simd_vector<vector_type>::value ||
+                            algebra::detail::is_storage_vector_v<vector_type>),
+                           bool> = true>
+ALGEBRA_HOST_DEVICE inline auto sum(const vector_type &v) {
+  return v.get().sum();
+}
+
 }  // namespace algebra::vc_aos::math

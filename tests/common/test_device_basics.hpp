@@ -34,7 +34,6 @@ class test_device_basics : public test_base<T> {
   using size_type = typename test_base<T>::size_type;
   template <size_type ROWS, size_type COLS>
   using matrix = typename test_base<T>::template matrix<ROWS, COLS>;
-  using matrix_actor = typename test_base<T>::matrix_actor;
 
   /// @}
 
@@ -96,7 +95,7 @@ class test_device_basics : public test_base<T> {
     }
 
     // Test set_zero
-    matrix_actor().set_zero(m2);
+    algebra::matrix::set_zero(m2);
     for (size_type i = 0; i < 6; ++i) {
       for (size_type j = 0; j < 4; ++j) {
         result += 0.4f * algebra::getter::element(m2, i, j);
@@ -104,7 +103,7 @@ class test_device_basics : public test_base<T> {
     }
 
     // Test set_identity
-    matrix_actor().set_identity(m2);
+    algebra::matrix::set_identity(m2);
     for (size_type i = 0; i < 6; ++i) {
       for (size_type j = 0; j < 4; ++j) {
         result += 0.3f * algebra::getter::element(m2, i, j);
@@ -112,14 +111,14 @@ class test_device_basics : public test_base<T> {
     }
 
     // Test block operations
-    auto b13 = matrix_actor().template block<1, 3>(m2, 0, 0);
-    auto b13_tp = matrix_actor().transpose(b13);
+    auto b13 = algebra::matrix::block<1, 3>(m2, 0, 0);
+    auto b13_tp = algebra::matrix::transpose(b13);
     algebra::getter::element(b13_tp, 0, 0) = 1;
     algebra::getter::element(b13_tp, 1, 0) = 2;
     algebra::getter::element(b13_tp, 2, 0) = 3;
-    matrix_actor().set_block(m2, b13_tp, 0, 0);
+    algebra::matrix::set_block(m2, b13_tp, 0, 0);
 
-    auto b32 = matrix_actor().template block<3, 2>(m2, 2, 2);
+    auto b32 = algebra::matrix::block<3, 2>(m2, 2, 2);
     algebra::getter::element(b32, 0, 0) = 4;
     algebra::getter::element(b32, 0, 1) = 3;
     algebra::getter::element(b32, 1, 0) = 12;
@@ -127,7 +126,7 @@ class test_device_basics : public test_base<T> {
     algebra::getter::element(b32, 2, 0) = 5;
     algebra::getter::element(b32, 2, 1) = 6;
 
-    matrix_actor().set_block(m2, b32, 2, 2);
+    algebra::matrix::set_block(m2, b32, 2, 2);
     for (size_type i = 0; i < 6; ++i) {
       for (size_type j = 0; j < 4; ++j) {
         result += 0.57f * algebra::getter::element(m2, i, j);
@@ -142,10 +141,10 @@ class test_device_basics : public test_base<T> {
   scalar matrix22_ops(const matrix<2, 2>& m22) const {
 
     // Test 2 X 2 matrix determinant
-    auto m22_det = matrix_actor().determinant(m22);
+    auto m22_det = algebra::matrix::determinant(m22);
 
     // Test 2 X 2 matrix inverse
-    auto m22_inv = matrix_actor().inverse(m22);
+    auto m22_inv = algebra::matrix::inverse(m22);
 
     matrix<3, 3> m33;
     algebra::getter::element(m33, 0, 0) = 1;
@@ -159,13 +158,13 @@ class test_device_basics : public test_base<T> {
     algebra::getter::element(m33, 2, 2) = 9;
 
     // Test 3 X 3 matrix determinant
-    auto m33_det = matrix_actor().determinant(m33);
+    auto m33_det = algebra::matrix::determinant(m33);
 
     // Test 3 X 3 matrix inverse
-    auto m33_inv = matrix_actor().inverse(m33);
+    auto m33_inv = algebra::matrix::inverse(m33);
 
     // Test Zero
-    auto m23 = matrix_actor().template zero<2, 3>();
+    auto m23 = algebra::matrix::zero<matrix<2, 3>>();
     algebra::getter::element(m23, 0, 0) += 2;
     algebra::getter::element(m23, 0, 1) += 3;
     algebra::getter::element(m23, 0, 2) += 4;
@@ -177,10 +176,10 @@ class test_device_basics : public test_base<T> {
     m23 = 2. * m23;
 
     // Test Transpose
-    auto m32 = matrix_actor().transpose(m23);
+    auto m32 = algebra::matrix::transpose(m23);
 
     // Test Identity and (Matrix + Matrix)
-    m32 = m32 + matrix_actor().template identity<3, 2>();
+    m32 = m32 + algebra::matrix::identity<matrix<3, 2>>();
 
     // Test Matrix X scalar
     m32 = m32 * 2.;

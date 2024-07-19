@@ -167,13 +167,13 @@ struct mul {
     return a * b;
   }
 };
-/*struct transpose {
+struct transpose {
   inline static const std::string name{"transpose"};
   template <typename matrix_t>
   auto operator()(const matrix_t &a) const {
-    return algebra::vector::normalize(a);
+    return algebra::matrix::transpose(a);
   }
-};*/
+};
 
 }  // namespace bench_op
 

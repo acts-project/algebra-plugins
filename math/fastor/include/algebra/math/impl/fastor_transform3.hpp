@@ -27,7 +27,7 @@ namespace algebra::fastor::math {
 /** Transform wrapper class to ensure standard API within different plugins
  *
  **/
-template <typename scalar_t, typename matrix_actor_t>
+template <typename scalar_t>
 struct transform3 {
   /// @name Type definitions for the struct
   /// @{
@@ -52,14 +52,11 @@ struct transform3 {
   using element_getter = algebra::fastor::math::element_getter<scalar_t>;
 
   /// Size type
-  using size_type = typename matrix_actor_t::size_ty;
-
-  /// Matrix actor
-  using matrix_actor = matrix_actor_t;
+  using size_type = std::size_t;
 
   /// 2D Matrix type
   template <size_type ROWS, size_type COLS>
-  using matrix_type = typename matrix_actor::template matrix_type<ROWS, COLS>;
+  using matrix_type = Fastor::Tensor<scalar_type, ROWS, COLS>;
 
   /// @}
 
@@ -117,7 +114,7 @@ struct transform3 {
    * @param t is the translation
    **/
   ALGEBRA_HOST
-  transform3(const vector3 &t) {
+  explicit transform3(const vector3 &t) {
 
     // The matrix needs to be initialized to the identity matrix first. In this
     // case, the `transform3` requires `_data` to look just like an identity
@@ -135,7 +132,7 @@ struct transform3 {
    * @param m is the full 4x4 matrix
    **/
   ALGEBRA_HOST
-  transform3(const matrix44 &m) {
+  explicit transform3(const matrix44 &m) {
     _data = m;
 
     _data_inv = Fastor::inverse(_data);
@@ -147,7 +144,7 @@ struct transform3 {
    * @param ma is the full 4x4 matrix as a 16-element array
    **/
   ALGEBRA_HOST
-  transform3(const array_type<16> &ma) {
+  explicit transform3(const array_type<16> &ma) {
     _data = ma;
 
     _data_inv = Fastor::inverse(_data);

@@ -42,16 +42,14 @@ REGISTER_TYPED_TEST_SUITE_P(test_host_basics_transform, transform3,
 
 // Instantiate the test(s).
 typedef testing::Types<
-    test_types<float, algebra::eigen::point2<float>,
-               algebra::eigen::point3<float>, algebra::eigen::vector2<float>,
-               algebra::eigen::vector3<float>,
-               algebra::eigen::transform3<float>, int,
-               algebra::eigen::matrix_type, algebra::matrix::actor<float>>,
-    test_types<double, algebra::eigen::point2<double>,
-               algebra::eigen::point3<double>, algebra::eigen::vector2<double>,
-               algebra::eigen::vector3<double>,
-               algebra::eigen::transform3<double>, int,
-               algebra::eigen::matrix_type, algebra::matrix::actor<double>>>
+    test_types<
+        float, algebra::eigen::point2<float>, algebra::eigen::point3<float>,
+        algebra::eigen::vector2<float>, algebra::eigen::vector3<float>,
+        algebra::eigen::transform3<float>, int, algebra::eigen::matrix_type>,
+    test_types<
+        double, algebra::eigen::point2<double>, algebra::eigen::point3<double>,
+        algebra::eigen::vector2<double>, algebra::eigen::vector3<double>,
+        algebra::eigen::transform3<double>, int, algebra::eigen::matrix_type>>
     eigen_eigen_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
                                eigen_eigen_types, test_specialisation_name);

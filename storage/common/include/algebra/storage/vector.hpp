@@ -84,11 +84,13 @@ class alignas(
           std::make_index_sequence<simd_size() - sizeof...(Values)>{});
     }
   }*/
-  template <typename... Values,
-            std::enable_if_t<std::conjunction_v<
-                                 std::is_convertible<Values, value_type>...> &&
-                                 sizeof...(Values) <= N && simd_size() != 4,
-                             bool> = true>
+  template <
+      typename... Values,
+      std::enable_if_t<
+          std::conjunction_v<std::is_convertible<Values, value_type>...> &&
+              sizeof...(Values) <= N && !(N == 3 && simd_size() == 4) &&
+              !(N == 6 && simd_size() == 8),
+          bool> = true>
   constexpr vector(Values &&...vals) : m_data{std::forward<Values>(vals)...} {
     // Fill the uninitialized part of the vector register with zero
     if constexpr ((sizeof...(Values) < simd_size()) &&

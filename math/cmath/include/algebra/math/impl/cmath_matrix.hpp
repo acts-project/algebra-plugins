@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022-2023 CERN for the benefit of the ACTS project
+ * (c) 2022-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -9,216 +9,154 @@
 
 // Project include(s).
 #include "algebra/math/algorithms/utils/algorithm_finder.hpp"
+#include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
-namespace algebra::cmath::matrix {
+namespace algebra::cmath {
 
-/// "Matrix actor", assuming a simple 2D matrix
-template <typename size_type, template <typename, size_type> class array_t,
-          template <typename, size_type, size_type> class matrix_t,
-          typename scalar_t, class determinant_actor_t, class inverse_actor_t,
-          class element_getter_t, class block_getter_t>
-struct actor {
+/// @returns a matrix of dimension @tparam ROW and @tparam COL that contains
+/// the submatrix of @param m beginning at row @param row and column
+/// @param col
+template <std::size_t ROWS, std::size_t COLS, class input_matrix_type>
+ALGEBRA_HOST_DEVICE decltype(auto) block(const input_matrix_type &m,
+                                         std::size_t row, std::size_t col) {
 
-  /// Size type
-  using size_ty = size_type;
+  return algebra::cmath::block_getter().template operator()<ROWS, COLS>(m, row,
+                                                                        col);
+}
 
-  /// Scalar type
-  using scalar_type = scalar_t;
-
-  /// Function (object) used for accessing a matrix element
-  using element_getter = element_getter_t;
-
-  /// Function (object) used for accessing a matrix block
-  using block_getter = block_getter_t;
-
-  /// 2D matrix type
-  template <size_type ROWS, size_type COLS>
-  using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
-
-  /// vector type
-  template <size_type N>
-  using array_type = array_t<scalar_t, N>;
-
-  /// Operator getting a reference to one element of a non-const matrix
-  template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
-                                               size_type row,
-                                               size_type col) const {
-    return element_getter()(m, row, col);
+/// Sets a matrix of dimension @tparam ROW and @tparam COL as submatrix of
+/// @param m beginning at row @param row and column @param col
+template <std::size_t ROWS, std::size_t COLS, class input_matrix_type,
+          typename scalar_t, template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE void set_block(
+    input_matrix_type &m, const array_t<array_t<scalar_t, ROWS>, COLS> &b,
+    std::size_t row, std::size_t col) {
+  for (std::size_t j = 0u; j < COLS; ++j) {
+    for (std::size_t i = 0u; i < ROWS; ++i) {
+      m[j + col][i + row] = b[j][i];
+    }
   }
+}
 
-  /// Operator getting one value of a const matrix
-  template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
-                                              size_type row,
-                                              size_type col) const {
-    return element_getter()(m, row, col);
+/// Sets a vector of length @tparam ROW as submatrix of
+/// @param m beginning at row @param row and column @param col
+template <std::size_t ROWS, typename scalar_t,
+          template <typename, std::size_t> class vector_t,
+          class input_matrix_type>
+ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
+                                   const vector_t<scalar_t, ROWS> &b,
+                                   std::size_t row, std::size_t col) {
+  for (std::size_t i = 0; i < ROWS; ++i) {
+    m[col][i + row] = b[i];
   }
+}
 
-  /// Operator getting a block of a const matrix
-  template <size_type ROWS, size_type COLS, class input_matrix_type>
-  ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
-                                                    size_type row,
-                                                    size_type col) const {
-    return block_getter().template operator()<ROWS, COLS>(m, row, col);
-  }
+/// @returns zero matrix of type @tparam matrix_t
+template <typename matrix_t,
+          std::enable_if_t<
+              std::is_scalar_v<typename matrix_t::value_type::value_type>,
+              bool> = true>
+ALGEBRA_HOST_DEVICE inline matrix_t zero() {
+  return matrix_t{0};
+}
 
-  /// Operator setting a block with a vector matrix
-  template <size_type ROWS, size_type COLS, class input_matrix_type>
-  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const matrix_type<ROWS, COLS> &b,
-                                     size_type row, size_type col) const {
-    for (size_type j = 0; j < COLS; ++j) {
-      for (size_type i = 0; i < ROWS; ++i) {
-        element_getter()(m, i + row, j + col) = element_getter()(b, i, j);
-      }
+/// Create zero matrix - cmath transform3
+template <class matrix_t, typename element_getter_t>
+ALGEBRA_HOST_DEVICE inline auto zero() {
+  matrix_t ret;
+
+  for (std::size_t j = 0; j < algebra::trait::columns<matrix_t>; ++j) {
+    for (std::size_t i = 0; i < algebra::trait::rows<matrix_t>; ++i) {
+      element_getter_t{}(ret, i, j) = 0;
     }
   }
 
-  /// Operator setting a block with a vector
-  template <size_type ROWS, template <typename, size_type> class vector_t,
-            class input_matrix_type>
-  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const vector_t<scalar_t, ROWS> &b,
-                                     size_type row, size_type col) const {
-    for (size_type i = 0; i < ROWS; ++i) {
-      element_getter()(m, i + row, col) = b[i];
+  return ret;
+}
+
+/// @returns identity matrix of type @tparam matrix_t
+template <typename matrix_t,
+          std::enable_if_t<
+              std::is_scalar_v<typename matrix_t::value_type::value_type>,
+              bool> = true>
+ALGEBRA_HOST_DEVICE inline auto identity() {
+  auto ret{zero<matrix_t>()};
+
+  for (std::size_t i = 0; i < algebra::trait::rank<matrix_t>; ++i) {
+    ret[i][i] = 1;
+  }
+
+  return ret;
+}
+
+/// Create identity matrix - cmath transform3
+template <class matrix_t, typename element_getter_t>
+ALGEBRA_HOST_DEVICE inline matrix_t identity() {
+  auto ret{zero<matrix_t, element_getter_t>()};
+
+  for (std::size_t i = 0; i < algebra::trait::rank<matrix_t>; ++i) {
+    element_getter_t{}(ret, i, i) = 1;
+  }
+
+  return ret;
+}
+
+/// Set @param m as zero matrix
+template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline void set_zero(
+    array_t<array_t<scalar_t, ROWS>, COLS> &m) {
+  m = zero<array_t<array_t<scalar_t, ROWS>, COLS>>();
+}
+
+/// Set @param m as identity matrix
+template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline void set_identity(
+    array_t<array_t<scalar_t, ROWS>, COLS> &m) {
+  m = identity<array_t<array_t<scalar_t, ROWS>, COLS>>();
+}
+
+/// @returns the transpose matrix of @param m
+template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline array_t<array_t<scalar_t, COLS>, ROWS> transpose(
+    const array_t<array_t<scalar_t, ROWS>, COLS> &m) {
+
+  array_t<array_t<scalar_t, COLS>, ROWS> ret;
+
+  for (std::size_t i = 0; i < ROWS; ++i) {
+    for (std::size_t j = 0; j < COLS; ++j) {
+      ret[i][j] = m[j][i];
     }
   }
 
-  // Create zero matrix
-  template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() const {
-    matrix_type<ROWS, COLS> ret;
+  return ret;
+}
 
-    for (size_type j = 0; j < COLS; ++j) {
-      for (size_type i = 0; i < ROWS; ++i) {
-        element_getter()(ret, i, j) = 0;
-      }
-    }
+/// @returns the determinant of @param m
+template <std::size_t N, typename scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline scalar_t determinant(
+    const array_t<array_t<scalar_t, N>, N> &m) {
 
-    return ret;
-  }
+  using matrix_t = array_t<array_t<scalar_t, N>, N>;
+  using element_getter_t = element_getter<std::size_t, array_t, scalar_t>;
 
-  // Create identity matrix
-  template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() const {
-    matrix_type<ROWS, COLS> ret;
+  return determinant_t<N, matrix_t, element_getter_t>{}(m);
+}
 
-    for (size_type j = 0; j < COLS; ++j) {
-      for (size_type i = 0; i < ROWS; ++i) {
-        if (i == j) {
-          element_getter()(ret, i, j) = 1;
-        } else {
-          element_getter()(ret, i, j) = 0;
-        }
-      }
-    }
+/// @returns the determinant of @param m
+template <std::size_t N, typename scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline array_t<array_t<scalar_t, N>, N> inverse(
+    const array_t<array_t<scalar_t, N>, N> &m) {
 
-    return ret;
-  }
+  using matrix_t = array_t<array_t<scalar_t, N>, N>;
+  using element_getter_t = element_getter<std::size_t, array_t, scalar_t>;
 
-  // Set input matrix as zero matrix
-  template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<ROWS, COLS> &m) const {
+  return inversion_t<N, matrix_t, element_getter_t>{}(m);
+}
 
-    for (size_type j = 0; j < COLS; ++j) {
-      for (size_type i = 0; i < ROWS; ++i) {
-        element_getter()(m, i, j) = 0;
-      }
-    }
-  }
-
-  // Set input matrix as identity matrix
-  template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline void set_identity(
-      matrix_type<ROWS, COLS> &m) const {
-
-    for (size_type j = 0; j < COLS; ++j) {
-      for (size_type i = 0; i < ROWS; ++i) {
-        if (i == j) {
-          element_getter()(m, i, j) = 1;
-        } else {
-          element_getter()(m, i, j) = 0;
-        }
-      }
-    }
-  }
-
-  // Create transpose matrix
-  template <size_type ROWS, size_type COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<COLS, ROWS> transpose(
-      const matrix_type<ROWS, COLS> &m) const {
-
-    matrix_type<COLS, ROWS> ret;
-
-    for (size_type i = 0; i < ROWS; ++i) {
-      for (size_type j = 0; j < COLS; ++j) {
-        element_getter()(ret, j, i) = element_getter()(m, i, j);
-      }
-    }
-
-    return ret;
-  }
-
-  // Get determinant
-  template <size_type N>
-  ALGEBRA_HOST_DEVICE inline scalar_t determinant(
-      const matrix_type<N, N> &m) const {
-
-    return determinant_actor_t()(m);
-  }
-
-  // Create inverse matrix
-  template <size_type N>
-  ALGEBRA_HOST_DEVICE inline matrix_type<N, N> inverse(
-      const matrix_type<N, N> &m) const {
-
-    return inverse_actor_t()(m);
-  }
-};
-
-namespace determinant {
-
-template <typename size_type,
-          template <typename, size_type, size_type> class matrix_t,
-          typename scalar_t, class... As>
-struct actor {
-
-  /// 2D matrix type
-  template <size_type ROWS, size_type COLS>
-  using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
-
-  template <size_type N>
-  ALGEBRA_HOST_DEVICE inline scalar_t operator()(
-      const matrix_type<N, N> &m) const {
-
-    return typename find_algorithm<size_type, N, As...>::algorithm_type()(m);
-  }
-};
-
-}  // namespace determinant
-
-namespace inverse {
-
-template <typename size_type,
-          template <typename, size_type, size_type> class matrix_t,
-          typename scalar_t, class... As>
-struct actor {
-
-  /// 2D matrix type
-  template <size_type ROWS, size_type COLS>
-  using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
-
-  template <size_type N>
-  ALGEBRA_HOST_DEVICE inline matrix_type<N, N> operator()(
-      const matrix_type<N, N> &m) const {
-
-    return typename find_algorithm<size_type, N, As...>::algorithm_type()(m);
-  }
-};
-
-}  // namespace inverse
-
-}  // namespace algebra::cmath::matrix
+}  // namespace algebra::cmath

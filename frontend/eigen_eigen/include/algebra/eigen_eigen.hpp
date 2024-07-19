@@ -70,15 +70,22 @@ using eigen::math::normalize;
 
 namespace matrix {
 
-template <typename scalar_t>
-using actor = eigen::matrix::actor<scalar_t>;
+using eigen::math::block;
+using eigen::math::determinant;
+using eigen::math::identity;
+using eigen::math::inverse;
+using eigen::math::set_block;
+using eigen::math::set_identity;
+using eigen::math::set_zero;
+using eigen::math::transpose;
+using eigen::math::zero;
 
 }  // namespace matrix
 
 namespace eigen {
 
 template <typename T>
-using transform3 = math::transform3<T, matrix::actor<T>>;
+using transform3 = math::transform3<T>;
 
 }  // namespace eigen
 

@@ -45,12 +45,12 @@ typedef testing::Types<
                algebra::vc_aos::point3<float>, algebra::vc_aos::vector2<float>,
                algebra::vc_aos::vector3<float>,
                algebra::vc_aos::transform3<float>, std::size_t,
-               algebra::vc_aos::matrix_type, float>,
+               algebra::vc_aos::matrix_type>,
     test_types<
         double, algebra::vc_aos::point2<double>,
         algebra::vc_aos::point3<double>, algebra::vc_aos::vector2<double>,
         algebra::vc_aos::vector3<double>, algebra::vc_aos::transform3<double>,
-        std::size_t, algebra::vc_aos::matrix_type, double>>
+        std::size_t, algebra::vc_aos::matrix_type>>
     vc_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
                                vc_cmath_types, test_specialisation_name);

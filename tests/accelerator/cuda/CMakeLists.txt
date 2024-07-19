@@ -58,4 +58,6 @@ if( ALGEBRA_PLUGINS_INCLUDE_VECMEM )
    algebra_add_test( vecmem_cuda "vecmem_cmath.cu"
       LINK_LIBRARIES algebra::vecmem_cmath
                      algebra::tests_cuda_common GTest::gtest_main )
+   target_compile_options( algebra_test_vecmem_cuda
+      PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )
 endif()

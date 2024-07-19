@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022 CERN for the benefit of the ACTS project
+ * (c) 2022-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/qualifiers.hpp"
+#include "algebra/type_traits.hpp"
 
 // System include(s)
 #include <type_traits>
@@ -16,24 +17,17 @@
 namespace algebra::cmath::matrix::determinant {
 
 /// "Determinant getter", assuming a N X N matrix
-template <typename size_type,
-          template <typename, size_type, size_type> class matrix_t,
-          typename scalar_t, class element_getter_t, size_type... Ds>
+template <class matrix_t, class element_getter_t>
 struct cofactor {
 
-  using _dims = std::integer_sequence<size_type, Ds...>;
+  using scalar_type = algebra::trait::value_t<matrix_t>;
+  using size_type = algebra::trait::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
 
-  /// 2D matrix type
-  template <size_type ROWS, size_type COLS>
-  using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
-
-  template <size_type N>
-  ALGEBRA_HOST_DEVICE inline scalar_t operator()(
-      const matrix_type<N, N> &m) const {
-    return determinant_getter_helper<N>()(m);
+  ALGEBRA_HOST_DEVICE inline scalar_type operator()(const matrix_t &m) const {
+    return determinant_getter_helper<algebra::trait::rank<matrix_t>>()(m);
   }
 
   template <size_type N, typename Enable = void>
@@ -42,7 +36,7 @@ struct cofactor {
   template <size_type N>
   struct determinant_getter_helper<N, typename std::enable_if_t<N == 1>> {
     template <class input_matrix_type>
-    ALGEBRA_HOST_DEVICE inline scalar_t operator()(
+    ALGEBRA_HOST_DEVICE inline scalar_type operator()(
         const input_matrix_type &m) const {
       return element_getter()(m, 0, 0);
     }
@@ -52,13 +46,13 @@ struct cofactor {
   struct determinant_getter_helper<N, typename std::enable_if_t<N != 1>> {
 
     template <class input_matrix_type>
-    ALGEBRA_HOST_DEVICE inline scalar_t operator()(
+    ALGEBRA_HOST_DEVICE inline scalar_type operator()(
         const input_matrix_type &m) const {
 
-      scalar_t D = 0;
+      scalar_type D = 0;
 
       // To store cofactors
-      matrix_type<N, N> temp;
+      matrix_t temp;
 
       // To store sign multiplier
       int sign = 1;
@@ -79,8 +73,7 @@ struct cofactor {
 
     template <class input_matrix_type>
     ALGEBRA_HOST_DEVICE inline void get_cofactor(const input_matrix_type &m,
-                                                 matrix_type<N, N> &temp,
-                                                 size_type p,
+                                                 matrix_t &temp, size_type p,
                                                  size_type q) const {
 
       size_type i = 0, j = 0;

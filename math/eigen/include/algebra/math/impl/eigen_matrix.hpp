@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022-2023 CERN for the benefit of the ACTS project
+ * (c) 2022-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -27,126 +27,98 @@
 #pragma nv_diagnostic pop
 #endif  // __NVCC_DIAG_PRAGMA_SUPPORT__
 
-namespace algebra::eigen::matrix {
+namespace algebra::eigen::math {
 
-/// "Matrix actor", assuming an Eigen matrix
-template <typename scalar_t>
-struct actor {
+/// Operator getting a block of a const matrix
+template <
+    int ROWS, int COLS, class derived_type, typename size_type_1,
+    typename size_type_2,
+    std::enable_if_t<std::is_convertible<size_type_1, Eigen::Index>::value &&
+                         std::is_convertible<size_type_2, Eigen::Index>::value,
+                     bool> = true>
+ALGEBRA_HOST_DEVICE auto block(const Eigen::MatrixBase<derived_type> &m,
+                               size_type_1 row, size_type_2 col) {
+  return m.template block<ROWS, COLS>(static_cast<Eigen::Index>(row),
+                                      static_cast<Eigen::Index>(col));
+}
 
-  /// Size type
-  using size_ty = int;
+/// Operator getting a block of a const matrix
+template <
+    int ROWS, int COLS, class derived_type, typename size_type_1,
+    typename size_type_2,
+    std::enable_if_t<std::is_convertible<size_type_1, Eigen::Index>::value &&
+                         std::is_convertible<size_type_2, Eigen::Index>::value,
+                     bool> = true>
+ALGEBRA_HOST_DEVICE auto block(Eigen::MatrixBase<derived_type> &m,
+                               size_type_1 row, size_type_2 col) {
+  return m.template block<ROWS, COLS>(static_cast<Eigen::Index>(row),
+                                      static_cast<Eigen::Index>(col));
+}
 
-  /// Scalar type
-  using scalar_type = scalar_t;
+/// Operator setting a block
+template <
+    typename derived_type1, typename derived_type2, typename size_type_1,
+    typename size_type_2,
+    std::enable_if_t<std::is_convertible<size_type_1, Eigen::Index>::value &&
+                         std::is_convertible<size_type_2, Eigen::Index>::value,
+                     bool> = true>
+ALGEBRA_HOST_DEVICE void set_block(Eigen::MatrixBase<derived_type1> &m,
+                                   const Eigen::MatrixBase<derived_type2> &b,
+                                   size_type_1 row, size_type_2 col) {
+  using block_t = Eigen::MatrixBase<derived_type2>;
+  constexpr auto R{block_t::RowsAtCompileTime};
+  constexpr auto C{block_t::ColsAtCompileTime};
+  m.template block<R, C>(static_cast<Eigen::Index>(row),
+                         static_cast<Eigen::Index>(col)) = b;
+}
 
-  /// 2D matrix type
-  template <int ROWS, int COLS>
-  using matrix_type = algebra::eigen::matrix_type<scalar_t, ROWS, COLS>;
+// Create zero matrix
+template <typename matrix_t>
+ALGEBRA_HOST_DEVICE inline matrix_t zero() {
+  return matrix_t::Zero();
+}
 
-  /// Array type
-  template <size_ty N>
-  using array_type = storage_type<scalar_type, N>;
+// Create identity matrix
+template <typename matrix_t>
+ALGEBRA_HOST_DEVICE inline matrix_t identity() {
+  return matrix_t::Identity();
+}
 
-  /// 3-element "vector" type
-  using vector3 = array_type<3>;
+// Set input matrix as zero matrix
+template <typename derived_type>
+ALGEBRA_HOST_DEVICE inline void set_zero(Eigen::MatrixBase<derived_type> &m) {
+  m.setZero();
+}
 
-  /// Operator getting a reference to one element of a non-const matrix
-  template <int ROWS, int COLS, typename size_type_1, typename size_type_2,
-            std::enable_if_t<
-                std::is_convertible<size_type_1, Eigen::Index>::value &&
-                    std::is_convertible<size_type_2, Eigen::Index>::value,
-                bool> = true>
-  ALGEBRA_HOST_DEVICE inline scalar_t &element(matrix_type<ROWS, COLS> &m,
-                                               size_type_1 row,
-                                               size_type_2 col) const {
-    return m(static_cast<Eigen::Index>(row), static_cast<Eigen::Index>(col));
-  }
+// Set input matrix as identity matrix
+template <typename derived_type>
+ALGEBRA_HOST_DEVICE inline void set_identity(
+    Eigen::MatrixBase<derived_type> &m) {
+  m.setIdentity();
+}
 
-  /// Operator getting one value of a const matrix
-  template <int ROWS, int COLS, typename size_type_1, typename size_type_2,
-            std::enable_if_t<
-                std::is_convertible<size_type_1, Eigen::Index>::value &&
-                    std::is_convertible<size_type_2, Eigen::Index>::value,
-                bool> = true>
-  ALGEBRA_HOST_DEVICE inline scalar_t element(const matrix_type<ROWS, COLS> &m,
-                                              size_type_1 row,
-                                              size_type_2 col) const {
-    return m(static_cast<Eigen::Index>(row), static_cast<Eigen::Index>(col));
-  }
+// Create transpose matrix
+template <typename derived_type>
+ALGEBRA_HOST_DEVICE inline matrix_type<
+    typename Eigen::MatrixBase<derived_type>::value_type,
+    Eigen::MatrixBase<derived_type>::ColsAtCompileTime,
+    Eigen::MatrixBase<derived_type>::RowsAtCompileTime>
+transpose(const Eigen::MatrixBase<derived_type> &m) {
+  return m.transpose();
+}
 
-  /// Operator getting a block of a const matrix
-  template <int ROWS, int COLS, class input_matrix_type, typename size_type_1,
-            typename size_type_2,
-            std::enable_if_t<
-                std::is_convertible<size_type_1, Eigen::Index>::value &&
-                    std::is_convertible<size_type_2, Eigen::Index>::value,
-                bool> = true>
-  ALGEBRA_HOST_DEVICE matrix_type<ROWS, COLS> block(const input_matrix_type &m,
-                                                    size_type_1 row,
-                                                    size_type_2 col) const {
-    return m.template block<ROWS, COLS>(static_cast<Eigen::Index>(row),
-                                        static_cast<Eigen::Index>(col));
-  }
+/// @returns the determinant of @param m
+template <typename derived_type>
+ALGEBRA_HOST_DEVICE inline typename Eigen::MatrixBase<derived_type>::value_type
+determinant(const Eigen::MatrixBase<derived_type> &m) {
+  return m.determinant();
+}
 
-  /// Operator setting a block
-  template <int ROWS, int COLS, class input_matrix_type, typename size_type_1,
-            typename size_type_2,
-            std::enable_if_t<
-                std::is_convertible<size_type_1, Eigen::Index>::value &&
-                    std::is_convertible<size_type_2, Eigen::Index>::value,
-                bool> = true>
-  ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
-                                     const matrix_type<ROWS, COLS> &b,
-                                     size_type_1 row, size_type_2 col) const {
-    m.template block<ROWS, COLS>(static_cast<Eigen::Index>(row),
-                                 static_cast<Eigen::Index>(col)) = b;
-  }
+/// @returns the inverse of @param m
+template <typename derived_type>
+ALGEBRA_HOST_DEVICE inline auto inverse(
+    const Eigen::MatrixBase<derived_type> &m) {
+  return m.inverse();
+}
 
-  // Create zero matrix
-  template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> zero() const {
-    return matrix_type<ROWS, COLS>::Zero();
-  }
-
-  // Create identity matrix
-  template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<ROWS, COLS> identity() const {
-    return matrix_type<ROWS, COLS>::Identity();
-  }
-
-  // Set input matrix as zero matrix
-  template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<ROWS, COLS> &m) const {
-    m.setZero();
-  }
-
-  // Set input matrix as identity matrix
-  template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline void set_identity(
-      matrix_type<ROWS, COLS> &m) const {
-    m.setIdentity();
-  }
-
-  // Create transpose matrix
-  template <int ROWS, int COLS>
-  ALGEBRA_HOST_DEVICE inline matrix_type<COLS, ROWS> transpose(
-      const matrix_type<ROWS, COLS> &m) const {
-    return m.transpose();
-  }
-
-  // Get determinant
-  template <int N>
-  ALGEBRA_HOST_DEVICE inline scalar_t determinant(
-      const matrix_type<N, N> &m) const {
-    return m.determinant();
-  }
-
-  // Create inverse matrix
-  template <int N>
-  ALGEBRA_HOST_DEVICE inline matrix_type<N, N> inverse(
-      const matrix_type<N, N> &m) const {
-    return m.inverse();
-  }
-};
-
-}  // namespace algebra::eigen::matrix
+}  // namespace algebra::eigen::math

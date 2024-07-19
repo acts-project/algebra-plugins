@@ -61,8 +61,13 @@ using smatrix::math::normalize;
 
 namespace matrix {
 
-template <typename scalar_t>
-using actor = smatrix::matrix::actor<scalar_t>;
+using smatrix::math::block;
+using smatrix::math::identity;
+using smatrix::math::set_block;
+using smatrix::math::set_identity;
+using smatrix::math::set_zero;
+using smatrix::math::transpose;
+using smatrix::math::zero;
 
 }  // namespace matrix
 
@@ -72,7 +77,7 @@ namespace smatrix {
 /// @{
 
 template <typename T>
-using transform3 = math::transform3<T, matrix::actor<T>>;
+using transform3 = math::transform3<T>;
 
 /// @}
 

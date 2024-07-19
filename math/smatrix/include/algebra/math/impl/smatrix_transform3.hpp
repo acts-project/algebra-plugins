@@ -20,7 +20,7 @@ namespace algebra::smatrix::math {
 /** Transform wrapper class to ensure standard API within differnt plugins
  *
  **/
-template <typename scalar_t, typename matrix_actor_t>
+template <typename scalar_t>
 struct transform3 {
 
   /// @name Type definitions for the struct
@@ -42,18 +42,12 @@ struct transform3 {
   /// 4x4 matrix type
   using matrix44 = ROOT::Math::SMatrix<scalar_type, 4, 4>;
 
-  /// Function (object) used for accessing a matrix element
-  using element_getter = algebra::smatrix::math::element_getter<scalar_t>;
-
   /// Size type
-  using size_type = typename matrix_actor_t::size_ty;
-
-  /// Matrix actor
-  using matrix_actor = matrix_actor_t;
+  using size_type = unsigned int;
 
   /// 2D Matrix type
   template <size_type ROWS, size_type COLS>
-  using matrix_type = typename matrix_actor::template matrix_type<ROWS, COLS>;
+  using matrix_type = ROOT::Math::SMatrix<scalar_type, ROWS, COLS>;
 
   /// @}
 
@@ -113,7 +107,7 @@ struct transform3 {
    * @param t is the translation
    **/
   ALGEBRA_HOST
-  transform3(const vector3 &t) {
+  explicit transform3(const vector3 &t) {
 
     _data(0, 3) = t[0];
     _data(1, 3) = t[1];
@@ -129,7 +123,7 @@ struct transform3 {
    * @param m is the full 4x4 matrix
    **/
   ALGEBRA_HOST
-  transform3(const matrix44 &m) {
+  explicit transform3(const matrix44 &m) {
     _data = m;
 
     int ifail = 0;
@@ -143,7 +137,7 @@ struct transform3 {
    * @param ma is the full 4x4 matrix as a 16-element array
    **/
   ALGEBRA_HOST
-  transform3(const array_type<16> &ma) {
+  explicit transform3(const array_type<16> &ma) {
 
     _data(0, 0) = ma[0];
     _data(1, 0) = ma[4];

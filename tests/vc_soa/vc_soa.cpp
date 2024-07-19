@@ -218,3 +218,49 @@ TEST(test_vc_host, vc_soa_transform3) {
   EXPECT_NEAR(loc_vecB[1][0], loc_vecC[1][0], tol);
   EXPECT_NEAR(loc_vecB[2][0], loc_vecC[2][0], tol);
 }
+
+/// This test an SoA (Vc::Vector) based 2x3 matrix
+TEST(test_vc_host, vc_soa_matrix3) {
+
+  using matrix_2x3_t = vc_soa::matrix_type<scalar_t, 2, 3>;
+
+  // Test type traits
+  static_assert(
+      std::is_same_v<algebra::trait::index_t<matrix_2x3_t>, std::size_t>);
+  static_assert(std::is_same_v<algebra::trait::value_t<matrix_2x3_t>, float>);
+  static_assert(std::is_same_v<algebra::trait::scalar_t<matrix_2x3_t>,
+                               Vc::Vector<float>>);
+  static_assert(std::is_same_v<algebra::trait::vector_t<matrix_2x3_t>,
+                               vc_soa::vector2<scalar_t>>);
+
+  static_assert(algebra::trait::rows<matrix_2x3_t> == 2);
+  static_assert(algebra::trait::columns<matrix_2x3_t> == 3);
+  static_assert(algebra::trait::rank<matrix_2x3_t> == 2);
+  static_assert(algebra::trait::size<matrix_2x3_t> == 6);
+  static_assert(!algebra::trait::is_square<matrix_2x3_t>);
+  static_assert(algebra::trait::is_square<vc_soa::matrix_type<scalar_t, 2, 2>>);
+  static_assert(algebra::trait::is_square<vc_soa::matrix_type<scalar_t, 3, 3>>);
+}
+
+/// This test an SoA (Vc::Vector) based 6x4 matrix
+TEST(test_vc_host, vc_soa_matrix64) {
+
+  // Create the matrix.
+  using matrix_6x4_t = vc_soa::matrix_type<scalar_t, 6, 4>;
+  matrix_6x4_t m;
+
+  // Test type traits
+  static_assert(
+      std::is_same_v<algebra::trait::index_t<matrix_6x4_t>, std::size_t>);
+  static_assert(std::is_same_v<algebra::trait::value_t<matrix_6x4_t>, float>);
+  static_assert(std::is_same_v<algebra::trait::scalar_t<matrix_6x4_t>,
+                               Vc::Vector<float>>);
+
+  static_assert(algebra::trait::rows<matrix_6x4_t> == 6);
+  static_assert(algebra::trait::columns<matrix_6x4_t> == 4);
+  static_assert(algebra::trait::rank<matrix_6x4_t> == 4);
+  static_assert(algebra::trait::size<matrix_6x4_t> == 24);
+  static_assert(!algebra::trait::is_square<matrix_6x4_t>);
+  static_assert(algebra::trait::is_square<vc_soa::matrix_type<scalar_t, 4, 4>>);
+  static_assert(algebra::trait::is_square<vc_soa::matrix_type<scalar_t, 6, 6>>);
+}

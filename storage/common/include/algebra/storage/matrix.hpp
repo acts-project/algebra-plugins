@@ -136,7 +136,7 @@ struct element_getter {
 
 };  // struct element_getter
 
-/// Build an identity matrix
+/// Get a zero-initialized matrix
 template <typename matrix_t>
 ALGEBRA_HOST_DEVICE constexpr matrix_t zero() noexcept {
 
@@ -149,6 +149,12 @@ ALGEBRA_HOST_DEVICE constexpr matrix_t zero() noexcept {
   }
 
   return m;
+}
+
+/// Set a matrix to zero
+template <typename matrix_t>
+ALGEBRA_HOST_DEVICE constexpr void set_zero(matrix_t &m) noexcept {
+  m = zero<matrix_t>();
 }
 
 /// Build an identity matrix
@@ -170,6 +176,12 @@ ALGEBRA_HOST_DEVICE constexpr matrix_t identity() noexcept {
 
   return identity<matrix_t>(std::make_index_sequence<std::min(
                                 matrix_t::rows(), matrix_t::columns())>());
+}
+
+/// Set a matrix to zero
+template <typename matrix_t>
+ALGEBRA_HOST_DEVICE constexpr void set_identity(matrix_t &m) noexcept {
+  m = identity<matrix_t>();
 }
 
 /// Transpose the matrix @param m

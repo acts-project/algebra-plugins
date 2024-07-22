@@ -87,8 +87,8 @@ TEST(test_vc_host, vc_soa_vector) {
   auto d{vector::dot(a, b)};
   EXPECT_TRUE((d == value_t(32.f)).isFull());
 
-  value_t norms_a{getter::norm(vector::normalize(a))};
-  value_t norms_b{getter::norm(vector::normalize(b))};
+  value_t norms_a{vector::norm(vector::normalize(a))};
+  value_t norms_b{vector::norm(vector::normalize(b))};
   for (unsigned int i{0u}; i < norms_a.size(); ++i) {
     EXPECT_NEAR(norms_a[i], 1.f, tol);
     EXPECT_NEAR(norms_b[i], 1.f, tol);
@@ -113,24 +113,24 @@ TEST(test_vc_host, vc_soa_getter) {
   // All results in the vector are the same, so only check the first one
 
   // Phi angle
-  auto v_phi = getter::phi(a);
+  auto v_phi = vector::phi(a);
   EXPECT_NEAR(v_phi[0], static_cast<scalar_t>(std::atan2(2., 1.)), tol);
 
   // Perpendicular projection
-  auto v_perp = getter::perp(a);
+  auto v_perp = vector::perp(a);
   EXPECT_NEAR(v_perp[0], std::sqrt(5.), tol);
 
   // Theta angle
-  auto v_theta = getter::theta(a);
+  auto v_theta = vector::theta(a);
   EXPECT_NEAR(v_theta[0], static_cast<scalar_t>(std::atan2(std::sqrt(5.), 3.)),
               tol);
 
   // Norm of the vector
-  auto v_norm = getter::norm(a);
+  auto v_norm = vector::norm(a);
   EXPECT_NEAR(v_norm[0], std::sqrt(14.), tol);
 
   // Eta of the vector
-  auto v_eta = getter::eta(a);
+  auto v_eta = vector::eta(a);
   EXPECT_NEAR(v_eta[0],
               static_cast<scalar_t>(std::atanh(1. / std::sqrt(14.) * 3.)), tol);
 }

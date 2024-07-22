@@ -8,6 +8,6 @@
 algebra_add_library( algebra_vecmem_cmath vecmem_cmath
    "include/algebra/vecmem_cmath.hpp" )
 target_link_libraries( algebra_vecmem_cmath
-   INTERFACE algebra::common algebra::vecmem_storage algebra::cmath_math )
+   INTERFACE algebra::common algebra::vecmem_storage algebra::cmath_math  algebra::generic_math )
 algebra_test_public_headers( algebra_vecmem_cmath
    "algebra/vecmem_cmath.hpp" )

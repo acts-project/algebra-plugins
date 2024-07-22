@@ -8,6 +8,6 @@
 algebra_add_library( algebra_array_cmath array_cmath
    "include/algebra/array_cmath.hpp" )
 target_link_libraries( algebra_array_cmath
-   INTERFACE algebra::common algebra::array_storage algebra::cmath_math )
+   INTERFACE algebra::common algebra::array_storage algebra::cmath_math   algebra::generic_math )
 algebra_test_public_headers( algebra_array_cmath
    "algebra/array_cmath.hpp" )

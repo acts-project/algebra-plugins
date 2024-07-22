@@ -52,10 +52,10 @@ typedef testing::Types<
                algebra::array::vector3<double>,
                algebra::array::transform3<double>, std::size_t,
                algebra::array::matrix_type>>
-    array_cmath_types;
+    array_generic_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
-                               array_cmath_types, test_specialisation_name);
+                               array_generic_types, test_specialisation_name);
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_matrix,
-                               array_cmath_types, test_specialisation_name);
+                               array_generic_types, test_specialisation_name);
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_transform,
-                               array_cmath_types, test_specialisation_name);
+                               array_generic_types, test_specialisation_name);

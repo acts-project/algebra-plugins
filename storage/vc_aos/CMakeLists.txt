@@ -5,9 +5,10 @@
 # Mozilla Public License Version 2.0
 
 # Set up the library.
-algebra_add_library( algebra_vc_storage vc_storage
-   "include/algebra/storage/vc_aos.hpp" )
-target_link_libraries( algebra_vc_storage
-   INTERFACE algebra::common algebra::common_storage Vc::Vc )
-algebra_test_public_headers( algebra_vc_storage
+algebra_add_library( algebra_vc_aos_storage vc_aos_storage
+   "include/algebra/storage/vc_aos.hpp"
+   "include/algebra/storage/impl/vc_aos_getter.hpp" )
+target_link_libraries( algebra_vc_aos_storage
+   INTERFACE algebra::common algebra::common_storage Vc::Vc algebra::common_math )
+algebra_test_public_headers( algebra_vc_aos_storage
    "algebra/storage/vc_aos.hpp" )

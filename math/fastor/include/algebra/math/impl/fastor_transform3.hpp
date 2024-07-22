@@ -1,6 +1,6 @@
 /** Algebra plugins, part of the ACTS project
  *
- * (c) 2022 CERN for the benefit of the ACTS project
+ * (c) 2022-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -24,19 +24,18 @@
 
 namespace algebra::fastor::math {
 
-/** Transform wrapper class to ensure standard API within different plugins
- *
- **/
+/// Transform wrapper class to ensure standard API towards the Fastor library
 template <typename scalar_t>
 struct transform3 {
   /// @name Type definitions for the struct
   /// @{
 
+  /// Scalar type used by the transform
+  using scalar_type = scalar_t;
+
   /// Array type used by the transform
   template <std::size_t N>
   using array_type = Fastor::Tensor<scalar_t, N>;
-  /// Scalar type used by the transform
-  using scalar_type = scalar_t;
 
   /// 3-element "vector" type
   using vector3 = array_type<3>;
@@ -48,16 +47,6 @@ struct transform3 {
   /// 4x4 matrix type
   using matrix44 = Fastor::Tensor<scalar_type, 4UL, 4UL>;
 
-  /// Function (object) used for accessing a matrix element
-  using element_getter = algebra::fastor::math::element_getter<scalar_t>;
-
-  /// Size type
-  using size_type = std::size_t;
-
-  /// 2D Matrix type
-  template <size_type ROWS, size_type COLS>
-  using matrix_type = Fastor::Tensor<scalar_type, ROWS, COLS>;
-
   /// @}
 
   /// @name Data objects
@@ -68,14 +57,12 @@ struct transform3 {
 
   /// @}
 
-  /** Contructor with arguments: t, x, y, z
-   *
-   * @param t the translation (or origin of the new frame)
-   * @param x the x axis of the new frame
-   * @param y the y axis of the new frame
-   * @param z the z axis of the new frame, normal vector for planes
-   *
-   **/
+  /// Contructor with arguments: t, x, y, z
+  ///
+  /// @param t the translation (or origin of the new frame)
+  /// @param x the x axis of the new frame
+  /// @param y the y axis of the new frame
+  /// @param z the z axis of the new frame, normal vector for planes
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
              const vector3 &z, bool get_inverse = true) {
@@ -97,22 +84,19 @@ struct transform3 {
     }
   }
 
-  /** Contructor with arguments: t, z, x
-   *
-   * @param t the translation (or origin of the new frame)
-   * @param z the z axis of the new frame, normal vector for planes
-   * @param x the x axis of the new frame
-   *
-   **/
+  /// Contructor with arguments: t, z, x
+  ///
+  /// @param t the translation (or origin of the new frame)
+  /// @param z the z axis of the new frame, normal vector for planes
+  /// @param x the x axis of the new frame
   ALGEBRA_HOST
   transform3(const vector3 &t, const vector3 &z, const vector3 &x,
              bool get_inverse = true)
       : transform3(t, x, Fastor::cross(z, x), z, get_inverse) {}
 
-  /** Constructor with arguments: translation
-   *
-   * @param t is the translation
-   **/
+  /// Constructor with arguments: translation
+  ///
+  /// @param t is the translation
   ALGEBRA_HOST
   explicit transform3(const vector3 &t) {
 
@@ -127,10 +111,9 @@ struct transform3 {
     _data_inv = Fastor::inverse(_data);
   }
 
-  /** Constructor with arguments: matrix
-   *
-   * @param m is the full 4x4 matrix
-   **/
+  /// Constructor with arguments: matrix
+  ///
+  /// @param m is the full 4x4 matrix
   ALGEBRA_HOST
   explicit transform3(const matrix44 &m) {
     _data = m;
@@ -138,11 +121,10 @@ struct transform3 {
     _data_inv = Fastor::inverse(_data);
   }
 
-  /** Constructor with arguments: matrix as Fastor::Tensor<scalar_t, 16> of
-   * scalars
-   *
-   * @param ma is the full 4x4 matrix as a 16-element array
-   **/
+  /// Constructor with arguments: matrix as Fastor::Tensor<scalar_t, 16> of
+  /// scalars
+  ///
+  /// @param ma is the full 4x4 matrix as a 16-element array
   ALGEBRA_HOST
   explicit transform3(const array_type<16> &ma) {
     _data = ma;
@@ -150,19 +132,19 @@ struct transform3 {
     _data_inv = Fastor::inverse(_data);
   }
 
-  /** Default contructors */
+  /// Default contructors
   transform3() = default;
   transform3(const transform3 &rhs) = default;
   ~transform3() = default;
 
-  /** Equality operator */
+  /// Equality operator
   ALGEBRA_HOST
   inline bool operator==(const transform3 &rhs) const {
 
     return Fastor::isequal(_data, rhs._data);
   }
 
-  /** This method retrieves the rotation of a transform */
+  /// This method retrieves the rotation of a transform
   ALGEBRA_HOST
   inline auto rotation() const {
 
@@ -170,32 +152,32 @@ struct transform3 {
         _data(Fastor::fseq<0, 3>(), Fastor::fseq<0, 3>()));
   }
 
-  /** This method retrieves x axis */
+  /// This method retrieves x axis
   ALGEBRA_HOST_DEVICE
   inline point3 x() const { return _data(Fastor::fseq<0, 3>(), 0); }
 
-  /** This method retrieves y axis */
+  /// This method retrieves y axis
   ALGEBRA_HOST_DEVICE
   inline point3 y() const { return _data(Fastor::fseq<0, 3>(), 1); }
 
-  /** This method retrieves z axis */
+  /// This method retrieves z axis
   ALGEBRA_HOST_DEVICE
   inline point3 z() const { return _data(Fastor::fseq<0, 3>(), 2); }
 
-  /** This method retrieves the translation of a transform */
+  /// This method retrieves the translation of a transform
   ALGEBRA_HOST
   inline vector3 translation() const { return _data(Fastor::fseq<0, 3>(), 3); }
 
-  /** This method retrieves the 4x4 matrix of a transform */
+  /// This method retrieves the 4x4 matrix of a transform
   ALGEBRA_HOST
   inline matrix44 matrix() const { return _data; }
 
-  /** This method retrieves the 4x4 matrix of an inverse transform */
+  /// This method retrieves the 4x4 matrix of an inverse transform
   ALGEBRA_HOST
   inline matrix44 matrix_inverse() const { return _data_inv; }
 
-  /** This method transform from a point from the local 3D cartesian frame to
-   * the global 3D cartesian frame */
+  /// This method transform from a point from the local 3D cartesian frame to
+  /// the global 3D cartesian frame
   ALGEBRA_HOST
   inline const point3 point_to_global(const point3 &v) const {
 
@@ -206,8 +188,8 @@ struct transform3 {
         Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
   }
 
-  /** This method transform from a vector from the global 3D cartesian frame
-   * into the local 3D cartesian frame */
+  /// This method transform from a vector from the global 3D cartesian frame
+  /// into the local 3D cartesian frame
   ALGEBRA_HOST
   inline const point3 point_to_local(const point3 &v) const {
 
@@ -218,8 +200,8 @@ struct transform3 {
         Fastor::matmul(_data_inv, vector_4)(Fastor::fseq<0, 3>()));
   }
 
-  /** This method transform from a vector from the local 3D cartesian frame to
-   * the global 3D cartesian frame */
+  /// This method transform from a vector from the local 3D cartesian frame to
+  /// the global 3D cartesian frame
   ALGEBRA_HOST
   inline const point3 vector_to_global(const vector3 &v) const {
 
@@ -230,8 +212,8 @@ struct transform3 {
         Fastor::matmul(_data, vector_4)(Fastor::fseq<0, 3>()));
   }
 
-  /** This method transform from a vector from the global 3D cartesian frame
-   * into the local 3D cartesian frame */
+  /// This method transform from a vector from the global 3D cartesian frame
+  /// into the local 3D cartesian frame
   ALGEBRA_HOST
   inline const point3 vector_to_local(const vector3 &v) const {
 

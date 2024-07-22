@@ -52,6 +52,15 @@ struct vector {};
 
 template <class M>
 using vector_t = typename vector<M>::type;
+
+template <class M, index_t<M> N, typename T>
+using other_vector_t = typename vector<M>::template type<N, T>;
+
+template <class M>
+struct matrix {};
+
+template <class M, index_t<M> ROWS, index_t<M> COLS, typename T>
+using other_matrix_t = typename matrix<M>::template other_type<T, ROWS, COLS>;
 /// @}
 
 /// Matrix dimensions
@@ -65,9 +74,13 @@ struct dimensions<M, std::enable_if_t<std::is_fundamental_v<M>, void>> {
 
   using size_type = std::size_t;
 
+  static constexpr size_type dim{0};
   static constexpr size_type rows{0};
   static constexpr size_type columns{0};
 };
+
+template <class M>
+inline constexpr index_t<M> dim{dimensions<M>::sim};
 
 template <class M>
 inline constexpr index_t<M> rows{dimensions<M>::rows};
@@ -82,7 +95,28 @@ template <class M>
 inline constexpr index_t<M> size{rows<M> * columns<M>};
 
 template <class M>
+inline constexpr bool is_matrix{dimensions<M>::dim == 2};
+
+template <class M>
+inline constexpr bool is_vector{dimensions<M>::dim == 1};
+
+template <class M>
 inline constexpr bool is_square{(rows<M> == columns<M>)};
+/// @}
+
+/// Getter types
+/// @{
+template <class M>
+struct element_getter {};
+
+template <class M>
+using element_getter_t = typename element_getter<M>::type;
+
+template <class M>
+struct block_getter {};
+
+template <class M>
+using block_getter_t = typename block_getter<M>::type;
 /// @}
 
 /// @}

@@ -67,15 +67,12 @@ struct vector_unaryOP_bm : public vector_bm<vector_t<scalar_t>> {
 
   void operator()(::benchmark::State &state) override {
 
-    using result_t = std::invoke_result_t<unaryOP, vector_t<scalar_t>>;
-
     const std::size_t n_samples{this->m_cfg.n_samples()};
 
     // Run the benchmark
     for (auto _ : state) {
       for (std::size_t i{0}; i < n_samples; ++i) {
-        result_t result = unaryOP{}(this->a[i]);
-        ::benchmark::DoNotOptimize(const_cast<const result_t &>(result));
+        ::benchmark::DoNotOptimize(unaryOP{}(this->a[i]));
       }
     }
   }
@@ -95,16 +92,12 @@ struct vector_binaryOP_bm : public vector_bm<vector_t<scalar_t>> {
 
   void operator()(::benchmark::State &state) override {
 
-    using result_t =
-        std::invoke_result_t<binaryOP, vector_t<scalar_t>, vector_t<scalar_t>>;
-
     const std::size_t n_samples{this->m_cfg.n_samples()};
 
     // Run the benchmark
     for (auto _ : state) {
       for (std::size_t i{0}; i < n_samples; ++i) {
-        result_t result = binaryOP{}(this->a[i], this->b[i]);
-        ::benchmark::DoNotOptimize(const_cast<const result_t &>(result));
+        ::benchmark::DoNotOptimize(binaryOP{}(this->a[i], this->b[i]));
       }
     }
   }
@@ -141,13 +134,23 @@ struct cross {
     return algebra::vector::cross(a, b);
   }
 };
-struct normalize {
-  inline static const std::string name{"normalize"};
-  template <typename vector_t>
-  auto operator()(const vector_t &a) const {
-    return algebra::vector::normalize(a);
-  }
-};
+
+// Macro for declaring vector unary ops
+#define ALGEBRA_PLUGINS_BENCH_VECTOR(OP)       \
+  struct OP {                                  \
+    inline static const std::string name{#OP}; \
+    template <typename vector_t>               \
+    auto operator()(const vector_t &a) const { \
+      return algebra::vector::OP(a);           \
+    }                                          \
+  };
+
+ALGEBRA_PLUGINS_BENCH_VECTOR(phi)
+ALGEBRA_PLUGINS_BENCH_VECTOR(theta)
+ALGEBRA_PLUGINS_BENCH_VECTOR(eta)
+ALGEBRA_PLUGINS_BENCH_VECTOR(perp)
+ALGEBRA_PLUGINS_BENCH_VECTOR(norm)
+ALGEBRA_PLUGINS_BENCH_VECTOR(normalize)
 
 }  // namespace bench_op
 

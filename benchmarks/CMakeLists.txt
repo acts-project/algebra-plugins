@@ -77,6 +77,10 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
                                                    algebra::common_storage)
    add_library( algebra::bench_vc_aos ALIAS algebra_bench_vc_aos )
 
+   vc_set_preferred_compiler_flags()
+   add_compile_definitions( ${Vc_DEFINITIONS} )
+   add_compile_options( ${Vc_COMPILE_FLAGS} ${Vc_ARCHITECTURE_FLAGS} )
+
    algebra_add_benchmark( vc_aos_getter
       "vc_aos/vc_aos_getter.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common

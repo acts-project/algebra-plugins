@@ -25,24 +25,24 @@ algebra_add_test( array
 
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
    algebra_add_test( eigen
-      "eigen/eigen_cmath.cpp" "eigen/eigen_eigen.cpp"
+      "eigen/eigen_generic.cpp" "eigen/eigen_eigen.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
-                     algebra::eigen_cmath algebra::eigen_eigen )
+                     algebra::eigen_generic algebra::eigen_eigen )
 endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_SMATRIX )
    algebra_add_test( smatrix
-      "smatrix/smatrix_cmath.cpp" "smatrix/smatrix_smatrix.cpp"
+      "smatrix/smatrix_generic.cpp" "smatrix/smatrix_smatrix.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
-                     algebra::smatrix_cmath algebra::smatrix_smatrix )
+                     algebra::smatrix_generic algebra::smatrix_smatrix )
 endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_VC )
    if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang" )
       algebra_add_test( vc_aos
-         "vc_aos/vc_cmath.cpp" "vc_aos/vc_aos.cpp"
+         "vc_aos/vc_aos_generic.cpp" "vc_aos/vc_aos.cpp"
          LINK_LIBRARIES GTest::gtest_main algebra::tests_common
-                        algebra::vc_cmath algebra::vc_aos )
+                        algebra::vc_aos_generic algebra::vc_aos )
 
       algebra_add_test( vc_soa
          "vc_soa/vc_soa.cpp"

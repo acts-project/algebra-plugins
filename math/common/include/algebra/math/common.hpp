@@ -29,8 +29,14 @@ namespace math_ns = std;
 
 /// Absolute value of arg
 template <typename scalar_t>
-ALGEBRA_HOST_DEVICE inline scalar_t fabs(scalar_t arg) {
+ALGEBRA_HOST_DEVICE inline auto fabs(scalar_t arg) {
   return math_ns::fabs(arg);
+}
+
+/// Fused multiply add
+template <typename scalar_t>
+ALGEBRA_HOST_DEVICE inline auto fma(scalar_t x, scalar_t y, scalar_t z) {
+  return math_ns::fma(x, y, z);
 }
 
 /// Arc tangent of y/x

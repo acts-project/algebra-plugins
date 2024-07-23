@@ -23,7 +23,16 @@ set( ALGEBRA_PLUGINS_FASTOR_SOURCE
    "fastor;GIT_REPOSITORY;https://github.com/romeric/Fastor.git;GIT_TAG;e96e63fe8a05898d732d0b9faba3667d9a25a38f"
    CACHE STRING "Source for Fastor, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_FASTOR_SOURCE )
-FetchContent_Declare( fastor ${ALGEBRA_PLUGINS_FASTOR_SOURCE} )
+
+# Mark the import as a system library on modern CMake versions
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.25.0)
+   set(ALGEBRA_PLUGINS_FASTOR_SOURCE_FULL "${ALGEBRA_PLUGINS_FASTOR_SOURCE};SYSTEM")
+else()
+   set(ALGEBRA_PLUGINS_FASTOR_SOURCE_FULL "${ALGEBRA_PLUGINS_FASTOR_SOURCE}")
+endif()
+mark_as_advanced( ALGEBRA_PLUGINS_FASTOR_SOURCE_FULL )
+
+FetchContent_Declare( fastor ${ALGEBRA_PLUGINS_FASTOR_SOURCE_FULL} )
 
 # Turn off the unit tests for Fastor.
 if( DEFINED CACHE{BUILD_TESTING} )

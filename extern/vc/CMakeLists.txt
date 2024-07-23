@@ -16,7 +16,16 @@ set( ALGEBRA_PLUGINS_VC_SOURCE
    "URL;https://github.com/VcDevel/Vc/archive/refs/tags/1.4.3.tar.gz;URL_MD5;02d33a9d560a14bb23204be235713f65"
    CACHE STRING "Source for Vc, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_VC_SOURCE )
-FetchContent_Declare( Vc ${ALGEBRA_PLUGINS_VC_SOURCE} )
+
+# Mark the import as a system library on modern CMake versions
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.25.0)
+   set(ALGEBRA_PLUGINS_VC_SOURCE_FULL "${ALGEBRA_PLUGINS_VC_SOURCE};SYSTEM")
+else()
+   set(ALGEBRA_PLUGINS_VC_SOURCE_FULL "${ALGEBRA_PLUGINS_VC_SOURCE}")
+endif()
+mark_as_advanced( ALGEBRA_PLUGINS_VC_SOURCE_FULL )
+
+FetchContent_Declare( Vc ${ALGEBRA_PLUGINS_VC_SOURCE_FULL} )
 
 # Turn off the unit tests for Vc.
 if( DEFINED CACHE{BUILD_TESTING} )

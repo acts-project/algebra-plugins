@@ -41,6 +41,7 @@ jobs:
     # Run the CMake configuration.
     - name: Configure
       run: cmake --preset default-x86-64
+                 -DALGEBRA_PLUGINS_INCLUDE_FASTOR=${{ (matrix.PLATFORM.OS == 'macos-latest') && 'OFF' || 'ON' }}
                  -S ${{ github.workspace }} -B build
                  -G "${{ matrix.PLATFORM.GENERATOR }}"
     # Perform the build.

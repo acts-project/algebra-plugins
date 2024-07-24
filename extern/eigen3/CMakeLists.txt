@@ -16,7 +16,16 @@ set( ALGEBRA_PLUGINS_EIGEN_SOURCE
    "URL;https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2;URL_MD5;132dde48fe2b563211675626d29f1707"
    CACHE STRING "Source for Eigen, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_EIGEN_SOURCE )
-FetchContent_Declare( Eigen3 ${ALGEBRA_PLUGINS_EIGEN_SOURCE} )
+
+# Mark the import as a system library on modern CMake versions
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.25.0)
+   set(ALGEBRA_PLUGINS_EIGEN_SOURCE_FULL "${ALGEBRA_PLUGINS_EIGEN_SOURCE};SYSTEM")
+else()
+   set(ALGEBRA_PLUGINS_EIGEN_SOURCE_FULL "${ALGEBRA_PLUGINS_EIGEN_SOURCE}")
+endif()
+mark_as_advanced( ALGEBRA_PLUGINS_EIGEN_SOURCE_FULL )
+
+FetchContent_Declare( Eigen3 ${ALGEBRA_PLUGINS_EIGEN_SOURCE_FULL} )
 
 # Turn off the unit tests for Eigen3.
 if( DEFINED CACHE{BUILD_TESTING} )

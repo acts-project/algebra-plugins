@@ -16,7 +16,16 @@ set( ALGEBRA_PLUGINS_GOOGLETEST_SOURCE
    "URL;https://github.com/google/googletest/archive/refs/tags/v1.14.0.tar.gz;URL_MD5;c8340a482851ef6a3fe618a082304cfc"
    CACHE STRING "Source for GoogleTest, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_GOOGLETEST_SOURCE )
-FetchContent_Declare( GoogleTest ${ALGEBRA_PLUGINS_GOOGLETEST_SOURCE} )
+
+# Mark the import as a system library on modern CMake versions
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.25.0)
+   set(ALGEBRA_PLUGINS_GOOGLETEST_SOURCE_FULL "${ALGEBRA_PLUGINS_GOOGLETEST_SOURCE};SYSTEM")
+else()
+   set(ALGEBRA_PLUGINS_GOOGLETEST_SOURCE_FULL "${ALGEBRA_PLUGINS_GOOGLETEST_SOURCE}")
+endif()
+mark_as_advanced( ALGEBRA_PLUGINS_GOOGLETEST_SOURCE_FULL )
+
+FetchContent_Declare( GoogleTest ${ALGEBRA_PLUGINS_GOOGLETEST_SOURCE_FULL} )
 
 # Options used in the build of GoogleTest.
 set( BUILD_GMOCK TRUE CACHE BOOL "Turn off the build of GMock" )

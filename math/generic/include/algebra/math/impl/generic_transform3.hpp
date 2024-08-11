@@ -138,9 +138,7 @@ struct transform3 {
   ///
   /// @param m is the full 4x4 matrix
   ALGEBRA_HOST_DEVICE
-  explicit transform3(const matrix44 &m) {
-
-    _data = m;
+  explicit transform3(const matrix44 &m) : _data{m} {
     _data_inv = matrix_inversion{}(_data);
   }
 

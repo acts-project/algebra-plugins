@@ -71,7 +71,7 @@ ALGEBRA_HOST_DEVICE inline auto transpose(const matrix_t &m) {
   constexpr index_t rows{algebra::trait::rows<matrix_t>};
   constexpr index_t columns{algebra::trait::columns<matrix_t>};
 
-  algebra::trait::other_matrix_t<matrix_t, columns, rows, value_t> ret;
+  algebra::trait::get_matrix_t<matrix_t, columns, rows, value_t> ret;
 
   for (index_t i = 0; i < rows; ++i) {
     for (index_t j = 0; j < columns; ++j) {

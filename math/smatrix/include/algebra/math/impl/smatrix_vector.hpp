@@ -21,17 +21,16 @@ namespace algebra::smatrix::math {
 /// This method retrieves phi from a vector, vector base with rows >= 2
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 2, bool> = true>
-ALGEBRA_HOST inline scalar_t phi(
-    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
+template <typename scalar_t, auto N>
+requires(N >= 2) ALGEBRA_HOST inline scalar_t
+    phi(const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATan2(v[1], v[0]));
 }
 
-template <typename scalar_t, class A, auto N,
-          std::enable_if_t<N >= 2, bool> = true>
-ALGEBRA_HOST inline scalar_t phi(
-    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+template <typename scalar_t, class A, auto N>
+requires(N >= 2) ALGEBRA_HOST inline scalar_t
+    phi(const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATan2(v.apply(1), v.apply(0)));
 }
@@ -39,18 +38,17 @@ ALGEBRA_HOST inline scalar_t phi(
 /// This method retrieves theta from a vector, vector base with rows >= 3
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
-ALGEBRA_HOST inline scalar_t theta(
-    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
+template <typename scalar_t, auto N>
+requires(N >= 3) ALGEBRA_HOST inline scalar_t
+    theta(const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(
       TMath::ATan2(TMath::Sqrt(v[0] * v[0] + v[1] * v[1]), v[2]));
 }
 
-template <typename scalar_t, class A, auto N,
-          std::enable_if_t<N >= 3, bool> = true>
-ALGEBRA_HOST inline scalar_t theta(
-    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+template <typename scalar_t, class A, auto N>
+requires(N >= 3) ALGEBRA_HOST inline scalar_t
+    theta(const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATan2(
       TMath::Sqrt(v.apply(0) * v.apply(0) + v.apply(1) * v.apply(1)),
@@ -77,17 +75,16 @@ ALGEBRA_HOST inline scalar_t norm(
 /// rows >= 3
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
-ALGEBRA_HOST inline scalar_t eta(
-    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
+template <typename scalar_t, auto N>
+requires(N >= 3) ALGEBRA_HOST inline scalar_t
+    eta(const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATanH(v[2] / norm(v)));
 }
 
-template <typename scalar_t, class A, auto N,
-          std::enable_if_t<N >= 3, bool> = true>
-ALGEBRA_HOST inline scalar_t eta(
-    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+template <typename scalar_t, class A, auto N>
+requires(N >= 3) ALGEBRA_HOST inline scalar_t
+    eta(const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATanH(v.apply(2) / norm(v)));
 }
@@ -95,17 +92,16 @@ ALGEBRA_HOST inline scalar_t eta(
 /// This method retrieves the perpendicular magnitude of a vector with rows >= 2
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 2, bool> = true>
-ALGEBRA_HOST inline scalar_t perp(
-    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
+template <typename scalar_t, auto N>
+requires(N >= 2) ALGEBRA_HOST inline scalar_t
+    perp(const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::Sqrt(v[0] * v[0] + v[1] * v[1]));
 }
 
-template <typename scalar_t, class A, auto N,
-          std::enable_if_t<N >= 2, bool> = true>
-ALGEBRA_HOST inline scalar_t perp(
-    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+template <typename scalar_t, class A, auto N>
+requires(N >= 2) ALGEBRA_HOST inline scalar_t
+    perp(const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(
       TMath::Sqrt(v.apply(0) * v.apply(0) + v.apply(1) * v.apply(1)));

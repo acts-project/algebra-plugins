@@ -20,10 +20,9 @@ namespace algebra::cmath {
 ///
 /// @return the scalar dot product value
 template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N,
-          std::enable_if_t<std::is_scalar_v<scalar_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, N> &a,
-                                        const array_t<scalar_t, N> &b) {
+          typename scalar_t, size_type N>
+requires std::is_scalar_v<scalar_t> ALGEBRA_HOST_DEVICE inline scalar_t dot(
+    const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) {
   array_t<scalar_t, N> tmp;
   for (size_type i = 0; i < N; i++) {
     tmp[i] = a[i] * b[i];
@@ -41,13 +40,11 @@ ALGEBRA_HOST_DEVICE inline scalar_t dot(const array_t<scalar_t, N> &a,
 /// @param b the second input matrix with single column
 ///
 /// @return the scalar dot product value
-template <
-    typename size_type, template <typename, size_type> class array_t,
-    typename scalar_t, size_type N, size_type COLS,
-    std::enable_if_t<COLS == 1 && std::is_scalar_v<scalar_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline scalar_t dot(
-    const array_t<scalar_t, N> &a,
-    const array_t<array_t<scalar_t, N>, COLS> &b) {
+template <typename size_type, template <typename, size_type> class array_t,
+          typename scalar_t, size_type N, size_type COLS>
+requires(COLS == 1 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
+    inline scalar_t dot(const array_t<scalar_t, N> &a,
+                        const array_t<array_t<scalar_t, N>, COLS> &b) {
   array_t<scalar_t, N> tmp;
   for (size_type i = 0; i < N; i++) {
     tmp[i] = a[i] * b[0][i];
@@ -65,13 +62,11 @@ ALGEBRA_HOST_DEVICE inline scalar_t dot(
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <
-    typename size_type, template <typename, size_type> class array_t,
-    typename scalar_t, size_type N, size_type COLS,
-    std::enable_if_t<COLS == 1 && std::is_scalar_v<scalar_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline scalar_t dot(
-    const array_t<array_t<scalar_t, N>, COLS> &a,
-    const array_t<scalar_t, N> &b) {
+template <typename size_type, template <typename, size_type> class array_t,
+          typename scalar_t, size_type N, size_type COLS>
+requires(COLS == 1 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
+    inline scalar_t dot(const array_t<array_t<scalar_t, N>, COLS> &a,
+                        const array_t<scalar_t, N> &b) {
   array_t<scalar_t, N> tmp;
   for (size_type i = 0; i < N; i++) {
     tmp[i] = a[0][i] * b[i];
@@ -89,13 +84,11 @@ ALGEBRA_HOST_DEVICE inline scalar_t dot(
 /// @param b the second input matrix with single column
 ///
 /// @return the scalar dot product value
-template <
-    typename size_type, template <typename, size_type> class array_t,
-    typename scalar_t, size_type N, size_type COLS,
-    std::enable_if_t<COLS == 1 && std::is_scalar_v<scalar_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline scalar_t dot(
-    const array_t<array_t<scalar_t, N>, COLS> &a,
-    const array_t<array_t<scalar_t, N>, COLS> &b) {
+template <typename size_type, template <typename, size_type> class array_t,
+          typename scalar_t, size_type N, size_type COLS>
+requires(COLS == 1 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
+    inline scalar_t dot(const array_t<array_t<scalar_t, N>, COLS> &a,
+                        const array_t<array_t<scalar_t, N>, COLS> &b) {
   array_t<scalar_t, N> tmp;
   for (size_type i = 0; i < N; i++) {
     tmp[i] = a[0][i] * b[0][i];
@@ -111,9 +104,9 @@ ALGEBRA_HOST_DEVICE inline scalar_t dot(
 ///
 /// @param v the input vector
 template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N,
-          std::enable_if_t<(N >= 2) && std::is_scalar_v<scalar_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, N> &v) {
+          typename scalar_t, size_type N>
+requires(N >= 2 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
+    inline scalar_t norm(const array_t<scalar_t, N> &v) {
 
   return algebra::math::sqrt(dot(v, v));
 }
@@ -123,10 +116,9 @@ ALGEBRA_HOST_DEVICE inline scalar_t norm(const array_t<scalar_t, N> &v) {
 ///
 /// @param v the input vector
 template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N,
-          std::enable_if_t<(N >= 3) && std::is_scalar_v<scalar_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline scalar_t eta(
-    const array_t<scalar_t, N> &v) noexcept {
+          typename scalar_t, size_type N>
+requires(N >= 3 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
+    inline scalar_t eta(const array_t<scalar_t, N> &v) noexcept {
 
   return algebra::math::atanh(v[2] / norm(v));
 }
@@ -135,10 +127,10 @@ ALGEBRA_HOST_DEVICE inline scalar_t eta(
 ///
 /// @param v the input vector
 template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N,
-          std::enable_if_t<std::is_scalar_v<scalar_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline array_t<scalar_t, N> normalize(
-    const array_t<scalar_t, N> &v) {
+          typename scalar_t, size_type N>
+requires std::is_scalar_v<scalar_t>
+    ALGEBRA_HOST_DEVICE inline array_t<scalar_t, N> normalize(
+        const array_t<scalar_t, N> &v) {
 
   return (static_cast<scalar_t>(1.) / norm(v)) * v;
 }

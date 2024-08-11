@@ -74,10 +74,10 @@ class alignas(
   /// in explicitely vectorized code, the underlying data array is filled with
   /// zeroes if too few arguments are given.
   template <typename... Values>
-    requires(std::conjunction_v<std::is_convertible<Values, value_type>...> &&
-             sizeof...(Values) <= N && !(N == 3 && simd_size() == 4) &&
-             !(N == 6 && simd_size() == 8))
-  ALGEBRA_HOST_DEVICE constexpr vector(Values &&...vals)
+  requires(std::conjunction_v<std::is_convertible<Values, value_type>...> &&
+           sizeof...(Values) <= N && !(N == 3 && simd_size() == 4) &&
+           !(N == 6 && simd_size() == 8)) ALGEBRA_HOST_DEVICE
+      constexpr vector(Values &&... vals)
       : m_data{std::forward<Values>(vals)...} {
     // Fill the uninitialized part of the vector register with zero
     if constexpr ((sizeof...(Values) < simd_size()) &&
@@ -88,15 +88,17 @@ class alignas(
   }
 
   template <typename... Values>
-    requires(std::conjunction_v<std::is_convertible<Values, value_type>...> &&
-             N == 3 && simd_size() == 4)
-  ALGEBRA_HOST_DEVICE constexpr vector(Values &&...vals)
+  requires(std::conjunction_v<std::is_convertible<Values, value_type>...> &&N ==
+               3 &&
+           simd_size() == 4) ALGEBRA_HOST_DEVICE
+      constexpr vector(Values &&... vals)
       : m_data{std::forward<Values>(vals)..., 0.f} {}
 
   template <typename... Values>
-    requires(std::conjunction_v<std::is_convertible<Values, value_type>...> &&
-             N == 6 && simd_size() == 8)
-  ALGEBRA_HOST_DEVICE constexpr vector(Values &&...vals)
+  requires(std::conjunction_v<std::is_convertible<Values, value_type>...> &&N ==
+               6 &&
+           simd_size() == 8) ALGEBRA_HOST_DEVICE
+      constexpr vector(Values &&... vals)
       : m_data{std::forward<Values>(vals)..., 0.f, 0.f} {}
 
   /// Construct from existing array storage @param vals
@@ -205,10 +207,9 @@ class alignas(
 template <std::size_t N, typename value_t,
           template <typename, std::size_t> class array_t,
           template <typename, std::size_t> class o_array_t>
-  requires(std::is_scalar_v<value_t>)
-ALGEBRA_HOST_DEVICE constexpr bool operator==(
-    const vector<N, value_t, array_t> &lhs,
-    const o_array_t<value_t, N> &rhs) noexcept {
+requires(std::is_scalar_v<value_t>) ALGEBRA_HOST_DEVICE constexpr bool
+operator==(const vector<N, value_t, array_t> &lhs,
+           const o_array_t<value_t, N> &rhs) noexcept {
 
   const auto comp = lhs.compare(rhs);
   bool is_full = false;
@@ -223,10 +224,9 @@ ALGEBRA_HOST_DEVICE constexpr bool operator==(
 template <std::size_t N, typename value_t,
           template <typename, std::size_t> class array_t,
           template <typename, std::size_t> class o_array_t>
-  requires(!std::is_scalar_v<value_t>)
-ALGEBRA_HOST_DEVICE constexpr bool operator==(
-    const vector<N, value_t, array_t> &lhs,
-    const o_array_t<value_t, N> &rhs) noexcept {
+requires(!std::is_scalar_v<value_t>) ALGEBRA_HOST_DEVICE constexpr bool
+operator==(const vector<N, value_t, array_t> &lhs,
+           const o_array_t<value_t, N> &rhs) noexcept {
 
   const auto comp = lhs.compare(rhs);
   bool is_full = false;
@@ -250,53 +250,53 @@ ALGEBRA_HOST_DEVICE constexpr bool operator==(
 /// @}
 
 /// Macro declaring all instances of a specific arithmetic operator
-#define DECLARE_vector_OPERATORS(OP)                                          \
-  template <std::size_t N, typename value_t, typename scalar_t,               \
-            template <typename, std::size_t> class array_t>                   \
-    requires(std::is_scalar_v<scalar_t>)                                      \
-  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator OP(                   \
-      const vector<N, value_t, array_t> &lhs, scalar_t rhs) noexcept {        \
-    return lhs.m_data OP static_cast<value_t>(rhs);                           \
-  }                                                                           \
-  template <std::size_t N, typename value_t, typename scalar_t,               \
-            template <typename, std::size_t> class array_t>                   \
-    requires(std::is_scalar_v<scalar_t>)                                      \
-  ALGEBRA_HOST_DEVICE inline decltype(auto) operator OP(                      \
-      scalar_t lhs, const vector<N, value_t, array_t> &rhs) noexcept {        \
-    return static_cast<value_t>(lhs) OP rhs.m_data;                           \
-  }                                                                           \
-  template <std::size_t N, typename value_t,                                  \
-            template <typename, std::size_t> class array_t>                   \
-  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator OP(                   \
-      const vector<N, value_t, array_t> &lhs,                                 \
-      const vector<N, value_t, array_t> &rhs) noexcept {                      \
-    return lhs.m_data OP rhs.m_data;                                          \
-  }                                                                           \
-  template <std::size_t N, typename value_t,                                  \
-            template <typename, std::size_t> class array_t,                   \
-            typename other_type>                                              \
-    requires(                                                                 \
-        std::is_object<decltype(std::declval<typename vector<                 \
-                                    N, value_t, array_t>::array_type>()       \
-                                    OP std::declval<other_type>())>::value && \
-        !std::is_scalar_v<other_type>)                                        \
-  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator OP(                   \
-      const vector<N, value_t, array_t> &lhs,                                 \
-      const other_type &rhs) noexcept {                                       \
-    return lhs.m_data OP rhs;                                                 \
-  }                                                                           \
-  template <std::size_t N, typename value_t,                                  \
-            template <typename, std::size_t> class array_t,                   \
-            typename other_type>                                              \
-    requires(                                                                 \
-        std::is_object<decltype(std::declval<typename vector<                 \
-                                    N, value_t, array_t>::array_type>()       \
-                                    OP std::declval<other_type>())>::value && \
-        !std::is_scalar_v<other_type>)                                        \
-  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator OP(                   \
-      const other_type &lhs,                                                  \
-      const vector<N, value_t, array_t> &rhs) noexcept {                      \
-    return lhs OP rhs.m_data;                                                 \
+#define DECLARE_vector_OPERATORS(OP)                                           \
+  template <std::size_t N, typename value_t, typename scalar_t,                \
+            template <typename, std::size_t> class array_t>                    \
+  requires(std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE constexpr decltype( \
+      auto)                                                                    \
+  operator OP(const vector<N, value_t, array_t> &lhs, scalar_t rhs) noexcept { \
+    return lhs.m_data OP static_cast<value_t>(rhs);                            \
+  }                                                                            \
+  template <std::size_t N, typename value_t, typename scalar_t,                \
+            template <typename, std::size_t> class array_t>                    \
+  requires(std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE inline decltype(    \
+      auto)                                                                    \
+  operator OP(scalar_t lhs, const vector<N, value_t, array_t> &rhs) noexcept { \
+    return static_cast<value_t>(lhs) OP rhs.m_data;                            \
+  }                                                                            \
+  template <std::size_t N, typename value_t,                                   \
+            template <typename, std::size_t> class array_t>                    \
+  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator OP(                    \
+      const vector<N, value_t, array_t> &lhs,                                  \
+      const vector<N, value_t, array_t> &rhs) noexcept {                       \
+    return lhs.m_data OP rhs.m_data;                                           \
+  }                                                                            \
+  template <std::size_t N, typename value_t,                                   \
+            template <typename, std::size_t> class array_t,                    \
+            typename other_type>                                               \
+  requires(                                                                    \
+      std::is_object<decltype(                                                 \
+          std::declval<typename vector<N, value_t, array_t>::array_type>()     \
+              OP std::declval<other_type>())>::value &&                        \
+      !std::is_scalar_v<other_type>)                                           \
+      ALGEBRA_HOST_DEVICE constexpr decltype(auto)                             \
+      operator OP(const vector<N, value_t, array_t> &lhs,                      \
+                  const other_type &rhs) noexcept {                            \
+    return lhs.m_data OP rhs;                                                  \
+  }                                                                            \
+  template <std::size_t N, typename value_t,                                   \
+            template <typename, std::size_t> class array_t,                    \
+            typename other_type>                                               \
+  requires(                                                                    \
+      std::is_object<decltype(                                                 \
+          std::declval<typename vector<N, value_t, array_t>::array_type>()     \
+              OP std::declval<other_type>())>::value &&                        \
+      !std::is_scalar_v<other_type>)                                           \
+      ALGEBRA_HOST_DEVICE constexpr decltype(auto)                             \
+      operator OP(const other_type &lhs,                                       \
+                  const vector<N, value_t, array_t> &rhs) noexcept {           \
+    return lhs OP rhs.m_data;                                                  \
   }
 
 // Implement all arithmetic operations on top of @c vector.

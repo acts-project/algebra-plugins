@@ -41,12 +41,10 @@ ALGEBRA_HOST_DEVICE inline auto norm(const Eigen::MatrixBase<derived_type> &v) {
 /// rows >= 3
 ///
 /// @param v the input vector
-template <
-    typename derived_type,
-    std::enable_if_t<Eigen::MatrixBase<derived_type>::RowsAtCompileTime >= 3,
-                     bool> = true>
-ALGEBRA_HOST_DEVICE inline auto eta(
-    const Eigen::MatrixBase<derived_type> &v) noexcept {
+template <typename derived_type>
+requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime >=
+         3) ALGEBRA_HOST_DEVICE
+    inline auto eta(const Eigen::MatrixBase<derived_type> &v) noexcept {
 
   return algebra::math::atanh(v[2] / v.norm());
 }

@@ -17,10 +17,10 @@ namespace algebra::generic::math {
 /// This method retrieves phi from a vector with rows >= 2
 ///
 /// @param v the input vector
-template <typename vector_t,
-          std::enable_if_t<algebra::trait::is_vector<vector_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> phi(
-    const vector_t &v) noexcept {
+template <typename vector_t>
+requires algebra::trait::is_vector<vector_t>
+    ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> phi(
+        const vector_t &v) noexcept {
 
   using element_getter_t = algebra::trait::element_getter_t<vector_t>;
 
@@ -31,10 +31,10 @@ ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> phi(
 /// This method retrieves the perpendicular magnitude of a vector with rows >= 2
 ///
 /// @param v the input vector
-template <typename vector_t,
-          std::enable_if_t<algebra::trait::is_vector<vector_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> perp(
-    const vector_t &v) noexcept {
+template <typename vector_t>
+requires algebra::trait::is_vector<vector_t>
+    ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> perp(
+        const vector_t &v) noexcept {
 
   using element_getter_t = algebra::trait::element_getter_t<vector_t>;
 
@@ -46,10 +46,10 @@ ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> perp(
 /// This method retrieves theta from a vector with rows >= 3
 ///
 /// @param v the input vector
-template <typename vector_t,
-          std::enable_if_t<algebra::trait::is_vector<vector_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> theta(
-    const vector_t &v) noexcept {
+template <typename vector_t>
+requires algebra::trait::is_vector<vector_t>
+    ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> theta(
+        const vector_t &v) noexcept {
 
   using element_getter_t = algebra::trait::element_getter_t<vector_t>;
 
@@ -65,12 +65,11 @@ ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> theta(
 /// @param b the second input vector
 ///
 /// @return a vector representing the cross product
-template <typename vector1_t, typename vector2_t,
-          std::enable_if_t<(algebra::trait::columns<vector1_t> == 1 &&
-                            algebra::trait::columns<vector2_t> == 1),
-                           bool> = true>
-ALGEBRA_HOST_DEVICE inline algebra::trait::vector_t<vector1_t> cross(
-    const vector1_t &a, const vector2_t &b) {
+template <typename vector1_t, typename vector2_t>
+requires(algebra::trait::columns<vector1_t> == 1 &&
+         algebra::trait::columns<vector2_t> == 1) ALGEBRA_HOST_DEVICE
+    inline algebra::trait::vector_t<vector1_t> cross(const vector1_t &a,
+                                                     const vector2_t &b) {
 
   using element_getter_t = algebra::trait::element_getter_t<vector1_t>;
 
@@ -92,12 +91,11 @@ ALGEBRA_HOST_DEVICE inline algebra::trait::vector_t<vector1_t> cross(
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename vector1_t, typename vector2_t,
-          std::enable_if_t<(algebra::trait::columns<vector1_t> == 1 &&
-                            algebra::trait::columns<vector2_t> == 1),
-                           bool> = true>
-ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector1_t> dot(
-    const vector1_t &a, const vector2_t &b) {
+template <typename vector1_t, typename vector2_t>
+requires(algebra::trait::columns<vector1_t> == 1 &&
+         algebra::trait::columns<vector2_t> == 1) ALGEBRA_HOST_DEVICE
+    inline algebra::trait::scalar_t<vector1_t> dot(const vector1_t &a,
+                                                   const vector2_t &b) {
 
   using scalar_t = algebra::trait::scalar_t<vector1_t>;
   using index_t = algebra::trait::index_t<vector1_t>;
@@ -115,10 +113,10 @@ ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector1_t> dot(
 /// This method retrieves the norm of a vector with rows >= 3
 ///
 /// @param v the input vector
-template <typename vector_t,
-          std::enable_if_t<algebra::trait::is_vector<vector_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> norm(
-    const vector_t &v) {
+template <typename vector_t>
+requires algebra::trait::is_vector<vector_t>
+    ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> norm(
+        const vector_t &v) {
 
   return algebra::math::sqrt(dot(v, v));
 }
@@ -127,10 +125,10 @@ ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> norm(
 /// rows >= 3
 ///
 /// @param v the input vector
-template <typename vector_t,
-          std::enable_if_t<algebra::trait::is_vector<vector_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> eta(
-    const vector_t &v) noexcept {
+template <typename vector_t>
+requires algebra::trait::is_vector<vector_t>
+    ALGEBRA_HOST_DEVICE inline algebra::trait::scalar_t<vector_t> eta(
+        const vector_t &v) noexcept {
 
   using element_getter_t = algebra::trait::element_getter_t<vector_t>;
 

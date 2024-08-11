@@ -44,120 +44,13 @@ using vector2 = storage_type<T, 2>;
 template <typename T>
 using point2 = vector2<T>;
 
+/// Element Getter
+using element_getter = cmath::storage::element_getter;
+/// Block Getter
+using block_getter = cmath::storage::block_getter;
+
 }  // namespace array
 
-namespace trait {
-
-/// Type trait specializations
-/// @{
-
-/// Index
-/// @{
-template <typename T, std::size_t N>
-struct index<std::array<T, N>> {
-  using type = algebra::array::size_type;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct index<std::array<std::array<T, ROWS>, COLS>> {
-  using type = algebra::array::size_type;
-};
-/// @}
-
-/// Dimension
-/// @{
-template <typename T, std::size_t N>
-struct dimensions<std::array<T, N>> {
-
-  using size_type = index_t<std::array<T, N>>;
-
-  static constexpr size_type dim{1};
-  static constexpr size_type rows{N};
-  static constexpr size_type columns{1};
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct dimensions<std::array<std::array<T, ROWS>, COLS>> {
-
-  using size_type = index_t<std::array<std::array<T, ROWS>, COLS>>;
-
-  static constexpr size_type dim{2};
-  static constexpr size_type rows{ROWS};
-  static constexpr size_type columns{COLS};
-};
-/// @}
-
-/// Value
-/// @{
-template <typename T, std::size_t N>
-struct value<std::array<T, N>> {
-  using type = T;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct value<std::array<std::array<T, ROWS>, COLS>> {
-  using type = T;
-};
-/// @}
-
-/// Vector
-/// @{
-template <typename T, std::size_t N>
-struct vector<std::array<T, N>> {
-
-  template <typename other_T, std::size_t other_N>
-  using other_type = std::array<other_T, other_N>;
-
-  using type = other_type<T, N>;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct vector<std::array<std::array<T, ROWS>, COLS>> {
-
-  template <typename other_T, std::size_t other_N>
-  using other_type = std::array<other_T, other_N>;
-
-  using type = other_type<T, ROWS>;
-};
-/// @}
-
-/// Matrix
-/// @{
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct matrix<std::array<std::array<T, ROWS>, COLS>> {
-  template <typename other_T, std::size_t other_ROWS, std::size_t other_COLS>
-  using other_type = std::array<std::array<other_T, other_ROWS>, other_COLS>;
-
-  using type = std::array<std::array<T, ROWS>, COLS>;
-};
-
-template <typename T, int N>
-struct matrix<std::array<T, N>> {
-  template <typename other_T, int other_ROWS, int other_COLS>
-  using other_type = std::array<std::array<other_T, other_ROWS>, other_COLS>;
-
-  using type = other_type<T, N, 1>;
-};
-/// @}
-
-/// Elemet/Block Getter
-/// @{
-template <typename T, std::size_t N>
-struct element_getter<std::array<T, N>> {
-  using type = cmath::storage::element_getter;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct element_getter<std::array<std::array<T, ROWS>, COLS>> {
-  using type = cmath::storage::element_getter;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct block_getter<std::array<std::array<T, ROWS>, COLS>> {
-  using type = cmath::storage::block_getter;
-};
-/// @}
-
-}  // namespace trait
+ALGEBRA_PLUGINS_DEFINE_TYPE_TRAITS(array)
 
 }  // namespace algebra

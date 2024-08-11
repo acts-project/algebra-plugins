@@ -74,12 +74,15 @@ struct vector_unaryOP_bm : public vector_bm<vector_t<scalar_t>> {
 
   void operator()(::benchmark::State &state) override {
 
+    using result_t = std::invoke_result_t<unaryOP, vector_t<scalar_t>>;
+
     const std::size_t n_samples{this->m_cfg.n_samples()};
 
     // Run the benchmark
     for (auto _ : state) {
       for (std::size_t i{0}; i < n_samples; ++i) {
-        ::benchmark::DoNotOptimize(unaryOP{}(this->a[i]));
+        result_t result = unaryOP{}(this->a[i]);
+        ::benchmark::DoNotOptimize(const_cast<const result_t &>(result));
       }
     }
   }
@@ -103,12 +106,16 @@ struct vector_binaryOP_bm : public vector_bm<vector_t<scalar_t>> {
 
   void operator()(::benchmark::State &state) override {
 
+    using result_t =
+        std::invoke_result_t<binaryOP, vector_t<scalar_t>, vector_t<scalar_t>>;
+
     const std::size_t n_samples{this->m_cfg.n_samples()};
 
     // Run the benchmark
     for (auto _ : state) {
       for (std::size_t i{0}; i < n_samples; ++i) {
-        ::benchmark::DoNotOptimize(binaryOP{}(this->a[i], this->b[i]));
+        result_t result = binaryOP{}(this->a[i], this->b[i]);
+        ::benchmark::DoNotOptimize(const_cast<const result_t &>(result));
       }
     }
   }

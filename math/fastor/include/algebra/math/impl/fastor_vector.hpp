@@ -24,9 +24,9 @@ namespace algebra::fastor::math {
 /// This method retrieves theta from a vector, vector base with rows >= 3
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
-ALGEBRA_HOST inline scalar_t theta(
-    const Fastor::Tensor<scalar_t, N> &v) noexcept {
+template <typename scalar_t, auto N>
+requires(N >= 3) ALGEBRA_HOST inline scalar_t
+    theta(const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
   return algebra::math::atan2(Fastor::norm(v(Fastor::fseq<0, 2>())), v[2]);
 }
@@ -34,9 +34,9 @@ ALGEBRA_HOST inline scalar_t theta(
 /// This method retrieves the perpenticular magnitude of a vector with rows >= 2
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 2, bool> = true>
-ALGEBRA_HOST inline scalar_t perp(
-    const Fastor::Tensor<scalar_t, N> &v) noexcept {
+template <typename scalar_t, auto N>
+requires(N >= 2) ALGEBRA_HOST inline scalar_t
+    perp(const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
   return algebra::math::sqrt(
       Fastor::inner(v(Fastor::fseq<0, 2>()), v(Fastor::fseq<0, 2>())));
@@ -55,9 +55,9 @@ ALGEBRA_HOST inline scalar_t norm(const Fastor::Tensor<scalar_t, N> &v) {
 /// rows >= 3
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
-ALGEBRA_HOST inline scalar_t eta(
-    const Fastor::Tensor<scalar_t, N> &v) noexcept {
+template <typename scalar_t, auto N>
+requires(N >= 3) ALGEBRA_HOST inline scalar_t
+    eta(const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
   return algebra::math::atanh(v[2] / Fastor::norm(v));
 }

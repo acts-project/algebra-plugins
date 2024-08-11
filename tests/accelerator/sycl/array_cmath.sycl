@@ -6,7 +6,7 @@
  */
 
 // Project include(s).
-#include "algebra/array_generic.hpp"
+#include "algebra/array_cmath.hpp"
 
 // Local include(s).
 #include "test_sycl_basics.hpp"
@@ -23,9 +23,9 @@ struct test_specialisation_name {
   static std::string GetName(int i) {
     switch (i) {
       case 0:
-        return "sycl_array_generic<float>";
+        return "sycl_array_cmath<float>";
       case 1:
-        return "sycl_array_generic<double>";
+        return "sycl_array_cmath<double>";
       default:
         return "unknown";
     }
@@ -44,6 +44,6 @@ typedef testing::Types<
                algebra::array::vector3<double>,
                algebra::array::transform3<double>, std::size_t,
                algebra::array::matrix_type>>
-    array_generic_types;
+    array_cmath_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_sycl_basics,
-                               array_generic_types, test_specialisation_name);
+                               array_cmath_types, test_specialisation_name);

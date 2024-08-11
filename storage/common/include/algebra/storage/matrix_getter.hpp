@@ -144,7 +144,7 @@ struct block_getter {
   template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
             std::size_t mCOL, typename value_t,
             template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE inline constexpr auto operator()(
+  ALGEBRA_HOST_DEVICE constexpr auto operator()(
       const matrix<array_t, value_t, mROW, mCOL> &m, const std::size_t row,
       const std::size_t col) noexcept {
 
@@ -181,7 +181,7 @@ struct block_getter {
   /// Get a vector of a const matrix
   template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
             typename value_t, template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE inline constexpr auto operator()(
+  ALGEBRA_HOST_DEVICE constexpr auto operator()(
       const matrix<array_t, value_t, ROWS, COLS> &m, const std::size_t row,
       const std::size_t col) noexcept {
 
@@ -214,7 +214,7 @@ struct block_getter {
 template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
           std::size_t mCOL, typename value_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline constexpr auto block(
+ALGEBRA_HOST_DEVICE constexpr auto block(
     const matrix<array_t, value_t, mROW, mCOL> &m, const std::size_t row,
     const std::size_t col) noexcept {
   return block_getter{}.template operator()<ROWS, COLS>(m, row, col);
@@ -224,7 +224,7 @@ ALGEBRA_HOST_DEVICE inline constexpr auto block(
 template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
           std::size_t mCOL, typename value_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline constexpr void set_block(
+ALGEBRA_HOST_DEVICE constexpr void set_block(
     matrix<array_t, value_t, mROW, mCOL> &m,
     const matrix<array_t, value_t, ROWS, COLS> &b, const std::size_t row,
     const std::size_t col) noexcept {
@@ -255,7 +255,7 @@ ALGEBRA_HOST_DEVICE inline constexpr void set_block(
 /// Operator setting a block with a vector
 template <class matrix_t, std::size_t ROW, typename value_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline constexpr void set_block(
+ALGEBRA_HOST_DEVICE constexpr void set_block(
     matrix_t &m, const storage::vector<ROW, value_t, array_t> &b,
     std::size_t row, std::size_t col) noexcept {
   assert(row < ROW);

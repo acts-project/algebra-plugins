@@ -37,7 +37,7 @@ requires(std::is_scalar_v<typename matrix_t::value_type::value_type>)
 /// Set @param m as zero matrix
 template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline constexpr void set_zero(
+ALGEBRA_HOST_DEVICE constexpr void set_zero(
     array_t<array_t<scalar_t, ROWS>, COLS> &m) {
   m = zero<array_t<array_t<scalar_t, ROWS>, COLS>>();
 }
@@ -45,7 +45,7 @@ ALGEBRA_HOST_DEVICE inline constexpr void set_zero(
 /// Set @param m as identity matrix
 template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline constexpr void set_identity(
+ALGEBRA_HOST_DEVICE constexpr void set_identity(
     array_t<array_t<scalar_t, ROWS>, COLS> &m) {
   m = identity<array_t<array_t<scalar_t, ROWS>, COLS>>();
 }

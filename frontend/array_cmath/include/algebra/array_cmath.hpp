@@ -47,12 +47,12 @@ using cmath::dot;
 using cmath::normalize;
 
 // generic implementations
-using generic::math::cross;
-using generic::math::eta;
-using generic::math::norm;
-using generic::math::perp;
-using generic::math::phi;
-using generic::math::theta;
+using cmath::cross;
+using cmath::eta;
+using cmath::norm;
+using cmath::perp;
+using cmath::phi;
+using cmath::theta;
 
 /// @}
 
@@ -88,9 +88,10 @@ using cmath::set_identity;
 using cmath::set_zero;
 using cmath::zero;
 
-using generic::math::determinant;
-using generic::math::inverse;
-using generic::math::transpose;
+// Uses generic implementation in the background
+using cmath::determinant;
+using cmath::inverse;
+using cmath::transpose;
 
 /// @}
 

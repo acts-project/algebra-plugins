@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/generic.hpp"
 #include "algebra/math/vc_aos.hpp"
 #include "algebra/storage/vc_aos.hpp"
 
@@ -43,11 +42,9 @@ using vc_aos::math::dot;
 using vc_aos::math::eta;
 using vc_aos::math::norm;
 using vc_aos::math::normalize;
-
-// No specific vectorized implementation needed
-using generic::math::perp;
-using generic::math::phi;
-using generic::math::theta;
+using vc_aos::math::perp;
+using vc_aos::math::phi;
+using vc_aos::math::theta;
 
 /// @}
 
@@ -58,15 +55,13 @@ namespace matrix {
 /// @name Matrix functions on @c algebra::vc_aos types
 /// @{
 
+using vc_aos::math::determinant;
 using vc_aos::math::identity;
+using vc_aos::math::inverse;
 using vc_aos::math::set_identity;
 using vc_aos::math::set_zero;
 using vc_aos::math::transpose;
 using vc_aos::math::zero;
-
-// Placeholder, until vectorization-friendly version is available
-using generic::math::determinant;
-using generic::math::inverse;
 
 /// @}
 

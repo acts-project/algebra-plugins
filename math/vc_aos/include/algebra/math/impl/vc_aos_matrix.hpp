@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
+#include "algebra/math/generic.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/matrix.hpp"
 
@@ -20,23 +21,28 @@ using storage::set_zero;
 using storage::transpose;
 using storage::zero;
 
-/// General case: Compute the determinant of a square matrix
-///
 /// @returns the determinant
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr value_t determinant(
-    const storage::matrix<array_t, value_t, N, N> &) noexcept {
-  // @TODO: Implement
-  return value_t(0);
+    const storage::matrix<array_t, value_t, N, N> &m) noexcept {
+  return algebra::generic::math::determinant(m);
 }
 
+/// @returns the inverse
 template <std::size_t ROW, std::size_t COL, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE constexpr storage::matrix<array_t, value_t, ROW, COL>
+ALGEBRA_HOST_DEVICE constexpr storage::matrix<array_t, value_t, COL, ROW>
 inverse(const storage::matrix<array_t, value_t, ROW, COL> &m) noexcept {
-  // @TODO: Implement
-  return m;
+  return algebra::generic::math::inverse(m);
+}
+
+/// @returns the transpose
+template <std::size_t ROW, std::size_t COL, concepts::value value_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE constexpr storage::matrix<array_t, value_t, COL, ROW>
+transpose(const storage::matrix<array_t, value_t, ROW, COL> &m) noexcept {
+  return algebra::generic::math::transpose(m);
 }
 
 }  // namespace algebra::vc_aos::math

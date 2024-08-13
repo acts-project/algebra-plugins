@@ -9,7 +9,6 @@
 
 // Project include(s).
 #include "algebra/math/eigen.hpp"
-#include "algebra/math/generic.hpp"
 #include "algebra/storage/eigen.hpp"
 
 // Eigen include(s).
@@ -47,12 +46,9 @@ using eigen::math::dot;
 using eigen::math::eta;
 using eigen::math::norm;
 using eigen::math::normalize;
-
-using generic::math::perp;
-using generic::math::phi;
-using generic::math::theta;
-
-/// @}
+using eigen::math::perp;
+using eigen::math::phi;
+using eigen::math::theta;
 
 }  // namespace vector
 

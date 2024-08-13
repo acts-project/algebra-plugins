@@ -21,14 +21,15 @@ namespace algebra::smatrix::math {
 /// This method retrieves phi from a vector, vector base with rows >= 2
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 2, bool> = true>
+template <concepts::scalar scalar_t, auto N,
+          std::enable_if_t<N >= 2, bool> = true>
 ALGEBRA_HOST inline scalar_t phi(
     const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATan2(v[1], v[0]));
 }
 
-template <typename scalar_t, class A, auto N,
+template <concepts::scalar scalar_t, class A, auto N,
           std::enable_if_t<N >= 2, bool> = true>
 ALGEBRA_HOST inline scalar_t phi(
     const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
@@ -39,7 +40,8 @@ ALGEBRA_HOST inline scalar_t phi(
 /// This method retrieves theta from a vector, vector base with rows >= 3
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
+template <concepts::scalar scalar_t, auto N,
+          std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST inline scalar_t theta(
     const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
@@ -47,7 +49,7 @@ ALGEBRA_HOST inline scalar_t theta(
       TMath::ATan2(TMath::Sqrt(v[0] * v[0] + v[1] * v[1]), v[2]));
 }
 
-template <typename scalar_t, class A, auto N,
+template <concepts::scalar scalar_t, class A, auto N,
           std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST inline scalar_t theta(
     const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
@@ -60,13 +62,13 @@ ALGEBRA_HOST inline scalar_t theta(
 /// This method retrieves the norm of a vector, no dimension restriction
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N>
+template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST inline scalar_t norm(const ROOT::Math::SVector<scalar_t, N> &v) {
 
   return static_cast<scalar_t>(TMath::Sqrt(ROOT::Math::Dot(v, v)));
 }
 
-template <typename scalar_t, class A, auto N>
+template <concepts::scalar scalar_t, class A, auto N>
 ALGEBRA_HOST inline scalar_t norm(
     const ROOT::Math::VecExpr<A, scalar_t, N> &v) {
 
@@ -77,14 +79,15 @@ ALGEBRA_HOST inline scalar_t norm(
 /// rows >= 3
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
+template <concepts::scalar scalar_t, auto N,
+          std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST inline scalar_t eta(
     const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATanH(v[2] / norm(v)));
 }
 
-template <typename scalar_t, class A, auto N,
+template <concepts::scalar scalar_t, class A, auto N,
           std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST inline scalar_t eta(
     const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
@@ -95,14 +98,15 @@ ALGEBRA_HOST inline scalar_t eta(
 /// This method retrieves the perpendicular magnitude of a vector with rows >= 2
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 2, bool> = true>
+template <concepts::scalar scalar_t, auto N,
+          std::enable_if_t<N >= 2, bool> = true>
 ALGEBRA_HOST inline scalar_t perp(
     const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::Sqrt(v[0] * v[0] + v[1] * v[1]));
 }
 
-template <typename scalar_t, class A, auto N,
+template <concepts::scalar scalar_t, class A, auto N,
           std::enable_if_t<N >= 2, bool> = true>
 ALGEBRA_HOST inline scalar_t perp(
     const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
@@ -114,7 +118,7 @@ ALGEBRA_HOST inline scalar_t perp(
 /// Get a normalized version of the input vector
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N>
+template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, N> normalize(
     const ROOT::Math::SVector<scalar_t, N> &v) {
 
@@ -124,7 +128,7 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, N> normalize(
 /// Get a normalized version of the input vector
 ///
 /// @param v the input vector
-template <typename scalar_t, class A, auto N>
+template <concepts::scalar scalar_t, class A, auto N>
 ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, N> normalize(
     const ROOT::Math::VecExpr<A, scalar_t, N> &v) {
 
@@ -137,7 +141,7 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, N> normalize(
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, auto N>
+template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SVector<scalar_t, N> &a,
                                  const ROOT::Math::SVector<scalar_t, N> &b) {
 
@@ -150,7 +154,7 @@ ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SVector<scalar_t, N> &a,
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, class A, auto N>
+template <concepts::scalar scalar_t, class A, auto N>
 ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SVector<scalar_t, N> &a,
                                  const ROOT::Math::VecExpr<A, scalar_t, N> &b) {
 
@@ -163,7 +167,7 @@ ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SVector<scalar_t, N> &a,
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, class A, auto N>
+template <concepts::scalar scalar_t, class A, auto N>
 ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::VecExpr<A, scalar_t, N> &a,
                                  const ROOT::Math::SVector<scalar_t, N> &b) {
 
@@ -176,7 +180,7 @@ ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::VecExpr<A, scalar_t, N> &a,
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, class A, auto N>
+template <concepts::scalar scalar_t, class A, auto N>
 ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::VecExpr<A, scalar_t, N> &a,
                                  const ROOT::Math::VecExpr<A, scalar_t, N> &b) {
 
@@ -189,7 +193,7 @@ ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::VecExpr<A, scalar_t, N> &a,
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, class A, auto N>
+template <concepts::scalar scalar_t, class A, auto N>
 ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SMatrix<scalar_t, N, 1> &a,
                                  const ROOT::Math::VecExpr<A, scalar_t, N> &b) {
 
@@ -202,7 +206,7 @@ ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SMatrix<scalar_t, N, 1> &a,
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, class A, auto N>
+template <concepts::scalar scalar_t, class A, auto N>
 ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::VecExpr<A, scalar_t, N> &a,
                                  const ROOT::Math::SMatrix<scalar_t, N, 1> &b) {
   return dot(b, a);
@@ -214,7 +218,7 @@ ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::VecExpr<A, scalar_t, N> &a,
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, auto N>
+template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SMatrix<scalar_t, N, 1> &a,
                                  const ROOT::Math::SVector<scalar_t, N> &b) {
 
@@ -227,7 +231,7 @@ ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SMatrix<scalar_t, N, 1> &a,
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, auto N>
+template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SVector<scalar_t, N> &a,
                                  const ROOT::Math::SMatrix<scalar_t, N, 1> &b) {
   return dot(b, a);
@@ -239,7 +243,7 @@ ALGEBRA_HOST inline scalar_t dot(const ROOT::Math::SVector<scalar_t, N> &a,
 /// @param b the second input vector
 ///
 /// @return a vector (expression) representing the cross product
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
     const ROOT::Math::SVector<scalar_t, 3> &a,
     const ROOT::Math::SVector<scalar_t, 3> &b) {
@@ -253,7 +257,7 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
 /// @param b the second input vector
 ///
 /// @return a vector (expression) representing the cross product
-template <typename scalar_t, class A>
+template <concepts::scalar scalar_t, class A>
 ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
     const ROOT::Math::SVector<scalar_t, 3> &a,
     const ROOT::Math::VecExpr<A, scalar_t, 3> &b) {
@@ -267,7 +271,7 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
 /// @param b the second input vector
 ///
 /// @return a vector (expression) representing the cross product
-template <typename scalar_t, class A>
+template <concepts::scalar scalar_t, class A>
 ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
     const ROOT::Math::VecExpr<A, scalar_t, 3> &a,
     const ROOT::Math::SVector<scalar_t, 3> &b) {
@@ -281,7 +285,7 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
 /// @param b the second input vector
 ///
 /// @return a vector (expression) representing the cross product
-template <typename scalar_t, class A>
+template <concepts::scalar scalar_t, class A>
 ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
     const ROOT::Math::VecExpr<A, scalar_t, 3> &a,
     const ROOT::Math::VecExpr<A, scalar_t, 3> &b) {
@@ -295,7 +299,7 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
 /// @param b the second input matrix<3,1>
 ///
 /// @return a vector (expression) representing the cross product
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
     const ROOT::Math::SVector<scalar_t, 3> &a,
     const ROOT::Math::SMatrix<scalar_t, 3, 1> &b) {
@@ -309,7 +313,7 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
 /// @param b the first input vector
 ///
 /// @return a vector (expression) representing the cross product
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
     const ROOT::Math::SMatrix<scalar_t, 3, 1> &a,
     const ROOT::Math::SVector<scalar_t, 3> &b) {
@@ -323,7 +327,7 @@ ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
 /// @param b the first input matrix<3,1>
 ///
 /// @return a vector (expression) representing the cross product
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST inline ROOT::Math::SVector<scalar_t, 3> cross(
     const ROOT::Math::SMatrix<scalar_t, 3, 1> &a,
     const ROOT::Math::SMatrix<scalar_t, 3, 1> &b) {

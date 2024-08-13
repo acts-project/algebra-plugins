@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/storage/impl/vc_aos_getter.hpp"
 #include "algebra/storage/matrix.hpp"
 #include "algebra/storage/vector.hpp"
@@ -30,38 +31,41 @@ namespace algebra {
 
 namespace vc_aos {
 
-/// size type for Vc storage model
+/// Size type for Vc storage model
 using size_type = std::size_t;
 /// Array type used to store Vc::Vectors
-template <typename T, size_type N>
+template <concepts::value T, size_type N>
 using storage_type = Vc::SimdArray<T, N>;
-/// value type in a linear algebra vector: AoS layout
-template <typename T>
+/// Value type in a linear algebra vector: AoS layout
+template <concepts::value T>
 using value_type = T;
+/// Scalar type in a linear algebra vector: AoS layout
+template <concepts::value T>
+using scalar_type = T;
 /// Vector type used in the Vc AoS storage model
-template <typename T, std::size_t N>
+template <concepts::value T, std::size_t N>
 using vector_type = algebra::storage::vector<N, T, storage_type>;
 /// Matrix type used in the Vc AoS storage model
-template <typename T, size_type ROWS, size_type COLS>
+template <concepts::value T, size_type ROWS, size_type COLS>
 using matrix_type = algebra::storage::matrix<storage_type, T, ROWS, COLS>;
 
 /// 2-element "vector" type, using @c Vc::SimdArray
-template <typename T>
+template <concepts::value T>
 using vector2 = vector_type<T, 2>;
 /// Point in 2D space, using @c Vc::SimdArray
-template <typename T>
+template <concepts::value T>
 using point2 = vector2<T>;
 /// 3-element "vector" type, using @c Vc::SimdArray
-template <typename T>
+template <concepts::value T>
 using vector3 = vector_type<T, 3>;
 /// Point in 3D space, using @c Vc::SimdArray
-template <typename T>
+template <concepts::value T>
 using point3 = vector3<T>;
 /// 6-element "vector" type, using @c Vc::SimdArray
-template <typename T>
+template <concepts::value T>
 using vector6 = vector_type<T, 6>;
 /// 8-element "vector" type, using @c Vc::SimdArray
-template <typename T>
+template <concepts::value T>
 using vector8 = vector_type<T, 8>;
 
 /// Element Getter
@@ -72,5 +76,20 @@ using block_getter = algebra::storage::block_getter;
 }  // namespace vc_aos
 
 ALGEBRA_PLUGINS_DEFINE_TYPE_TRAITS(vc_aos)
+
+namespace traits {
+
+// Vector and storage types are different
+template <typename T, auto N>
+struct dimensions<vc_aos::storage_type<T, N>> {
+
+  using size_type = vc_aos::size_type;
+
+  static constexpr size_type dim{1};
+  static constexpr size_type rows{N};
+  static constexpr size_type columns{1};
+};
+
+}  // namespace traits
 
 }  // namespace algebra

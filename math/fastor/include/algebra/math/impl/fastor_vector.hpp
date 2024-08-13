@@ -24,7 +24,8 @@ namespace algebra::fastor::math {
 /// This method retrieves theta from a vector, vector base with rows >= 3
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
+template <concepts::scalar scalar_t, auto N,
+          std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST inline scalar_t theta(
     const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
@@ -34,7 +35,8 @@ ALGEBRA_HOST inline scalar_t theta(
 /// This method retrieves the perpenticular magnitude of a vector with rows >= 2
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 2, bool> = true>
+template <concepts::scalar scalar_t, auto N,
+          std::enable_if_t<N >= 2, bool> = true>
 ALGEBRA_HOST inline scalar_t perp(
     const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
@@ -45,7 +47,7 @@ ALGEBRA_HOST inline scalar_t perp(
 /// This method retrieves the norm of a vector, no dimension restriction
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N>
+template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST inline scalar_t norm(const Fastor::Tensor<scalar_t, N> &v) {
 
   return Fastor::norm(v);
@@ -55,7 +57,8 @@ ALGEBRA_HOST inline scalar_t norm(const Fastor::Tensor<scalar_t, N> &v) {
 /// rows >= 3
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N, std::enable_if_t<N >= 3, bool> = true>
+template <concepts::scalar scalar_t, auto N,
+          std::enable_if_t<N >= 3, bool> = true>
 ALGEBRA_HOST inline scalar_t eta(
     const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
@@ -65,7 +68,7 @@ ALGEBRA_HOST inline scalar_t eta(
 /// Get a normalized version of the input vector
 ///
 /// @param v the input vector
-template <typename scalar_t, auto N>
+template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST inline Fastor::Tensor<scalar_t, N> normalize(
     const Fastor::Tensor<scalar_t, N> &v) {
 
@@ -78,7 +81,7 @@ ALGEBRA_HOST inline Fastor::Tensor<scalar_t, N> normalize(
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, auto N>
+template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST_DEVICE inline scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
                                         const Fastor::Tensor<scalar_t, N> &b) {
   return Fastor::inner(a, b);
@@ -90,7 +93,7 @@ ALGEBRA_HOST_DEVICE inline scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
 /// @param b the second input Tensor<scalar_t, N, 1>
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, auto N>
+template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
                                  const Fastor::Tensor<scalar_t, N, 1> &b) {
 
@@ -107,7 +110,7 @@ ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
 /// @param b the first input vector
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, auto N>
+template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
                                  const Fastor::Tensor<scalar_t, N> &b) {
 
@@ -121,7 +124,7 @@ ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
 /// @param b the first input Tensor<scalar_t, 3, 1>
 ///
 /// @return the scalar dot product value
-template <typename scalar_t, auto N>
+template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
                                  const Fastor::Tensor<scalar_t, N, 1> &b) {
 
@@ -135,7 +138,7 @@ ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
 /// @param b the second input vector
 ///
 /// @return a vector (expression) representing the cross product
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline Fastor::Tensor<scalar_t, 3> cross(
     const Fastor::Tensor<scalar_t, 3> &a,
     const Fastor::Tensor<scalar_t, 3> &b) {
@@ -148,7 +151,7 @@ ALGEBRA_HOST_DEVICE inline Fastor::Tensor<scalar_t, 3> cross(
 /// @param b the second input Tensor<scalar_t, 3, 1>
 ///
 /// @return a vector representing the cross product
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST inline Fastor::Tensor<scalar_t, 3> cross(
     const Fastor::Tensor<scalar_t, 3> &a,
     const Fastor::Tensor<scalar_t, 3, 1> &b) {
@@ -166,7 +169,7 @@ ALGEBRA_HOST inline Fastor::Tensor<scalar_t, 3> cross(
 /// @param b the first input vector
 ///
 /// @return a vector representing the cross product
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST inline Fastor::Tensor<scalar_t, 3> cross(
     const Fastor::Tensor<scalar_t, 3, 1> &a,
     const Fastor::Tensor<scalar_t, 3> &b) {
@@ -181,7 +184,7 @@ ALGEBRA_HOST inline Fastor::Tensor<scalar_t, 3> cross(
 /// @param b the first input Tensor<scalar_t, 3, 1>
 ///
 /// @return a vector representing the cross product
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST inline Fastor::Tensor<scalar_t, 3> cross(
     const Fastor::Tensor<scalar_t, 3, 1> &a,
     const Fastor::Tensor<scalar_t, 3, 1> &b) {

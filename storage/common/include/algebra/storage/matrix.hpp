@@ -7,6 +7,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/storage/vector.hpp"
 #include "algebra/type_traits.hpp"
 
@@ -17,20 +18,20 @@
 namespace algebra::storage {
 
 /// Generic matrix type that can take vectors as columns
-template <template <typename, std::size_t> class array_t, typename value_t,
-          std::size_t ROW, std::size_t COL>
-struct alignas(alignof(storage::vector<ROW, value_t, array_t>)) matrix {
+template <template <typename, std::size_t> class array_t,
+          concepts::scalar scalar_t, std::size_t ROW, std::size_t COL>
+struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
 
   // The matrix consists of column vectors
-  using vector_type = storage::vector<ROW, value_t, array_t>;
+  using vector_type = storage::vector<ROW, scalar_t, array_t>;
   // Value type: Can be simd types
-  using value_type = value_t;
+  using scalar_type = scalar_t;
 
   /// Default constructor
   constexpr matrix() = default;
 
   /// Construct from given column vectors @param v
-  template <typename... vector_t,
+  template <concepts::vector... vector_t,
             std::enable_if_t<sizeof...(vector_t) == COL, bool> = true>
   explicit matrix(vector_t &&...v) : m_storage{std::forward<vector_t>(v)...} {}
 
@@ -66,14 +67,14 @@ struct alignas(alignof(storage::vector<ROW, value_t, array_t>)) matrix {
   /// Sets the trailing uninitialized values to zero.
   /// @{
   // AoS
-  template <typename V = value_t, std::size_t... I,
+  template <concepts::simd_scalar V = scalar_t, std::size_t... I,
             typename std::enable_if_t<!std::is_scalar_v<V>, bool> = true>
   constexpr bool equal(const matrix &rhs, std::index_sequence<I...>) const {
     return (... && (m_storage[I] == rhs[I]));
   }
 
   // SoA
-  template <typename V = value_t, std::size_t... I,
+  template <concepts::value V = scalar_t, std::size_t... I,
             typename std::enable_if_t<std::is_scalar_v<V>, bool> = true>
   constexpr bool equal(const matrix &rhs, std::index_sequence<I...>) const {
     return (... && ((m_storage[I].get() == rhs[I].get()).isFull()));
@@ -86,7 +87,7 @@ struct alignas(alignof(storage::vector<ROW, value_t, array_t>)) matrix {
 };  // struct matrix
 
 /// Get a zero-initialized matrix
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 ALGEBRA_HOST_DEVICE constexpr matrix_t zero() noexcept {
 
   matrix_t m;
@@ -100,39 +101,39 @@ ALGEBRA_HOST_DEVICE constexpr matrix_t zero() noexcept {
 }
 
 /// Set a matrix to zero
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 ALGEBRA_HOST_DEVICE constexpr void set_zero(matrix_t &m) noexcept {
   m = zero<matrix_t>();
 }
 
 /// Build an identity matrix
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 ALGEBRA_HOST_DEVICE constexpr matrix_t identity() noexcept {
 
   // Zero initialized
   matrix_t m{zero<matrix_t>()};
 
-  for (std::size_t i = 0u; i < algebra::trait::rank<matrix_t>; ++i) {
-    m[i][i] = typename matrix_t::value_type(1);
+  for (std::size_t i = 0u; i < algebra::traits::rank<matrix_t>; ++i) {
+    m[i][i] = typename matrix_t::scalar_type(1);
   }
 
   return m;
 }
 
 /// Set a matrix to zero
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 ALGEBRA_HOST_DEVICE constexpr void set_identity(matrix_t &m) noexcept {
   m = identity<matrix_t>();
 }
 
 /// Transpose the matrix @param m
-template <std::size_t ROW, std::size_t COL, typename value_t,
+template <std::size_t ROW, std::size_t COL, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t, std::size_t... I>
 ALGEBRA_HOST_DEVICE constexpr auto transpose(
-    const matrix<array_t, value_t, ROW, COL> &m,
+    const matrix<array_t, scalar_t, ROW, COL> &m,
     std::index_sequence<I...>) noexcept {
 
-  using matrix_T_t = matrix<array_t, value_t, COL, ROW>;
+  using matrix_T_t = matrix<array_t, scalar_t, COL, ROW>;
   using column_t = typename matrix_T_t::vector_type;
 
   matrix_T_t res_m;
@@ -145,49 +146,42 @@ ALGEBRA_HOST_DEVICE constexpr auto transpose(
 }
 
 /// Build an identity matrix
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 ALGEBRA_HOST_DEVICE constexpr auto transpose(const matrix_t &m) noexcept {
   return transpose(m, std::make_index_sequence<matrix_t::columns()>());
 }
 
 /// Scalar multiplication
-template <typename matrix_t, typename scalar_t, std::size_t... J,
-          std::enable_if_t<
-              std::is_scalar_v<scalar_t> ||
-                  std::is_same_v<typename matrix_t::value_type, scalar_t>,
-              bool> = true>
+template <concepts::matrix matrix_t, concepts::scalar scalar_t,
+          std::size_t... J>
 ALGEBRA_HOST_DEVICE inline constexpr matrix_t matrix_scalar_mul(
     scalar_t a, const matrix_t &rhs, std::index_sequence<J...>) noexcept {
 
   return matrix_t{(a * rhs[J])...};
 }
 
-template <std::size_t ROW, std::size_t COL, typename value_t, typename scalar_t,
-          template <typename, std::size_t> class array_t,
-          std::enable_if_t<std::is_scalar_v<scalar_t> ||
-                               std::is_same_v<value_t, scalar_t>,
-                           bool> = true>
+template <std::size_t ROW, std::size_t COL, concepts::scalar scalar1_t,
+          concepts::scalar scalar2_t,
+          template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator*(
-    scalar_t a, const matrix<array_t, value_t, ROW, COL> &rhs) noexcept {
+    scalar2_t a, const matrix<array_t, scalar1_t, ROW, COL> &rhs) noexcept {
 
-  using matrix_t = matrix<array_t, value_t, ROW, COL>;
+  using matrix_t = matrix<array_t, scalar1_t, ROW, COL>;
 
   return matrix_scalar_mul(a, rhs,
                            std::make_index_sequence<matrix_t::columns()>());
 }
 
-template <std::size_t ROW, std::size_t COL, typename value_t, typename scalar_t,
-          template <typename, std::size_t> class array_t,
-          std::enable_if_t<std::is_scalar_v<scalar_t> ||
-                               std::is_same_v<value_t, scalar_t>,
-                           bool> = true>
+template <std::size_t ROW, std::size_t COL, concepts::scalar scalar1_t,
+          concepts::scalar scalar2_t,
+          template <typename, std::size_t> class array_t>
 inline constexpr decltype(auto) operator*(
-    const matrix<array_t, value_t, ROW, COL> &lhs, scalar_t a) noexcept {
+    const matrix<array_t, scalar1_t, ROW, COL> &lhs, scalar2_t a) noexcept {
   return a * lhs;
 }
 
 /// Matrix addition
-template <typename matrix_t, std::size_t... J>
+template <concepts::matrix matrix_t, std::size_t... J>
 ALGEBRA_HOST_DEVICE inline constexpr matrix_t matrix_add(
     const matrix_t &lhs, const matrix_t &rhs,
     std::index_sequence<J...>) noexcept {
@@ -195,18 +189,18 @@ ALGEBRA_HOST_DEVICE inline constexpr matrix_t matrix_add(
   return matrix_t{(lhs[J] + rhs[J])...};
 }
 
-template <std::size_t ROW, std::size_t COL, typename value_t,
+template <std::size_t ROW, std::size_t COL, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator+(
-    const matrix<array_t, value_t, ROW, COL> &lhs,
-    const matrix<array_t, value_t, ROW, COL> &rhs) noexcept {
+    const matrix<array_t, scalar_t, ROW, COL> &lhs,
+    const matrix<array_t, scalar_t, ROW, COL> &rhs) noexcept {
 
-  using matrix_t = matrix<array_t, value_t, ROW, COL>;
+  using matrix_t = matrix<array_t, scalar_t, ROW, COL>;
 
   return matrix_add(lhs, rhs, std::make_index_sequence<matrix_t::columns()>());
 }
 
-template <typename matrix_t, std::size_t... J>
+template <concepts::matrix matrix_t, std::size_t... J>
 ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) matrix_sub(
     const matrix_t &lhs, const matrix_t &rhs,
     std::index_sequence<J...>) noexcept {
@@ -214,26 +208,26 @@ ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) matrix_sub(
   return matrix_t{(lhs[J] - rhs[J])...};
 }
 
-template <std::size_t ROW, std::size_t COL, typename value_t,
+template <std::size_t ROW, std::size_t COL, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator-(
-    const matrix<array_t, value_t, ROW, COL> &lhs,
-    const matrix<array_t, value_t, ROW, COL> &rhs) noexcept {
+    const matrix<array_t, scalar_t, ROW, COL> &lhs,
+    const matrix<array_t, scalar_t, ROW, COL> &rhs) noexcept {
 
-  using matrix_t = matrix<array_t, value_t, ROW, COL>;
+  using matrix_t = matrix<array_t, scalar_t, ROW, COL>;
 
   return matrix_sub(lhs, rhs, std::make_index_sequence<matrix_t::columns()>());
 }
 
 /// Matrix-vector multiplication
-template <std::size_t ROW, std::size_t COL, typename value_t,
+template <std::size_t ROW, std::size_t COL, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator*(
-    const matrix<array_t, value_t, ROW, COL> &lhs,
-    const vector<COL, value_t, array_t> &v) noexcept {
+    const matrix<array_t, scalar_t, ROW, COL> &lhs,
+    const vector<COL, scalar_t, array_t> &v) noexcept {
 
   // Init vector
-  vector<ROW, value_t, array_t> res_v{v[0] * lhs[0]};
+  vector<ROW, scalar_t, array_t> res_v{v[0] * lhs[0]};
 
   // Add the rest per column
   for (std::size_t j = 1u; j < COL; ++j) {
@@ -245,13 +239,14 @@ ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator*(
 }
 
 /// Matrix-matrix multiplication
-template <std::size_t LROW, std::size_t COL, std::size_t RCOL, typename value_t,
+template <std::size_t LROW, std::size_t COL, std::size_t RCOL,
+          concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator*(
-    const matrix<array_t, value_t, LROW, COL> &lhs,
-    const matrix<array_t, value_t, COL, RCOL> &rhs) noexcept {
+    const matrix<array_t, scalar_t, LROW, COL> &lhs,
+    const matrix<array_t, scalar_t, COL, RCOL> &rhs) noexcept {
 
-  matrix<array_t, value_t, LROW, RCOL> res_m;
+  matrix<array_t, scalar_t, LROW, RCOL> res_m;
 
   for (std::size_t j = 0u; j < RCOL; ++j) {
     // Init column j

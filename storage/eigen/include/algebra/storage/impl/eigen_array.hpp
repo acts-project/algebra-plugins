@@ -1,11 +1,14 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2023 CERN for the benefit of the ACTS project
+ * (c) 2020-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
 
 #pragma once
+
+// Project include(s).
+#include "algebra/concepts.hpp"
 
 // Eigen include(s).
 #ifdef _MSC_VER
@@ -29,7 +32,7 @@
 namespace algebra::eigen {
 
 /// Eigen array type
-template <typename T, int N>
+template <concepts::scalar T, int N>
 class array : public Eigen::Matrix<T, N, 1, 0, N, 1> {
 
  public:

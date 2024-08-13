@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
@@ -23,10 +24,10 @@ struct element_getter {
 
   /// Operator getting a reference to one element of a non-const matrix
   template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
-  template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE inline scalar_t &operator()(array_t<array_t<scalar_t, ROWS>, COLS> &m,
-                                                  std::size_t row,
-                                                  std::size_t col) const {
+            template <typename, std::size_t> class array_t>
+  ALGEBRA_HOST_DEVICE inline scalar_t &operator()(
+      array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
+      std::size_t col) const {
 
     assert(row < ROWS);
     assert(col < COLS);
@@ -35,7 +36,7 @@ struct element_getter {
 
   /// Operator getting one value of a const matrix
   template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
-  template <typename, std::size_t> class array_t>
+            template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline scalar_t operator()(
       const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
       std::size_t col) const {
@@ -46,25 +47,28 @@ struct element_getter {
   }
 
   /// Operator getting a reference to one element of a non-const matrix
-  template <std::size_t N, typename scalar_t,template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE inline scalar_t &operator()(array_t<array_t<scalar_t, N>, 1> &m,
-                                                  std::size_t row) const {
+  template <std::size_t N, typename scalar_t,
+            template <typename, std::size_t> class array_t>
+  ALGEBRA_HOST_DEVICE inline scalar_t &operator()(
+      array_t<array_t<scalar_t, N>, 1> &m, std::size_t row) const {
 
     assert(row < N);
     return m[row];
   }
 
   /// Operator getting a reference to one element of a const matrix
-  template <std::size_t N, typename scalar_t,template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE inline scalar_t operator()(const array_t<array_t<scalar_t, N>, 1> &m,
-                                                  std::size_t row) const {
+  template <std::size_t N, typename scalar_t,
+            template <typename, std::size_t> class array_t>
+  ALGEBRA_HOST_DEVICE inline scalar_t operator()(
+      const array_t<array_t<scalar_t, N>, 1> &m, std::size_t row) const {
 
     assert(row < N);
     return m[row];
   }
 
   /// Operator getting a reference to one element of a non-const matrix
-  template <std::size_t N, typename scalar_t, template <typename, std::size_t> class array_t>
+  template <std::size_t N, typename scalar_t,
+            template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline scalar_t &operator()(array_t<scalar_t, N> &m,
                                                   std::size_t row) const {
 
@@ -73,9 +77,10 @@ struct element_getter {
   }
 
   /// Operator getting a reference to one element of a const matrix
-  template <std::size_t N, typename scalar_t, template <typename, std::size_t> class array_t>
+  template <std::size_t N, typename scalar_t,
+            template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline scalar_t operator()(const array_t<scalar_t, N> &m,
-                                                  std::size_t row) const {
+                                                 std::size_t row) const {
 
     assert(row < N);
     return m[row];
@@ -84,8 +89,8 @@ struct element_getter {
 };  // struct element_getter
 
 /// Function extracting an element from a matrix (const)
-template <template <typename, std::size_t> class array_t,
-          typename scalar_t, std::size_t ROWS, std::size_t COLS>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t ROWS, std::size_t COLS>
 ALGEBRA_HOST_DEVICE inline scalar_t element(
     const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
     std::size_t col) {
@@ -94,8 +99,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t element(
 }
 
 /// Function extracting an element from a matrix (non-const)
-template <template <typename, std::size_t> class array_t,
-          typename scalar_t, std::size_t ROWS, std::size_t COLS>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t ROWS, std::size_t COLS>
 ALGEBRA_HOST_DEVICE inline scalar_t &element(
     array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
     std::size_t col) {
@@ -104,8 +109,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t &element(
 }
 
 /// Function extracting an element from a matrix (const)
-template <template <typename, std::size_t> class array_t,
-          typename scalar_t, std::size_t N>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N>
 ALGEBRA_HOST_DEVICE inline scalar_t element(
     const array_t<array_t<scalar_t, N>, 1> &m, std::size_t row) {
 
@@ -113,8 +118,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t element(
 }
 
 /// Function extracting an element from a matrix (non-const)
-template <template <typename, std::size_t> class array_t,
-          typename scalar_t, std::size_t N>
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N>
 ALGEBRA_HOST_DEVICE inline scalar_t &element(
     array_t<array_t<scalar_t, N>, 1> &m, std::size_t row) {
 
@@ -122,19 +127,19 @@ ALGEBRA_HOST_DEVICE inline scalar_t &element(
 }
 
 /// Function extracting an element from a vector (const)
-template <template <typename, std::size_t> class array_t,
-          typename scalar_t, std::size_t N>
-ALGEBRA_HOST_DEVICE inline scalar_t element(
-    const array_t<scalar_t, N> &v, std::size_t row) {
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N>
+ALGEBRA_HOST_DEVICE inline scalar_t element(const array_t<scalar_t, N> &v,
+                                            std::size_t row) {
 
   return element_getter()(v, row);
 }
 
 /// Function extracting an element from a vector (non-const)
-template <template <typename, std::size_t> class array_t,
-          typename scalar_t, std::size_t N>
-ALGEBRA_HOST_DEVICE inline scalar_t &element(
-    array_t<scalar_t, N> &v, std::size_t row) {
+template <template <typename, std::size_t> class array_t, typename scalar_t,
+          std::size_t N>
+ALGEBRA_HOST_DEVICE inline scalar_t &element(array_t<scalar_t, N> &v,
+                                             std::size_t row) {
 
   return element_getter()(v, row);
 }
@@ -161,10 +166,11 @@ struct block_getter {
   }
 
   /// Operator producing a vector out of a const matrix
-  template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS, typename scalar_t,
-  template <typename, std::size_t> class array_t>
+  template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
+            typename scalar_t, template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> operator()(
-      const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row, std::size_t col) {
+      const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
+      std::size_t col) {
 
     assert(col < COLS);
     assert(row + SIZE <= ROWS);
@@ -186,15 +192,14 @@ template <std::size_t ROWS, std::size_t COLS, class input_matrix_type>
 ALGEBRA_HOST_DEVICE decltype(auto) block(const input_matrix_type &m,
                                          std::size_t row, std::size_t col) {
 
-  return block_getter().template operator()<ROWS, COLS>(m, row,
-                                                                        col);
+  return block_getter().template operator()<ROWS, COLS>(m, row, col);
 }
 
 /// Function extracting a vector from a matrix
 template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
           typename scalar_t, template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> vector(
-    const array_t<array_t<scalar_t, ROWS>, COLS>& m, std::size_t row,
+    const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
     std::size_t col) {
 
   return block_getter().template operator()<SIZE>(m, row, col);

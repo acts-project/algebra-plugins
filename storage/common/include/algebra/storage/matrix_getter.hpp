@@ -7,9 +7,9 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/storage/matrix.hpp"
 #include "algebra/storage/vector.hpp"
-#include "algebra/type_traits.hpp"
 
 // System include(s).
 #include <cassert>
@@ -20,10 +20,10 @@ namespace algebra::storage {
 struct element_getter {
 
   /// Get const access to a matrix element
-  template <template <typename, std::size_t> class array_t, typename value_t,
-            std::size_t ROW, std::size_t COL>
+  template <template <typename, std::size_t> class array_t,
+            concepts::scalar scalar_t, std::size_t ROW, std::size_t COL>
   ALGEBRA_HOST inline decltype(auto) operator()(
-      const matrix<array_t, value_t, ROW, COL> &m, std::size_t row,
+      const matrix<array_t, scalar_t, ROW, COL> &m, std::size_t row,
       std::size_t col) const {
 
     // Make sure that the indices are valid.
@@ -35,10 +35,10 @@ struct element_getter {
   }
 
   /// Get non-const access to a matrix element
-  template <template <typename, std::size_t> class array_t, typename value_t,
-            std::size_t ROW, std::size_t COL>
+  template <template <typename, std::size_t> class array_t,
+            concepts::scalar scalar_t, std::size_t ROW, std::size_t COL>
   ALGEBRA_HOST inline decltype(auto) operator()(
-      matrix<array_t, value_t, ROW, COL> &m, std::size_t row,
+      matrix<array_t, scalar_t, ROW, COL> &m, std::size_t row,
       std::size_t col) const {
     assert(row < ROW);
     assert(col < COL);
@@ -47,39 +47,39 @@ struct element_getter {
   }
 
   /// Get const access to a matrix element
-  template <template <typename, std::size_t> class array_t, typename value_t,
-            std::size_t ROW>
+  template <template <typename, std::size_t> class array_t,
+            concepts::scalar scalar_t, std::size_t ROW>
   ALGEBRA_HOST inline decltype(auto) operator()(
-      const matrix<array_t, value_t, ROW, 1> &m, std::size_t row) const {
+      const matrix<array_t, scalar_t, ROW, 1> &m, std::size_t row) const {
 
     assert(row < ROW);
     return m[1][row];
   }
 
   /// Get non-const access to a matrix element
-  template <template <typename, std::size_t> class array_t, typename value_t,
-            std::size_t ROW>
+  template <template <typename, std::size_t> class array_t,
+            concepts::scalar scalar_t, std::size_t ROW>
   ALGEBRA_HOST inline decltype(auto) operator()(
-      matrix<array_t, value_t, ROW, 1> &m, std::size_t row) const {
+      matrix<array_t, scalar_t, ROW, 1> &m, std::size_t row) const {
 
     assert(row < ROW);
     return m[1][row];
   }
 
   /// Get const access to a vector element
-  template <template <typename, std::size_t> class array_t, typename value_t,
-            std::size_t N>
+  template <template <typename, std::size_t> class array_t,
+            concepts::scalar scalar_t, std::size_t N>
   ALGEBRA_HOST inline decltype(auto) operator()(
-      const vector<N, value_t, array_t> &v, std::size_t row) const {
+      const vector<N, scalar_t, array_t> &v, std::size_t row) const {
 
     assert(row < N);
     return v[row];
   }
 
   /// Get non-const access to a vector element
-  template <template <typename, std::size_t> class array_t, typename value_t,
-            std::size_t N>
-  ALGEBRA_HOST inline decltype(auto) operator()(vector<N, value_t, array_t> &v,
+  template <template <typename, std::size_t> class array_t,
+            concepts::scalar scalar_t, std::size_t N>
+  ALGEBRA_HOST inline decltype(auto) operator()(vector<N, scalar_t, array_t> &v,
                                                 std::size_t row) const {
 
     assert(row < N);
@@ -89,51 +89,51 @@ struct element_getter {
 };  // struct element_getter
 
 /// Function extracting an element from a matrix (const)
-template <std::size_t ROW, std::size_t COL, typename value_t,
+template <std::size_t ROW, std::size_t COL, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline decltype(auto) element(
-    const matrix<array_t, value_t, ROW, COL> &m, std::size_t row,
+    const matrix<array_t, scalar_t, ROW, COL> &m, std::size_t row,
     std::size_t col) {
   return element_getter{}(m, row, col);
 }
 
 /// Function extracting an element from a matrix (non-const)
-template <std::size_t ROW, std::size_t COL, typename value_t,
+template <std::size_t ROW, std::size_t COL, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline decltype(auto) element(
-    matrix<array_t, value_t, ROW, COL> &m, std::size_t row, std::size_t col) {
+    matrix<array_t, scalar_t, ROW, COL> &m, std::size_t row, std::size_t col) {
   return element_getter{}(m, row, col);
 }
 
 /// Function extracting an element from a 1D matrix (const)
-template <std::size_t ROW, typename value_t,
+template <std::size_t ROW, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline decltype(auto) element(
-    const matrix<array_t, value_t, ROW, 1> &m, std::size_t row) {
+    const matrix<array_t, scalar_t, ROW, 1> &m, std::size_t row) {
   return element_getter{}(m, row);
 }
 
 /// Function extracting an element from a 1D matrix (non-const)
-template <std::size_t ROW, typename value_t,
+template <std::size_t ROW, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline decltype(auto) element(
-    matrix<array_t, value_t, ROW, 1> &m, std::size_t row) {
+    matrix<array_t, scalar_t, ROW, 1> &m, std::size_t row) {
   return element_getter{}(m, row);
 }
 
 /// Function extracting an element from a vector (const)
-template <std::size_t N, typename value_t,
+template <std::size_t N, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline decltype(auto) element(
-    const vector<N, value_t, array_t> &v, std::size_t row) {
+    const vector<N, scalar_t, array_t> &v, std::size_t row) {
   return element_getter{}(v, row);
 }
 
 /// Function extracting an element from a vector (non-const)
-template <std::size_t N, typename value_t,
+template <std::size_t N, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline decltype(auto) element(
-    vector<N, value_t, array_t> &v, std::size_t row) {
+    vector<N, scalar_t, array_t> &v, std::size_t row) {
   return element_getter{}(v, row);
 }
 
@@ -142,10 +142,10 @@ struct block_getter {
 
   /// Get a block of a const matrix
   template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
-            std::size_t mCOL, typename value_t,
+            std::size_t mCOL, concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline constexpr auto operator()(
-      const matrix<array_t, value_t, mROW, mCOL> &m, const std::size_t row,
+      const matrix<array_t, scalar_t, mROW, mCOL> &m, const std::size_t row,
       const std::size_t col) noexcept {
 
     static_assert(ROWS <= mROW);
@@ -153,8 +153,8 @@ struct block_getter {
     assert(row + ROWS <= mROW);
     assert(col + COLS <= mCOL);
 
-    using input_matrix_t = matrix<array_t, value_t, mROW, mCOL>;
-    using matrix_t = matrix<array_t, value_t, ROWS, COLS>;
+    using input_matrix_t = matrix<array_t, scalar_t, mROW, mCOL>;
+    using matrix_t = matrix<array_t, scalar_t, ROWS, COLS>;
 
     matrix_t res_m;
 
@@ -180,9 +180,10 @@ struct block_getter {
 
   /// Get a vector of a const matrix
   template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
-            typename value_t, template <typename, std::size_t> class array_t>
+            concepts::scalar scalar_t,
+            template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline constexpr auto operator()(
-      const matrix<array_t, value_t, ROWS, COLS> &m, const std::size_t row,
+      const matrix<array_t, scalar_t, ROWS, COLS> &m, const std::size_t row,
       const std::size_t col) noexcept {
 
     static_assert(SIZE <= ROWS);
@@ -190,8 +191,8 @@ struct block_getter {
     assert(row + SIZE <= ROWS);
     assert(col <= COLS);
 
-    using input_matrix_t = matrix<array_t, value_t, ROWS, COLS>;
-    using vector_t = vector<SIZE, value_t, array_t>;
+    using input_matrix_t = matrix<array_t, scalar_t, ROWS, COLS>;
+    using vector_t = vector<SIZE, scalar_t, array_t>;
 
     vector_t res_v{};
 
@@ -212,29 +213,29 @@ struct block_getter {
 
 /// Get a block of a const matrix
 template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
-          std::size_t mCOL, typename value_t,
+          std::size_t mCOL, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline constexpr auto block(
-    const matrix<array_t, value_t, mROW, mCOL> &m, const std::size_t row,
+    const matrix<array_t, scalar_t, mROW, mCOL> &m, const std::size_t row,
     const std::size_t col) noexcept {
   return block_getter{}.template operator()<ROWS, COLS>(m, row, col);
 }
 
 /// Get a block of a const matrix
 template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
-          std::size_t mCOL, typename value_t,
+          std::size_t mCOL, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline constexpr void set_block(
-    matrix<array_t, value_t, mROW, mCOL> &m,
-    const matrix<array_t, value_t, ROWS, COLS> &b, const std::size_t row,
+    matrix<array_t, scalar_t, mROW, mCOL> &m,
+    const matrix<array_t, scalar_t, ROWS, COLS> &b, const std::size_t row,
     const std::size_t col) noexcept {
   static_assert(ROWS <= mROW);
   static_assert(COLS <= mCOL);
   assert(row + ROWS <= mROW);
   assert(col + COLS <= mCOL);
 
-  using input_matrix_t = matrix<array_t, value_t, mROW, mCOL>;
-  using matrix_t = matrix<array_t, value_t, ROWS, COLS>;
+  using input_matrix_t = matrix<array_t, scalar_t, mROW, mCOL>;
+  using matrix_t = matrix<array_t, scalar_t, ROWS, COLS>;
 
   // Don't access single elements in underlying vectors unless necessary
   if constexpr (matrix_t::storage_rows() == input_matrix_t::storage_rows()) {
@@ -253,10 +254,10 @@ ALGEBRA_HOST_DEVICE inline constexpr void set_block(
 }
 
 /// Operator setting a block with a vector
-template <class matrix_t, std::size_t ROW, typename value_t,
+template <class matrix_t, std::size_t ROW, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline constexpr void set_block(
-    matrix_t &m, const storage::vector<ROW, value_t, array_t> &b,
+    matrix_t &m, const storage::vector<ROW, scalar_t, array_t> &b,
     std::size_t row, std::size_t col) noexcept {
   assert(row < ROW);
   assert(row < matrix_t::rows());

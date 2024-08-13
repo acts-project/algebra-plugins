@@ -58,6 +58,41 @@ using generic::math::theta;
 
 }  // namespace vector
 
+// Use special algorithms for 4 dimensional matrices
+namespace generic {
+
+// Determinant algorithms
+template <typename T, auto ROWS, auto COLS>
+struct determinant_selector<4, array::matrix_type<T, ROWS, COLS>> {
+  using type =
+      matrix::determinant::hard_coded<array::matrix_type<T, ROWS, COLS>,
+                                      array::element_getter>;
+};
+
+// Inversion algorithms
+template <typename T, auto ROWS, auto COLS>
+struct inversion_selector<4, array::matrix_type<T, ROWS, COLS>> {
+  using type = matrix::inverse::hard_coded<array::matrix_type<T, ROWS, COLS>,
+                                           array::element_getter>;
+};
+
+// Determinant algorithms
+template <typename T, auto ROWS, auto COLS>
+struct determinant_selector<3, array::matrix_type<T, ROWS, COLS>> {
+  using type =
+      matrix::determinant::hard_coded<array::matrix_type<T, ROWS, COLS>,
+                                      array::element_getter>;
+};
+
+// Inversion algorithms
+template <typename T, auto ROWS, auto COLS>
+struct inversion_selector<3, array::matrix_type<T, ROWS, COLS>> {
+  using type = matrix::inverse::hard_coded<array::matrix_type<T, ROWS, COLS>,
+                                           array::element_getter>;
+};
+
+}  // namespace generic
+
 namespace matrix {
 
 /// @name Matrix functions on @c algebra::array::storage_type

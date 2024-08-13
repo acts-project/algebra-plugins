@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/matrix.hpp"
@@ -34,7 +35,8 @@ using algebra::storage::operator-;
 using algebra::storage::operator+;
 
 /// Transform wrapper class to ensure standard API within differnt plugins
-template <template <typename, std::size_t> class array_t, typename scalar_t>
+template <template <typename, std::size_t> class array_t,
+          concepts::value value_t>
 struct transform3 {
 
   // How to address matrix columns
@@ -49,24 +51,24 @@ struct transform3 {
   /// @{
 
   /// Scalar type used by the transform
-  using scalar_type = scalar_t;
+  using value_type = value_t;
   /// The type of the matrix elements (scalar for AoS, Vc::Vector for SoA)
-  using value_type =
-      std::conditional_t<Vc::is_simd_vector<array_t<scalar_t, 4>>::value,
-                         scalar_t, Vc::Vector<scalar_t>>;
+  using scalar_type =
+      std::conditional_t<Vc::is_simd_vector<array_t<value_t, 4>>::value,
+                         value_t, Vc::Vector<value_t>>;
 
   template <std::size_t N>
-  using array_type = array_t<value_type, N>;
+  using array_type = array_t<scalar_type, N>;
 
   /// 3-element "vector" type (does not observe translations)
-  using vector3 = storage::vector<3u, value_type, array_t>;
+  using vector3 = storage::vector<3u, scalar_type, array_t>;
   /// Point in 3D space (does observe translations)
   using point3 = vector3;
   /// Point in 2D space
-  using point2 = storage::vector<2u, value_type, array_t>;
+  using point2 = storage::vector<2u, scalar_type, array_t>;
 
   /// 4x4 matrix type
-  using matrix44 = storage::matrix<array_t, value_type, 3u, 4u>;
+  using matrix44 = storage::matrix<array_t, scalar_type, 3u, 4u>;
   using column_t = typename matrix44::vector_type;
 
   /// Function (object) used for accessing a matrix element
@@ -156,11 +158,11 @@ struct transform3 {
 
   /// Matrix access operator
   ALGEBRA_HOST_DEVICE
-  inline const value_type &operator()(std::size_t row, std::size_t col) const {
+  inline const scalar_type &operator()(std::size_t row, std::size_t col) const {
     return _data[col][row];
   }
   ALGEBRA_HOST_DEVICE
-  inline value_type &operator()(std::size_t row, std::size_t col) {
+  inline scalar_type &operator()(std::size_t row, std::size_t col) {
     return _data[col][row];
   }
 
@@ -170,7 +172,7 @@ struct transform3 {
   ///
   /// @return a sacalar determinant - no checking done
   ALGEBRA_HOST_DEVICE
-  inline constexpr value_type determinant(const matrix44 &m) const {
+  inline constexpr scalar_type determinant(const matrix44 &m) const {
     return -m[e_z][0] * m[e_y][1] * m[e_x][2] +
            m[e_y][0] * m[e_z][1] * m[e_x][2] +
            m[e_z][0] * m[e_x][1] * m[e_y][2] -
@@ -212,7 +214,7 @@ struct transform3 {
         m[e_t][0] * m[e_x][1] * m[e_y][2] + m[e_x][0] * m[e_t][1] * m[e_y][2] +
         m[e_y][0] * m[e_x][1] * m[e_t][2] - m[e_x][0] * m[e_y][1] * m[e_t][2];
     // i[e_t][3] = 1;
-    const value_type idet{value_type(1.f) / determinant(i)};
+    const scalar_type idet{scalar_type(1.f) / determinant(i)};
 
     i[e_x] = i[e_x] * idet;
     i[e_y] = i[e_y] * idet;
@@ -236,7 +238,7 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   inline auto rotation() const {
 
-    using matrix_t = storage::matrix<array_t, value_type, 3u, 3u>;
+    using matrix_t = storage::matrix<array_t, scalar_type, 3u, 3u>;
 
     matrix_t submatrix;
     for (unsigned int icol = 0; icol < 3; ++icol) {

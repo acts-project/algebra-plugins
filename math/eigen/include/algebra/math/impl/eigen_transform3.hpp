@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/qualifiers.hpp"
+#include "algebra/storage/impl/eigen_array.hpp"
 
 // Eigen include(s).
 #ifdef _MSC_VER
@@ -46,7 +47,7 @@ struct transform3 {
 
   /// Array type used by the transform
   template <int N>
-  using array_type = Eigen::Matrix<scalar_type, N, 1, 0, N, 1>;
+  using array_type = eigen::array<scalar_type, N>;
 
   /// 3-element "vector" type
   using vector3 = array_type<3>;
@@ -193,7 +194,7 @@ struct transform3 {
 
   /// This method retrieves the translation of a transform
   ALGEBRA_HOST_DEVICE
-  inline auto translation() const {
+  inline point3 translation() const {
 
     return _data.matrix().template block<3, 1>(0, 3);
   }

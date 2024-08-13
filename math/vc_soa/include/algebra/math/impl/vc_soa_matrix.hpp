@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/math/impl/vc_soa_vector.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/matrix.hpp"
@@ -20,7 +21,7 @@ using storage::set_zero;
 using storage::transpose;
 using storage::zero;
 
-template <std::size_t ROW, std::size_t COL, typename value_t,
+template <std::size_t ROW, std::size_t COL, concepts::value value_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline constexpr value_t determinant(
     const storage::matrix<array_t, value_t, ROW, COL> &m) noexcept {
@@ -28,7 +29,7 @@ ALGEBRA_HOST_DEVICE inline constexpr value_t determinant(
   return value_t(0);
 }
 
-template <std::size_t ROW, std::size_t COL, typename value_t,
+template <std::size_t ROW, std::size_t COL, concepts::value value_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline constexpr storage::matrix<array_t, value_t, ROW, COL>
 inverse(const storage::matrix<array_t, value_t, ROW, COL> &m) noexcept {
@@ -37,7 +38,7 @@ inverse(const storage::matrix<array_t, value_t, ROW, COL> &m) noexcept {
 }
 
 /// Transpose(matrix)-matrix multiplication
-/*template <std::size_t LROW, std::size_t COL, std::size_t RCOL, typename
+/*template <std::size_t LROW, std::size_t COL, std::size_t RCOL, concepts::value
 value_t, template <typename, std::size_t> class array_t> ALGEBRA_HOST_DEVICE
 inline constexpr decltype(auto) transpose_mul( const matrix<array_t, value_t,
 LROW, COL> &lhs, const matrix<array_t, value_t, COL, RCOL> &rhs) noexcept {

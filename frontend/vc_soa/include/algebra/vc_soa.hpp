@@ -78,7 +78,7 @@ namespace vc_soa {
 /// @name Vc based transforms on @c algebra::vc_soa types
 /// @{
 
-template <typename T>
+template <concepts::value T>
 using transform3 =
     algebra::vc_aos::math::transform3<algebra::vc_soa::storage_type, T>;
 

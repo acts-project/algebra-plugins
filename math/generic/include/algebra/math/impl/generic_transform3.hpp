@@ -17,7 +17,7 @@
 namespace algebra::generic::math {
 
 /// Transform wrapper class to ensure standard API within differnt plugins
-template <typename index_t, typename scalar_t,
+template <concepts::index index_t, concepts::scalar scalar_t,
           template <typename, index_t, index_t> class matrix_t,
           template <typename, index_t> class array_t>
 struct transform3 {
@@ -41,12 +41,13 @@ struct transform3 {
 
   // 4 x 4 Matrix (keep four rows for better alignment)
   using matrix44 = matrix_t<scalar_t, 4, 4>;
+  static_assert(concepts::square_matrix<matrix44>);
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = algebra::trait::element_getter_t<matrix44>;
+  using element_getter = algebra::traits::element_getter_t<matrix44>;
 
   /// Function (object) used for accessing a matrix element
-  using block_getter = algebra::trait::block_getter_t<matrix44>;
+  using block_getter = algebra::traits::block_getter_t<matrix44>;
 
   /// Matrix inversion algorithm
   using matrix_inversion =

@@ -30,13 +30,13 @@
 namespace algebra::eigen::math {
 
 /// Create zero matrix
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 ALGEBRA_HOST_DEVICE inline matrix_t zero() {
   return matrix_t::Zero();
 }
 
 /// Create identity matrix
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 ALGEBRA_HOST_DEVICE inline matrix_t identity() {
   return matrix_t::Identity();
 }

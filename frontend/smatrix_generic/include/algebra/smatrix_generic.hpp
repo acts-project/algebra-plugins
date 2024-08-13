@@ -71,7 +71,7 @@ namespace smatrix {
 /// @name generic based transforms on @c algebra::smatrix
 /// @{
 
-template <typename T>
+template <concepts::scalar T>
 using transform3 =
     generic::math::transform3<smatrix::size_type, T, smatrix::matrix_type,
                               smatrix::storage_type>;

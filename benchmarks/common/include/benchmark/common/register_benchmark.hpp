@@ -7,6 +7,9 @@
 
 #pragma once
 
+// Project include(s)
+#include "benchmark_base.hpp"
+
 // Benchmark include
 #include <benchmark/benchmark.h>
 
@@ -15,8 +18,9 @@
 
 namespace algebra {
 
-template <typename benchmark_t, typename config_t>
-void register_benchmark(const config_t& cfg, const std::string& suffix) {
+template <typename benchmark_t>
+requires std::derived_from<benchmark_t, benchmark_base> void register_benchmark(
+    const benchmark_base::configuration& cfg, const std::string& suffix) {
   benchmark_t bench{cfg};
 
   ::benchmark::RegisterBenchmark((bench.name() + suffix).c_str(), bench)

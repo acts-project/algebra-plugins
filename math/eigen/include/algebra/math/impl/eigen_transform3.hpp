@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/qualifiers.hpp"
+#include "algebra/storage/impl/eigen_array.hpp"
 
 // Eigen include(s).
 #ifdef _MSC_VER
@@ -35,7 +36,7 @@
 namespace algebra::eigen::math {
 
 /// Transform wrapper class to ensure standard API within differnt plugins
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 struct transform3 {
 
   /// @name Type definitions for the struct
@@ -46,7 +47,7 @@ struct transform3 {
 
   /// Array type used by the transform
   template <int N>
-  using array_type = Eigen::Matrix<scalar_type, N, 1, 0, N, 1>;
+  using array_type = eigen::array<scalar_type, N>;
 
   /// 3-element "vector" type
   using vector3 = array_type<3>;
@@ -159,15 +160,13 @@ struct transform3 {
   ///
   /// @param m is the rotation matrix
   /// @param v is the vector to be rotated
-  template <
-      typename derived_type,
-      std::enable_if_t<Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3,
-                       bool> = true,
-      std::enable_if_t<Eigen::MatrixBase<derived_type>::ColsAtCompileTime == 1,
-                       bool> = true>
-  ALGEBRA_HOST_DEVICE static inline auto rotate(
-      const Eigen::Transform<scalar_type, 3, Eigen::Affine> &m,
-      const Eigen::MatrixBase<derived_type> &v) {
+  template <typename derived_type>
+  requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3 &&
+           Eigen::MatrixBase<derived_type>::ColsAtCompileTime ==
+               1) ALGEBRA_HOST_DEVICE
+      static inline auto rotate(
+          const Eigen::Transform<scalar_type, 3, Eigen::Affine> &m,
+          const Eigen::MatrixBase<derived_type> &v) {
 
     return m.matrix().template block<3, 3>(0, 0) * v;
   }
@@ -193,7 +192,7 @@ struct transform3 {
 
   /// This method retrieves the translation of a transform
   ALGEBRA_HOST_DEVICE
-  inline auto translation() const {
+  inline point3 translation() const {
 
     return _data.matrix().template block<3, 1>(0, 3);
   }
@@ -208,56 +207,48 @@ struct transform3 {
 
   /// This method transform from a point from the local 3D cartesian frame to
   /// the global 3D cartesian frame
-  template <
-      typename derived_type,
-      std::enable_if_t<Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3,
-                       bool> = true,
-      std::enable_if_t<Eigen::MatrixBase<derived_type>::ColsAtCompileTime == 1,
-                       bool> = true>
-  ALGEBRA_HOST_DEVICE inline auto point_to_global(
-      const Eigen::MatrixBase<derived_type> &v) const {
+  template <typename derived_type>
+  requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3 &&
+           Eigen::MatrixBase<derived_type>::ColsAtCompileTime ==
+               1) ALGEBRA_HOST_DEVICE
+      inline auto point_to_global(
+          const Eigen::MatrixBase<derived_type> &v) const {
 
     return (_data * v);
   }
 
   /// This method transform from a vector from the global 3D cartesian frame
   /// into the local 3D cartesian frame
-  template <
-      typename derived_type,
-      std::enable_if_t<Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3,
-                       bool> = true,
-      std::enable_if_t<Eigen::MatrixBase<derived_type>::ColsAtCompileTime == 1,
-                       bool> = true>
-  ALGEBRA_HOST_DEVICE inline auto point_to_local(
-      const Eigen::MatrixBase<derived_type> &v) const {
+  template <typename derived_type>
+  requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3 &&
+           Eigen::MatrixBase<derived_type>::ColsAtCompileTime ==
+               1) ALGEBRA_HOST_DEVICE
+      inline auto point_to_local(
+          const Eigen::MatrixBase<derived_type> &v) const {
 
     return (_data_inv * v);
   }
 
   /// This method transform from a vector from the local 3D cartesian frame to
   /// the global 3D cartesian frame
-  template <
-      typename derived_type,
-      std::enable_if_t<Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3,
-                       bool> = true,
-      std::enable_if_t<Eigen::MatrixBase<derived_type>::ColsAtCompileTime == 1,
-                       bool> = true>
-  ALGEBRA_HOST_DEVICE inline auto vector_to_global(
-      const Eigen::MatrixBase<derived_type> &v) const {
+  template <typename derived_type>
+  requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3 &&
+           Eigen::MatrixBase<derived_type>::ColsAtCompileTime ==
+               1) ALGEBRA_HOST_DEVICE
+      inline auto vector_to_global(
+          const Eigen::MatrixBase<derived_type> &v) const {
 
     return (_data.linear() * v);
   }
 
   /// This method transform from a vector from the global 3D cartesian frame
   /// into the local 3D cartesian frame
-  template <
-      typename derived_type,
-      std::enable_if_t<Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3,
-                       bool> = true,
-      std::enable_if_t<Eigen::MatrixBase<derived_type>::ColsAtCompileTime == 1,
-                       bool> = true>
-  ALGEBRA_HOST_DEVICE inline auto vector_to_local(
-      const Eigen::MatrixBase<derived_type> &v) const {
+  template <typename derived_type>
+  requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3 &&
+           Eigen::MatrixBase<derived_type>::ColsAtCompileTime ==
+               1) ALGEBRA_HOST_DEVICE
+      inline auto vector_to_local(
+          const Eigen::MatrixBase<derived_type> &v) const {
 
     return (_data_inv.linear() * v);
   }

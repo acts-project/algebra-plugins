@@ -8,26 +8,26 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
-#include "algebra/type_traits.hpp"
 
 namespace algebra::cmath {
 
 /// @returns zero matrix of type @tparam matrix_t
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 requires(std::is_scalar_v<typename matrix_t::value_type::value_type>)
     ALGEBRA_HOST_DEVICE inline matrix_t zero() {
   return matrix_t{};
 }
 
 /// @returns identity matrix of type @tparam matrix_t
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 requires(std::is_scalar_v<typename matrix_t::value_type::value_type>)
     ALGEBRA_HOST_DEVICE inline auto identity() {
   auto ret{zero<matrix_t>()};
 
-  for (std::size_t i = 0; i < algebra::trait::rank<matrix_t>; ++i) {
+  for (std::size_t i = 0; i < algebra::traits::rank<matrix_t>; ++i) {
     ret[i][i] = 1;
   }
 
@@ -35,7 +35,7 @@ requires(std::is_scalar_v<typename matrix_t::value_type::value_type>)
 }
 
 /// Set @param m as zero matrix
-template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
+template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr void set_zero(
     array_t<array_t<scalar_t, ROWS>, COLS> &m) {
@@ -43,7 +43,7 @@ ALGEBRA_HOST_DEVICE constexpr void set_zero(
 }
 
 /// Set @param m as identity matrix
-template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
+template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr void set_identity(
     array_t<array_t<scalar_t, ROWS>, COLS> &m) {

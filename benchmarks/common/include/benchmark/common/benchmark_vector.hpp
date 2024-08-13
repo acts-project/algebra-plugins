@@ -20,11 +20,11 @@
 
 namespace algebra {
 
-template <typename vector_t>
+template <concepts::vector vector_t>
 void fill_random_vec(std::vector<vector_t> &);
 
 /// Benchmark for vector operations
-template <typename vector_t>
+template <concepts::vector vector_t>
 struct vector_bm : public benchmark_base {
 
   /// Prefix for the benchmark name
@@ -57,9 +57,10 @@ struct vector_bm : public benchmark_base {
 };
 
 /// Benchmark elementwise addition of vectors
-template <template <typename> class vector_t, typename scalar_t,
+template <template <typename> class vector_t, concepts::scalar scalar_t,
           typename unaryOP>
-struct vector_unaryOP_bm : public vector_bm<vector_t<scalar_t>> {
+requires std::invocable<unaryOP, vector_t<scalar_t>> struct vector_unaryOP_bm
+    : public vector_bm<vector_t<scalar_t>> {
   using base_type = vector_bm<vector_t<scalar_t>>;
 
   vector_unaryOP_bm() = delete;
@@ -89,9 +90,11 @@ struct vector_unaryOP_bm : public vector_bm<vector_t<scalar_t>> {
 };
 
 /// Benchmark elementwise addition of vectors
-template <template <typename> class vector_t, typename scalar_t,
+template <template <typename> class vector_t, concepts::scalar scalar_t,
           typename binaryOP>
-struct vector_binaryOP_bm : public vector_bm<vector_t<scalar_t>> {
+requires std::invocable<binaryOP, vector_t<scalar_t>,
+                        vector_t<scalar_t>> struct vector_binaryOP_bm
+    : public vector_bm<vector_t<scalar_t>> {
   using base_type = vector_bm<vector_t<scalar_t>>;
 
   vector_binaryOP_bm() = delete;
@@ -126,28 +129,28 @@ namespace bench_op {
 
 struct add {
   inline static const std::string name{"add"};
-  template <typename vector_t>
+  template <concepts::vector vector_t>
   auto operator()(const vector_t &a, const vector_t &b) const {
     return a + b;
   }
 };
 struct sub {
   inline static const std::string name{"sub"};
-  template <typename vector_t>
+  template <concepts::vector vector_t>
   auto operator()(const vector_t &a, const vector_t &b) const {
     return a - b;
   }
 };
 struct dot {
   inline static const std::string name{"dot"};
-  template <typename vector_t>
+  template <concepts::vector vector_t>
   auto operator()(const vector_t &a, const vector_t &b) const {
     return algebra::vector::dot(a, b);
   }
 };
 struct cross {
   inline static const std::string name{"cross"};
-  template <typename vector_t>
+  template <concepts::vector vector_t>
   auto operator()(const vector_t &a, const vector_t &b) const {
     return algebra::vector::cross(a, b);
   }
@@ -157,7 +160,7 @@ struct cross {
 #define ALGEBRA_PLUGINS_BENCH_VECTOR(OP)       \
   struct OP {                                  \
     inline static const std::string name{#OP}; \
-    template <typename vector_t>               \
+    template <concepts::vector vector_t>       \
     auto operator()(const vector_t &a) const { \
       return algebra::vector::OP(a);           \
     }                                          \

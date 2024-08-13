@@ -17,7 +17,7 @@
 namespace algebra {
 
 /// Fill a @c Vc::SimdArray based vector with random values
-template <typename vector_aos_t>
+template <concepts::vector vector_aos_t>
 inline void fill_random_vec(std::vector<vector_aos_t> &collection) {
 
   // Generate a vector of the right type with random values
@@ -30,7 +30,7 @@ inline void fill_random_vec(std::vector<vector_aos_t> &collection) {
 }
 
 /// Fill a @c Vc::SimdArray based transform3 with random values
-template <typename transform3_t>
+template <concepts::transform3D transform3_t>
 inline void fill_random_trf(std::vector<transform3_t> &collection) {
   // Generate a random, but valid affine transformation
   auto rand_obj = []() {
@@ -59,7 +59,7 @@ inline void fill_random_trf(std::vector<transform3_t> &collection) {
 }
 
 /// Fill a @c Vc::SimdArray based matrix with random values
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 inline void fill_random_matrix(std::vector<matrix_t> &collection) {
   // Generate a random, but valid affine transformation
   auto rand_obj = []() {

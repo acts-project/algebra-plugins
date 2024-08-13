@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
@@ -35,44 +36,40 @@ namespace algebra::eigen::storage {
 /// Functor used to access elements of Eigen matrices
 struct element_getter {
   /// Get non-const access to a matrix element
-  template <typename derived_type, typename size_type_1, typename size_type_2>
-  requires(std::is_base_of_v<
-           Eigen::DenseCoeffsBase<derived_type, Eigen::WriteAccessors>,
-           Eigen::MatrixBase<derived_type> >
-               &&std::is_convertible_v<size_type_1, Eigen::Index>
-                   &&std::is_convertible_v<size_type_2, Eigen::Index>)
-      ALGEBRA_HOST_DEVICE inline auto &
-      operator()(Eigen::MatrixBase<derived_type> &m, size_type_1 row,
-                 size_type_2 col) const {
+  template <typename derived_type, concepts::index size_type_1,
+            concepts::index size_type_2>
+  requires std::is_base_of_v<
+      Eigen::DenseCoeffsBase<derived_type, Eigen::WriteAccessors>,
+      Eigen::MatrixBase<derived_type> >
+      ALGEBRA_HOST_DEVICE inline auto &operator()(
+          Eigen::MatrixBase<derived_type> &m, size_type_1 row,
+          size_type_2 col) const {
 
     return m(static_cast<Eigen::Index>(row), static_cast<Eigen::Index>(col));
   }
   /// Get const access to a matrix element
-  template <typename derived_type, typename size_type_1, typename size_type_2>
-  requires(std::is_convertible_v<size_type_1, Eigen::Index>
-               &&std::is_convertible_v<size_type_2, Eigen::Index>)
-      ALGEBRA_HOST_DEVICE inline auto
-      operator()(const Eigen::MatrixBase<derived_type> &m, size_type_1 row,
-                 size_type_2 col) const {
+  template <typename derived_type, concepts::index size_type_1,
+            concepts::index size_type_2>
+  ALGEBRA_HOST_DEVICE inline auto operator()(
+      const Eigen::MatrixBase<derived_type> &m, size_type_1 row,
+      size_type_2 col) const {
 
     return m(static_cast<Eigen::Index>(row), static_cast<Eigen::Index>(col));
   }
   /// Get non-const access to a matrix element
-  template <typename derived_type, typename size_type>
-  requires(std::is_base_of_v<
-           Eigen::DenseCoeffsBase<derived_type, Eigen::WriteAccessors>,
-           Eigen::MatrixBase<derived_type> >
-               &&std::is_convertible_v<size_type, Eigen::Index>)
-      ALGEBRA_HOST_DEVICE inline auto &
-      operator()(Eigen::MatrixBase<derived_type> &m, size_type row) const {
+  template <typename derived_type, concepts::index size_type>
+  requires std::is_base_of_v<
+      Eigen::DenseCoeffsBase<derived_type, Eigen::WriteAccessors>,
+      Eigen::MatrixBase<derived_type> >
+      ALGEBRA_HOST_DEVICE inline auto &operator()(
+          Eigen::MatrixBase<derived_type> &m, size_type row) const {
 
     return m(static_cast<Eigen::Index>(row));
   }
   /// Get const access to a matrix element
-  template <typename derived_type, typename size_type>
-  requires std::is_convertible_v<size_type, Eigen::Index>
-      ALGEBRA_HOST_DEVICE inline auto operator()(
-          const Eigen::MatrixBase<derived_type> &m, size_type row) const {
+  template <typename derived_type, concepts::index size_type>
+  ALGEBRA_HOST_DEVICE inline auto operator()(
+      const Eigen::MatrixBase<derived_type> &m, size_type row) const {
 
     return m(static_cast<Eigen::Index>(row));
   }
@@ -121,35 +118,43 @@ requires std::is_base_of_v<
 
 /// Functor used to extract a block from Eigen matrices
 struct block_getter {
-  template <int kROWS, int kCOLS, typename matrix_type, typename size_type_1,
-            typename size_type_2>
-  requires(std::is_convertible_v<size_type_1, Eigen::Index>
-               &&std::is_convertible_v<size_type_2, Eigen::Index>)
-      ALGEBRA_HOST_DEVICE decltype(auto)
-      operator()(const matrix_type &m, size_type_1 row, size_type_2 col) const {
+
+  template <int kROWS, int kCOLS, typename derived_type,
+            concepts::index size_type_1, concepts::index size_type_2>
+  ALGEBRA_HOST_DEVICE decltype(auto) operator()(
+      const Eigen::MatrixBase<derived_type> &m, size_type_1 row,
+      size_type_2 col) const {
 
     return m.template block<kROWS, kCOLS>(row, col);
   }
 
-  template <int kROWS, int kCOLS, typename matrix_type, typename size_type_1,
-            typename size_type_2>
-  requires(std::is_convertible_v<size_type_1, Eigen::Index>
-               &&std::is_convertible_v<size_type_2, Eigen::Index>)
-      ALGEBRA_HOST_DEVICE decltype(auto)
-      operator()(matrix_type &m, size_type_1 row, size_type_2 col) const {
+  template <int kROWS, int kCOLS, typename derived_type,
+            concepts::index size_type_1, concepts::index size_type_2>
+  ALGEBRA_HOST_DEVICE decltype(auto) operator()(
+      Eigen::MatrixBase<derived_type> &m, size_type_1 row,
+      size_type_2 col) const {
 
     return m.template block<kROWS, kCOLS>(row, col);
   }
 
-  template <int SIZE, typename matrix_type, typename size_type_1,
-            typename size_type_2>
-  requires(std::is_convertible_v<size_type_1, Eigen::Index>
-               &&std::is_convertible_v<size_type_2, Eigen::Index>)
-      ALGEBRA_HOST_DEVICE decltype(auto)
-      operator()(matrix_type &m, size_type_1 row, size_type_2 col) const {
+  template <int SIZE, typename derived_type, concepts::index size_type_1,
+            concepts::index size_type_2>
+  ALGEBRA_HOST_DEVICE decltype(auto) operator()(
+      Eigen::MatrixBase<derived_type> &m, size_type_1 row,
+      size_type_2 col) const {
 
     return m.template block<SIZE, 1>(row, col);
   }
+
+  template <int SIZE, typename derived_type, concepts::index size_type_1,
+            concepts::index size_type_2>
+  ALGEBRA_HOST_DEVICE decltype(auto) operator()(
+      const Eigen::MatrixBase<derived_type> &m, size_type_1 row,
+      size_type_2 col) const {
+
+    return m.template block<SIZE, 1>(row, col);
+  }
+
 };  // struct block_getter
 
 /// Operator getting a block of a const matrix

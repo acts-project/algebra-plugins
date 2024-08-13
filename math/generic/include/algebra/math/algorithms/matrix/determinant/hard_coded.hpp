@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/type_traits.hpp"
 
@@ -17,18 +18,18 @@
 namespace algebra::generic::matrix::determinant {
 
 /// "Determinant getter", assuming a N X N matrix
-template <class matrix_t, class element_getter_t>
+template <concepts::square_matrix matrix_t, class element_getter_t>
 struct hard_coded {
 
-  using scalar_type = algebra::trait::value_t<matrix_t>;
-  using size_type = algebra::trait::index_t<matrix_t>;
+  using scalar_type = algebra::traits::value_t<matrix_t>;
+  using size_type = algebra::traits::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
 
   // 2 X 2 matrix determinant
   template <typename M = matrix_t>
-  requires(algebra::trait::rank<M> == 2) ALGEBRA_HOST_DEVICE inline scalar_type
+  requires(algebra::traits::rank<M> == 2) ALGEBRA_HOST_DEVICE inline scalar_type
   operator()(const matrix_t &m) const {
 
     return element_getter()(m, 0, 0) * element_getter()(m, 1, 1) -
@@ -37,7 +38,7 @@ struct hard_coded {
 
   // 4 X 4 matrix determinant
   template <typename M = matrix_t>
-  requires(algebra::trait::rank<M> == 4) ALGEBRA_HOST_DEVICE inline scalar_type
+  requires(algebra::traits::rank<M> == 4) ALGEBRA_HOST_DEVICE inline scalar_type
   operator()(const matrix_t &m) const {
 
     return element_getter()(m, 0, 3) * element_getter()(m, 1, 2) *
@@ -89,6 +90,6 @@ struct hard_coded {
            element_getter()(m, 0, 0) * element_getter()(m, 1, 1) *
                element_getter()(m, 2, 2) * element_getter()(m, 3, 3);
   }
-};
+};  // namespace algebra::generic::matrix::determinant
 
 }  // namespace algebra::generic::matrix::determinant

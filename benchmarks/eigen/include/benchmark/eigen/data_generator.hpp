@@ -17,7 +17,7 @@
 namespace algebra {
 
 /// Fill an @c Eigen3 based vector with random values
-template <typename vector_t>
+template <concepts::vector vector_t>
 inline void fill_random_vec(std::vector<vector_t> &collection) {
 
   auto rand_obj = []() { return vector_t::Random(); };
@@ -27,7 +27,7 @@ inline void fill_random_vec(std::vector<vector_t> &collection) {
 }
 
 /// Fill a @c Eigen3 based transform3 with random values
-template <typename transform3_t>
+template <concepts::transform3D transform3_t>
 inline void fill_random_trf(std::vector<transform3_t> &collection) {
 
   using vector_t = typename transform3_t::vector3;
@@ -52,7 +52,7 @@ inline void fill_random_trf(std::vector<transform3_t> &collection) {
 }
 
 /// Fill a @c Eigen3 based matrix with random values
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 inline void fill_random_matrix(std::vector<matrix_t> &collection) {
 
   auto rand_obj = []() { return matrix_t::Random(); };

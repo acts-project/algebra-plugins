@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
@@ -17,12 +18,12 @@
 namespace algebra::generic::matrix::decomposition {
 
 /// "Partial Pivot LU Decomposition", assuming a N X N matrix
-template <class matrix_t, class element_getter_t>
+template <concepts::matrix matrix_t, class element_getter_t>
 struct partial_pivot_lud {
 
-  using scalar_type = algebra::trait::value_t<matrix_t>;
-  using size_type = algebra::trait::index_t<matrix_t>;
-  using vector_type = algebra::trait::vector_t<matrix_t>;
+  using scalar_type = algebra::traits::value_t<matrix_t>;
+  using size_type = algebra::traits::index_t<matrix_t>;
+  using vector_type = algebra::traits::vector_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
@@ -40,10 +41,10 @@ struct partial_pivot_lud {
     int n_pivot = 0;
   };
 
-  ALGEBRA_HOST_DEVICE inline lud<algebra::trait::rank<matrix_t>> operator()(
+  ALGEBRA_HOST_DEVICE inline lud<algebra::traits::rank<matrix_t>> operator()(
       const matrix_t& m) const {
 
-    constexpr size_type N{algebra::trait::rank<matrix_t>};
+    constexpr size_type N{algebra::traits::rank<matrix_t>};
 
     // LU decomposition matrix
     matrix_t lu = m;

@@ -21,14 +21,14 @@ namespace algebra::generic::matrix {
 namespace adjoint {
 
 /// "Adjoint getter", assuming a N X N matrix
-template <concepts::square_matrix matrix_t, class element_getter_t>
+template <concepts::square_matrix matrix_t>
 struct cofactor {
 
   using scalar_type = algebra::traits::value_t<matrix_t>;
   using size_type = algebra::traits::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = element_getter_t;
+  using element_getter = algebra::traits::element_getter_t<matrix_t>;
 
   ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t &m) const {
     return adjoint_getter_helper<algebra::traits::rank<matrix_t>>()(m);
@@ -50,8 +50,7 @@ struct cofactor {
   template <size_type N>
   struct adjoint_getter_helper<N, typename std::enable_if_t<N != 1>> {
 
-    using determinant_getter =
-        determinant::cofactor<matrix_t, element_getter_t>;
+    using determinant_getter = determinant::cofactor<matrix_t>;
 
     ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t &m) const {
 
@@ -92,18 +91,16 @@ struct cofactor {
 namespace inverse {
 
 /// "inverse getter", assuming a N X N matrix
-template <class matrix_t, class element_getter_t>
+template <concepts::square_matrix matrix_t>
 struct cofactor {
 
   using scalar_type = algebra::traits::value_t<matrix_t>;
   using size_type = algebra::traits::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = element_getter_t;
-
-  using determinant_getter = determinant::cofactor<matrix_t, element_getter_t>;
-
-  using adjoint_getter = adjoint::cofactor<matrix_t, element_getter_t>;
+  using element_getter = algebra::traits::element_getter_t<matrix_t>;
+  using determinant_getter = determinant::cofactor<matrix_t>;
+  using adjoint_getter = adjoint::cofactor<matrix_t>;
 
   ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t &m) const {
 

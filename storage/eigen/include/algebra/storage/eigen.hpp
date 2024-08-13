@@ -86,16 +86,6 @@ struct dimensions<Eigen::MatrixBase<derived_t>> {
       Eigen::MatrixBase<derived_t>::ColsAtCompileTime};
 };
 
-/*template <typename T, int N>
-struct dimensions<Eigen::Matrix<T, N, 1, 0, N, 1>> {
-
-  using size_type = index_t<Eigen::Matrix<T, N, 1, 0, N, 1>>;
-
-  static constexpr size_type dim{1};
-  static constexpr size_type rows{N};
-  static constexpr size_type columns{1};
-};*/
-
 template <typename T, int ROWS, int COLS, int bROWS, int bCOLS>
 struct dimensions<
     Eigen::Block<eigen::matrix_type<T, ROWS, COLS>, bROWS, bCOLS, false>> {

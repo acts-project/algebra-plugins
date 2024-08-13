@@ -18,7 +18,7 @@
 namespace algebra::generic::matrix::decomposition {
 
 /// "Partial Pivot LU Decomposition", assuming a N X N matrix
-template <concepts::matrix matrix_t, class element_getter_t>
+template <concepts::square_matrix matrix_t>
 struct partial_pivot_lud {
 
   using scalar_type = algebra::traits::value_t<matrix_t>;
@@ -26,7 +26,7 @@ struct partial_pivot_lud {
   using vector_type = algebra::traits::vector_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = element_getter_t;
+  using element_getter = algebra::traits::element_getter_t<matrix_t>;
 
   template <size_type N>
   struct lud {
@@ -92,12 +92,12 @@ struct partial_pivot_lud {
 
         // Pivoting rows of A
         for (size_type q = 0; q < N; q++) {
-          row_0[q] = element_getter_t()(lu, i, q);
-          row_1[q] = element_getter_t()(lu, max_idx, q);
+          row_0[q] = element_getter()(lu, i, q);
+          row_1[q] = element_getter()(lu, max_idx, q);
         }
         for (size_type q = 0; q < N; q++) {
-          element_getter_t()(lu, i, q) = row_1[q];
-          element_getter_t()(lu, max_idx, q) = row_0[q];
+          element_getter()(lu, i, q) = row_1[q];
+          element_getter()(lu, max_idx, q) = row_0[q];
         }
 
         // counting pivots starting from N (for determinant)
@@ -106,12 +106,12 @@ struct partial_pivot_lud {
 
       for (size_type j = i + 1; j < N; j++) {
         // m[j][i] /= m[i][i];
-        element_getter_t()(lu, j, i) /= element_getter_t()(lu, i, i);
+        element_getter()(lu, j, i) /= element_getter()(lu, i, i);
 
         for (size_type k = i + 1; k < N; k++) {
           // m[j][k] -= m[j][i] * m[i][k];
-          element_getter_t()(lu, j, k) -=
-              element_getter_t()(lu, j, i) * element_getter_t()(lu, i, k);
+          element_getter()(lu, j, k) -=
+              element_getter()(lu, j, i) * element_getter()(lu, i, k);
         }
       }
     }

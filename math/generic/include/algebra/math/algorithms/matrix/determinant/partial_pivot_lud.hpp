@@ -16,18 +16,17 @@
 namespace algebra::generic::matrix::determinant {
 
 /// "Partial Pivot LU Decomposition", assuming a N X N matrix
-template <concepts::square_matrix matrix_t, class element_getter_t>
+template <concepts::square_matrix matrix_t>
 struct partial_pivot_lud {
 
   using scalar_type = algebra::traits::value_t<matrix_t>;
   using size_type = algebra::traits::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = element_getter_t;
+  using element_getter = algebra::traits::element_getter_t<matrix_t>;
 
   using decomposition_t =
-      typename algebra::generic::matrix::decomposition::partial_pivot_lud<
-          matrix_t, element_getter_t>;
+      algebra::generic::matrix::decomposition::partial_pivot_lud<matrix_t>;
 
   ALGEBRA_HOST_DEVICE inline scalar_type operator()(const matrix_t& m) const {
 

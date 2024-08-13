@@ -19,17 +19,16 @@
 namespace algebra::generic::matrix::inverse {
 
 /// "inverse getter", assuming a N X N matrix
-template <concepts::square_matrix matrix_t, class element_getter_t>
+template <concepts::square_matrix matrix_t>
 struct hard_coded {
 
   using scalar_type = algebra::traits::value_t<matrix_t>;
   using size_type = algebra::traits::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = element_getter_t;
+  using element_getter = algebra::traits::element_getter_t<matrix_t>;
 
-  using determinant_getter =
-      determinant::hard_coded<matrix_t, element_getter_t>;
+  using determinant_getter = determinant::hard_coded<matrix_t>;
 
   // 2 X 2 matrix inverse
   template <typename M = matrix_t,

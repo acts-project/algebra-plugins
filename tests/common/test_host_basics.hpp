@@ -186,8 +186,10 @@ TYPED_TEST_P(test_host_basics_matrix, matrix3) {
   static_assert(!algebra::concepts::vector<matrix_2x3_t>);
   static_assert(!algebra::concepts::square_matrix<matrix_2x3_t>);
 
-  // static_assert(algebra::concepts::index<algebra::traits::index_t<matrix_2x3_t>>);
-  // static_assert(algebra::concepts::value<algebra::traits::value_t<matrix_2x3_t>>);
+  static_assert(
+      algebra::concepts::index<algebra::traits::index_t<matrix_2x3_t>>);
+  static_assert(
+      algebra::concepts::value<algebra::traits::value_t<matrix_2x3_t>>);
   static_assert(
       algebra::concepts::scalar<algebra::traits::scalar_t<matrix_2x3_t>>);
   static_assert(
@@ -259,6 +261,15 @@ TYPED_TEST_P(test_host_basics_matrix, matrix64) {
   static_assert(!algebra::concepts::scalar<matrix_6x4_t>);
   static_assert(!algebra::concepts::vector<matrix_6x4_t>);
   static_assert(!algebra::concepts::square_matrix<matrix_6x4_t>);
+
+  static_assert(
+      algebra::concepts::index<algebra::traits::index_t<matrix_6x4_t>>);
+  static_assert(
+      algebra::concepts::value<algebra::traits::value_t<matrix_6x4_t>>);
+  static_assert(
+      algebra::concepts::scalar<algebra::traits::scalar_t<matrix_6x4_t>>);
+  static_assert(
+      algebra::concepts::vector<algebra::traits::vector_t<matrix_6x4_t>>);
 
   // Fill it.
   for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {

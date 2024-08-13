@@ -16,18 +16,18 @@
 namespace algebra::generic::matrix::inverse {
 
 /// "Partial Pivot LU Decomposition", assuming a N X N matrix
-template <concepts::square_matrix matrix_t, class element_getter_t>
+template <concepts::square_matrix matrix_t>
 struct partial_pivot_lud {
 
   using scalar_type = algebra::traits::value_t<matrix_t>;
   using size_type = algebra::traits::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = element_getter_t;
+  using element_getter = algebra::traits::element_getter_t<matrix_t>;
 
   using decomposition_t =
       typename algebra::generic::matrix::decomposition::partial_pivot_lud<
-          matrix_t, element_getter_t>;
+          matrix_t>;
 
   ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t& m) const {
 
@@ -48,22 +48,22 @@ struct partial_pivot_lud {
     // Calculate inv(A) = inv(U) * inv(L) * P;
     for (size_type j = 0; j < N; j++) {
       for (size_type i = 0; i < N; i++) {
-        element_getter_t()(inv, i, j) = static_cast<size_type>(P[i]) == j
-                                            ? static_cast<scalar_type>(1.0)
-                                            : static_cast<scalar_type>(0.0);
+        element_getter()(inv, i, j) = static_cast<size_type>(P[i]) == j
+                                          ? static_cast<scalar_type>(1.0)
+                                          : static_cast<scalar_type>(0.0);
 
         for (size_type k = 0; k < i; k++) {
-          element_getter_t()(inv, i, j) -=
-              element_getter_t()(lu, i, k) * element_getter_t()(inv, k, j);
+          element_getter()(inv, i, j) -=
+              element_getter()(lu, i, k) * element_getter()(inv, k, j);
         }
       }
 
       for (size_type i = N - 1; int(i) >= 0; i--) {
         for (size_type k = i + 1; k < N; k++) {
-          element_getter_t()(inv, i, j) -=
-              element_getter_t()(lu, i, k) * element_getter_t()(inv, k, j);
+          element_getter()(inv, i, j) -=
+              element_getter()(lu, i, k) * element_getter()(inv, k, j);
         }
-        element_getter_t()(inv, i, j) /= element_getter_t()(lu, i, i);
+        element_getter()(inv, i, j) /= element_getter()(lu, i, i);
       }
     }
 

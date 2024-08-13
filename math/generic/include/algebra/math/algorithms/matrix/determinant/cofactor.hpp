@@ -18,14 +18,14 @@
 namespace algebra::generic::matrix::determinant {
 
 /// "Determinant getter", assuming a N X N matrix
-template <concepts::square_matrix matrix_t, class element_getter_t>
+template <concepts::square_matrix matrix_t>
 struct cofactor {
 
   using scalar_type = algebra::traits::value_t<matrix_t>;
   using size_type = algebra::traits::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = element_getter_t;
+  using element_getter = algebra::traits::element_getter_t<matrix_t>;
 
   ALGEBRA_HOST_DEVICE inline scalar_type operator()(const matrix_t &m) const {
     return determinant_getter_helper<algebra::traits::rank<matrix_t>>()(m);

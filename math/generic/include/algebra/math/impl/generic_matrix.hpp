@@ -87,15 +87,13 @@ ALGEBRA_HOST_DEVICE inline auto transpose(const M &m) {
 template <concepts::square_matrix M>
 ALGEBRA_HOST_DEVICE inline algebra::traits::scalar_t<M> determinant(
     const M &m) {
-
-  return determinant_t<M>{}(m);
+  return typename determinant_selector<algebra::traits::rank<M>, M>::type{}(m);
 }
 
 /// @returns the determinant of @param m
 template <concepts::square_matrix M>
 ALGEBRA_HOST_DEVICE inline M inverse(const M &m) {
-
-  return inversion_t<M>{}(m);
+  return typename inversion_selector<algebra::traits::rank<M>, M>::type{}(m);
 }
 
 }  // namespace algebra::generic::math

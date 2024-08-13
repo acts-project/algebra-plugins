@@ -15,46 +15,38 @@
 
 namespace algebra::generic {
 
-/// Get the type of determinant algorithm acording to matrix dimension
+/// Get the type of determinant algorithm acording to matrix dimension by
+/// partial template specilization
 /// @{
 
 // Default algorithm
-template <std::size_t N, typename... Args>
+template <std::size_t N, concepts::square_matrix M>
 struct determinant_selector {
-  using type = matrix::determinant::partial_pivot_lud<Args...>;
+  using type = matrix::determinant::partial_pivot_lud<M>;
 };
 
 /// Always use hard coded implementation for very small matrices
-template <typename... Args>
-struct determinant_selector<2, Args...> {
-  using type = matrix::determinant::hard_coded<Args...>;
-};
-
-/// @tparam M matrix type
 template <concepts::square_matrix M>
-using determinant_t =
-    typename determinant_selector<algebra::traits::rank<M>, M,
-                                  algebra::traits::element_getter_t<M>>::type;
+struct determinant_selector<2, M> {
+  using type = matrix::determinant::hard_coded<M>;
+};
 /// @}
 
-/// Get the type of inversion algorithm acording to matrix dimension
+/// Get the type of inversion algorithm acording to matrix dimension by
+/// partial template specilization
 /// @{
-template <std::size_t N, typename... Args>
+
+// Default algorithm
+template <std::size_t N, concepts::square_matrix M>
 struct inversion_selector {
-  using type = matrix::inverse::partial_pivot_lud<Args...>;
+  using type = matrix::inverse::partial_pivot_lud<M>;
 };
 
 /// Always use hard coded implementation for very small matrices
-template <typename... Args>
-struct inversion_selector<2, Args...> {
-  using type = matrix::inverse::hard_coded<Args...>;
-};
-
-/// @tparam M matrix type
 template <concepts::square_matrix M>
-using inversion_t =
-    typename inversion_selector<algebra::traits::rank<M>, M,
-                                algebra::traits::element_getter_t<M>>::type;
-/// @}generic
+struct inversion_selector<2, M> {
+  using type = matrix::inverse::hard_coded<M>;
+};
+/// @}
 
 }  // namespace algebra::generic

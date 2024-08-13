@@ -50,8 +50,7 @@ struct transform3 {
   using block_getter = algebra::traits::block_getter_t<matrix44>;
 
   /// Matrix inversion algorithm
-  using matrix_inversion =
-      generic::matrix::inverse::hard_coded<matrix44, element_getter>;
+  using matrix_inversion = generic::matrix::inverse::hard_coded<matrix44>;
 
   /// @}
 

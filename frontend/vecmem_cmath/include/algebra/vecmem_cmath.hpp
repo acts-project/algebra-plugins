@@ -58,22 +58,22 @@ using generic::math::theta;
 
 }  // namespace vector
 
-// Use special algorithms for 4 dimensional matrices
+// Use special algorithms for 4 dimensional matrices by partial template
+// specilization
+// @see "algebra/math/algorithms/utils/algorithm_finder.hpp"
 namespace generic {
 
 // Determinant algorithms
 template <typename T, auto ROWS, auto COLS>
 struct determinant_selector<4, vecmem::matrix_type<T, ROWS, COLS>> {
   using type =
-      matrix::determinant::hard_coded<vecmem::matrix_type<T, ROWS, COLS>,
-                                      vecmem::element_getter>;
+      matrix::determinant::hard_coded<vecmem::matrix_type<T, ROWS, COLS>>;
 };
 
 // Inversion algorithms
 template <typename T, auto ROWS, auto COLS>
 struct inversion_selector<4, vecmem::matrix_type<T, ROWS, COLS>> {
-  using type = matrix::inverse::hard_coded<vecmem::matrix_type<T, ROWS, COLS>,
-                                           vecmem::element_getter>;
+  using type = matrix::inverse::hard_coded<vecmem::matrix_type<T, ROWS, COLS>>;
 };
 
 }  // namespace generic

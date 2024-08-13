@@ -12,7 +12,7 @@
 #include <cmath>
 #include <type_traits>
 
-namespace algebra::trait {
+namespace algebra::traits {
 
 /// Matrix traits
 /// @{
@@ -67,7 +67,15 @@ using get_matrix_t = typename matrix<M>::template other_type<T, ROWS, COLS>;
 /// Matrix dimensions
 /// @{
 template <typename M>
-struct dimensions {};
+struct dimensions {
+
+  using size_type = int;
+
+  // Error case
+  static constexpr size_type dim{-1};
+  static constexpr size_type rows{-1};
+  static constexpr size_type columns{-1};
+};
 
 /// Specilization for scalar types
 template <typename M>
@@ -81,13 +89,14 @@ requires std::is_fundamental_v<M> struct dimensions<M> {
 };
 
 template <class M>
-inline constexpr index_t<M> dim{dimensions<M>::sim};
+inline constexpr index_t<M> dim{dimensions<std::remove_cvref_t<M>>::sim};
 
 template <class M>
-inline constexpr index_t<M> rows{dimensions<M>::rows};
+inline constexpr index_t<M> rows{dimensions<std::remove_cvref_t<M>>::rows};
 
 template <class M>
-inline constexpr index_t<M> columns{dimensions<M>::columns};
+inline constexpr index_t<M> columns{
+    dimensions<std::remove_cvref_t<M>>::columns};
 
 template <class M>
 inline constexpr index_t<M> rank{std::min(rows<M>, columns<M>)};
@@ -95,11 +104,11 @@ inline constexpr index_t<M> rank{std::min(rows<M>, columns<M>)};
 template <class M>
 inline constexpr index_t<M> size{rows<M> * columns<M>};
 
-template <class M>
-inline constexpr bool is_matrix{dimensions<M>::dim == 2};
+template <class V>
+inline constexpr bool is_vector{dimensions<std::remove_cvref_t<V>>::dim == 1};
 
 template <class M>
-inline constexpr bool is_vector{dimensions<M>::dim == 1};
+inline constexpr bool is_matrix{dimensions<std::remove_cvref_t<M>>::dim == 2};
 
 template <class M>
 inline constexpr bool is_square{(rows<M> == columns<M>)};
@@ -120,13 +129,13 @@ template <class M>
 using block_getter_t = typename block_getter<M>::type;
 /// @}
 
-}  // namespace algebra::trait
+}  // namespace algebra::traits
 
 /// Default type trait specializations
 /// @{
 #define ALGEBRA_PLUGINS_DEFINE_TYPE_TRAITS(A)                           \
                                                                         \
-  namespace trait {                                                     \
+  namespace traits {                                                    \
                                                                         \
   template <typename T, auto N>                                         \
   struct index<A::vector_type<T, N>> {                                  \
@@ -217,4 +226,4 @@ using block_getter_t = typename block_getter<M>::type;
     using type = A::block_getter;                                       \
   };                                                                    \
                                                                         \
-  }  // namespace algebra::trait
+  }  // namespace algebra::traits

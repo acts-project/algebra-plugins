@@ -1,11 +1,14 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023 CERN for the benefit of the ACTS project
+ * (c) 2023-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
 
 #pragma once
+
+// Project include(s).
+#include "algebra/concepts.hpp"
 
 // Fastor include(s).
 #ifdef _MSC_VER
@@ -36,7 +39,7 @@ namespace algebra::fastor {
 /// class to behave the way a `Fastor::Tensor` would. Inheriting from
 /// `Fastor::Tensor` allows this class to reuse all the functions defined in the
 /// parent class (i.e. `Fastor::Tensor`).
-template <typename T, std::size_t M1, std::size_t N>
+template <concepts::scalar T, std::size_t M1, std::size_t N>
 class Matrix : public Fastor::Tensor<T, M1, N> {
 
  public:
@@ -53,8 +56,7 @@ class Matrix : public Fastor::Tensor<T, M1, N> {
   ///
   /// The `static_cast` is there to signal both to the compiler and the reader
   /// that we wish to interpret the `Matrix` object as a `Fastor::Tensor` here.
-  template <typename U, std::size_t M2,
-            std::enable_if_t<std::is_convertible_v<U, T>, bool> = true>
+  template <concepts::scalar U, std::size_t M2>
   inline Matrix<T, M1, M2> operator*(const Matrix<U, N, M2>& other) const {
     return Fastor::matmul(static_cast<Fastor::Tensor<T, M1, N>>(*this),
                           static_cast<Fastor::Tensor<T, N, M2>>(other));
@@ -71,8 +73,7 @@ class Matrix : public Fastor::Tensor<T, M1, N> {
   ///
   /// The `static_cast` is there to signal both to the compiler and the reader
   /// that we wish to interpret the `Matrix` object as a `Fastor::Tensor` here.
-  template <typename U,
-            std::enable_if_t<std::is_convertible_v<U, T>, bool> = true>
+  template <concepts::scalar U>
   inline Fastor::Tensor<T, M1> operator*(
       const Fastor::Tensor<U, N>& other) const {
     return Fastor::matmul(static_cast<Fastor::Tensor<T, M1, N>>(*this),

@@ -8,6 +8,7 @@
 #pragma once
 
 // Local include(s).
+#include "algebra/concepts.hpp"
 #include "test_types.hpp"
 
 // System include(s).
@@ -18,10 +19,13 @@ template <class T>
 class test_base {};
 
 /// Test base class, using a @c test_types type argument
-template <typename scalar_t, typename point2_t, typename point3_t,
-          typename vector2_t, typename vector3_t, typename transform3_t,
-          typename size_ty,
-          template <typename, size_ty, size_ty> class matrix_t>
+template <
+    algebra::concepts::scalar scalar_t, algebra::concepts::point2D point2_t,
+    algebra::concepts::point3D point3_t, algebra::concepts::vector2D vector2_t,
+    algebra::concepts::vector3D vector3_t,
+    algebra::concepts::transform3D transform3_t,
+    algebra::concepts::index size_ty,
+    template <typename, size_ty, size_ty> class matrix_t>
 class test_base<test_types<scalar_t, point2_t, point3_t, vector2_t, vector3_t,
                            transform3_t, size_ty, matrix_t> > {
 

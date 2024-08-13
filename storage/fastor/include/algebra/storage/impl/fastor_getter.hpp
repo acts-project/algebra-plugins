@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/impl/fastor_matrix.hpp"
@@ -30,7 +31,7 @@ namespace algebra::fastor::storage {
 /// Functor used to access elements of Fastor matrices
 struct element_getter {
 
-  template <std::size_t ROWS, std::size_t COLS, typename scalar_t>
+  template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t>
   ALGEBRA_HOST_DEVICE inline scalar_t &operator()(
       Fastor::Tensor<scalar_t, ROWS, COLS> &m, std::size_t row,
       std::size_t col) const {
@@ -40,7 +41,7 @@ struct element_getter {
     return m(row, col);
   }
 
-  template <std::size_t ROWS, std::size_t COLS, typename scalar_t>
+  template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t>
   ALGEBRA_HOST_DEVICE inline scalar_t operator()(
       const Fastor::Tensor<scalar_t, ROWS, COLS> &m, std::size_t row,
       std::size_t col) const {
@@ -50,7 +51,7 @@ struct element_getter {
     return m(row, col);
   }
 
-  template <std::size_t N, typename scalar_t>
+  template <std::size_t N, concepts::scalar scalar_t>
   ALGEBRA_HOST_DEVICE inline scalar_t &operator()(
       Fastor::Tensor<scalar_t, N, 1> &m, std::size_t row) const {
 
@@ -58,7 +59,7 @@ struct element_getter {
     return m(row);
   }
 
-  template <std::size_t N, typename scalar_t>
+  template <std::size_t N, concepts::scalar scalar_t>
   ALGEBRA_HOST_DEVICE inline scalar_t operator()(
       const Fastor::Tensor<scalar_t, N, 1> &m, std::size_t row) const {
 
@@ -66,7 +67,7 @@ struct element_getter {
     return m(row);
   }
 
-  template <std::size_t N, typename scalar_t>
+  template <std::size_t N, concepts::scalar scalar_t>
   ALGEBRA_HOST_DEVICE inline scalar_t &operator()(
       Fastor::Tensor<scalar_t, N> &m, std::size_t row) const {
 
@@ -74,7 +75,7 @@ struct element_getter {
     return m(row);
   }
 
-  template <std::size_t N, typename scalar_t>
+  template <std::size_t N, concepts::scalar scalar_t>
   ALGEBRA_HOST_DEVICE inline scalar_t operator()(
       const Fastor::Tensor<scalar_t, N> &m, std::size_t row) const {
 
@@ -85,7 +86,7 @@ struct element_getter {
 };  // element_getter
 
 /// Function extracting an element from a matrix (const)
-template <typename scalar_t, std::size_t ROWS, std::size_t COLS>
+template <concepts::scalar scalar_t, std::size_t ROWS, std::size_t COLS>
 ALGEBRA_HOST_DEVICE inline scalar_t element(
     const Fastor::Tensor<scalar_t, ROWS, COLS> &m, std::size_t row,
     std::size_t col) {
@@ -93,35 +94,35 @@ ALGEBRA_HOST_DEVICE inline scalar_t element(
 }
 
 /// Function extracting an element from a matrix (non-const)
-template <typename scalar_t, std::size_t ROWS, std::size_t COLS>
+template <concepts::scalar scalar_t, std::size_t ROWS, std::size_t COLS>
 ALGEBRA_HOST_DEVICE inline scalar_t &element(
     Fastor::Tensor<scalar_t, ROWS, COLS> &m, std::size_t row, std::size_t col) {
   return element_getter()(m, row, col);
 }
 
 /// Function extracting an element from a matrix (const)
-template <typename scalar_t, std::size_t N>
+template <concepts::scalar scalar_t, std::size_t N>
 ALGEBRA_HOST_DEVICE inline scalar_t element(
     const Fastor::Tensor<scalar_t, N, 1> &m, std::size_t row) {
   return element_getter()(m, row);
 }
 
 /// Function extracting an element from a matrix (non-const)
-template <typename scalar_t, std::size_t N>
+template <concepts::scalar scalar_t, std::size_t N>
 ALGEBRA_HOST_DEVICE inline scalar_t &element(Fastor::Tensor<scalar_t, N, 1> &m,
                                              std::size_t row) {
   return element_getter()(m, row);
 }
 
 /// Function extracting an element from a vector (const)
-template <typename scalar_t, std::size_t N>
+template <concepts::scalar scalar_t, std::size_t N>
 ALGEBRA_HOST_DEVICE inline scalar_t element(
     const Fastor::Tensor<scalar_t, N> &m, std::size_t row) {
   return element_getter()(m, row);
 }
 
 /// Function extracting an element from a vector (non-const)
-template <typename scalar_t, std::size_t N>
+template <concepts::scalar scalar_t, std::size_t N>
 ALGEBRA_HOST_DEVICE inline scalar_t &element(Fastor::Tensor<scalar_t, N> &m,
                                              std::size_t row) {
   return element_getter()(m, row);
@@ -131,7 +132,7 @@ ALGEBRA_HOST_DEVICE inline scalar_t &element(Fastor::Tensor<scalar_t, N> &m,
 struct block_getter {
 
   template <std::size_t ROWS, std::size_t COLS, std::size_t oROWS,
-            std::size_t oCOLS, typename scalar_t>
+            std::size_t oCOLS, concepts::scalar scalar_t>
   ALGEBRA_HOST_DEVICE algebra::fastor::Matrix<scalar_t, ROWS, COLS> operator()(
       const Fastor::Tensor<scalar_t, oROWS, oCOLS> &m, std::size_t row,
       std::size_t col) const {
@@ -141,7 +142,7 @@ struct block_getter {
   }
 
   template <std::size_t SIZE, std::size_t oROWS, std::size_t oCOLS,
-            typename scalar_t>
+            concepts::scalar scalar_t>
   ALGEBRA_HOST_DEVICE Fastor::Tensor<scalar_t, SIZE> operator()(
       const Fastor::Tensor<scalar_t, oROWS, oCOLS> &m, std::size_t row,
       std::size_t col) const {
@@ -155,7 +156,7 @@ struct block_getter {
 
 /// Operator getting a block of a const matrix
 template <std::size_t ROWS, std::size_t COLS, std::size_t oROWS,
-          std::size_t oCOLS, typename scalar_t>
+          std::size_t oCOLS, concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE decltype(auto) block(
     const Fastor::Tensor<scalar_t, oROWS, oCOLS> &m, std::size_t row,
     std::size_t col) {
@@ -164,7 +165,7 @@ ALGEBRA_HOST_DEVICE decltype(auto) block(
 
 /// Function extracting a slice from the matrix
 template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
-          typename scalar_t>
+          concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline decltype(auto) vector(
     const Fastor::Tensor<scalar_t, ROWS, COLS> &m, std::size_t row,
     std::size_t col) {
@@ -173,8 +174,8 @@ ALGEBRA_HOST_DEVICE inline decltype(auto) vector(
 }
 
 /// Operator setting a block with a matrix
-template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
-          class input_matrix_type>
+template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t,
+          concepts::matrix input_matrix_type>
 ALGEBRA_HOST_DEVICE void set_block(
     input_matrix_type &m, const Fastor::Tensor<scalar_t, ROWS, COLS> &b,
     std::size_t row, std::size_t col) {
@@ -183,7 +184,8 @@ ALGEBRA_HOST_DEVICE void set_block(
 }
 
 /// Operator setting a block with a vector
-template <std::size_t ROWS, typename scalar_t, class input_matrix_type>
+template <std::size_t ROWS, concepts::scalar scalar_t,
+          concepts::matrix input_matrix_type>
 ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,
                                    const Fastor::Tensor<scalar_t, ROWS> &b,
                                    std::size_t row, std::size_t col) {

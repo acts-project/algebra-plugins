@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/qualifiers.hpp"
 
 // SYCL include(s).
@@ -29,43 +30,43 @@ namespace math_ns = std;
 #endif  // SYCL
 
 /// Absolute value of arg
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline auto fabs(scalar_t arg) {
   return math_ns::fabs(arg);
 }
 
 /// Fused multiply add
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline auto fma(scalar_t x, scalar_t y, scalar_t z) {
   return math_ns::fma(x, y, z);
 }
 
 /// Arc tangent of y/x
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline scalar_t atan2(scalar_t y, scalar_t x) {
   return math_ns::atan2(y, x);
 }
 
 /// Square root of arg
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline scalar_t sqrt(scalar_t arg) {
   return math_ns::sqrt(arg);
 }
 
 /// Inverse hyperbolic tangent of arg
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline scalar_t atanh(scalar_t arg) {
   return math_ns::atanh(arg);
 }
 
 /// Minimum of two values
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline scalar_t min(scalar_t a, scalar_t b) {
   return math_ns::min(a, b);
 }
 
 /// Maximum of two values
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline scalar_t max(scalar_t a, scalar_t b) {
   return math_ns::max(a, b);
 }

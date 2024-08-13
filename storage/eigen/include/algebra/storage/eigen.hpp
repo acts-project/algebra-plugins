@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/storage/impl/eigen_array.hpp"
 #include "algebra/storage/impl/eigen_getter.hpp"
 #include "algebra/type_traits.hpp"
@@ -22,27 +23,27 @@ namespace eigen {
 /// size type for Eigen storage model
 using size_type = int;
 /// Array type used in the Eigen storage model
-template <typename T, size_type N>
+template <concepts::scalar T, size_type N>
 using storage_type = array<T, N>;
 /// Vector type used in the Eigen storage model
-template <typename T, size_type N>
+template <concepts::scalar T, size_type N>
 using vector_type = storage_type<T, N>;
 /// Matrix type used in the Eigen storage model
 /// If the number of rows is 1, make it RowMajor
-template <typename T, size_type ROWS, size_type COLS>
+template <concepts::scalar T, size_type ROWS, size_type COLS>
 using matrix_type = Eigen::Matrix<T, ROWS, COLS, (ROWS == 1), ROWS, COLS>;
 
 /// 3-element "vector" type, using @c eigen::vector_type
-template <typename T>
+template <concepts::scalar T>
 using vector3 = storage_type<T, 3>;
 /// Point in 3D space, using @c eigen::vector_type
-template <typename T>
+template <concepts::scalar T>
 using point3 = vector3<T>;
 /// 2-element "vector" type, using @c eigen::vector_type
-template <typename T>
+template <concepts::scalar T>
 using vector2 = storage_type<T, 2>;
 /// Point in 2D space, using @c eigen::vector_type
-template <typename T>
+template <concepts::scalar T>
 using point2 = vector2<T>;
 
 /// Element Getter
@@ -55,7 +56,7 @@ using block_getter = eigen::storage::block_getter;
 ALGEBRA_PLUGINS_DEFINE_TYPE_TRAITS(eigen)
 
 // Extra specializations needed for some additional eigen types
-namespace trait {
+namespace traits {
 
 /// Index
 /// @{
@@ -172,6 +173,6 @@ struct block_getter<Eigen::MatrixBase<derived_t>> {
 };
 /// @}
 
-}  // namespace trait
+}  // namespace traits
 
 }  // namespace algebra

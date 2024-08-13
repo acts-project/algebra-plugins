@@ -7,11 +7,17 @@
 
 #pragma once
 
+// Local include(s).
+#include "algebra/concepts.hpp"
+
 /// Simple struct holding the types that describe a given plugin
-template <typename scalar_t, typename point2_t, typename point3_t,
-          typename vector2_t, typename vector3_t, typename transform3_t,
-          typename size_ty,
-          template <typename, size_ty, size_ty> class matrix_t>
+template <
+    algebra::concepts::scalar scalar_t, algebra::concepts::point2D point2_t,
+    algebra::concepts::point3D point3_t, algebra::concepts::vector2D vector2_t,
+    algebra::concepts::vector3D vector3_t,
+    algebra::concepts::transform3D transform3_t,
+    algebra::concepts::index size_ty,
+    template <typename, size_ty, size_ty> class matrix_t>
 struct test_types {
 
   using scalar = scalar_t;

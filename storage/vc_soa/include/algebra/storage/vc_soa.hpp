@@ -89,17 +89,6 @@ struct scalar<
 };
 /// @}
 
-// Vector and storage types are different
-template <typename T, auto N>
-struct dimensions<vc_soa::storage_type<T, N>> {
-
-  using size_type = vc_soa::size_type;
-
-  static constexpr size_type dim{1};
-  static constexpr size_type rows{N};
-  static constexpr size_type columns{1};
-};
-
 }  // namespace traits
 
 }  // namespace algebra

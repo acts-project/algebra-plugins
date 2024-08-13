@@ -144,7 +144,7 @@ struct block_getter {
   template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
             std::size_t mCOL, concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE inline constexpr auto operator()(
+  ALGEBRA_HOST_DEVICE inline constexpr auto get_block(
       const matrix<array_t, scalar_t, mROW, mCOL> &m, const std::size_t row,
       const std::size_t col) noexcept {
 
@@ -169,6 +169,7 @@ struct block_getter {
       }
     }
 
+    // @TODO: Try masked vector assignment
     for (std::size_t j = col; j < col + COLS; ++j) {
       for (std::size_t i = row; i < row + ROWS; ++i) {
         res_m[j - col][i - row] = m[j][i];
@@ -182,14 +183,14 @@ struct block_getter {
   template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
             concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE inline constexpr auto operator()(
+  ALGEBRA_HOST_DEVICE inline constexpr auto get_vector(
       const matrix<array_t, scalar_t, ROWS, COLS> &m, const std::size_t row,
       const std::size_t col) noexcept {
 
     static_assert(SIZE <= ROWS);
     static_assert(SIZE <= COLS);
     assert(row + SIZE <= ROWS);
-    assert(col <= COLS);
+    assert(col < COLS);
 
     using input_matrix_t = matrix<array_t, scalar_t, ROWS, COLS>;
     using vector_t = vector<SIZE, scalar_t, array_t>;
@@ -202,8 +203,8 @@ struct block_getter {
         return m[col];
       }
     }
-    for (std::size_t i = row; i < row + SIZE; ++i) {
-      res_v[i] = m[col][i];
+    for (std::size_t i = 0; i < SIZE; ++i) {
+      res_v[i] = m[col][i + row];
     }
 
     return res_v;
@@ -218,7 +219,7 @@ template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
 ALGEBRA_HOST_DEVICE inline constexpr auto block(
     const matrix<array_t, scalar_t, mROW, mCOL> &m, const std::size_t row,
     const std::size_t col) noexcept {
-  return block_getter{}.template operator()<ROWS, COLS>(m, row, col);
+  return block_getter{}.template get_block<ROWS, COLS>(m, row, col);
 }
 
 /// Get a block of a const matrix
@@ -259,18 +260,17 @@ template <class matrix_t, std::size_t ROW, concepts::scalar scalar_t,
 ALGEBRA_HOST_DEVICE inline constexpr void set_block(
     matrix_t &m, const storage::vector<ROW, scalar_t, array_t> &b,
     std::size_t row, std::size_t col) noexcept {
-  assert(row < ROW);
-  assert(row < matrix_t::rows());
+  assert(row + ROW <= matrix_t::rows());
   assert(col < matrix_t::columns());
 
-  if constexpr (matrix_t::storage_rows() == ROW) {
+  if constexpr (matrix_t::storage_rows() == storage::vector<ROW, scalar_t, array_t>::storage_size()) {
     if (row == 0u) {
       m[col] = b;
       return;
     }
   }
-  for (std::size_t i = row; i < ROW; ++i) {
-    m[col][i] = b[i - row];
+  for (std::size_t i = 0; i < ROW; ++i) {
+    m[col][i + row] = b[i];
   }
 }
 

@@ -28,6 +28,33 @@
 
 namespace algebra::vc_aos::math {
 
+/// This method retrieves phi from a vector @param v
+template <typename vector_t,
+          std::enable_if_t<(Vc::is_simd_vector<vector_t>::value ||
+                            algebra::detail::is_storage_vector_v<vector_t>),
+                           bool> = true>
+ALGEBRA_HOST_DEVICE inline auto phi(const vector_t &v) {
+  return algebra::math::atan2(v[1], v[0]);
+}
+
+/// This method retrieves the perpendicular magnitude of a vector @param v
+template <typename vector_t,
+          std::enable_if_t<(Vc::is_simd_vector<vector_t>::value ||
+                            algebra::detail::is_storage_vector_v<vector_t>),
+                           bool> = true>
+ALGEBRA_HOST_DEVICE inline auto perp(const vector_t &v) {
+  return algebra::math::sqrt(algebra::math::fma(v[0], v[0], v[1] * v[1]));
+}
+
+/// This method retrieves theta from a vector @param v
+template <typename vector_t,
+          std::enable_if_t<(Vc::is_simd_vector<vector_t>::value ||
+                            algebra::detail::is_storage_vector_v<vector_t>),
+                           bool> = true>
+ALGEBRA_HOST_DEVICE inline auto theta(const vector_t &v) {
+  return algebra::math::atan2(perp(v), v[2]);
+}
+
 /// Dot product between two input vectors
 ///
 /// @tparam vector_type generic input vector type
@@ -71,7 +98,7 @@ template <typename vector_type,
           std::enable_if_t<(Vc::is_simd_vector<vector_type>::value ||
                             algebra::detail::is_storage_vector_v<vector_type>),
                            bool> = true>
-ALGEBRA_HOST_DEVICE inline auto normalize(const vector_type &v) {
+ALGEBRA_HOST_DEVICE inline vector_type normalize(const vector_type &v) {
 
   return v / norm(v);
 }
@@ -105,9 +132,8 @@ template <typename vector_type1, typename vector_type2,
                                      algebra::detail::is_storage_vector_v<
                                          vector_type2>)),
               bool> = true>
-ALGEBRA_HOST_DEVICE inline auto cross(const vector_type1 &a,
-                                      const vector_type2 &b)
-    -> decltype(a * b - a * b) {
+ALGEBRA_HOST_DEVICE inline vector_type1 cross(const vector_type1 &a,
+                                              const vector_type2 &b) {
 
   return {algebra::math::fma(a[1], b[2], -b[1] * a[2]),
           algebra::math::fma(a[2], b[0], -b[2] * a[0]),

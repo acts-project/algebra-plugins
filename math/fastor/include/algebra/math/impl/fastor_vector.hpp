@@ -21,6 +21,13 @@
 
 namespace algebra::fastor::math {
 
+/// This method retrieves phi from a vector @param v
+template <concepts::scalar scalar_t, auto N,
+          std::enable_if_t<N >= 2, bool> = true>
+ALGEBRA_HOST_DEVICE inline auto phi(const Fastor::Tensor<scalar_t, N> &v) {
+  return algebra::math::atan2(v[1], v[0]);
+}
+
 /// This method retrieves theta from a vector, vector base with rows >= 3
 ///
 /// @param v the input vector

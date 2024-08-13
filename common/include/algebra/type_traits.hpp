@@ -8,7 +8,7 @@
 #pragma once
 
 // System include(s).
-#include <cmath>
+#include <algorithm>
 #include <type_traits>
 
 namespace algebra::traits {
@@ -76,7 +76,7 @@ struct dimensions {
 };
 
 template <class M>
-inline constexpr index_t<M> dim{dimensions<std::remove_cvref_t<M>>::sim};
+inline constexpr index_t<M> dim{dimensions<std::remove_cvref_t<M>>::dim};
 
 template <class M>
 inline constexpr index_t<M> rows{dimensions<std::remove_cvref_t<M>>::rows};

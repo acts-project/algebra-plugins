@@ -31,7 +31,7 @@ struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
   constexpr matrix() = default;
 
   /// Construct from given column vectors @param v
-  template <concepts::vector... vector_t,
+  template <typename... vector_t,
             std::enable_if_t<sizeof...(vector_t) == COL, bool> = true>
   explicit matrix(vector_t &&...v) : m_storage{std::forward<vector_t>(v)...} {}
 

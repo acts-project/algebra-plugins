@@ -10,9 +10,61 @@
 // Project include(s).
 #include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
+#include "algebra/math/generic.hpp"
 #include "algebra/qualifiers.hpp"
 
 namespace algebra::cmath {
+
+/// This method retrieves phi from a vector with rows >= 2
+///
+/// @param v the input vector
+template <concepts::index size_type,
+          template <typename, size_type> class array_t,
+          concepts::scalar scalar_t, size_type N,
+          std::enable_if_t<(N >= 2), bool> = true>
+ALGEBRA_HOST_DEVICE inline scalar_t phi(const array_t<scalar_t, N> &v) {
+  return algebra::generic::math::phi(v);
+}
+
+/// This method retrieves the perpendicular magnitude of a vector with rows >= 2
+///
+/// @param v the input vector
+template <concepts::index size_type,
+          template <typename, size_type> class array_t,
+          concepts::scalar scalar_t, size_type N,
+          std::enable_if_t<(N >= 2), bool> = true>
+ALGEBRA_HOST_DEVICE inline scalar_t perp(const array_t<scalar_t, N> &v) {
+  return algebra::generic::math::perp(v);
+}
+
+/// This method retrieves theta from a vector with rows >= 3
+///
+/// @param v the input vector
+template <concepts::index size_type,
+          template <typename, size_type> class array_t,
+          concepts::scalar scalar_t, size_type N,
+          std::enable_if_t<(N >= 2), bool> = true>
+ALGEBRA_HOST_DEVICE inline scalar_t theta(const array_t<scalar_t, N> &v) {
+  return algebra::generic::math::theta(v);
+}
+
+/// Cross product between two input vectors - 3 Dim
+///
+/// @tparam vector1_t first vector or column matrix type
+/// @tparam vector2_t second vector or column matrix type
+///
+/// @param a the first input vector
+/// @param b the second input vector
+///
+/// @return a vector representing the cross product
+template <concepts::index size_type,
+          template <typename, size_type> class array_t,
+          concepts::scalar scalar_t, size_type N,
+          std::enable_if_t<(N >= 3), bool> = true>
+ALGEBRA_HOST_DEVICE inline array_t<scalar_t, N> cross(
+    const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) {
+  return algebra::generic::math::cross(a, b);
+}
 
 /// Dot product between two input vectors
 ///

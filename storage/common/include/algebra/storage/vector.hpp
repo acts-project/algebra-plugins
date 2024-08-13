@@ -67,57 +67,54 @@ class alignas(
     }
   }
 
+  /// Construct from other vector type
+  template <typename other_vector_t, typename S = scalar_type,
+            std::enable_if_t<std::is_scalar_v<S>, bool> = true>
+  constexpr vector(const other_vector_t &v) {
+    for (std::size_t i = 0; i < N; ++i) {
+      m_data[i] = v[i];
+    }
+  }
+
   /// Construct from element values @param vals .
   ///
   /// @{
 
   /// Construct vector in SoA layout from simd scalars
-  template <concepts::simd_scalar... Scalars,
-            std::enable_if_t<sizeof...(Scalars) == N, bool> = true>
+  template <typename... Scalars,
+            std::enable_if_t<sizeof...(Scalars) == simd_size(), bool> = true>
+    requires((concepts::simd_scalar<Scalars> ||
+              std::convertible_to<Scalars, scalar_type>) &&
+             ...)
   constexpr vector(Scalars &&...scals)
       : m_data{std::forward<Scalars>(scals)...} {}
 
   /// In order to avoid uninitialized values, which deteriorate the performance
   /// in explicitely vectorized code, the underlying data array is filled with
   /// zeroes if too few arguments are given.
-  template <concepts::value... Values>
+  template <typename... Values,
+            std::enable_if_t<(sizeof...(Values) < simd_size()), bool> = true>
+    requires(std::convertible_to<Values, scalar_type> && ...)
   constexpr vector(Values &&...vals) {
 
-    static_assert(sizeof...(Values) <= N);
-
     // Fill up last entries, if necessary (explicitly for now)
-    if constexpr ((simd_size() - N) == 1) {
-      m_data = {std::forward<Values>(vals)..., 0.f};
-    } else if constexpr ((simd_size() - N) == 2) {
-      m_data = {std::forward<Values>(vals)..., 0.f, 0.f};
-    } else if constexpr (sizeof...(Values) < simd_size()) {
+    if constexpr ((m_data.size() - sizeof...(Values)) == 1) {
+      // 3D vectors
+      m_data = {scalar_type{std::forward<Values>(vals)}..., scalar_type{0}};
+    } else if constexpr ((m_data.size() - sizeof...(Values)) == 2) {
+      // 6D vectors
+      m_data = {scalar_type{std::forward<Values>(vals)}..., scalar_type{0}, scalar_type{0}};
+    } else {
       // @TODO: Does this actually work, yet?
       zero_fill(std::make_index_sequence<simd_size() - sizeof...(Values)>{});
-    } else {
-      m_data = {std::forward<Values>(vals)...};
     }
   }
 
   /// @}
 
   /// Construct from existing array storage @param vals .
+  constexpr vector(array_type &&vals) : m_data{std::move(vals)} {}
   constexpr vector(const array_type &vals) : m_data{vals} {}
-
-  /// Assignment operator from wrapped data.
-  ///
-  /// @param lhs wrap a copy of this data.
-  constexpr const vector &operator=(const array_type &lhs) {
-    m_data = lhs;
-    return *this;
-  }
-
-  /// Assignment operator from @c std::initializer_list .
-  ///
-  /// @param list wrap an array of this data.
-  constexpr vector &operator=(std::initializer_list<scalar_type> &list) {
-    m_data = array_type(list);
-    return *this;
-  }
 
   /// Conversion operator from wrapper to underlying data array.
   /// @{
@@ -132,6 +129,9 @@ class alignas(
   constexpr decltype(auto) operator[](std::size_t i) { return m_data[i]; }
   constexpr decltype(auto) operator[](std::size_t i) const { return m_data[i]; }
   /// @}
+
+  /// @returns the size of the underlying data storage
+  static constexpr std::size_t storage_size() { return simd_size(); }
 
   /// Operator*=
   ///
@@ -190,12 +190,12 @@ class alignas(
 /// Friend operators
 /// @{
 
-template <std::size_t N, concepts::scalar scalar_t,
+template <std::size_t N, std::size_t M, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t,
           template <typename, std::size_t> class o_array_t,
           std::enable_if_t<std::is_scalar_v<scalar_t>, bool> = true>
 constexpr bool operator==(const vector<N, scalar_t, array_t> &lhs,
-                          const o_array_t<scalar_t, N> &rhs) noexcept {
+                          const o_array_t<scalar_t, M> &rhs) noexcept {
 
   const auto comp = lhs.compare(rhs);
   bool is_full = false;
@@ -207,12 +207,12 @@ constexpr bool operator==(const vector<N, scalar_t, array_t> &lhs,
   return is_full;
 }
 
-template <std::size_t N, concepts::scalar scalar_t,
+template <std::size_t N, std::size_t M, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t,
           template <typename, std::size_t> class o_array_t,
           std::enable_if_t<!std::is_scalar_v<scalar_t>, bool> = true>
 constexpr bool operator==(const vector<N, scalar_t, array_t> &lhs,
-                          const o_array_t<scalar_t, N> &rhs) noexcept {
+                          const o_array_t<scalar_t, M> &rhs) noexcept {
 
   const auto comp = lhs.compare(rhs);
   bool is_full = false;
@@ -230,7 +230,7 @@ template <std::size_t N, concepts::scalar scalar_t,
           template <typename, std::size_t> class o_array_t>
 constexpr bool operator==(const vector<N, scalar_t, array_t> &lhs,
                           const vector<N, scalar_t, o_array_t> &rhs) noexcept {
-  return (lhs == rhs.m_data);
+  return (rhs.m_data == lhs);
 }
 
 /// @}

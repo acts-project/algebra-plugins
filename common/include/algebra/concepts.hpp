@@ -17,25 +17,25 @@ namespace algebra::concepts {
 
 // Value concept: Single entry
 template <typename T>
-concept value = std::is_arithmetic_v<std::decay_t<T>>;
+concept value = std::is_arithmetic_v<std::remove_cvref_t<T>>;
 
 /// Scalar concept: Elements of vectors/matrices (can be simd vectors)
 template <typename T>
 concept scalar = !algebra::traits::is_matrix<T> &&
                  !algebra::traits::is_vector<T> && requires(T a, T b) {
-                   { a + b } -> std::convertible_to<T>;
-                   { a - b } -> std::convertible_to<T>;
-                   { a* b } -> std::convertible_to<T>;
-                   { a / b } -> std::convertible_to<T>;
+                   { a + b } -> std::convertible_to<std::remove_cvref_t<T>>;
+                   { a - b } -> std::convertible_to<std::remove_cvref_t<T>>;
+                   { a* b } -> std::convertible_to<std::remove_cvref_t<T>>;
+                   { a / b } -> std::convertible_to<std::remove_cvref_t<T>>;
                  };
 
 /// Check if a scalar is simd
 template <typename T>
-concept simd_scalar = scalar<T> && !std::is_scalar_v<T>;
+concept simd_scalar = scalar<T> && !std::is_scalar_v<std::remove_cvref_t<T>>;
 
 /// Index concept to access vector/matrix elements
 template <typename T>
-concept index = std::is_integral_v<T>;
+concept index = std::is_integral_v<std::remove_cvref_t<T>>;
 
 /// Vector concepts
 /// @{

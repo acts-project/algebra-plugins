@@ -9,7 +9,6 @@
 
 // Project include(s).
 #include "algebra/math/fastor.hpp"
-#include "algebra/math/generic.hpp"
 #include "algebra/storage/fastor.hpp"
 
 // Fastor include(s).
@@ -48,9 +47,8 @@ using fastor::math::eta;
 using fastor::math::norm;
 using fastor::math::normalize;
 using fastor::math::perp;
+using fastor::math::phi;
 using fastor::math::theta;
-
-using generic::math::phi;
 
 /// @}
 

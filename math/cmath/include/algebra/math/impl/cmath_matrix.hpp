@@ -10,6 +10,7 @@
 // Project include(s).
 #include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
+#include "algebra/math/generic.hpp"
 #include "algebra/qualifiers.hpp"
 
 namespace algebra::cmath {
@@ -46,6 +47,30 @@ template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t,
 ALGEBRA_HOST_DEVICE inline constexpr void set_identity(
     array_t<array_t<scalar_t, ROWS>, COLS> &m) {
   m = identity<array_t<array_t<scalar_t, ROWS>, COLS>>();
+}
+
+/// @returns the transpose matrix of @param m
+template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline auto transpose(
+    const array_t<array_t<scalar_t, ROWS>, COLS> &m) {
+  return algebra::generic::math::transpose(m);
+}
+
+/// @returns the determinant of @param m
+template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline scalar_t determinant(
+    const array_t<array_t<scalar_t, ROWS>, COLS> &m) {
+  return algebra::generic::math::determinant(m);
+}
+
+/// @returns the determinant of @param m
+template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline auto inverse(
+    const array_t<array_t<scalar_t, ROWS>, COLS> &m) {
+  return algebra::generic::math::inverse(m);
 }
 
 }  // namespace algebra::cmath

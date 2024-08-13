@@ -168,7 +168,7 @@ struct block_getter {
   /// Operator producing a vector out of a const matrix
   template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
             typename scalar_t, template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> operator()(
+  ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> get_vector(
       const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
       std::size_t col) {
 
@@ -202,7 +202,7 @@ ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> vector(
     const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
     std::size_t col) {
 
-  return block_getter().template operator()<SIZE>(m, row, col);
+  return block_getter().template get_vector<SIZE>(m, row, col);
 }
 
 /// Sets a matrix of dimension @tparam ROW and @tparam COL as submatrix of

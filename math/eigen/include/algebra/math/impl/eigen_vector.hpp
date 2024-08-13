@@ -28,6 +28,25 @@
 
 namespace algebra::eigen::math {
 
+/// This method retrieves phi from a vector @param v
+template <typename derived_type>
+ALGEBRA_HOST_DEVICE inline auto phi(const Eigen::MatrixBase<derived_type> &v) {
+  return algebra::math::atan2(v[1], v[0]);
+}
+
+/// This method retrieves the perpendicular magnitude of a vector @param v
+template <typename derived_type>
+ALGEBRA_HOST_DEVICE inline auto perp(const Eigen::MatrixBase<derived_type> &v) {
+  return algebra::math::sqrt(algebra::math::fma(v[0], v[0], v[1] * v[1]));
+}
+
+/// This method retrieves theta from a vector @param v
+template <typename derived_type>
+ALGEBRA_HOST_DEVICE inline auto theta(
+    const Eigen::MatrixBase<derived_type> &v) {
+  return algebra::math::atan2(perp(v), v[2]);
+}
+
 /// This method retrieves the norm of a vector, no dimension restriction
 ///
 /// @param v the input vector

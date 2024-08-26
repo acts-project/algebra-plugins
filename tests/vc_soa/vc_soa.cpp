@@ -143,7 +143,6 @@ TEST(test_vc_host, vc_soa_transform3) {
   // Value type is Vc::Vector<float>
   using value_t = typename vector3::value_type;
   using transform3 = vc_soa::transform3<scalar_t>;
-  using transform3 = vc_soa::transform3<scalar_t>;
 
   transform3 idty{};
 

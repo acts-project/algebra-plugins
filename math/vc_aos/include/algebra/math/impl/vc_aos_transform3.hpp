@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023-2024 CERN for the benefit of the ACTS project
+ * (c) 2020-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -10,7 +10,7 @@
 // Project include(s).
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
-#include "algebra/storage/impl/vc_soa_matrix44.hpp"
+#include "algebra/storage/matrix44.hpp"
 #include "algebra/storage/vector.hpp"
 
 // Vc include(s).
@@ -23,11 +23,9 @@
 #endif  // MSVC
 
 // System include(s).
-#include <array>
 #include <cassert>
-#include <type_traits>
 
-namespace algebra::vc_soa::math {
+namespace algebra::vc_aos::math {
 
 using algebra::storage::operator*;
 using algebra::storage::operator/;
@@ -35,7 +33,7 @@ using algebra::storage::operator-;
 using algebra::storage::operator+;
 
 /// Transform wrapper class to ensure standard API within differnt plugins
-template <typename scalar_t>
+template <template <typename, std::size_t> class array_t, typename scalar_t>
 struct transform3 {
 
   /// @name Type definitions for the struct
@@ -43,21 +41,32 @@ struct transform3 {
 
   /// Scalar type used by the transform
   using scalar_type = scalar_t;
-  /// The type of the matrix elements (in this case: Vc::Vector)
-  using value_type = Vc::Vector<scalar_t>;
+  /// The type of the matrix elements (scalar for AoS, Vc::Vector for SoA)
+  using value_type =
+      std::conditional_t<Vc::is_simd_vector<array_t<scalar_t, 4>>::value,
+                         scalar_t, Vc::Vector<scalar_t>>;
+
+  // AoS stores four elements per vector for alignment
+  using storage_dim =
+      std::conditional_t<Vc::is_simd_vector<value_type>::value,
+                         std::integral_constant<std::size_t, 3u>,
+                         std::integral_constant<std::size_t, 4u>>;
+
+  template <std::size_t N>
+  using array_type = array_t<value_type, N>;
 
   /// 3-element "vector" type (does not observe translations)
-  using vector3 = storage::vector<3, value_type, std::array>;
+  using vector3 = storage::vector<storage_dim::value, value_type, array_t>;
   /// Point in 3D space (does observe translations)
   using point3 = vector3;
   /// Point in 2D space
-  using point2 = storage::vector<2, value_type, std::array>;
+  using point2 = storage::vector<2, value_type, array_t>;
 
   /// 4x4 matrix type
-  using matrix44 = algebra::vc_soa::matrix44<scalar_type>;
+  using matrix44 = storage::matrix44<array_t, value_type, storage_dim::value>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = algebra::vc_soa::element_getter<scalar_type>;
+  using element_getter = storage::element_getter;
 
   /// @}
 
@@ -68,7 +77,6 @@ struct transform3 {
   matrix44 _data_inv;
 
   /// @}
-
   /// Default constructor: identity
   ALGEBRA_HOST_DEVICE
   transform3() = default;
@@ -94,7 +102,10 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &z, const vector3 &x,
              bool get_inverse = true)
-      : transform3(t, x, cross(z, x), z, get_inverse) {}
+      : transform3(t, x,
+                   vector3(z[1] * x[2] - x[1] * z[2], z[2] * x[0] - x[2] * z[0],
+                           z[0] * x[1] - x[0] * z[1]),
+                   z, get_inverse) {}
 
   /// Constructor with arguments: translation
   ///
@@ -107,6 +118,21 @@ struct transform3 {
   /// @param m is the full 4x4 matrix with simd-vector elements
   ALGEBRA_HOST_DEVICE
   transform3(const matrix44 &m) : _data{m}, _data_inv{invert(_data)} {}
+
+  /// Constructor with arguments: matrix as std::aray of scalar
+  ///
+  /// @param ma is the full 4x4 matrix 16 array
+  ALGEBRA_HOST_DEVICE
+  transform3(const array_type<16> &ma) {
+
+    // The values that are not set here, are known to be zero or one
+    // and never used explicitly
+    _data.x = typename matrix44::vector_type{ma[0], ma[4], ma[8]};
+    _data.y = typename matrix44::vector_type{ma[1], ma[5], ma[9]};
+    _data.z = typename matrix44::vector_type{ma[2], ma[6], ma[10]};
+    _data.t = typename matrix44::vector_type{ma[3], ma[7], ma[11]};
+    _data_inv = invert(_data);
+  }
 
   /// Defaults
   transform3(const transform3 &rhs) = default;
@@ -170,7 +196,7 @@ struct transform3 {
              m.t[0] * m.x[1] * m.y[2] + m.x[0] * m.t[1] * m.y[2] +
              m.y[0] * m.x[1] * m.t[2] - m.x[0] * m.y[1] * m.t[2];
     // i.t[3] = 1;
-    const value_type idet{value_type::One() / determinant(i)};
+    const value_type idet{value_type(1.f) / determinant(i)};
 
     i.x = i.x * idet;
     i.y = i.y * idet;
@@ -184,88 +210,106 @@ struct transform3 {
   ///
   /// @param m is the rotation matrix
   /// @param v is the vector to be rotated
-  ALGEBRA_HOST_DEVICE
-  inline constexpr auto rotate(const matrix44 &m, const vector3 &v) const {
+  template <typename vector3_type>
+  ALGEBRA_HOST_DEVICE inline constexpr auto rotate(
+      const matrix44 &m, const vector3_type &v) const {
 
     return m.x * v[0] + m.y * v[1] + m.z * v[2];
   }
 
-  /// @returns the translation of the transform
+  /// This method retrieves the rotation of a transform
   ALGEBRA_HOST_DEVICE
-  inline point3 translation() const { return _data.t; }
+  inline array_type<16> rotation() const {
 
-  /// @returns the 4x4 matrix of the transform
+    array_type<16> submatrix;
+    for (unsigned int irow = 0; irow < 3; ++irow) {
+      for (unsigned int icol = 0; icol < 3; ++icol) {
+        submatrix[icol + irow * 4] = element_getter()(_data, irow, icol);
+      }
+    }
+    return submatrix;
+  }
+
+  /// This method retrieves x axis
+  ALGEBRA_HOST_DEVICE
+  inline const vector3 &x() const { return _data.x; }
+
+  /// This method retrieves y axis
+  ALGEBRA_HOST_DEVICE
+  inline const vector3 &y() const { return _data.y; }
+
+  /// This method retrieves z axis
+  ALGEBRA_HOST_DEVICE
+  inline const vector3 &z() const { return _data.z; }
+
+  /// This method retrieves the translation
+  ALGEBRA_HOST_DEVICE
+  inline const vector3 &translation() const { return _data.t; }
+
+  /// This method retrieves the 4x4 matrix of a transform
   ALGEBRA_HOST_DEVICE
   inline const matrix44 &matrix() const { return _data; }
 
-  /// @returns the 4x4 matrix of the inverse transform
+  /// This method retrieves the 4x4 matrix of an inverse transform
   ALGEBRA_HOST_DEVICE
   inline const matrix44 &matrix_inverse() const { return _data_inv; }
 
-  /// This method transforms a point from the local 3D cartesian frame
-  /// to the global 3D cartesian frame
+  /// This method transform from a point from the local 3D cartesian frame
+  ///  to the global 3D cartesian frame
   ///
-  /// @tparam point3_t 3D point
+  /// @tparam point_type 3D point
   ///
   /// @param v is the point to be transformed
   ///
   /// @return a global point
-  template <
-      typename point3_t,
-      std::enable_if_t<std::is_convertible_v<point3_t, point3>, bool> = true>
-  ALGEBRA_HOST_DEVICE inline point3 point_to_global(const point3_t &v) const {
+  template <typename point3_type>
+  ALGEBRA_HOST_DEVICE inline auto point_to_global(const point3_type &p) const {
 
-    return rotate(_data, v) + _data.t;
+    return rotate(_data, p) + _data.t;
   }
 
-  /// This method transforms a point from the global 3D cartesian frame
-  /// into the local 3D cartesian frame
+  /// This method transform from a vector from the global 3D cartesian frame
+  ///  into the local 3D cartesian frame
   ///
-  /// @tparam point3_t 3D point
+  /// @tparam point_type 3D point
   ///
   /// @param v is the point to be transformed
   ///
   /// @return a local point
-  template <
-      typename point3_t,
-      std::enable_if_t<std::is_convertible_v<point3_t, point3>, bool> = true>
-  ALGEBRA_HOST_DEVICE inline point3 point_to_local(const point3_t &v) const {
+  template <typename point3_type>
+  ALGEBRA_HOST_DEVICE inline auto point_to_local(const point3_type &p) const {
 
-    return rotate(_data_inv, v) + _data_inv.t;
+    return rotate(_data_inv, p) + _data_inv.t;
   }
 
-  /// This method transforms a vector from the local 3D cartesian frame
-  /// to the global 3D cartesian frame
+  /// This method transform from a vector from the local 3D cartesian frame
+  ///  to the global 3D cartesian frame
   ///
-  /// @tparam vector3_t 3D vector
+  /// @tparam vector3_type 3D vector
   ///
   /// @param v is the vector to be transformed
   ///
   /// @return a vector in global coordinates
-  template <
-      typename vector3_t,
-      std::enable_if_t<std::is_convertible_v<vector3_t, vector3>, bool> = true>
-  ALGEBRA_HOST_DEVICE inline vector3 vector_to_global(
-      const vector3_t &v) const {
+  template <typename vector3_type>
+  ALGEBRA_HOST_DEVICE inline auto vector_to_global(
+      const vector3_type &v) const {
 
     return rotate(_data, v);
   }
 
-  /// This method transforms a vector from the global 3D cartesian frame
-  /// into the local 3D cartesian frame
+  /// This method transform from a vector from the global 3D cartesian frame
+  ///  into the local 3D cartesian frame
   ///
-  /// @tparam vector3_t 3D vector
+  /// @tparam vector3_type 3D vector
   ///
   /// @param v is the vector to be transformed
   ///
-  /// @return a vector in local coordinates
-  template <
-      typename vector3_t,
-      std::enable_if_t<std::is_convertible_v<vector3_t, vector3>, bool> = true>
-  ALGEBRA_HOST_DEVICE inline vector3 vector_to_local(const vector3_t &v) const {
+  /// @return a vector in global coordinates
+  template <typename vector3_type>
+  ALGEBRA_HOST_DEVICE inline auto vector_to_local(const vector3_type &v) const {
 
     return rotate(_data_inv, v);
   }
 };  // struct transform3
 
-}  // namespace algebra::vc_soa::math
+}  // namespace algebra::vc_aos::math

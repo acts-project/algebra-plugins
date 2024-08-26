@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022 CERN for the benefit of the ACTS project
+ * (c) 2022-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -33,6 +33,14 @@ struct test_specialisation_name {
   }
 };
 
+// Register the tests
+REGISTER_TYPED_TEST_SUITE_P(test_host_basics_vector, local_vectors, vector3,
+                            getter);
+REGISTER_TYPED_TEST_SUITE_P(test_host_basics_matrix, matrix3, matrix64,
+                            matrix22);
+REGISTER_TYPED_TEST_SUITE_P(test_host_basics_transform, transform3,
+                            global_transformations);
+
 // Instantiate the test(s).
 typedef testing::Types<
     test_types<float, algebra::fastor::point2<float>,
@@ -47,5 +55,9 @@ typedef testing::Types<
                algebra::fastor::transform3<double>, std::size_t,
                algebra::fastor::matrix_type, algebra::matrix::actor<double>>>
     fastor_fastor_types;
-INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics,
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
+                               fastor_fastor_types, test_specialisation_name);
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_matrix,
+                               fastor_fastor_types, test_specialisation_name);
+INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_transform,
                                fastor_fastor_types, test_specialisation_name);

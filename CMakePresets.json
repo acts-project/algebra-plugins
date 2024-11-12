@@ -74,7 +74,8 @@
          "displayName" : "SYCL Developer Configuration",
          "inherits" : [ "vecmem", "eigen" ],
          "cacheVariables" : {
-            "ALGEBRA_PLUGINS_TEST_SYCL" : "TRUE"
+            "ALGEBRA_PLUGINS_TEST_SYCL" : "TRUE",
+            "VECMEM_BUILD_SYCL_LIBRARY" : "TRUE"
          }
       }
    ]

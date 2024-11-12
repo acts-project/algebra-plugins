@@ -49,16 +49,15 @@ using cmath::element;
 
 /// Function extracting a slice from matrix44 - const
 template <std::size_t SIZE, template <typename, std::size_t> class array_t,
-          typename value_t, std::size_t N,
-          std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline const auto& vector(
-    const storage::matrix44<array_t, value_t, N>& m,
-    std::size_t
+          typename value_t, std::size_t N>
+requires(SIZE <= 4) ALGEBRA_HOST_DEVICE inline const
+    auto& vector(const storage::matrix44<array_t, value_t, N>& m,
+                 std::size_t
 #ifndef NDEBUG
-        row
+                     row
 #endif  // not NDEBUG
-    ,
-    std::size_t col) {
+                 ,
+                 std::size_t col) {
 
   assert(row == 0);
   assert(col < 4);
@@ -82,16 +81,15 @@ ALGEBRA_HOST_DEVICE inline const auto& vector(
 
 /// Function extracting a slice from matrix44 - non-const
 template <std::size_t SIZE, template <typename, std::size_t> class array_t,
-          typename value_t, std::size_t N,
-          std::enable_if_t<SIZE <= 4, bool> = true>
-ALGEBRA_HOST_DEVICE inline auto& vector(
-    storage::matrix44<array_t, value_t, N>& m,
-    std::size_t
+          typename value_t, std::size_t N>
+requires(SIZE <= 4) ALGEBRA_HOST_DEVICE
+    inline auto& vector(storage::matrix44<array_t, value_t, N>& m,
+                        std::size_t
 #ifndef NDEBUG
-        row
+                            row
 #endif  // not NDEBUG
-    ,
-    std::size_t col) {
+                        ,
+                        std::size_t col) {
 
   assert(row == 0);
   assert(col < 4);

@@ -115,4 +115,4 @@ jobs:
       run: |
         cd build
         source ${GITHUB_WORKSPACE}/.github/ci_setup.sh ${{ matrix.PLATFORM.NAME }}
-        ctest --output-on-failure
+        ctest --output-on-failure 

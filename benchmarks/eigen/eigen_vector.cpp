@@ -8,7 +8,6 @@
 // Project include(s)
 #include "algebra/eigen_eigen.hpp"
 #include "benchmark/common/benchmark_vector.hpp"
-#include "benchmark/common/register_benchmark.hpp"
 #include "benchmark/eigen/data_generator.hpp"
 
 // Benchmark include
@@ -50,16 +49,7 @@ int main(int argc, char** argv) {
   //
   // Register all benchmarks
   //
-  algebra::register_benchmark<add_f_t>(cfg, "_single");
-  algebra::register_benchmark<add_d_t>(cfg, "_double");
-  algebra::register_benchmark<sub_f_t>(cfg, "_single");
-  algebra::register_benchmark<sub_d_t>(cfg, "_double");
-  algebra::register_benchmark<dot_f_t>(cfg, "_single");
-  algebra::register_benchmark<dot_d_t>(cfg, "_double");
-  algebra::register_benchmark<cross_f_t>(cfg, "_single");
-  algebra::register_benchmark<cross_d_t>(cfg, "_double");
-  algebra::register_benchmark<normlz_f_t>(cfg, "_single");
-  algebra::register_benchmark<normlz_d_t>(cfg, "_double");
+  ALGEBRA_PLUGINS_REGISTER_VECTOR_BENCH(cfg)
 
   ::benchmark::Initialize(&argc, argv);
   ::benchmark::RunSpecifiedBenchmarks();

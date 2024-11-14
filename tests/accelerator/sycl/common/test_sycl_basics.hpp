@@ -40,7 +40,7 @@ class test_sycl_basics : public test_basics_base<T> {
 TYPED_TEST_SUITE_P(test_sycl_basics);
 
 /// Test for some basic 2D "vector operations"
-/*TYPED_TEST_P(test_sycl_basics, vector_2d_ops) {
+TYPED_TEST_P(test_sycl_basics, vector_2d_ops) {
 
   // Don't run the test at double precision, if the SYCL device doesn't
   // support it.
@@ -137,7 +137,7 @@ TYPED_TEST_P(test_sycl_basics, matrix22_ops) {
 
   // Compare the outputs.
   this->compareOutputs();
-}*/
+}
 
 /// Test for some operations with @c transform3
 TYPED_TEST_P(test_sycl_basics, transform3) {
@@ -165,6 +165,5 @@ TYPED_TEST_P(test_sycl_basics, transform3) {
   this->compareOutputs();
 }
 
-REGISTER_TYPED_TEST_SUITE_P(test_sycl_basics, /*vector_2d_ops, vector_3d_ops,
-                            matrix64_ops, matrix22_ops,*/
-                            transform3);
+REGISTER_TYPED_TEST_SUITE_P(test_sycl_basics, vector_2d_ops, vector_3d_ops,
+                            matrix64_ops, matrix22_ops, transform3);

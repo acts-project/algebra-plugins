@@ -9,6 +9,7 @@
 
 // Project include(s)
 #include "benchmark_base.hpp"
+#include "register_benchmark.hpp"
 
 // System include(s)
 #include <string>
@@ -182,5 +183,28 @@ struct mul {
 };
 
 }  // namespace bench_op
+
+// Macro for registering all vector benchmarks
+#define ALGEBRA_PLUGINS_REGISTER_MATRIX_BENCH(CFG)                    \
+  algebra::register_benchmark<mat44_add_f_t>(CFG, "_4x4_add_single"); \
+  algebra::register_benchmark<mat44_add_d_t>(CFG, "_4x4_add_double"); \
+  algebra::register_benchmark<mat66_add_f_t>(CFG, "_6x6_add_single"); \
+  algebra::register_benchmark<mat66_add_d_t>(CFG, "_6x6_add_double"); \
+  algebra::register_benchmark<mat88_add_f_t>(CFG, "_8x8_add_single"); \
+  algebra::register_benchmark<mat88_add_d_t>(CFG, "_8x8_add_double"); \
+                                                                      \
+  algebra::register_benchmark<mat44_mul_f_t>(CFG, "_4x4_mul_single"); \
+  algebra::register_benchmark<mat44_mul_d_t>(CFG, "_4x4_mul_double"); \
+  algebra::register_benchmark<mat66_mul_f_t>(CFG, "_6x6_mul_single"); \
+  algebra::register_benchmark<mat66_mul_d_t>(CFG, "_6x6_mul_double"); \
+  algebra::register_benchmark<mat88_mul_f_t>(CFG, "_8x8_mul_single"); \
+  algebra::register_benchmark<mat88_mul_d_t>(CFG, "_8x8_mul_double"); \
+                                                                      \
+  algebra::register_benchmark<mat44_vec_f_t>(CFG, "_4x4_vec_single"); \
+  algebra::register_benchmark<mat44_vec_d_t>(CFG, "_4x4_vec_double"); \
+  algebra::register_benchmark<mat66_vec_f_t>(CFG, "_6x6_vec_single"); \
+  algebra::register_benchmark<mat66_vec_d_t>(CFG, "_6x6_vec_double"); \
+  algebra::register_benchmark<mat88_vec_f_t>(CFG, "_8x8_vec_single"); \
+  algebra::register_benchmark<mat88_vec_d_t>(CFG, "_8x8_vec_double");
 
 }  // namespace algebra

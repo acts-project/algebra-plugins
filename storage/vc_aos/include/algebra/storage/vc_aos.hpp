@@ -55,7 +55,7 @@ template <typename T>
 using point3 = vector3<T>;
 /// 6-element "vector" type, using @c Vc::SimdArray
 template <typename T>
-using vector6 = vector_type<T, 8>;
+using vector6 = vector_type<T, 6>;
 /// 8-element "vector" type, using @c Vc::SimdArray
 template <typename T>
 using vector8 = vector_type<T, 8>;

@@ -35,21 +35,24 @@ struct alignas(alignof(storage::vector<ROW, value_t, array_t>)) matrix {
 
   /// Construct from given column vectors @param v
   template <typename... vector_t>
-  requires(sizeof...(vector_t) == COL) explicit matrix(vector_t &&... v)
+  ALGEBRA_HOST_DEVICE requires(sizeof...(vector_t) ==
+                               COL) explicit matrix(vector_t &&... v)
       : m_storage{std::forward<vector_t>(v)...} {}
 
   /// Equality operator between two matrices
   template <std::size_t R, std::size_t C, typename V,
             template <typename, std::size_t> class A>
-  friend constexpr bool operator==(const matrix<A, V, R, C> &lhs,
-                                   const matrix<A, V, R, C> &rhs);
+  ALGEBRA_HOST_DEVICE friend constexpr bool operator==(
+      const matrix<A, V, R, C> &lhs, const matrix<A, V, R, C> &rhs);
 
   /// Subscript operator
   /// @{
+  ALGEBRA_HOST_DEVICE
   constexpr const vector_type &operator[](const std::size_t i) const {
     assert(i < COL);
     return m_storage[i];
   }
+  ALGEBRA_HOST_DEVICE
   constexpr vector_type &operator[](const std::size_t i) {
     assert(i < COL);
     return m_storage[i];
@@ -57,15 +60,18 @@ struct alignas(alignof(storage::vector<ROW, value_t, array_t>)) matrix {
   /// @}
 
   /// @returns the number of rows
+  ALGEBRA_HOST_DEVICE
   static consteval std::size_t rows() { return ROW; }
 
   /// @returns the number of rows of the underlying vector storage
   /// @note can be different from the matrix rows due to padding
+  ALGEBRA_HOST_DEVICE
   static consteval std::size_t storage_rows() {
     return vector_type::simd_size();
   }
 
   /// @returns the number of columns
+  ALGEBRA_HOST_DEVICE
   static consteval std::size_t columns() { return COL; }
 
  private:
@@ -73,14 +79,14 @@ struct alignas(alignof(storage::vector<ROW, value_t, array_t>)) matrix {
   /// @{
   // AoS
   template <std::size_t... I>
-  requires(!std::is_scalar_v<value_t>) constexpr bool equal(
+  ALGEBRA_HOST_DEVICE requires(!std::is_scalar_v<value_t>) constexpr bool equal(
       const matrix &rhs, std::index_sequence<I...>) const {
     return (... && (m_storage[I] == rhs[I]));
   }
 
   // SoA
   template <std::size_t... I>
-  requires(std::is_scalar_v<value_t>) constexpr bool equal(
+  ALGEBRA_HOST requires(std::is_scalar_v<value_t>) constexpr bool equal(
       const matrix &rhs, std::index_sequence<I...>) const {
     return (... && ((m_storage[I].get() == rhs[I].get()).isFull()));
   }
@@ -108,8 +114,9 @@ struct alignas(alignof(storage::vector<ROW, value_t, array_t>)) matrix {
   template <std::size_t R, std::size_t C, typename V, typename scalar_t,
             template <typename, std::size_t> class A>
   requires(std::is_scalar_v<scalar_t> ||
-           std::is_same_v<V, scalar_t>) friend constexpr decltype(auto)
-  operator*(const matrix<A, V, R, C> &lhs, scalar_t a) noexcept;
+           std::is_same_v<V, scalar_t>) ALGEBRA_HOST_DEVICE
+      friend constexpr decltype(auto)
+      operator*(const matrix<A, V, R, C> &lhs, scalar_t a) noexcept;
 
   /// Matrix-vector multiplication
   template <std::size_t R, std::size_t C, typename V,
@@ -135,7 +142,7 @@ struct element_getter {
   /// Get const access to a matrix element
   template <template <typename, std::size_t> class array_t, typename value_t,
             std::size_t ROW, std::size_t COL>
-  ALGEBRA_HOST inline decltype(auto) operator()(
+  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
       const matrix<array_t, value_t, ROW, COL> &m, std::size_t row,
       std::size_t col) const {
 
@@ -150,7 +157,7 @@ struct element_getter {
   /// Get non-const access to a matrix element
   template <template <typename, std::size_t> class array_t, typename value_t,
             std::size_t ROW, std::size_t COL>
-  ALGEBRA_HOST inline decltype(auto) operator()(
+  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
       matrix<array_t, value_t, ROW, COL> &m, std::size_t row,
       std::size_t col) const {
 
@@ -164,9 +171,8 @@ struct element_getter {
 
   /// Get const access to a matrix44 element from a flat array
   template <template <typename, std::size_t> class array_t, typename value_t>
-  ALGEBRA_HOST inline decltype(auto) operator()(const array_t<value_t, 16> &m,
-                                                unsigned int row,
-                                                unsigned int col) const {
+  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
+      const array_t<value_t, 16> &m, unsigned int row, unsigned int col) const {
     // Make sure that the indices are valid.
     assert(row < 4);
     assert(col < 4);
@@ -263,11 +269,10 @@ ALGEBRA_HOST_DEVICE constexpr auto block(
       }
       return;
     }
-  } else {
-    for (std::size_t j = col; j < col + COLS; ++j) {
-      for (std::size_t i = row; i < row + ROWS; ++i) {
-        res_m[j - col][i - row] = m[j][i];
-      }
+  }
+  for (std::size_t j = col; j < col + COLS; ++j) {
+    for (std::size_t i = row; i < row + ROWS; ++i) {
+      res_m[j - col][i - row] = m[j][i];
     }
   }
 
@@ -330,8 +335,9 @@ ALGEBRA_HOST_DEVICE constexpr void set_block(
 /// Equality operator between two matrices
 template <std::size_t ROW, std::size_t COL, typename value_t,
           template <typename, std::size_t> class array_t>
-constexpr bool operator==(const matrix<array_t, value_t, ROW, COL> &lhs,
-                          const matrix<array_t, value_t, ROW, COL> &rhs) {
+ALGEBRA_HOST_DEVICE constexpr bool operator==(
+    const matrix<array_t, value_t, ROW, COL> &lhs,
+    const matrix<array_t, value_t, ROW, COL> &rhs) {
   return lhs.equal(rhs, std::make_index_sequence<COL>());
 }
 
@@ -404,8 +410,10 @@ requires(std::is_scalar_v<scalar_t> ||
 template <std::size_t ROW, std::size_t COL, typename value_t, typename scalar_t,
           template <typename, std::size_t> class array_t>
 requires(std::is_scalar_v<scalar_t> ||
-         std::is_same_v<value_t, scalar_t>) constexpr decltype(auto)
-operator*(const matrix<array_t, value_t, ROW, COL> &lhs, scalar_t a) noexcept {
+         std::is_same_v<value_t, scalar_t>) ALGEBRA_HOST_DEVICE
+    constexpr decltype(auto)
+    operator*(const matrix<array_t, value_t, ROW, COL> &lhs,
+              scalar_t a) noexcept {
   return a * lhs;
 }
 

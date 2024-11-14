@@ -9,7 +9,6 @@
 #include "algebra/array_cmath.hpp"
 #include "benchmark/array/data_generator.hpp"
 #include "benchmark/common/benchmark_matrix.hpp"
-#include "benchmark/common/register_benchmark.hpp"
 
 // Benchmark include
 #include <benchmark/benchmark.h>
@@ -75,26 +74,7 @@ int main(int argc, char** argv) {
   //
   // Register all benchmarks
   //
-  algebra::register_benchmark<mat44_add_f_t>(cfg, "_4x4_add_single");
-  algebra::register_benchmark<mat44_add_d_t>(cfg, "_4x4_add_double");
-  algebra::register_benchmark<mat66_add_f_t>(cfg, "_6x6_add_single");
-  algebra::register_benchmark<mat66_add_d_t>(cfg, "_6x6_add_double");
-  algebra::register_benchmark<mat88_add_f_t>(cfg, "_8x8_add_single");
-  algebra::register_benchmark<mat88_add_d_t>(cfg, "_8x8_add_double");
-
-  algebra::register_benchmark<mat44_mul_f_t>(cfg, "_4x4_mul_single");
-  algebra::register_benchmark<mat44_mul_d_t>(cfg, "_4x4_mul_double");
-  algebra::register_benchmark<mat66_mul_f_t>(cfg, "_6x6_mul_single");
-  algebra::register_benchmark<mat66_mul_d_t>(cfg, "_6x6_mul_double");
-  algebra::register_benchmark<mat88_mul_f_t>(cfg, "_8x8_mul_single");
-  algebra::register_benchmark<mat88_mul_d_t>(cfg, "_8x8_mul_double");
-
-  algebra::register_benchmark<mat44_vec_f_t>(cfg, "_4x4_vec_single");
-  algebra::register_benchmark<mat44_vec_d_t>(cfg, "_4x4_vec_double");
-  algebra::register_benchmark<mat66_vec_f_t>(cfg, "_6x6_vec_single");
-  algebra::register_benchmark<mat66_vec_d_t>(cfg, "_6x6_vec_double");
-  algebra::register_benchmark<mat88_vec_f_t>(cfg, "_8x8_vec_single");
-  algebra::register_benchmark<mat88_vec_d_t>(cfg, "_8x8_vec_double");
+  ALGEBRA_PLUGINS_REGISTER_MATRIX_BENCH(cfg)
 
   ::benchmark::Initialize(&argc, argv);
   ::benchmark::RunSpecifiedBenchmarks();

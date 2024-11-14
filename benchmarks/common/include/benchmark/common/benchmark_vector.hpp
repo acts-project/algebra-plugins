@@ -9,6 +9,7 @@
 
 // Project include(s)
 #include "benchmark_base.hpp"
+#include "register_benchmark.hpp"
 
 // System include(s)
 #include <chrono>
@@ -160,5 +161,18 @@ struct normalize {
 };
 
 }  // namespace bench_op
+
+// Macro for registering all vector benchmarks
+#define ALGEBRA_PLUGINS_REGISTER_VECTOR_BENCH(CFG)         \
+  algebra::register_benchmark<add_f_t>(CFG, "_single");    \
+  algebra::register_benchmark<add_d_t>(CFG, "_double");    \
+  algebra::register_benchmark<sub_f_t>(CFG, "_single");    \
+  algebra::register_benchmark<sub_d_t>(CFG, "_double");    \
+  algebra::register_benchmark<dot_f_t>(CFG, "_single");    \
+  algebra::register_benchmark<dot_d_t>(CFG, "_double");    \
+  algebra::register_benchmark<cross_f_t>(CFG, "_single");  \
+  algebra::register_benchmark<cross_d_t>(CFG, "_double");  \
+  algebra::register_benchmark<normlz_f_t>(CFG, "_single"); \
+  algebra::register_benchmark<normlz_d_t>(CFG, "_double");
 
 }  // namespace algebra

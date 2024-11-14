@@ -36,6 +36,7 @@ using algebra::storage::operator+;
 template <template <typename, std::size_t> class array_t, typename scalar_t>
 struct transform3 {
 
+ private:
   // How to address matrix columns
   enum elem : std::size_t {
     e_x = 0u,
@@ -44,6 +45,7 @@ struct transform3 {
     e_t = 3u,
   };
 
+ public:
   /// @name Type definitions for the struct
   /// @{
 

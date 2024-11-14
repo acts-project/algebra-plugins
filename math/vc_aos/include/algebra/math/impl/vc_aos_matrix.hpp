@@ -104,22 +104,6 @@ struct actor {
       const matrix_type<ROWS, COLS> &m) {
     return storage::transpose(m);
   }
-
-  /// Get determinant using a specific algorithm @tparam determinant_t
-  /*template <std::size_t N, typename determinant_t = determinant_t>
-  ALGEBRA_HOST_DEVICE static constexpr constexpr value_type determinant(
-      const matrix_type<N, N> &m) {
-
-    return determinant_t{}(m);
-  }
-
-  /// Get inverse using a specific algorithm @tparam inverse_t
-  template <std::size_t N, typename inverse_t = inverse_t>
-  ALGEBRA_HOST_DEVICE static constexpr constexpr matrix_type<N, N> inverse(
-      const matrix_type<N, N> &m) {
-
-    return inverse_t{}(m);
-  }*/
 };
 
 }  // namespace matrix

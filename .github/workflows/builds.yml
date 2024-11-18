@@ -37,7 +37,7 @@ jobs:
     # The build/test steps to execute.
     steps:
     # Use a standard checkout of the code.
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     # Run the CMake configuration.
     - name: Configure
       run: cmake --preset default-x86-64
@@ -98,7 +98,7 @@ jobs:
     # The build/test steps to execute.
     steps:
     # Use a standard checkout of the code.
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     # Run the CMake configuration.
     - name: Configure
       run: |

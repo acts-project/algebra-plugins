@@ -177,6 +177,159 @@ struct actor {
 
     return inverse_actor_t()(m);
   }
+
+  // Set matrix C to the product AB
+  template <size_type M, size_type N, size_type O>
+  ALGEBRA_HOST_DEVICE inline void set_product(
+      matrix_type<M, O> &C, const matrix_type<M, N> &A,
+      const matrix_type<N, O> &B) const {
+
+    for (size_type i = 0; i < M; ++i) {
+      for (size_type j = 0; j < O; ++j) {
+        scalar_t T = 0.f;
+
+        for (size_type k = 0; k < N; ++k) {
+          T += element_getter()(A, i, k) * element_getter()(B, k, j);
+        }
+
+        element_getter()(C, i, j) = T;
+      }
+    }
+  }
+
+  // Set matrix C to the product A^TB
+  template <size_type M, size_type N, size_type O>
+  ALGEBRA_HOST_DEVICE inline void set_product_left_transpose(
+      matrix_type<M, O> &C, const matrix_type<N, M> &A,
+      const matrix_type<N, O> &B) const {
+
+    for (size_type i = 0; i < M; ++i) {
+      for (size_type j = 0; j < O; ++j) {
+        scalar_t T = 0.f;
+
+        for (size_type k = 0; k < N; ++k) {
+          T += element_getter()(A, k, i) * element_getter()(B, k, j);
+        }
+
+        element_getter()(C, i, j) = T;
+      }
+    }
+  }
+
+  // Set matrix C to the product AB^T
+  template <size_type M, size_type N, size_type O>
+  ALGEBRA_HOST_DEVICE inline void set_product_right_transpose(
+      matrix_type<M, O> &C, const matrix_type<M, N> &A,
+      const matrix_type<O, N> &B) const {
+
+    for (size_type i = 0; i < M; ++i) {
+      for (size_type j = 0; j < O; ++j) {
+        scalar_t T = 0.f;
+
+        for (size_type k = 0; k < N; ++k) {
+          T += element_getter()(A, i, k) * element_getter()(B, j, k);
+        }
+
+        element_getter()(C, i, j) = T;
+      }
+    }
+  }
+
+  // Set matrix A to the product AB in place
+  template <size_type M>
+  ALGEBRA_HOST_DEVICE inline void set_inplace_product_right(
+      matrix_type<M, M> &A, const matrix_type<M, M> &B) const {
+
+    for (size_type i = 0; i < M; ++i) {
+      matrix_type<1, M> Q;
+
+      for (size_type j = 0; j < M; ++j) {
+        element_getter()(Q, 0, j) = element_getter()(A, i, j);
+      }
+
+      for (size_type j = 0; j < M; ++j) {
+        scalar_t T = 0.f;
+
+        for (size_type k = 0; k < M; ++k) {
+          T += element_getter()(Q, 0, k) * element_getter()(B, k, j);
+        }
+
+        element_getter()(A, i, j) = T;
+      }
+    }
+  }
+
+  // Set matrix A to the product BA in place
+  template <size_type M>
+  ALGEBRA_HOST_DEVICE inline void set_inplace_product_left(
+      matrix_type<M, M> &A, const matrix_type<M, M> &B) const {
+
+    for (size_type j = 0; j < M; ++j) {
+      matrix_type<1, M> Q;
+
+      for (size_type i = 0; i < M; ++i) {
+        element_getter()(Q, 0, i) = element_getter()(A, i, j);
+      }
+
+      for (size_type i = 0; i < M; ++i) {
+        scalar_t T = 0.f;
+
+        for (size_type k = 0; k < M; ++k) {
+          T += element_getter()(B, i, k) * element_getter()(Q, 0, k);
+        }
+
+        element_getter()(A, i, j) = T;
+      }
+    }
+  }
+
+  // Set matrix A to the product AB^T in place
+  template <size_type M>
+  ALGEBRA_HOST_DEVICE inline void set_inplace_product_right_transpose(
+      matrix_type<M, M> &A, const matrix_type<M, M> &B) const {
+
+    for (size_type i = 0; i < M; ++i) {
+      matrix_type<1, M> Q;
+
+      for (size_type j = 0; j < M; ++j) {
+        element_getter()(Q, 0, j) = element_getter()(A, i, j);
+      }
+
+      for (size_type j = 0; j < M; ++j) {
+        scalar_t T = 0.f;
+
+        for (size_type k = 0; k < M; ++k) {
+          T += element_getter()(Q, 0, k) * element_getter()(B, j, k);
+        }
+
+        element_getter()(A, i, j) = T;
+      }
+    }
+  }
+
+  // Set matrix A to the product B^TA in place
+  template <size_type M>
+  ALGEBRA_HOST_DEVICE inline void set_inplace_product_left_transpose(
+      matrix_type<M, M> &A, const matrix_type<M, M> &B) const {
+
+    for (size_type j = 0; j < M; ++j) {
+      matrix_type<1, M> Q;
+
+      for (size_type i = 0; i < M; ++i) {
+        element_getter()(Q, 0, i) = element_getter()(A, i, j);
+      }
+
+      for (size_type i = 0; i < M; ++i) {
+        scalar_t T = 0.f;
+
+        for (size_type k = 0; k < M; ++k) {
+          T += element_getter()(B, k, i) * element_getter()(Q, 0, k);
+        }
+
+        element_getter()(A, i, j) = T;
+      }
+    }
+  }
 };
 
 namespace determinant {

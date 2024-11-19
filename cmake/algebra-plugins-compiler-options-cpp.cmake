@@ -28,7 +28,7 @@ elseif( "${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC" )
    # Basic flags for all build modes.
    string( REGEX REPLACE "/W[0-9]" "" CMAKE_CXX_FLAGS
       "${CMAKE_CXX_FLAGS}" )
-   algebra_add_flag( CMAKE_CXX_FLAGS "/W4" )
+   algebra_add_flag( CMAKE_CXX_FLAGS "/W4 /bigobj" )
 
    # Fail on warnings, if asked for that behaviour.
    if( ALGEBRA_PLUGINS_FAIL_ON_WARNINGS )

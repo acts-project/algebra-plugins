@@ -8,6 +8,6 @@
 algebra_add_library( algebra_smatrix_smatrix smatrix_smatrix
    "include/algebra/smatrix_smatrix.hpp" )
 target_link_libraries( algebra_smatrix_smatrix
-   INTERFACE algebra::common algebra::smatrix_storage algebra::smatrix_math )
+   INTERFACE algebra::common algebra::smatrix_storage algebra::smatrix_math algebra::generic_math )
 algebra_test_public_headers( algebra_smatrix_smatrix
    "algebra/smatrix_smatrix.hpp" )

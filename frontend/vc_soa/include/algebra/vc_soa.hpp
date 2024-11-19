@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/generic.hpp"
 #include "algebra/math/impl/vc_aos_transform3.hpp"
 #include "algebra/math/vc_soa.hpp"
 #include "algebra/storage/vc_soa.hpp"
@@ -70,6 +71,14 @@ using vc_soa::math::set_identity;
 using vc_soa::math::set_zero;
 using vc_soa::math::transpose;
 using vc_soa::math::zero;
+
+using generic::math::set_inplace_product_left;
+using generic::math::set_inplace_product_left_transpose;
+using generic::math::set_inplace_product_right;
+using generic::math::set_inplace_product_right_transpose;
+using generic::math::set_product;
+using generic::math::set_product_left_transpose;
+using generic::math::set_product_right_transpose;
 
 }  // namespace matrix
 

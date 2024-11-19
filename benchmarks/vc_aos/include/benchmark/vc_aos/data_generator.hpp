@@ -26,7 +26,7 @@ inline void fill_random_vec(std::vector<vector_aos_t> &collection) {
   };
 
   collection.resize(collection.capacity());
-  std::generate(collection.begin(), collection.end(), rand_obj);
+  std::ranges::generate(collection, rand_obj);
 }
 
 /// Fill a @c Vc::SimdArray based transform3 with random values
@@ -55,7 +55,29 @@ inline void fill_random_trf(std::vector<transform3_t> &collection) {
   };
 
   collection.resize(collection.capacity());
-  std::generate(collection.begin(), collection.end(), rand_obj);
+  std::ranges::generate(collection, rand_obj);
+}
+
+/// Fill a @c Vc::SimdArray based matrix with random values
+template <typename matrix_t>
+inline void fill_random_matrix(std::vector<matrix_t> &collection) {
+  // Generate a random, but valid affine transformation
+  auto rand_obj = []() {
+    using vector_t = typename matrix_t::vector_type;
+    vector_t x_axis;
+    vector_t z_axis;
+    vector_t t;
+
+    matrix_t m;
+    for (std::size_t j = 0u; j < matrix_t::columns(); ++j) {
+      m[j] = vector_t::array_type::Random();
+    }
+
+    return m;
+  };
+
+  collection.resize(collection.capacity());
+  std::ranges::generate(collection, rand_obj);
 }
 
 }  // namespace algebra

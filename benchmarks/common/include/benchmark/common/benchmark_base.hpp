@@ -62,7 +62,7 @@ struct benchmark_base {
   benchmark_base() = default;
 
   /// Construct from an externally provided configuration @param cfg
-  benchmark_base(configuration cfg) : m_cfg{cfg} {}
+  explicit benchmark_base(configuration cfg) : m_cfg{cfg} {}
 
   /// @returns the benchmark configuration
   configuration& config() { return m_cfg; }

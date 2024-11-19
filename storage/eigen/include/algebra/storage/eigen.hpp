@@ -20,6 +20,9 @@ using size_type = int;
 /// Array type used in the Eigen storage model
 template <typename T, size_type N>
 using storage_type = array<T, N>;
+/// Vector type used in the Eigen storage model
+template <typename T, std::size_t N>
+using vector_type = storage_type<T, N>;
 /// Matrix type used in the Eigen storage model
 /// If the number of rows is 1, make it RowMajor
 template <typename T, size_type ROWS, size_type COLS>

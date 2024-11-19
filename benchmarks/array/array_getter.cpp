@@ -9,7 +9,6 @@
 #include "algebra/array_cmath.hpp"
 #include "benchmark/array/data_generator.hpp"
 #include "benchmark/common/benchmark_getter.hpp"
-#include "benchmark/common/register_benchmark.hpp"
 
 // Benchmark include
 #include <benchmark/benchmark.h>
@@ -48,16 +47,7 @@ int main(int argc, char** argv) {
   //
   // Register all benchmarks
   //
-  algebra::register_benchmark<phi_f_t>(cfg, "_single");
-  algebra::register_benchmark<phi_d_t>(cfg, "_double");
-  algebra::register_benchmark<theta_f_t>(cfg, "_single");
-  algebra::register_benchmark<theta_d_t>(cfg, "_double");
-  algebra::register_benchmark<perp_f_t>(cfg, "_single");
-  algebra::register_benchmark<perp_d_t>(cfg, "_double");
-  algebra::register_benchmark<norm_f_t>(cfg, "_single");
-  algebra::register_benchmark<norm_d_t>(cfg, "_double");
-  algebra::register_benchmark<eta_f_t>(cfg, "_single");
-  algebra::register_benchmark<eta_d_t>(cfg, "_double");
+  ALGEBRA_PLUGINS_REGISTER_GETTER_BENCH(cfg)
 
   ::benchmark::Initialize(&argc, argv);
   ::benchmark::RunSpecifiedBenchmarks();

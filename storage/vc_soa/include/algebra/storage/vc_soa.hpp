@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/storage/matrix.hpp"
 #include "algebra/storage/vector.hpp"
 
 // System include(s).
@@ -38,7 +39,7 @@ template <typename T, std::size_t N>
 using vector_type = storage::vector<N, value_type<T>, storage_type>;
 /// Matrix type used in the Vc SoA storage model
 template <typename T, size_type ROWS, size_type COLS>
-using matrix_type = storage::vector<ROWS * COLS, value_type<T>, storage_type>;
+using matrix_type = storage::matrix<storage_type, value_type<T>, ROWS, COLS>;
 
 /// 2-element "vector" type, using @c Vc::Vector in every element
 template <typename T>

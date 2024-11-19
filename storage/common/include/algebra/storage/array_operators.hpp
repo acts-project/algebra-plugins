@@ -21,7 +21,7 @@ template <template <typename, std::size_t> class array_t, typename scalar_t,
           std::size_t N,
           std::enable_if_t<!std::is_same_v<array_t<scalar_t, N>, scalar_t>,
                            bool> = true>
-ALGEBRA_HOST_DEVICE inline constexpr array_t<scalar_t, N> operator*(
+ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator*(
     const array_t<scalar_t, N> &a, scalar_t s) noexcept {
 
   array_t<scalar_t, N> result;
@@ -36,7 +36,7 @@ template <template <typename, std::size_t> class array_t, typename scalar_t,
           std::size_t N,
           std::enable_if_t<!std::is_same_v<array_t<scalar_t, N>, scalar_t>,
                            bool> = true>
-ALGEBRA_HOST_DEVICE inline constexpr array_t<scalar_t, N> operator*(
+ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator*(
     scalar_t s, const array_t<scalar_t, N> &a) noexcept {
 
   array_t<scalar_t, N> result;
@@ -50,7 +50,7 @@ ALGEBRA_HOST_DEVICE inline constexpr array_t<scalar_t, N> operator*(
 template <template <typename, std::size_t> class array_t, typename scalar_t,
           std::size_t N,
           std::enable_if_t<std::is_object_v<scalar_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline constexpr array_t<scalar_t, N> operator-(
+ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator-(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) noexcept {
 
   array_t<scalar_t, N> result;
@@ -64,7 +64,7 @@ ALGEBRA_HOST_DEVICE inline constexpr array_t<scalar_t, N> operator-(
 template <template <typename, std::size_t> class array_t, typename scalar_t,
           std::size_t N,
           std::enable_if_t<std::is_object_v<scalar_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline constexpr array_t<scalar_t, N> operator+(
+ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator+(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) noexcept {
 
   array_t<scalar_t, N> result;
@@ -78,7 +78,7 @@ ALGEBRA_HOST_DEVICE inline constexpr array_t<scalar_t, N> operator+(
 template <template <typename, std::size_t> class array_t, typename scalar_t,
           std::size_t N,
           std::enable_if_t<std::is_object_v<scalar_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline constexpr array_t<scalar_t, N> operator*(
+ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator*(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) noexcept {
 
   array_t<scalar_t, N> result;
@@ -92,7 +92,7 @@ ALGEBRA_HOST_DEVICE inline constexpr array_t<scalar_t, N> operator*(
 template <template <typename, std::size_t> class array_t, typename scalar_t,
           std::size_t N,
           std::enable_if_t<std::is_object_v<scalar_t>, bool> = true>
-ALGEBRA_HOST_DEVICE inline constexpr array_t<scalar_t, N> operator/(
+ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator/(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) noexcept {
 
   array_t<scalar_t, N> result;

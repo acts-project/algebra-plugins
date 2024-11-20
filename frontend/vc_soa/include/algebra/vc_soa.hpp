@@ -10,6 +10,7 @@
 // Project include(s).
 #include "algebra/math/impl/vc_aos_transform3.hpp"
 #include "algebra/math/vc_soa.hpp"
+#include "algebra/print.hpp"
 #include "algebra/storage/vc_soa.hpp"
 
 // System include(s).
@@ -37,6 +38,9 @@ using vc_soa::storage::block;
 using vc_soa::storage::element;
 using vc_soa::storage::set_block;
 using vc_soa::storage::vector;
+
+/// Print the linear algebra types of this backend
+using algebra::operator<<;
 
 /// @}
 

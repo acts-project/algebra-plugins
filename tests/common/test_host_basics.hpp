@@ -41,6 +41,9 @@ TYPED_TEST_P(test_host_basics_vector, local_vectors) {
   ASSERT_EQ(vA[0], 0.f);
   ASSERT_EQ(vA[1], 1.f);
 
+  // Test printing
+  std::cout << vA << std::endl;
+
   // Assignment
   typename TypeParam::point2 vB = vA;
   ASSERT_EQ(vB[0], 0.f);
@@ -94,6 +97,9 @@ TYPED_TEST_P(test_host_basics_vector, vector3) {
   ASSERT_EQ(vA[0], 0.f);
   ASSERT_EQ(vA[1], 1.f);
   ASSERT_EQ(vA[2], 2.f);
+
+  // Test printing
+  std::cout << vA << std::endl;
 
   // Assignment
   typename TypeParam::vector3 vB = vA;
@@ -220,6 +226,9 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_3x1) {
   algebra::getter::element(vF, 1, 0) = 6.f;
   algebra::getter::element(vF, 2, 0) = 13.f;
 
+  // Test printing
+  std::cout << vF << std::endl;
+
   typename TypeParam::vector3 vD{1.f, 1.f, 1.f};
   typename TypeParam::vector3 vG = algebra::vector::cross(vD, vF);
   ASSERT_NEAR(vG[0], 7.f, this->m_epsilon);
@@ -342,6 +351,9 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   ASSERT_NEAR(algebra::getter::element(m, 0, 2), 10., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 1, 2), 20., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 2, 2), 30., this->m_epsilon);
+
+  // Test printing
+  std::cout << m << std::endl;
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_3x3) {
@@ -669,6 +681,9 @@ TYPED_TEST_P(test_host_basics_transform, transform3) {
   ASSERT_TRUE(trf1 == trf1);
   typename TypeParam::transform3 trf2;
   trf2 = trf1;
+
+  // Test printing
+  std::cout << trf1 << std::endl;
 
   const auto rot = trf2.rotation();
   ASSERT_NEAR(algebra::getter::element(rot, 0, 0), x[0], this->m_epsilon);

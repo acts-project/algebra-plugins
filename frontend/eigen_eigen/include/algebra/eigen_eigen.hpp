@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/math/eigen.hpp"
+#include "algebra/print.hpp"
 #include "algebra/storage/eigen.hpp"
 
 // Eigen include(s).
@@ -19,6 +20,9 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif  // MSVC
+
+/// Print the linear algebra types of this backend
+using algebra::operator<<;
 
 namespace algebra {
 

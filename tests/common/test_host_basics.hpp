@@ -143,10 +143,33 @@ TYPED_TEST_P(test_host_basics_vector, getter) {
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_2x3) {
+
+  using matrix_2x3_t = typename TypeParam::template matrix<2, 3>;
+
+  // Test type traits
+  static_assert(std::is_same_v<algebra::trait::index_t<matrix_2x3_t>,
+                               typename TypeParam::size_type>);
+  static_assert(std::is_same_v<algebra::trait::value_t<matrix_2x3_t>,
+                               typename TypeParam::scalar>);
+  static_assert(std::is_same_v<algebra::trait::scalar_t<matrix_2x3_t>,
+                               typename TypeParam::scalar>);
+  static_assert(std::is_same_v<algebra::trait::vector_t<matrix_2x3_t>,
+                               typename TypeParam::vector2>);
+
+  static_assert(algebra::trait::rows<matrix_2x3_t> == 2);
+  static_assert(algebra::trait::columns<matrix_2x3_t> == 3);
+  static_assert(algebra::trait::rank<matrix_2x3_t> == 2);
+  static_assert(algebra::trait::size<matrix_2x3_t> == 6);
+  static_assert(!algebra::trait::is_square<matrix_2x3_t>);
+  static_assert(
+      algebra::trait::is_square<typename TypeParam::template matrix<2, 2>>);
+  static_assert(
+      algebra::trait::is_square<typename TypeParam::template matrix<3, 3>>);
+
   // Test on matrix - vector operations
   typename TypeParam::vector3 vE{1.f, 2.f, 3.f};
 
-  typename TypeParam::template matrix<2, 3> m23;
+  matrix_2x3_t m23;
 
   algebra::getter::element(m23, 0, 0) = 1.f;
   algebra::getter::element(m23, 0, 1) = 2.f;
@@ -184,7 +207,26 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   // Create the matrix.
   static constexpr typename TypeParam::size_type ROWS = 6;
   static constexpr typename TypeParam::size_type COLS = 4;
-  typename TypeParam::template matrix<ROWS, COLS> m;
+  using matrix_6x4_t = typename TypeParam::template matrix<ROWS, COLS>;
+  matrix_6x4_t m;
+
+  // Test type traits
+  static_assert(std::is_same_v<algebra::trait::index_t<matrix_6x4_t>,
+                               typename TypeParam::size_type>);
+  static_assert(std::is_same_v<algebra::trait::value_t<matrix_6x4_t>,
+                               typename TypeParam::scalar>);
+  static_assert(std::is_same_v<algebra::trait::scalar_t<matrix_6x4_t>,
+                               typename TypeParam::scalar>);
+
+  static_assert(algebra::trait::rows<matrix_6x4_t> == 6);
+  static_assert(algebra::trait::columns<matrix_6x4_t> == 4);
+  static_assert(algebra::trait::rank<matrix_6x4_t> == 4);
+  static_assert(algebra::trait::size<matrix_6x4_t> == 24);
+  static_assert(!algebra::trait::is_square<matrix_6x4_t>);
+  static_assert(
+      algebra::trait::is_square<typename TypeParam::template matrix<4, 4>>);
+  static_assert(
+      algebra::trait::is_square<typename TypeParam::template matrix<6, 6>>);
 
   // Fill it.
   for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
@@ -207,7 +249,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   }
 
   // Test set_zero
-  typename TypeParam::matrix_actor().set_zero(m);
+  algebra::matrix::set_zero(m);
   for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
     for (typename TypeParam::size_type j = 0; j < COLS; ++j) {
       ASSERT_NEAR(algebra::getter::element(m, i, j), 0., this->m_epsilon);
@@ -215,7 +257,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   }
 
   // Test set_identity
-  typename TypeParam::matrix_actor().set_identity(m);
+  algebra::matrix::set_identity(m);
   for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
     for (typename TypeParam::size_type j = 0; j < COLS; ++j) {
       if (i == j) {
@@ -227,17 +269,17 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   }
 
   // Test block operations
-  auto b13 = typename TypeParam::matrix_actor().template block<1, 3>(m, 0, 0);
+  auto b13 = algebra::matrix::block<1, 3>(m, 0, 0);
   ASSERT_NEAR(algebra::getter::element(b13, 0, 0), 1.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b13, 0, 1), 0.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b13, 0, 2), 0.f, this->m_epsilon);
 
-  auto b13_tp = typename TypeParam::matrix_actor().transpose(b13);
+  auto b13_tp = algebra::matrix::transpose(b13);
   ASSERT_NEAR(algebra::getter::element(b13_tp, 0, 0), 1.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b13_tp, 1, 0), 0.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b13_tp, 2, 0), 0.f, this->m_epsilon);
 
-  auto b32 = typename TypeParam::matrix_actor().template block<3, 2>(m, 2, 2);
+  auto b32 = algebra::matrix::block<3, 2>(m, 2, 2);
   ASSERT_NEAR(algebra::getter::element(b32, 0, 0), 1.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b32, 0, 1), 0.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(b32, 1, 0), 0.f, this->m_epsilon);
@@ -252,7 +294,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   algebra::getter::element(b32, 2, 0) = 5.f;
   algebra::getter::element(b32, 2, 1) = 6.f;
 
-  typename TypeParam::matrix_actor().set_block(m, b32, 2, 2);
+  algebra::matrix::set_block(m, b32, 2, 2);
   ASSERT_NEAR(algebra::getter::element(m, 2, 2), 4.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 2, 3), 3.f, this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 3, 2), 12.f, this->m_epsilon);
@@ -261,7 +303,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   ASSERT_NEAR(algebra::getter::element(m, 4, 3), 6.f, this->m_epsilon);
 
   typename TypeParam::vector3 v = {10.f, 20.f, 30.f};
-  typename TypeParam::matrix_actor().set_block(m, v, 0, 2);
+  algebra::matrix::set_block(m, v, 0, 2);
   ASSERT_NEAR(algebra::getter::element(m, 0, 2), 10., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 1, 2), 20., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 2, 2), 30., this->m_epsilon);
@@ -300,11 +342,11 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_3x3) {
     algebra::getter::element(m33, 2, 2) = 9.f;
 
     // Test 3 X 3 matrix determinant
-    auto m33_det = typename TypeParam::matrix_actor().determinant(m33);
+    auto m33_det = algebra::matrix::determinant(m33);
     ASSERT_NEAR(m33_det, 20.f, this->m_isclose);
 
     // Test 3 X 3 matrix inverse
-    auto m33_inv = typename TypeParam::matrix_actor().inverse(m33);
+    auto m33_inv = algebra::matrix::inverse(m33);
     ASSERT_NEAR(algebra::getter::element(m33_inv, 0, 0), -3.f / 20.f,
                 this->m_isclose);
     ASSERT_NEAR(algebra::getter::element(m33_inv, 0, 1), 11.f / 20.f,
@@ -335,11 +377,11 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_2x2) {
   algebra::getter::element(m22, 1, 1) = 13.f;
 
   // Test 2 X 2 matrix determinant
-  auto m22_det = typename TypeParam::matrix_actor().determinant(m22);
+  auto m22_det = algebra::matrix::determinant(m22);
   ASSERT_NEAR(m22_det, 16.f, this->m_isclose);
 
   // Test 2 X 2 matrix inverse
-  auto m22_inv = typename TypeParam::matrix_actor().inverse(m22);
+  auto m22_inv = algebra::matrix::inverse(m22);
   ASSERT_NEAR(algebra::getter::element(m22_inv, 0, 0), 13.f / 16.f,
               this->m_isclose);
   ASSERT_NEAR(algebra::getter::element(m22_inv, 0, 1), -3.f / 16.f,
@@ -396,7 +438,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x6) {
   algebra::getter::element(m66_big, 5, 4) = -1.f;
   algebra::getter::element(m66_big, 5, 5) = -1.f;
 
-  auto m66_big_det = typename TypeParam::matrix_actor().determinant(m66_big);
+  auto m66_big_det = algebra::matrix::determinant(m66_big);
   ASSERT_NEAR(m66_big_det, 216.f, 2.f * this->m_isclose);
 
   // Test 6 X 6 small matrix determinant
@@ -480,8 +522,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x6) {
   algebra::getter::element(m66_small, 5, 5) =
       static_cast<typename TypeParam::scalar>(89875.517874);
 
-  auto m66_small_det =
-      typename TypeParam::matrix_actor().determinant(m66_small);
+  auto m66_small_det = algebra::matrix::determinant(m66_small);
   ASSERT_NEAR((m66_small_det - 4.30636e-11f) / 4.30636e-11f, 0.f,
               2.f * this->m_isclose);
 }
@@ -495,7 +536,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {
   algebra::getter::element(m22, 1, 1) = 13.f;
 
   // Test 2 X 2 matrix inverse
-  auto m22_inv = typename TypeParam::matrix_actor().inverse(m22);
+  auto m22_inv = algebra::matrix::inverse(m22);
   ASSERT_NEAR(algebra::getter::element(m22_inv, 0, 0), 13.f / 16.f,
               this->m_isclose);
   ASSERT_NEAR(algebra::getter::element(m22_inv, 0, 1), -3.f / 16.f,
@@ -516,11 +557,10 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {
   algebra::getter::element(m33, 2, 1) = 8.f;
   algebra::getter::element(m33, 2, 2) = 9.f;
 
-  auto m33_inv = typename TypeParam::matrix_actor().inverse(m33);
+  auto m33_inv = algebra::matrix::inverse(m33);
 
   // Test Zero
-  typename TypeParam::template matrix<2, 3> m23 =
-      typename TypeParam::matrix_actor().template zero<2, 3>();
+  auto m23 = algebra::matrix::zero<typename TypeParam::template matrix<2, 3>>();
   algebra::getter::element(m23, 0, 0) += 2.f;
   algebra::getter::element(m23, 0, 1) += 3.f;
   algebra::getter::element(m23, 0, 2) += 4.f;
@@ -538,10 +578,11 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {
   ASSERT_NEAR(algebra::getter::element(m23, 1, 2), 14.f, this->m_epsilon);
 
   // Test Transpose
-  auto m32 = typename TypeParam::matrix_actor().transpose(m23);
+  auto m32 = algebra::matrix::transpose(m23);
 
   // Test Identity and (Matrix + Matrix)
-  m32 = m32 + typename TypeParam::matrix_actor().template identity<3, 2>();
+  m32 = m32 +
+        algebra::matrix::identity<typename TypeParam::template matrix<3, 2>>();
 
   // Test Matrix X scalar
   m32 = m32 * 2.f;
@@ -592,19 +633,16 @@ TYPED_TEST_P(test_host_basics_transform, transform3) {
   typename TypeParam::transform3 trf2;
   trf2 = trf1;
 
-  // Helper object for the matrix checks.
-  auto element_getter = typename TypeParam::transform3::element_getter();
-
   const auto rot = trf2.rotation();
-  ASSERT_NEAR(element_getter(rot, 0, 0), x[0], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rot, 1, 0), x[1], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rot, 2, 0), x[2], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rot, 0, 1), y[0], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rot, 1, 1), y[1], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rot, 2, 1), y[2], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rot, 0, 2), z[0], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rot, 1, 2), z[1], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rot, 2, 2), z[2], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rot, 0, 0), x[0], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rot, 1, 0), x[1], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rot, 2, 0), x[2], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rot, 0, 1), y[0], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rot, 1, 1), y[1], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rot, 2, 1), y[2], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rot, 0, 2), z[0], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rot, 1, 2), z[1], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rot, 2, 2), z[2], this->m_epsilon);
 
   auto trn = trf2.translation();
   ASSERT_NEAR(trn[0], 2.f, this->m_epsilon);
@@ -634,15 +672,15 @@ TYPED_TEST_P(test_host_basics_transform, transform3) {
 
   // Re-evaluate rot and trn
   auto rotm = trfm.rotation();
-  ASSERT_NEAR(element_getter(rotm, 0, 0), x[0], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotm, 1, 0), x[1], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotm, 2, 0), x[2], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotm, 0, 1), y[0], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotm, 1, 1), y[1], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotm, 2, 1), y[2], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotm, 0, 2), z[0], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotm, 1, 2), z[1], this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotm, 2, 2), z[2], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotm, 0, 0), x[0], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotm, 1, 0), x[1], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotm, 2, 0), x[2], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotm, 0, 1), y[0], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotm, 1, 1), y[1], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotm, 2, 1), y[2], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotm, 0, 2), z[0], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotm, 1, 2), z[1], this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotm, 2, 2), z[2], this->m_epsilon);
 
   auto trnm = trfm.translation();
   ASSERT_NEAR(trnm[0], 2.f, this->m_epsilon);
@@ -661,15 +699,15 @@ TYPED_TEST_P(test_host_basics_transform, transform3) {
 
   // Re-evaluate rot and trn
   auto rotma = trfma.rotation();
-  ASSERT_NEAR(element_getter(rotma, 0, 0), 1.f, this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotma, 1, 0), 0.f, this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotma, 2, 0), 0.f, this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotma, 0, 1), 0.f, this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotma, 1, 1), 1.f, this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotma, 2, 1), 0.f, this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotma, 0, 2), 0.f, this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotma, 1, 2), 0.f, this->m_epsilon);
-  ASSERT_NEAR(element_getter(rotma, 2, 2), 1.f, this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotma, 0, 0), 1.f, this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotma, 1, 0), 0.f, this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotma, 2, 0), 0.f, this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotma, 0, 1), 0.f, this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotma, 1, 1), 1.f, this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotma, 2, 1), 0.f, this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotma, 0, 2), 0.f, this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotma, 1, 2), 0.f, this->m_epsilon);
+  ASSERT_NEAR(algebra::getter::element(rotma, 2, 2), 1.f, this->m_epsilon);
 
   auto trnma = trfma.translation();
   ASSERT_NEAR(trnma[0], 0.f, this->m_epsilon);

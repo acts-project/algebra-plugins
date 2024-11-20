@@ -10,6 +10,10 @@ enable_language( SYCL )
 # Set the default SYCL compiler flags.
 include( algebra-plugins-compiler-options-sycl )
 
+if(${CMAKE_SYCL_STANDARD} LESS 20)
+   message(SEND_ERROR "CMAKE_SYCL_STANDARD=${CMAKE_SYCL_STANDARD}, but algebra-plugins requires C++>=20")
+endif()
+
 # Helper library for the SYCL tests.
 add_library( algebra_tests_sycl_common INTERFACE )
 target_include_directories( algebra_tests_sycl_common INTERFACE

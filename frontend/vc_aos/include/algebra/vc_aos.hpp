@@ -93,12 +93,15 @@ using vc_aos::math::normalize;
 
 namespace matrix {
 
-template <typename scalar_t>
-using actor = vc_aos::matrix::actor<vc_aos::storage_type, scalar_t>;
-
-using storage::identity;
-using storage::transpose;
-using storage::zero;
+using vc_aos::math::block;
+using vc_aos::math::determinant;
+using vc_aos::math::identity;
+using vc_aos::math::inverse;
+using vc_aos::math::set_block;
+using vc_aos::math::set_identity;
+using vc_aos::math::set_zero;
+using vc_aos::math::transpose;
+using vc_aos::math::zero;
 
 }  // namespace matrix
 

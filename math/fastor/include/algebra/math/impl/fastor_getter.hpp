@@ -93,7 +93,6 @@ struct element_getter {
   ALGEBRA_HOST_DEVICE inline scalar_t &operator()(matrix_type<ROWS, COLS> &m,
                                                   std::size_t row,
                                                   std::size_t col) const {
-
     assert(row < ROWS);
     assert(col < COLS);
     return m(row, col);

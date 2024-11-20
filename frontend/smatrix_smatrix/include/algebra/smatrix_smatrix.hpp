@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2020-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -61,8 +61,15 @@ using smatrix::math::normalize;
 
 namespace matrix {
 
-template <typename scalar_t>
-using actor = smatrix::matrix::actor<scalar_t>;
+using smatrix::math::block;
+using smatrix::math::determinant;
+using smatrix::math::identity;
+using smatrix::math::inverse;
+using smatrix::math::set_block;
+using smatrix::math::set_identity;
+using smatrix::math::set_zero;
+using smatrix::math::transpose;
+using smatrix::math::zero;
 
 }  // namespace matrix
 
@@ -72,7 +79,7 @@ namespace smatrix {
 /// @{
 
 template <typename T>
-using transform3 = math::transform3<T, matrix::actor<T>>;
+using transform3 = math::transform3<T>;
 
 /// @}
 

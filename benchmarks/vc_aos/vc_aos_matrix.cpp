@@ -27,6 +27,19 @@ int main(int argc, char** argv) {
   algebra::benchmark_base::configuration cfg{};
   cfg.n_samples(100000);
 
+  using mat44_transp_f_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<float, 4, 4>, bench_op::transpose>;
+  using mat44_transp_d_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<double, 4, 4>, bench_op::transpose>;
+  using mat66_transp_f_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<float, 6, 6>, bench_op::transpose>;
+  using mat66_transp_d_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<double, 6, 6>, bench_op::transpose>;
+  using mat88_transp_f_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<float, 8, 8>, bench_op::transpose>;
+  using mat88_transp_d_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<double, 8, 8>, bench_op::transpose>;
+
   using mat44_add_f_t =
       matrix_binaryOP_bm<vc_aos::matrix_type<float, 4, 4>, bench_op::add>;
   using mat44_add_d_t =

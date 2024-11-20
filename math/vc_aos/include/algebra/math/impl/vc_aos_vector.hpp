@@ -35,16 +35,14 @@ namespace algebra::vc_aos::math {
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename vector_type1, typename vector_type2,
-          std::enable_if_t<
-              ((Vc::is_simd_vector<vector_type1>::value ||
-                algebra::detail::is_storage_vector_v<
-                    vector_type1>)&&(Vc::is_simd_vector<vector_type2>::value ||
-                                     algebra::detail::is_storage_vector_v<
-                                         vector_type2>)),
-              bool> = true>
-ALGEBRA_HOST_DEVICE inline auto dot(const vector_type1 &a,
-                                    const vector_type2 &b) {
+template <typename vector_type1, typename vector_type2>
+requires(
+    (Vc::is_simd_vector<vector_type1>::value ||
+     algebra::detail::is_storage_vector_v<
+         vector_type1>)&&(Vc::is_simd_vector<vector_type2>::value ||
+                          algebra::detail::is_storage_vector_v<vector_type2>))
+    ALGEBRA_HOST_DEVICE
+    inline auto dot(const vector_type1 &a, const vector_type2 &b) {
 
   return (a * b).sum();
 }
@@ -54,11 +52,10 @@ ALGEBRA_HOST_DEVICE inline auto dot(const vector_type1 &a,
 /// @tparam vector_type generic input vector type
 ///
 /// @param v the input vector
-template <typename vector_type,
-          std::enable_if_t<(Vc::is_simd_vector<vector_type>::value ||
-                            algebra::detail::is_storage_vector_v<vector_type>),
-                           bool> = true>
-ALGEBRA_HOST_DEVICE inline auto normalize(const vector_type &v) {
+template <typename vector_type>
+requires(Vc::is_simd_vector<vector_type>::value ||
+         algebra::detail::is_storage_vector_v<vector_type>) ALGEBRA_HOST_DEVICE
+    inline auto normalize(const vector_type &v) {
 
   return v / algebra::math::sqrt(dot(v, v));
 }
@@ -71,20 +68,32 @@ ALGEBRA_HOST_DEVICE inline auto normalize(const vector_type &v) {
 /// @param b the second input vector
 ///
 /// @return a vector representing the cross product
-template <typename vector_type1, typename vector_type2,
-          std::enable_if_t<
-              ((Vc::is_simd_vector<vector_type1>::value ||
-                algebra::detail::is_storage_vector_v<
-                    vector_type1>)&&(Vc::is_simd_vector<vector_type2>::value ||
-                                     algebra::detail::is_storage_vector_v<
-                                         vector_type2>)),
-              bool> = true>
-ALGEBRA_HOST_DEVICE inline auto cross(const vector_type1 &a,
-                                      const vector_type2 &b)
-    -> decltype(a * b - a * b) {
+template <typename vector_type1, typename vector_type2>
+requires(
+    (Vc::is_simd_vector<vector_type1>::value ||
+     algebra::detail::is_storage_vector_v<
+         vector_type1>)&&(Vc::is_simd_vector<vector_type2>::value ||
+                          algebra::detail::is_storage_vector_v<vector_type2>))
+    ALGEBRA_HOST_DEVICE
+    inline auto cross(const vector_type1 &a, const vector_type2 &b)
+        -> decltype(a * b - a * b) {
 
   return {a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0],
           a[0] * b[1] - b[0] * a[1], 0.f};
+}
+
+/// Elementwise sum
+///
+/// @tparam vector_type generic input vector type
+///
+/// @param v the vector whose elements should be summed
+///
+/// @return the sum of the elements
+template <typename vector_type>
+requires(Vc::is_simd_vector<vector_type>::value ||
+         algebra::detail::is_storage_vector_v<vector_type>) ALGEBRA_HOST_DEVICE
+    inline auto sum(const vector_type &v) {
+  return v.get().sum();
 }
 
 }  // namespace algebra::vc_aos::math

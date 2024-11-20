@@ -64,100 +64,34 @@ using smatrix::math::normalize;
 
 namespace matrix {
 
-using size_type = smatrix::size_type;
-template <typename T, size_type N>
-using array_type = smatrix::storage_type<T, N>;
-template <typename T, size_type ROWS, size_type COLS>
-using matrix_type = smatrix::matrix_type<T, ROWS, COLS>;
-template <typename scalar_t>
-using element_getter = smatrix::math::element_getter<scalar_t>;
-template <typename scalar_t>
-using block_getter = smatrix::math::block_getter<scalar_t>;
-
-// matrix actor
-template <typename scalar_t, typename determinant_actor_t,
-          typename inverse_actor_t>
-using actor =
-    cmath::matrix::actor<size_type, array_type, matrix_type, scalar_t,
-                         determinant_actor_t, inverse_actor_t,
-                         element_getter<scalar_t>, block_getter<scalar_t>>;
-
-namespace determinant {
-
-// determinant aggregation
-template <typename scalar_t, class... As>
-using actor =
-    cmath::matrix::determinant::actor<size_type, matrix_type, scalar_t, As...>;
-
-// determinant::cofactor
-template <typename scalar_t, size_type... Ds>
-using cofactor =
-    cmath::matrix::determinant::cofactor<size_type, matrix_type, scalar_t,
-                                         element_getter<scalar_t>, Ds...>;
-
-// determinant::partial_pivot_lud
-template <typename scalar_t, size_type... Ds>
-using partial_pivot_lud = cmath::matrix::determinant::partial_pivot_lud<
-    size_type, matrix_type, scalar_t, element_getter<scalar_t>, Ds...>;
-
-// determinant::hard_coded
-template <typename scalar_t, size_type... Ds>
-using hard_coded =
-    cmath::matrix::determinant::hard_coded<size_type, matrix_type, scalar_t,
-                                           element_getter<scalar_t>, Ds...>;
-
-// preset(s) as standard option(s) for user's convenience
-template <typename scalar_t>
-using preset0 =
-    actor<scalar_t, partial_pivot_lud<scalar_t>, hard_coded<scalar_t, 2, 4>>;
-
-}  // namespace determinant
-
-namespace inverse {
-
-// inverion aggregation
-template <typename scalar_t, class... As>
-using actor =
-    cmath::matrix::inverse::actor<size_type, matrix_type, scalar_t, As...>;
-
-// inverse::cofactor
-template <typename scalar_t, size_type... Ds>
-using cofactor =
-    cmath::matrix::inverse::cofactor<size_type, matrix_type, scalar_t,
-                                     element_getter<scalar_t>, Ds...>;
-
-// inverse::partial_pivot_lud
-template <typename scalar_t, size_type... Ds>
-using partial_pivot_lud =
-    cmath::matrix::inverse::partial_pivot_lud<size_type, matrix_type, scalar_t,
-                                              element_getter<scalar_t>, Ds...>;
-
-// inverse::hard_coded
-template <typename scalar_t, size_type... Ds>
-using hard_coded =
-    cmath::matrix::inverse::hard_coded<size_type, matrix_type, scalar_t,
-                                       element_getter<scalar_t>, Ds...>;
-
-// preset(s) as standard option(s) for user's convenience
-template <typename scalar_t>
-using preset0 =
-    actor<scalar_t, partial_pivot_lud<scalar_t>, hard_coded<scalar_t, 2, 4>>;
-
-}  // namespace inverse
+using smatrix::math::block;
+using smatrix::math::determinant;
+using smatrix::math::identity;
+using smatrix::math::inverse;
+using smatrix::math::set_block;
+using smatrix::math::set_identity;
+using smatrix::math::set_zero;
+using smatrix::math::transpose;
+using smatrix::math::zero;
 
 }  // namespace matrix
 
 namespace smatrix {
 
-/// @name cmath based transforms on @c algebra::matrix::actor
+template <typename scalar_t>
+using element_getter = smatrix::math::element_getter<scalar_t>;
+
+template <typename scalar_t>
+using block_getter = smatrix::math::block_getter<scalar_t>;
+
+/// @name cmath based transforms on @c algebra::smatrix
 /// @{
 
 template <typename T>
-using transform3_actor =
-    algebra::matrix::actor<T, algebra::matrix::determinant::preset0<T>,
-                           algebra::matrix::inverse::preset0<T>>;
-template <typename T>
-using transform3 = cmath::transform3<transform3_actor<T>>;
+using transform3 =
+    cmath::transform3<smatrix::size_type, T, smatrix::matrix_type,
+                      smatrix::storage_type, element_getter<T>,
+                      block_getter<T>>;
 
 /// @}
 

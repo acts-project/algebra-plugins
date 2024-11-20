@@ -73,15 +73,22 @@ using fastor::math::normalize;
 
 namespace matrix {
 
-template <typename scalar_t>
-using actor = fastor::matrix::actor<scalar_t>;
+using fastor::math::block;
+using fastor::math::determinant;
+using fastor::math::identity;
+using fastor::math::inverse;
+using fastor::math::set_block;
+using fastor::math::set_identity;
+using fastor::math::set_zero;
+using fastor::math::transpose;
+using fastor::math::zero;
 
 }  // namespace matrix
 
 namespace fastor {
 
 template <typename T>
-using transform3 = math::transform3<T, matrix::actor<T>>;
+using transform3 = math::transform3<T>;
 
 }  // namespace fastor
 

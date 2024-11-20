@@ -45,13 +45,12 @@ typedef testing::Types<
         float, algebra::smatrix::point2<float>, algebra::smatrix::point3<float>,
         algebra::smatrix::vector2<float>, algebra::smatrix::vector3<float>,
         algebra::smatrix::transform3<float>, unsigned int,
-        algebra::smatrix::matrix_type, algebra::matrix::actor<float>>,
-    test_types<double, algebra::smatrix::point2<double>,
-               algebra::smatrix::point3<double>,
-               algebra::smatrix::vector2<double>,
-               algebra::smatrix::vector3<double>,
-               algebra::smatrix::transform3<double>, unsigned int,
-               algebra::smatrix::matrix_type, algebra::matrix::actor<double>>>
+        algebra::smatrix::matrix_type>,
+    test_types<
+        double, algebra::smatrix::point2<double>,
+        algebra::smatrix::point3<double>, algebra::smatrix::vector2<double>,
+        algebra::smatrix::vector3<double>, algebra::smatrix::transform3<double>,
+        unsigned int, algebra::smatrix::matrix_type>>
     smatrix_smatrix_types;
 INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_host_basics_vector,
                                smatrix_smatrix_types, test_specialisation_name);

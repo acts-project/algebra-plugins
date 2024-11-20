@@ -17,57 +17,55 @@
 namespace algebra::cmath::matrix::decomposition {
 
 /// "Partial Pivot LU Decomposition", assuming a N X N matrix
-template <typename size_type,
-          template <typename, size_type, size_type> class matrix_t,
-          typename scalar_t, class element_getter_t, size_type... Ds>
+template <class matrix_t, class element_getter_t>
 struct partial_pivot_lud {
 
-  using _dims = std::integer_sequence<size_type, Ds...>;
+  using scalar_type = algebra::trait::value_t<matrix_t>;
+  using size_type = algebra::trait::index_t<matrix_t>;
+  using vector_type = algebra::trait::vector_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
-
-  /// 2D matrix type
-  template <size_type ROWS, size_type COLS>
-  using matrix_type = matrix_t<scalar_t, ROWS, COLS>;
 
   template <size_type N>
   struct lud {
     // LU decomposition matrix, equal to (L - I) + U, where the diagonal
     // components of L is always 1
-    matrix_type<N, N> lu;
+    matrix_t lu;
 
     // Permutation vector
-    matrix_type<1, N> P;
+    vector_type P;
 
     // Number of pivots
     int n_pivot = 0;
   };
 
-  template <size_type N>
-  ALGEBRA_HOST_DEVICE inline lud<N> operator()(
-      const matrix_type<N, N>& m) const {
+  ALGEBRA_HOST_DEVICE inline lud<algebra::trait::rank<matrix_t>> operator()(
+      const matrix_t& m) const {
+
+    constexpr size_type N{algebra::trait::rank<matrix_t>};
+
     // LU decomposition matrix
-    matrix_type<N, N> lu = m;
+    matrix_t lu = m;
 
     // Permutation
-    matrix_type<1, N> P;
+    vector_type P;
 
     // Max index and value
     size_type max_idx;
-    scalar_t max_val;
-    scalar_t abs_val;
+    scalar_type max_val;
+    scalar_type abs_val;
 
     // Number of pivoting
     int n_pivot = N;
 
     // Rows for swapping
-    matrix_type<1, N> row_0;
-    matrix_type<1, N> row_1;
+    vector_type row_0;
+    vector_type row_1;
 
     // Unit permutation matrix, P[N] initialized with N
     for (size_type i = 0; i < N; i++) {
-      element_getter_t()(P, 0, i) = static_cast<scalar_t>(i);
+      P[i] = static_cast<scalar_type>(i);
     }
 
     for (size_type i = 0; i < N; i++) {
@@ -86,19 +84,19 @@ struct partial_pivot_lud {
 
       if (max_idx != i) {
         // Pivoting P
-        auto j = element_getter_t()(P, 0, i);
+        auto j = P[i];
 
-        element_getter_t()(P, 0, i) = element_getter_t()(P, 0, max_idx);
-        element_getter_t()(P, 0, max_idx) = j;
+        P[i] = P[max_idx];
+        P[max_idx] = j;
 
         // Pivoting rows of A
         for (size_type q = 0; q < N; q++) {
-          element_getter_t()(row_0, 0, q) = element_getter_t()(lu, i, q);
-          element_getter_t()(row_1, 0, q) = element_getter_t()(lu, max_idx, q);
+          row_0[q] = element_getter_t()(lu, i, q);
+          row_1[q] = element_getter_t()(lu, max_idx, q);
         }
         for (size_type q = 0; q < N; q++) {
-          element_getter_t()(lu, i, q) = element_getter_t()(row_1, 0, q);
-          element_getter_t()(lu, max_idx, q) = element_getter_t()(row_0, 0, q);
+          element_getter_t()(lu, i, q) = row_1[q];
+          element_getter_t()(lu, max_idx, q) = row_0[q];
         }
 
         // counting pivots starting from N (for determinant)

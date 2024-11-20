@@ -16,6 +16,7 @@
 #endif
 
 // System include(s).
+#include <algorithm>
 #include <cmath>
 
 namespace algebra::math {
@@ -49,6 +50,18 @@ ALGEBRA_HOST_DEVICE inline scalar_t sqrt(scalar_t arg) {
 template <typename scalar_t>
 ALGEBRA_HOST_DEVICE inline scalar_t atanh(scalar_t arg) {
   return math_ns::atanh(arg);
+}
+
+/// Minimum of two values
+template <typename scalar_t>
+ALGEBRA_HOST_DEVICE inline scalar_t min(scalar_t a, scalar_t b) {
+  return math_ns::min(a, b);
+}
+
+/// Maximum of two values
+template <typename scalar_t>
+ALGEBRA_HOST_DEVICE inline scalar_t max(scalar_t a, scalar_t b) {
+  return math_ns::max(a, b);
 }
 
 }  // namespace algebra::math

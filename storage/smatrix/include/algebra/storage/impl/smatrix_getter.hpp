@@ -133,7 +133,7 @@ struct block_getter {
 
   template <unsigned int SIZE, unsigned int ROWS, unsigned int COLS,
             concepts::scalar scalar_t>
-  ALGEBRA_HOST_DEVICE ROOT::Math::SVector<scalar_t, SIZE> operator()(
+  ALGEBRA_HOST_DEVICE ROOT::Math::SVector<scalar_t, SIZE> vector(
       const ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m, unsigned int row,
       unsigned int col) const {
 
@@ -159,7 +159,7 @@ ALGEBRA_HOST_DEVICE inline auto vector(
     const ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m, std::size_t row,
     std::size_t col) {
 
-  return block_getter{}.template operator()<SIZE>(
+  return block_getter{}.template vector<SIZE>(
       m, static_cast<unsigned int>(row), static_cast<unsigned int>(col));
 }
 

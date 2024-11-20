@@ -70,17 +70,6 @@ int main(int argc, char** argv) {
   //
   // Register all benchmarks
   //
-  algebra::register_benchmark<phi_f_t>(cfg_s, "_single");
-  algebra::register_benchmark<phi_d_t>(cfg_d, "_double");
-  algebra::register_benchmark<theta_f_t>(cfg_s, "_single");
-  algebra::register_benchmark<theta_d_t>(cfg_d, "_double");
-  algebra::register_benchmark<perp_f_t>(cfg_s, "_single");
-  algebra::register_benchmark<perp_d_t>(cfg_d, "_double");
-  algebra::register_benchmark<norm_f_t>(cfg_s, "_single");
-  algebra::register_benchmark<norm_d_t>(cfg_d, "_double");
-  algebra::register_benchmark<eta_f_t>(cfg_s, "_single");
-  algebra::register_benchmark<eta_d_t>(cfg_d, "_double");
-
   algebra::register_benchmark<add_f_t>(cfg_s, "_single");
   algebra::register_benchmark<add_d_t>(cfg_d, "_double");
   algebra::register_benchmark<sub_f_t>(cfg_s, "_single");
@@ -91,6 +80,17 @@ int main(int argc, char** argv) {
   algebra::register_benchmark<cross_d_t>(cfg_d, "_double");
   algebra::register_benchmark<normlz_f_t>(cfg_s, "_single");
   algebra::register_benchmark<normlz_d_t>(cfg_d, "_double");
+
+  algebra::register_benchmark<phi_f_t>(cfg_s, "_single");
+  algebra::register_benchmark<phi_d_t>(cfg_d, "_double");
+  algebra::register_benchmark<theta_f_t>(cfg_s, "_single");
+  algebra::register_benchmark<theta_d_t>(cfg_d, "_double");
+  algebra::register_benchmark<perp_f_t>(cfg_s, "_single");
+  algebra::register_benchmark<perp_d_t>(cfg_d, "_double");
+  algebra::register_benchmark<norm_f_t>(cfg_s, "_single");
+  algebra::register_benchmark<norm_d_t>(cfg_d, "_double");
+  algebra::register_benchmark<eta_f_t>(cfg_s, "_single");
+  algebra::register_benchmark<eta_d_t>(cfg_d, "_double");
 
   ::benchmark::Initialize(&argc, argv);
   ::benchmark::RunSpecifiedBenchmarks();

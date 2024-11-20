@@ -165,11 +165,31 @@ struct block_getter {
     return submatrix;
   }
 
-  /// Operator producing a vector out of a const matrix
+  /// Operator producing a row vector out of a const matrix
   template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
             concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> vector(
+  ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> row(
+      const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
+      std::size_t col) {
+
+    assert(col + SIZE <= COLS);
+    assert(row < ROWS);
+
+    array_t<scalar_t, SIZE> subvector{};
+
+    for (std::size_t icol = col; icol < col + SIZE; ++icol) {
+      subvector[icol - col] = m[icol][row];
+    }
+
+    return subvector;
+  }
+
+  /// Operator producing a column vector out of a const matrix
+  template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
+            concepts::scalar scalar_t,
+            template <typename, std::size_t> class array_t>
+  ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> column(
       const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
       std::size_t col) {
 
@@ -196,15 +216,26 @@ ALGEBRA_HOST_DEVICE decltype(auto) block(const input_matrix_type &m,
   return block_getter().template operator()<ROWS, COLS>(m, row, col);
 }
 
-/// Function extracting a vector from a matrix
+/// Function extracting a row vector from a matrix
 template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
           concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> vector(
+ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> row(
     const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
     std::size_t col) {
 
-  return block_getter().template vector<SIZE>(m, row, col);
+  return block_getter().template row<SIZE>(m, row, col);
+}
+
+/// Function extracting a column vector from a matrix
+template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
+          concepts::scalar scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> column(
+    const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
+    std::size_t col) {
+
+  return block_getter().template column<SIZE>(m, row, col);
 }
 
 /// Sets a matrix of dimension @tparam ROW and @tparam COL as submatrix of

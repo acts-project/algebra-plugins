@@ -15,17 +15,9 @@
 namespace algebra::vc_aos::storage {
 
 using algebra::storage::block;
+using algebra::storage::column;
 using algebra::storage::element;
+using algebra::storage::row;
 using algebra::storage::set_block;
-
-/// Get a vector of a const matrix
-template <std::size_t SIZE, std::size_t ROW, std::size_t COL,
-          concepts::scalar scalar_t,
-          template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE constexpr decltype(auto) vector(
-    const algebra::storage::matrix<array_t, scalar_t, ROW, COL> &m,
-    const std::size_t row, const std::size_t col) noexcept {
-  return algebra::storage::block_getter{}.template vector<SIZE>(m, row, col);
-}
 
 }  // namespace algebra::vc_aos::storage

@@ -143,7 +143,18 @@ struct block_getter {
 
   template <std::size_t SIZE, std::size_t oROWS, std::size_t oCOLS,
             concepts::scalar scalar_t>
-  ALGEBRA_HOST_DEVICE Fastor::Tensor<scalar_t, SIZE> vector(
+  ALGEBRA_HOST_DEVICE Fastor::Tensor<scalar_t, SIZE> row(
+      const Fastor::Tensor<scalar_t, oROWS, oCOLS> &m, std::size_t row,
+      std::size_t col) const {
+
+    return Fastor::Tensor<scalar_t, SIZE>(
+        m(static_cast<int>(row),
+          Fastor::seq(static_cast<int>(col), static_cast<int>(col + SIZE))));
+  }
+
+  template <std::size_t SIZE, std::size_t oROWS, std::size_t oCOLS,
+            concepts::scalar scalar_t>
+  ALGEBRA_HOST_DEVICE Fastor::Tensor<scalar_t, SIZE> column(
       const Fastor::Tensor<scalar_t, oROWS, oCOLS> &m, std::size_t row,
       std::size_t col) const {
 
@@ -163,14 +174,24 @@ ALGEBRA_HOST_DEVICE decltype(auto) block(
   return block_getter{}.template operator()<ROWS, COLS>(m, row, col);
 }
 
-/// Function extracting a slice from the matrix
+/// Function extracting a row vector from the matrix
 template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
           concepts::scalar scalar_t>
-ALGEBRA_HOST_DEVICE inline decltype(auto) vector(
+ALGEBRA_HOST_DEVICE inline decltype(auto) row(
     const Fastor::Tensor<scalar_t, ROWS, COLS> &m, std::size_t row,
     std::size_t col) {
 
-  return block_getter{}.template vector<SIZE>(m, row, col);
+  return block_getter{}.template row<SIZE>(m, row, col);
+}
+
+/// Function extracting a column vector from the matrix
+template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
+          concepts::scalar scalar_t>
+ALGEBRA_HOST_DEVICE inline decltype(auto) column(
+    const Fastor::Tensor<scalar_t, ROWS, COLS> &m, std::size_t row,
+    std::size_t col) {
+
+  return block_getter{}.template column<SIZE>(m, row, col);
 }
 
 /// Operator setting a block with a matrix

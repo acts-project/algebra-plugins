@@ -139,7 +139,25 @@ struct block_getter {
 
   template <int SIZE, typename derived_type, concepts::index size_type_1,
             concepts::index size_type_2>
-  ALGEBRA_HOST_DEVICE decltype(auto) vector(Eigen::MatrixBase<derived_type> &m,
+  ALGEBRA_HOST_DEVICE decltype(auto) row(Eigen::MatrixBase<derived_type> &m,
+                                         size_type_1 row,
+                                         size_type_2 col) const {
+
+    return m.template block<1, SIZE>(row, col);
+  }
+
+  template <int SIZE, typename derived_type, concepts::index size_type_1,
+            concepts::index size_type_2>
+  ALGEBRA_HOST_DEVICE decltype(auto) row(
+      const Eigen::MatrixBase<derived_type> &m, size_type_1 row,
+      size_type_2 col) const {
+
+    return m.template block<1, SIZE>(row, col);
+  }
+
+  template <int SIZE, typename derived_type, concepts::index size_type_1,
+            concepts::index size_type_2>
+  ALGEBRA_HOST_DEVICE decltype(auto) column(Eigen::MatrixBase<derived_type> &m,
                                             size_type_1 row,
                                             size_type_2 col) const {
 
@@ -148,7 +166,7 @@ struct block_getter {
 
   template <int SIZE, typename derived_type, concepts::index size_type_1,
             concepts::index size_type_2>
-  ALGEBRA_HOST_DEVICE decltype(auto) vector(
+  ALGEBRA_HOST_DEVICE decltype(auto) column(
       const Eigen::MatrixBase<derived_type> &m, size_type_1 row,
       size_type_2 col) const {
 
@@ -176,11 +194,21 @@ ALGEBRA_HOST_DEVICE decltype(auto) block(Eigen::MatrixBase<derived_type> &m,
 
 /// Function extracting a slice from the matrix
 template <int SIZE, typename derived_type>
-ALGEBRA_HOST_DEVICE inline decltype(auto) vector(
+ALGEBRA_HOST_DEVICE inline decltype(auto) row(
     const Eigen::MatrixBase<derived_type> &m, std::size_t row,
     std::size_t col) {
 
-  return block_getter{}.template vector<SIZE>(m, static_cast<Eigen::Index>(row),
+  return block_getter{}.template row<SIZE>(m, static_cast<Eigen::Index>(row),
+                                           static_cast<Eigen::Index>(col));
+}
+
+/// Function extracting a slice from the matrix
+template <int SIZE, typename derived_type>
+ALGEBRA_HOST_DEVICE inline decltype(auto) column(
+    const Eigen::MatrixBase<derived_type> &m, std::size_t row,
+    std::size_t col) {
+
+  return block_getter{}.template column<SIZE>(m, static_cast<Eigen::Index>(row),
                                               static_cast<Eigen::Index>(col));
 }
 

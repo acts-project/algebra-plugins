@@ -29,9 +29,10 @@ namespace getter {
 /// @{
 
 using fastor::storage::block;
+using fastor::storage::column;
 using fastor::storage::element;
+using fastor::storage::row;
 using fastor::storage::set_block;
-using fastor::storage::vector;
 
 /// @}
 

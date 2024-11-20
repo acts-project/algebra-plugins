@@ -23,9 +23,10 @@ namespace getter {
 /// @{
 
 using smatrix::storage::block;
+using smatrix::storage::column;
 using smatrix::storage::element;
+using smatrix::storage::row;
 using smatrix::storage::set_block;
-using smatrix::storage::vector;
 
 /// @}
 

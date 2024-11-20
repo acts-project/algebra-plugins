@@ -32,9 +32,10 @@ namespace getter {
 /// @{
 
 using eigen::storage::block;
+using eigen::storage::column;
 using eigen::storage::element;
+using eigen::storage::row;
 using eigen::storage::set_block;
-using eigen::storage::vector;
 
 /// @}
 

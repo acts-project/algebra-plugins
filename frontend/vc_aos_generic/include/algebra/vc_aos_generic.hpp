@@ -11,6 +11,7 @@
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/generic.hpp"
 #include "algebra/math/vc_aos.hpp"
+#include "algebra/print.hpp"
 #include "algebra/storage/array.hpp"
 #include "algebra/storage/vc_aos.hpp"
 
@@ -20,6 +21,9 @@
 using algebra::cmath::operator*;
 using algebra::cmath::operator-;
 using algebra::cmath::operator+;
+
+/// Print the linear algebra types of this backend
+using algebra::operator<<;
 
 /// @}
 

@@ -9,7 +9,11 @@
 
 // Project include(s).
 #include "algebra/math/smatrix.hpp"
+#include "algebra/print.hpp"
 #include "algebra/storage/smatrix.hpp"
+
+/// Print the linear algebra types of this backend
+using algebra::operator<<;
 
 namespace algebra {
 

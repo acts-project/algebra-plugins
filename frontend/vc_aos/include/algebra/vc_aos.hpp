@@ -9,11 +9,15 @@
 
 // Project include(s).
 #include "algebra/math/vc_aos.hpp"
+#include "algebra/print.hpp"
 #include "algebra/storage/vc_aos.hpp"
 
 // System include(s).
 #include <cassert>
 #include <type_traits>
+
+/// Print the linear algebra types of this backend
+using algebra::operator<<;
 
 namespace algebra {
 

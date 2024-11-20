@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/math/fastor.hpp"
+#include "algebra/print.hpp"
 #include "algebra/storage/fastor.hpp"
 
 // Fastor include(s).
@@ -19,6 +20,9 @@
 #ifdef _MSC_VER
 #pragma warning(default : 4244 4701 4702)
 #endif  // MSVC
+
+/// Print the linear algebra types of this backend
+using algebra::operator<<;
 
 namespace algebra {
 

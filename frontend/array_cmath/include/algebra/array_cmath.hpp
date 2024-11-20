@@ -10,6 +10,7 @@
 // Project include(s).
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/generic.hpp"
+#include "algebra/print.hpp"
 #include "algebra/storage/array.hpp"
 
 /// @name Operators on @c algebra::array::storage_type
@@ -18,6 +19,9 @@
 using algebra::cmath::operator*;
 using algebra::cmath::operator-;
 using algebra::cmath::operator+;
+
+/// Print the linear algebra types of this backend
+using algebra::operator<<;
 
 /// @}
 

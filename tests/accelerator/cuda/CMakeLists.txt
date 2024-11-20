@@ -51,8 +51,8 @@ target_compile_options( algebra_test_array_cuda
    PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )
 
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
-   algebra_add_test( eigen_cuda "eigen_cmath.cu" "eigen_eigen.cu"
-      LINK_LIBRARIES algebra::eigen_cmath algebra::eigen_eigen
+   algebra_add_test( eigen_cuda "eigen_generic.cu" "eigen_eigen.cu"
+      LINK_LIBRARIES algebra::eigen_generic algebra::eigen_eigen
                      algebra::tests_cuda_common GTest::gtest_main )
    target_compile_options( algebra_test_eigen_cuda
       PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )

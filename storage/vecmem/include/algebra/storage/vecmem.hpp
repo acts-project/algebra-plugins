@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s)
+#include "algebra/storage/impl/cmath_getter.hpp"
 #include "algebra/type_traits.hpp"
 
 // VecMem include(s).
@@ -20,9 +21,14 @@ namespace algebra {
 
 namespace vecmem {
 
+/// size type for VecMem storage model
+using size_type = std::size_t;
 /// Array type used in the VecMem storage model
 template <typename T, std::size_t N>
 using storage_type = ::vecmem::static_array<T, N>;
+/// Vector type used in the VecMem storage model
+template <typename T, std::size_t N>
+using vector_type = storage_type<T, N>;
 /// Matrix type used in the VecMem storage model
 template <typename T, std::size_t ROWS, std::size_t COLS>
 using matrix_type = storage_type<storage_type<T, ROWS>, COLS>;
@@ -40,39 +46,13 @@ using vector2 = storage_type<T, 2>;
 template <typename T>
 using point2 = vector2<T>;
 
+/// Element Getter
+using element_getter = cmath::storage::element_getter;
+/// Block Getter
+using block_getter = cmath::storage::block_getter;
+
 }  // namespace vecmem
 
-namespace trait {
-
-/// Type trait specializations
-/// @{
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct index<::vecmem::static_array<::vecmem::static_array<T, ROWS>, COLS>> {
-  using type = std::size_t;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct dimensions<
-    ::vecmem::static_array<::vecmem::static_array<T, ROWS>, COLS>> {
-
-  using size_type =
-      index_t<::vecmem::static_array<::vecmem::static_array<T, ROWS>, COLS>>;
-
-  static constexpr size_type rows{ROWS};
-  static constexpr size_type columns{COLS};
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct value<::vecmem::static_array<::vecmem::static_array<T, ROWS>, COLS>> {
-  using type = T;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct vector<::vecmem::static_array<::vecmem::static_array<T, ROWS>, COLS>> {
-  using type = ::vecmem::static_array<T, ROWS>;
-};
-/// @}
-
-}  // namespace trait
+ALGEBRA_PLUGINS_DEFINE_TYPE_TRAITS(vecmem)
 
 }  // namespace algebra

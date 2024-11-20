@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2022 CERN for the benefit of the ACTS project
+ * (c) 2020-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/cmath.hpp"
 #include "algebra/math/eigen.hpp"
+#include "algebra/math/generic.hpp"
 #include "algebra/storage/eigen.hpp"
 
 // Eigen include(s).
@@ -25,31 +25,13 @@ namespace algebra {
 
 namespace getter {
 
-/// @name Getter functions on @c algebra::eigen::storage_type
+/// @name Getter functions on @c algebra::eigen
 /// @{
 
-using eigen::math::eta;
-using eigen::math::norm;
-using eigen::math::perp;
-using eigen::math::phi;
-using eigen::math::theta;
-
-/// @}
-
-/// Function extracting a slice from the matrix used by
-/// @c algebra::eigen::transform3
-template <unsigned int SIZE, typename derived_type>
-ALGEBRA_HOST_DEVICE inline auto vector(const Eigen::MatrixBase<derived_type>& m,
-                                       std::size_t row, std::size_t col) {
-
-  return m.template block<SIZE, 1>(static_cast<Eigen::Index>(row),
-                                   static_cast<Eigen::Index>(col));
-}
-
-/// @name Getter functions on @c algebra::eigen::matrix_type
-/// @{
-
-using eigen::math::element;
+using eigen::storage::block;
+using eigen::storage::element;
+using eigen::storage::set_block;
+using eigen::storage::vector;
 
 /// @}
 
@@ -62,7 +44,13 @@ namespace vector {
 
 using eigen::math::cross;
 using eigen::math::dot;
+using eigen::math::eta;
+using eigen::math::norm;
 using eigen::math::normalize;
+
+using generic::math::perp;
+using generic::math::phi;
+using generic::math::theta;
 
 /// @}
 
@@ -70,15 +58,18 @@ using eigen::math::normalize;
 
 namespace matrix {
 
-using eigen::math::block;
+/// @name Matrix functions on @c algebra::eigen::storage_type
+/// @{
+
 using eigen::math::determinant;
 using eigen::math::identity;
 using eigen::math::inverse;
-using eigen::math::set_block;
 using eigen::math::set_identity;
 using eigen::math::set_zero;
 using eigen::math::transpose;
 using eigen::math::zero;
+
+/// @}
 
 }  // namespace matrix
 

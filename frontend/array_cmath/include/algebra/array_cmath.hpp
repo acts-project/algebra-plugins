@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/math/cmath.hpp"
+#include "algebra/math/generic.hpp"
 #include "algebra/storage/array.hpp"
 
 /// @name Operators on @c algebra::array::storage_type
@@ -27,29 +28,10 @@ namespace getter {
 /// @name Getter functions on @c algebra::array::storage_type
 /// @{
 
-using cmath::eta;
-using cmath::norm;
-using cmath::perp;
-using cmath::phi;
-using cmath::theta;
-
-/// @}
-
-/// Function extracting a slice from a matrix
-template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
-          typename scalar_t>
-ALGEBRA_HOST_DEVICE inline array::storage_type<scalar_t, SIZE> vector(
-    const array::matrix_type<scalar_t, ROWS, COLS>& m, std::size_t row,
-    std::size_t col) {
-
-  return cmath::vector_getter<std::size_t, array::storage_type, scalar_t,
-                              SIZE>()(m, row, col);
-}
-
-/// @name Getter functions on @c algebra::array::matrix_type
-/// @{
-
-using cmath::element;
+using cmath::storage::block;
+using cmath::storage::element;
+using cmath::storage::set_block;
+using cmath::storage::vector;
 
 /// @}
 
@@ -60,9 +42,17 @@ namespace vector {
 /// @name Vector functions on @c algebra::array::storage_type
 /// @{
 
-using cmath::cross;
+// array specific implementations
 using cmath::dot;
 using cmath::normalize;
+
+// generic implementations
+using generic::math::cross;
+using generic::math::eta;
+using generic::math::norm;
+using generic::math::perp;
+using generic::math::phi;
+using generic::math::theta;
 
 /// @}
 
@@ -70,31 +60,31 @@ using cmath::normalize;
 
 namespace matrix {
 
-using cmath::block;
-using cmath::determinant;
+/// @name Matrix functions on @c algebra::array::storage_type
+/// @{
+
 using cmath::identity;
-using cmath::inverse;
-using cmath::set_block;
 using cmath::set_identity;
 using cmath::set_zero;
-using cmath::transpose;
 using cmath::zero;
+
+using generic::math::determinant;
+using generic::math::inverse;
+using generic::math::transpose;
+
+/// @}
 
 }  // namespace matrix
 
 namespace array {
 
-template <typename scalar_t>
-using element_getter =
-    cmath::element_getter<array::size_type, array::storage_type, scalar_t>;
-
 /// @name cmath based transforms on @c algebra::array
 /// @{
 
 template <typename T>
-using transform3 = cmath::transform3<array::size_type, T, array::matrix_type,
-                                     array::storage_type, element_getter<T>,
-                                     cmath::block_getter>;
+using transform3 =
+    generic::math::transform3<array::size_type, T, array::matrix_type,
+                              array::storage_type>;
 
 /// @}
 

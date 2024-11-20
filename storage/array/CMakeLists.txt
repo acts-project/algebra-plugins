@@ -8,6 +8,6 @@
 algebra_add_library( algebra_array_storage array_storage
    "include/algebra/storage/array.hpp" )
 target_link_libraries( algebra_array_storage
-   INTERFACE algebra::common )
+   INTERFACE algebra::common algebra::common_math algebra::cmath_storage )
 algebra_test_public_headers( algebra_array_storage
    "algebra/storage/array.hpp" )

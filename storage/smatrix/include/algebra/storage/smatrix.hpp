@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s)
+#include "algebra/storage/impl/smatrix_getter.hpp"
 #include "algebra/type_traits.hpp"
 
 // ROOT/Smatrix include(s).
@@ -26,6 +27,9 @@ using size_type = unsigned int;
 /// Array type used in the SMatrix storage model
 template <typename T, size_type N>
 using storage_type = ROOT::Math::SVector<T, N>;
+/// Vector type used in the SMatrix storage model
+template <typename T, size_type N>
+using vector_type = storage_type<T, N>;
 /// Matrix type used in the SMatrix storage model
 template <typename T, size_type ROWS, size_type COLS>
 using matrix_type = ROOT::Math::SMatrix<T, ROWS, COLS>;
@@ -43,37 +47,13 @@ using vector2 = storage_type<T, 2>;
 template <typename T>
 using point2 = vector2<T>;
 
+/// Element Getter
+using element_getter = smatrix::storage::element_getter;
+/// Block Getter
+using block_getter = smatrix::storage::block_getter;
+
 }  // namespace smatrix
 
-namespace trait {
-
-/// Type trait specializations
-/// @{
-template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
-struct dimensions<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
-
-  using size_type = unsigned int;
-
-  static constexpr size_type rows{ROWS};
-  static constexpr size_type columns{COLS};
-};
-
-template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
-struct value<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
-  using type = T;
-};
-
-template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
-struct index<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
-  using type = unsigned int;
-};
-
-template <typename T, unsigned int ROWS, unsigned int COLS, typename expr>
-struct vector<ROOT::Math::SMatrix<T, ROWS, COLS, expr>> {
-  using type = ROOT::Math::SVector<T, ROWS>;
-};
-/// @}
-
-}  // namespace trait
+ALGEBRA_PLUGINS_DEFINE_TYPE_TRAITS(smatrix)
 
 }  // namespace algebra

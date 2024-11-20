@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s)
+#include "algebra/storage/impl/cmath_getter.hpp"
 #include "algebra/type_traits.hpp"
 
 // System include(s).
@@ -43,37 +44,13 @@ using vector2 = storage_type<T, 2>;
 template <typename T>
 using point2 = vector2<T>;
 
+/// Element Getter
+using element_getter = cmath::storage::element_getter;
+/// Block Getter
+using block_getter = cmath::storage::block_getter;
+
 }  // namespace array
 
-namespace trait {
-
-/// Type trait specializations
-/// @{
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct index<std::array<std::array<T, ROWS>, COLS>> {
-  using type = algebra::array::size_type;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct dimensions<std::array<std::array<T, ROWS>, COLS>> {
-
-  using size_type = index_t<std::array<std::array<T, ROWS>, COLS>>;
-
-  static constexpr size_type rows{ROWS};
-  static constexpr size_type columns{COLS};
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct value<std::array<std::array<T, ROWS>, COLS>> {
-  using type = T;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct vector<std::array<std::array<T, ROWS>, COLS>> {
-  using type = std::array<T, ROWS>;
-};
-/// @}
-
-}  // namespace trait
+ALGEBRA_PLUGINS_DEFINE_TYPE_TRAITS(array)
 
 }  // namespace algebra

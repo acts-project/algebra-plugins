@@ -29,8 +29,8 @@ algebra_add_test( array_sycl "array_cmath.sycl"
                   GTest::gtest_main )
 
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
-   algebra_add_test( eigen_sycl "eigen_cmath.sycl" "eigen_eigen.sycl"
-      LINK_LIBRARIES algebra::eigen_cmath algebra::eigen_eigen
+   algebra_add_test( eigen_sycl "eigen_generic.sycl" "eigen_eigen.sycl"
+      LINK_LIBRARIES algebra::eigen_generic algebra::eigen_eigen
                      algebra::tests_sycl_common GTest::gtest_main )
    # Prevent Eigen from considering the SYCL device compilation as either:
    #  - host compilation;

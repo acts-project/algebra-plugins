@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/storage/impl/vc_soa_getter.hpp"
 #include "algebra/storage/matrix.hpp"
 #include "algebra/storage/vector.hpp"
 #include "algebra/type_traits.hpp"
@@ -39,10 +40,11 @@ template <typename T>
 using value_type = Vc::Vector<T>;
 /// Vector type used in the Vc SoA storage model
 template <typename T, std::size_t N>
-using vector_type = storage::vector<N, value_type<T>, storage_type>;
+using vector_type = algebra::storage::vector<N, Vc::Vector<T>, std::array>;
 /// Matrix type used in the Vc SoA storage model
 template <typename T, size_type ROWS, size_type COLS>
-using matrix_type = storage::matrix<storage_type, value_type<T>, ROWS, COLS>;
+using matrix_type =
+    algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>;
 
 /// 2-element "vector" type, using @c Vc::Vector in every element
 template <typename T>
@@ -63,40 +65,22 @@ using vector6 = vector_type<T, 6>;
 template <typename T>
 using vector8 = vector_type<T, 8>;
 
+/// Element Getter
+using element_getter = algebra::storage::element_getter;
+/// Block Getter
+using block_getter = algebra::storage::block_getter;
+
 }  // namespace vc_soa
+
+ALGEBRA_PLUGINS_DEFINE_TYPE_TRAITS(vc_soa)
 
 namespace trait {
 
-/// Type trait specializations
+/// Make sure the simd scalar type is recognized correctly
 /// @{
 template <typename T, std::size_t ROWS, std::size_t COLS>
-struct index<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
-  using type = algebra::vc_soa::size_type;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct dimensions<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
-
-  using size_type =
-      index_t<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>>;
-
-  static constexpr size_type rows{ROWS};
-  static constexpr size_type columns{COLS};
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct value<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
-  using type = T;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct scalar<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
+struct scalar<algebra::storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
   using type = Vc::Vector<T>;
-};
-
-template <typename T, std::size_t ROWS, std::size_t COLS>
-struct vector<storage::matrix<std::array, Vc::Vector<T>, ROWS, COLS>> {
-  using type = storage::vector<ROWS, Vc::Vector<T>, std::array>;
 };
 /// @}
 

@@ -27,28 +27,16 @@ using algebra::storage::operator+;
 /// @}
 
 namespace algebra {
-namespace vc_soa {
-
-/// @name Vc based transforms on @c algebra::vc_soa types
-/// @{
-
-template <typename T>
-using transform3 = algebra::vc_aos::math::transform3<storage_type, T>;
-
-/// @}
-
-}  // namespace vc_soa
 
 namespace getter {
 
 /// @name Getter functions on @c algebra::vc_soa types
 /// @{
 
-using vc_soa::math::eta;
-using vc_soa::math::norm;
-using vc_soa::math::perp;
-using vc_soa::math::phi;
-using vc_soa::math::theta;
+using vc_soa::storage::block;
+using vc_soa::storage::element;
+using vc_soa::storage::set_block;
+using vc_soa::storage::vector;
 
 /// @}
 
@@ -61,7 +49,12 @@ namespace vector {
 
 using vc_soa::math::cross;
 using vc_soa::math::dot;
+using vc_soa::math::eta;
+using vc_soa::math::norm;
 using vc_soa::math::normalize;
+using vc_soa::math::perp;
+using vc_soa::math::phi;
+using vc_soa::math::theta;
 
 /// @}
 
@@ -70,16 +63,27 @@ using vc_soa::math::normalize;
 // Produces clash with matrix typedefs in other plugins
 namespace matrix {
 
-using vc_soa::math::block;
 using vc_soa::math::determinant;
 using vc_soa::math::identity;
 using vc_soa::math::inverse;
-using vc_soa::math::set_block;
 using vc_soa::math::set_identity;
 using vc_soa::math::set_zero;
 using vc_soa::math::transpose;
 using vc_soa::math::zero;
 
 }  // namespace matrix
+
+namespace vc_soa {
+
+/// @name Vc based transforms on @c algebra::vc_soa types
+/// @{
+
+template <typename T>
+using transform3 =
+    algebra::vc_aos::math::transform3<algebra::vc_soa::storage_type, T>;
+
+/// @}
+
+}  // namespace vc_soa
 
 }  // namespace algebra

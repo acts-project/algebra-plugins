@@ -34,28 +34,19 @@
 
 namespace algebra::eigen::math {
 
-/** Transform wrapper class to ensure standard API within differnt plugins */
+/// Transform wrapper class to ensure standard API within differnt plugins
 template <typename scalar_t>
 struct transform3 {
 
   /// @name Type definitions for the struct
   /// @{
-  /// Size type
-  using size_type = int;
+
   /// Scalar type used by the transform
   using scalar_type = scalar_t;
 
-  /// 2D Matrix type
-  template <size_type ROWS, size_type COLS>
-  using matrix_type = Eigen::Matrix<scalar_t, ROWS, COLS, 0, ROWS, COLS>;
-
-  /// 4x4 matrix type
-  using matrix44 =
-      typename Eigen::Transform<scalar_type, 3, Eigen::Affine>::MatrixType;
-
   /// Array type used by the transform
   template <int N>
-  using array_type = Eigen::Matrix<scalar_t, N, 1, 0, N, 1>;
+  using array_type = Eigen::Matrix<scalar_type, N, 1, 0, N, 1>;
 
   /// 3-element "vector" type
   using vector3 = array_type<3>;
@@ -63,6 +54,10 @@ struct transform3 {
   using point3 = vector3;
   /// Point in 2D space
   using point2 = array_type<2>;
+
+  /// 4x4 matrix type
+  using matrix44 =
+      typename Eigen::Transform<scalar_type, 3, Eigen::Affine>::MatrixType;
 
   /// @}
 
@@ -76,14 +71,12 @@ struct transform3 {
 
   /// @}
 
-  /** Contructor with arguments: t, x, y, z
-   *
-   * @param t the translation (or origin of the new frame)
-   * @param x the x axis of the new frame
-   * @param y the y axis of the new frame
-   * @param z the z axis of the new frame, normal vector for planes
-   *
-   **/
+  /// Contructor with arguments: t, x, y, z
+  ///
+  /// @param t the translation (or origin of the new frame)
+  /// @param x the x axis of the new frame
+  /// @param y the y axis of the new frame
+  /// @param z the z axis of the new frame, normal vector for planes
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
              const vector3 &z, bool get_inverse = true) {
@@ -98,22 +91,19 @@ struct transform3 {
     }
   }
 
-  /** Contructor with arguments: t, z, x
-   *
-   * @param t the translation (or origin of the new frame)
-   * @param z the z axis of the new frame, normal vector for planes
-   * @param x the x axis of the new frame
-   *
-   **/
+  /// Contructor with arguments: t, z, x
+  ///
+  /// @param t the translation (or origin of the new frame)
+  /// @param z the z axis of the new frame, normal vector for planes
+  /// @param x the x axis of the new frame
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &z, const vector3 &x,
              bool get_inverse = true)
       : transform3(t, x, z.cross(x), z, get_inverse) {}
 
-  /** Constructor with arguments: translation
-   *
-   * @param t is the transform
-   **/
+  /// Constructor with arguments: translation
+  ///
+  /// @param t is the transform
   ALGEBRA_HOST_DEVICE
   explicit transform3(const vector3 &t) {
     _data.setIdentity();
@@ -124,10 +114,9 @@ struct transform3 {
     _data_inv = _data.inverse();
   }
 
-  /** Constructor with arguments: matrix
-   *
-   * @param m is the full 4x4 matrix
-   **/
+  /// Constructor with arguments: matrix
+  ///
+  /// @param m is the full 4x4 matrix
   ALGEBRA_HOST_DEVICE
   explicit transform3(const matrix44 &m) {
 
@@ -136,10 +125,9 @@ struct transform3 {
     _data_inv = _data.inverse();
   }
 
-  /** Constructor with arguments: matrix as std::aray of scalar
-   *
-   * @param ma is the full 4x4 matrix as a 16 array
-   **/
+  /// Constructor with arguments: matrix as std::aray of scalar
+  ///
+  /// @param ma is the full 4x4 matrix as a 16 array
   ALGEBRA_HOST_DEVICE
   explicit transform3(const array_type<16> &ma) {
 
@@ -149,29 +137,28 @@ struct transform3 {
     _data_inv = _data.inverse();
   }
 
-  /** Default constructor: set contents to identity matrices */
+  /// Default constructor: set contents to identity matrices
   ALGEBRA_HOST_DEVICE
   transform3() {
     _data.setIdentity();
     _data_inv.setIdentity();
   }
 
-  /** Default contructors */
+  /// Default contructors
   transform3(const transform3 &rhs) = default;
   ~transform3() = default;
 
-  /** Equality operator */
+  /// Equality operator
   ALGEBRA_HOST_DEVICE
   inline bool operator==(const transform3 &rhs) const {
 
     return (_data.isApprox(rhs._data));
   }
 
-  /** Rotate a vector into / from a frame
-   *
-   * @param m is the rotation matrix
-   * @param v is the vector to be rotated
-   */
+  /// Rotate a vector into / from a frame
+  ///
+  /// @param m is the rotation matrix
+  /// @param v is the vector to be rotated
   template <
       typename derived_type,
       std::enable_if_t<Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3,
@@ -185,42 +172,42 @@ struct transform3 {
     return m.matrix().template block<3, 3>(0, 0) * v;
   }
 
-  /** This method retrieves the rotation of a transform  **/
+  /// This method retrieves the rotation of a transform
   ALGEBRA_HOST_DEVICE
   inline auto rotation() const {
 
     return _data.matrix().template block<3, 3>(0, 0);
   }
 
-  /** This method retrieves x axis */
+  /// This method retrieves x axis
   ALGEBRA_HOST_DEVICE
   inline point3 x() const { return _data.matrix().template block<3, 1>(0, 0); }
 
-  /** This method retrieves y axis */
+  /// This method retrieves y axis
   ALGEBRA_HOST_DEVICE
   inline point3 y() const { return _data.matrix().template block<3, 1>(0, 1); }
 
-  /** This method retrieves z axis */
+  /// This method retrieves z axis
   ALGEBRA_HOST_DEVICE
   inline point3 z() const { return _data.matrix().template block<3, 1>(0, 2); }
 
-  /** This method retrieves the translation of a transform **/
+  /// This method retrieves the translation of a transform
   ALGEBRA_HOST_DEVICE
   inline auto translation() const {
 
     return _data.matrix().template block<3, 1>(0, 3);
   }
 
-  /** This method retrieves the 4x4 matrix of a transform */
+  /// This method retrieves the 4x4 matrix of a transform
   ALGEBRA_HOST_DEVICE
   inline const matrix44 &matrix() const { return _data.matrix(); }
 
-  /** This method retrieves the 4x4 matrix of an inverse transform */
+  /// This method retrieves the 4x4 matrix of an inverse transform
   ALGEBRA_HOST_DEVICE
   inline const matrix44 &matrix_inverse() const { return _data_inv.matrix(); }
 
-  /** This method transform from a point from the local 3D cartesian frame to
-   * the global 3D cartesian frame */
+  /// This method transform from a point from the local 3D cartesian frame to
+  /// the global 3D cartesian frame
   template <
       typename derived_type,
       std::enable_if_t<Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3,
@@ -233,8 +220,8 @@ struct transform3 {
     return (_data * v);
   }
 
-  /** This method transform from a vector from the global 3D cartesian frame
-   * into the local 3D cartesian frame */
+  /// This method transform from a vector from the global 3D cartesian frame
+  /// into the local 3D cartesian frame
   template <
       typename derived_type,
       std::enable_if_t<Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3,
@@ -247,8 +234,8 @@ struct transform3 {
     return (_data_inv * v);
   }
 
-  /** This method transform from a vector from the local 3D cartesian frame to
-   * the global 3D cartesian frame */
+  /// This method transform from a vector from the local 3D cartesian frame to
+  /// the global 3D cartesian frame
   template <
       typename derived_type,
       std::enable_if_t<Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3,
@@ -261,8 +248,8 @@ struct transform3 {
     return (_data.linear() * v);
   }
 
-  /** This method transform from a vector from the global 3D cartesian frame
-   * into the local 3D cartesian frame */
+  /// This method transform from a vector from the global 3D cartesian frame
+  /// into the local 3D cartesian frame
   template <
       typename derived_type,
       std::enable_if_t<Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3,

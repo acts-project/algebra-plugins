@@ -6,13 +6,9 @@
  */
 #pragma once
 
-// @TODO: Remove this when Vc fixes their false positives.
-#if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
-#endif
-
 // Project include(s).
 #include "algebra/storage/vector.hpp"
+#include "algebra/type_traits.hpp"
 
 // System include(s).
 #include <array>
@@ -136,57 +132,10 @@ struct alignas(alignof(storage::vector<ROW, value_t, array_t>)) matrix {
 
 };  // struct matrix
 
-/// Functor used to access elements of a matrix
-struct element_getter {
-
-  /// Get const access to a matrix element
-  template <template <typename, std::size_t> class array_t, typename value_t,
-            std::size_t ROW, std::size_t COL>
-  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
-      const matrix<array_t, value_t, ROW, COL> &m, std::size_t row,
-      std::size_t col) const {
-
-    // Make sure that the indices are valid.
-    assert(row < ROW);
-    assert(col < COL);
-
-    // Return the selected element.
-    return m[col][row];
-  }
-
-  /// Get non-const access to a matrix element
-  template <template <typename, std::size_t> class array_t, typename value_t,
-            std::size_t ROW, std::size_t COL>
-  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
-      matrix<array_t, value_t, ROW, COL> &m, std::size_t row,
-      std::size_t col) const {
-
-    // Make sure that the indices are valid.
-    assert(row < ROW);
-    assert(col < COL);
-
-    // Return the selected element.
-    return m[col][row];
-  }
-
-  /// Get const access to a matrix44 element from a flat array
-  template <template <typename, std::size_t> class array_t, typename value_t>
-  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
-      const array_t<value_t, 16> &m, unsigned int row, unsigned int col) const {
-    // Make sure that the indices are valid.
-    assert(row < 4);
-    assert(col < 4);
-    // Return the selected element.
-    return m[row * 4 + col];
-  }
-
-};  // struct element_getter
-
 /// Get a zero-initialized matrix
 template <typename matrix_t>
 ALGEBRA_HOST_DEVICE constexpr matrix_t zero() noexcept {
 
-  // Zero initialized
   matrix_t m;
 
   for (std::size_t j = 0u; j < matrix_t::columns(); ++j) {
@@ -204,24 +153,17 @@ ALGEBRA_HOST_DEVICE constexpr void set_zero(matrix_t &m) noexcept {
 }
 
 /// Build an identity matrix
-template <typename matrix_t, std::size_t... I>
-ALGEBRA_HOST_DEVICE constexpr matrix_t identity(
-    std::index_sequence<I...>) noexcept {
+template <typename matrix_t>
+ALGEBRA_HOST_DEVICE constexpr matrix_t identity() noexcept {
 
   // Zero initialized
   matrix_t m{zero<matrix_t>()};
 
-  ((m[I][I] = typename matrix_t::value_type(1)), ...);
+  for (std::size_t i = 0u; i < algebra::trait::rank<matrix_t>; ++i) {
+    m[i][i] = typename matrix_t::value_type(1);
+  }
 
   return m;
-}
-
-/// Build an identity matrix
-template <typename matrix_t>
-ALGEBRA_HOST_DEVICE constexpr matrix_t identity() noexcept {
-
-  return identity<matrix_t>(std::make_index_sequence<std::min(
-                                matrix_t::rows(), matrix_t::columns())>());
 }
 
 /// Set a matrix to zero
@@ -252,96 +194,7 @@ ALGEBRA_HOST_DEVICE constexpr auto transpose(
 /// Build an identity matrix
 template <typename matrix_t>
 ALGEBRA_HOST_DEVICE constexpr auto transpose(const matrix_t &m) noexcept {
-
   return transpose(m, std::make_index_sequence<matrix_t::columns()>());
-}
-
-/// Get a block of a const matrix
-template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
-          std::size_t mCOL, typename value_t,
-          template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE constexpr auto block(
-    const matrix<array_t, value_t, mROW, mCOL> &m, const std::size_t row,
-    const std::size_t col) noexcept {
-  static_assert(ROWS <= mROW);
-  static_assert(COLS <= mCOL);
-  assert(row + ROWS <= mROW);
-  assert(col + COLS <= mCOL);
-
-  using input_matrix_t = matrix<array_t, value_t, mROW, mCOL>;
-  using matrix_t = matrix<array_t, value_t, ROWS, COLS>;
-
-  matrix_t res_m;
-
-  // Don't access single elements in underlying vectors unless necessary
-  if constexpr (matrix_t::storage_rows() == input_matrix_t::storage_rows()) {
-    if (row == 0u) {
-      for (std::size_t j = col; j < col + COLS; ++j) {
-        res_m[j - col] = m[j];
-      }
-      return;
-    }
-  }
-  for (std::size_t j = col; j < col + COLS; ++j) {
-    for (std::size_t i = row; i < row + ROWS; ++i) {
-      res_m[j - col][i - row] = m[j][i];
-    }
-  }
-
-  return res_m;
-}
-
-/// Get a block of a const matrix
-template <std::size_t ROWS, std::size_t COLS, std::size_t mROW,
-          std::size_t mCOL, typename value_t,
-          template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE constexpr void set_block(
-    matrix<array_t, value_t, mROW, mCOL> &m,
-    const matrix<array_t, value_t, ROWS, COLS> &b, const std::size_t row,
-    const std::size_t col) noexcept {
-  static_assert(ROWS <= mROW);
-  static_assert(COLS <= mCOL);
-  assert(row + ROWS <= mROW);
-  assert(col + COLS <= mCOL);
-
-  using input_matrix_t = matrix<array_t, value_t, mROW, mCOL>;
-  using matrix_t = matrix<array_t, value_t, ROWS, COLS>;
-
-  // Don't access single elements in underlying vectors unless necessary
-  if constexpr (matrix_t::storage_rows() == input_matrix_t::storage_rows()) {
-    if (row == 0u) {
-      for (std::size_t j = col; j < mCOL; ++j) {
-        m[j] = b[j - col];
-      }
-      return;
-    }
-  }
-  for (std::size_t j = col; j < col + COLS; ++j) {
-    for (std::size_t i = row; i < row + ROWS; ++i) {
-      m[j][i] = b[j - col][i - row];
-    }
-  }
-}
-
-/// Operator setting a block with a vector
-template <class matrix_t, std::size_t ROW, typename value_t,
-          template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE constexpr void set_block(
-    matrix_t &m, const storage::vector<ROW, value_t, array_t> &b,
-    std::size_t row, std::size_t col) noexcept {
-  assert(row < ROW);
-  assert(row < matrix_t::rows());
-  assert(col < matrix_t::columns());
-
-  if constexpr (matrix_t::storage_rows() == ROW) {
-    if (row == 0u) {
-      m[col] = b;
-      return;
-    }
-  }
-  for (std::size_t i = row; i < ROW; ++i) {
-    m[col][i] = b[i - row];
-  }
 }
 
 /// Equality operator between two matrices

@@ -1,6 +1,6 @@
 # Algebra plugins library, part of the ACTS project (R&D line)
 #
-# (c) 2021-2023 CERN for the benefit of the ACTS project
+# (c) 2021-2024 CERN for the benefit of the ACTS project
 #
 # Mozilla Public License Version 2.0
 
@@ -11,7 +11,6 @@ find_package(ROOT COMPONENTS Core MathCore Smatrix REQUIRED)
 algebra_add_library(algebra_smatrix_math smatrix_math
    "include/algebra/math/smatrix.hpp"
    "include/algebra/math/impl/smatrix_errorcheck.hpp"
-   "include/algebra/math/impl/smatrix_getter.hpp"
    "include/algebra/math/impl/smatrix_matrix.hpp"
    "include/algebra/math/impl/smatrix_transform3.hpp"
    "include/algebra/math/impl/smatrix_vector.hpp")

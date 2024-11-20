@@ -8,6 +8,5 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/impl/vc_soa_getter.hpp"
 #include "algebra/math/impl/vc_soa_matrix.hpp"
 #include "algebra/math/impl/vc_soa_vector.hpp"

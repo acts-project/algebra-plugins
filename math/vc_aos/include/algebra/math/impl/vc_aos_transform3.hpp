@@ -11,6 +11,7 @@
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/matrix.hpp"
+#include "algebra/storage/matrix_getter.hpp"
 #include "algebra/storage/vector.hpp"
 
 // Vc include(s).
@@ -48,8 +49,7 @@ struct transform3 {
  public:
   /// @name Type definitions for the struct
   /// @{
-  /// Index type
-  using size_type = std::size_t;
+
   /// Scalar type used by the transform
   using scalar_type = scalar_t;
   /// The type of the matrix elements (scalar for AoS, Vc::Vector for SoA)

@@ -33,6 +33,9 @@ TEST(test_vc_host, vc_soa_vector) {
   EXPECT_TRUE((a[1] == scalar_t(2.f)).isFull());
   EXPECT_TRUE((a[2] == scalar_t(3.f)).isFull());
 
+  // Test printing
+  std::cout << a << std::endl;
+
   // Masked comparison
   auto m = a.compare(a);
   EXPECT_TRUE(m[0].isFull());
@@ -171,6 +174,9 @@ TEST(test_vc_host, vc_soa_transform3) {
   transform3 trf2;
   trf2 = trf1;
 
+  // Test printing
+  std::cout << trf1 << std::endl;
+
   EXPECT_TRUE((trf2(0, 0) == x[0]).isFull());
   EXPECT_TRUE((trf2(1, 0) == x[1]).isFull());
   EXPECT_TRUE((trf2(2, 0) == x[2]).isFull());
@@ -262,4 +268,7 @@ TEST(test_vc_host, vc_soa_matrix64) {
   static_assert(!algebra::traits::is_square<matrix_6x4_t>);
   static_assert(algebra::traits::is_square<vc_soa::matrix_type<value_t, 4, 4>>);
   static_assert(algebra::traits::is_square<vc_soa::matrix_type<value_t, 6, 6>>);
+
+  // Test printing
+  std::cout << m << std::endl;
 }

@@ -143,7 +143,7 @@ struct block_getter {
 
   template <std::size_t SIZE, std::size_t oROWS, std::size_t oCOLS,
             concepts::scalar scalar_t>
-  ALGEBRA_HOST_DEVICE Fastor::Tensor<scalar_t, SIZE> operator()(
+  ALGEBRA_HOST_DEVICE Fastor::Tensor<scalar_t, SIZE> vector(
       const Fastor::Tensor<scalar_t, oROWS, oCOLS> &m, std::size_t row,
       std::size_t col) const {
 
@@ -170,7 +170,7 @@ ALGEBRA_HOST_DEVICE inline decltype(auto) vector(
     const Fastor::Tensor<scalar_t, ROWS, COLS> &m, std::size_t row,
     std::size_t col) {
 
-  return block_getter{}.template operator()<SIZE>(m, row, col);
+  return block_getter{}.template vector<SIZE>(m, row, col);
 }
 
 /// Operator setting a block with a matrix

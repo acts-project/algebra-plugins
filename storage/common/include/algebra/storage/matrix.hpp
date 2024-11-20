@@ -32,9 +32,9 @@ struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
 
   /// Construct from given column vectors @param v
   template <concepts::vector... vector_t>
-  ALGEBRA_HOST_DEVICE requires(sizeof...(vector_t) ==
-                               COL) explicit matrix(vector_t &&... v)
-      : m_storage{std::forward<vector_t>(v)...} {}
+  ALGEBRA_HOST_DEVICE
+    requires(sizeof...(vector_t) == COL)
+  explicit matrix(vector_t &&...v) : m_storage{std::forward<vector_t>(v)...} {}
 
   /// Equality operator between two matrices
   template <std::size_t R, std::size_t C, concepts::scalar S,
@@ -76,17 +76,17 @@ struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
   /// @{
   // AoS
   template <std::size_t... I>
-  ALGEBRA_HOST_DEVICE requires(
-      !std::is_scalar_v<scalar_t>) constexpr bool equal(const matrix &rhs,
-                                                        std::index_sequence<
-                                                            I...>) const {
+  ALGEBRA_HOST_DEVICE
+    requires(!std::is_scalar_v<scalar_t>)
+  constexpr bool equal(const matrix &rhs, std::index_sequence<I...>) const {
     return (... && (m_storage[I] == rhs[I]));
   }
 
   // SoA
   template <std::size_t... I>
-  ALGEBRA_HOST requires(std::is_scalar_v<scalar_t>) constexpr bool equal(
-      const matrix &rhs, std::index_sequence<I...>) const {
+  ALGEBRA_HOST
+    requires(std::is_scalar_v<scalar_t>)
+  constexpr bool equal(const matrix &rhs, std::index_sequence<I...>) const {
     return (... && ((m_storage[I].get() == rhs[I].get()).isFull()));
   }
   /// @}
@@ -105,15 +105,15 @@ struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
 
   template <std::size_t R, std::size_t C, typename S1, typename S2,
             template <typename, std::size_t> class A>
-  requires(std::is_scalar_v<S2> || std::is_same_v<S1, S2>) ALGEBRA_HOST_DEVICE
-      friend constexpr decltype(auto)
-      operator*(S2 a, const matrix<A, S1, R, C> &rhs) noexcept;
+  /*requires(std::is_scalar_v<S2> || std::is_same_v<S1, S2>)*/
+  ALGEBRA_HOST_DEVICE friend constexpr decltype(auto) operator*(
+      const S2 a, const matrix<A, S1, R, C> &rhs) noexcept;
 
-  template <std::size_t R, std::size_t C, typename S1, typename S2,
-            template <typename, std::size_t> class A>
-  requires(std::is_scalar_v<S2> || std::is_same_v<S1, S2>) ALGEBRA_HOST_DEVICE
-      friend constexpr decltype(auto)
-      operator*(const matrix<A, S1, R, C> &lhs, S2 a) noexcept;
+  template <std::size_t R, std::size_t C, concepts::scalar S1,
+            concepts::scalar S2, template <typename, std::size_t> class A>
+  /*requires(std::is_scalar_v<S2> || std::is_same_v<S1, S2>)*/
+  ALGEBRA_HOST_DEVICE friend constexpr decltype(auto) operator*(
+      const matrix<A, S1, R, C> &lhs, const S2 a) noexcept;
 
   /// Matrix-vector multiplication
   template <std::size_t R, std::size_t C, typename S,
@@ -212,8 +212,9 @@ template <concepts::matrix matrix_t, concepts::scalar scalar_t,
           std::size_t... J>
 ALGEBRA_HOST_DEVICE constexpr matrix_t matrix_scalar_mul(
     scalar_t a, const matrix_t &rhs, std::index_sequence<J...>) noexcept {
+  using mat_scalar_t = algebra::traits::value_t<matrix_t>;
 
-  return matrix_t{(a * rhs[J])...};
+  return matrix_t{(static_cast<mat_scalar_t>(a) * rhs[J])...};
 }
 
 /// Matrix addition
@@ -257,30 +258,22 @@ ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator-(
   return matrix_sub(lhs, rhs, std::make_index_sequence<matrix_t::columns()>());
 }
 
-template <std::size_t ROW, std::size_t COL, concepts::scalar scalar1_t,
-          concepts::scalar scalar2_t,
-          template <typename, std::size_t> class array_t>
-requires(std::is_scalar_v<scalar1_t> ||
-         std::is_same_v<scalar1_t, scalar2_t>) ALGEBRA_HOST_DEVICE
-    constexpr decltype(auto)
-    operator*(scalar1_t a,
-              const matrix<array_t, scalar2_t, ROW, COL> &rhs) noexcept {
+template <std::size_t R, std::size_t C, typename S1, typename S2,
+          template <typename, std::size_t> class A>
+ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator*(
+    const S2 a, const matrix<A, S1, R, C> &rhs) noexcept {
 
-  using matrix_t = matrix<array_t, scalar2_t, ROW, COL>;
+  using matrix_t = matrix<A, S2, R, C>;
 
-  return matrix_scalar_mul(a, rhs,
+  return matrix_scalar_mul(static_cast<S1>(a), rhs,
                            std::make_index_sequence<matrix_t::columns()>());
 }
 
-template <std::size_t ROW, std::size_t COL, concepts::scalar scalar1_t,
-          concepts::scalar scalar2_t,
-          template <typename, std::size_t> class array_t>
-requires(std::is_scalar_v<scalar1_t> ||
-         std::is_same_v<scalar1_t, scalar2_t>) ALGEBRA_HOST_DEVICE
-    constexpr decltype(auto)
-    operator*(const matrix<array_t, scalar1_t, ROW, COL> &lhs,
-              scalar2_t a) noexcept {
-  return a * lhs;
+template <std::size_t R, std::size_t C, concepts::scalar S1,
+          concepts::scalar S2, template <typename, std::size_t> class A>
+ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator*(
+    const matrix<A, S1, R, C> &lhs, const S2 a) noexcept {
+  return static_cast<S1>(a) * lhs;
 }
 
 /// Matrix-vector multiplication

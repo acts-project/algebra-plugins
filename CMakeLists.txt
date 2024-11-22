@@ -170,9 +170,10 @@ endif()
 
 # Set up the Algebra Plugin libraries.
 add_subdirectory( common )
-add_subdirectory( storage )
-add_subdirectory( math )
 add_subdirectory( frontend )
+add_subdirectory( math )
+add_subdirectory( storage )
+add_subdirectory( utils )
 
 # Set up the test(s).
 if( BUILD_TESTING AND ALGEBRA_PLUGINS_BUILD_TESTING )

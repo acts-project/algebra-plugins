@@ -203,7 +203,7 @@ struct block_getter {
       }
     }
     for (std::size_t i = row; i < row + SIZE; ++i) {
-      res_v[i] = m[col][i];
+      res_v[i - row] = m[col][i];
     }
 
     return res_v;
@@ -238,7 +238,8 @@ ALGEBRA_HOST_DEVICE constexpr void set_block(
   using matrix_t = matrix<array_t, scalar_t, ROWS, COLS>;
 
   // Don't access single elements in underlying vectors unless necessary
-  if constexpr (ROWS == mROW && matrix_t::storage_rows() == input_matrix_t::storage_rows()) {
+  if constexpr (ROWS == mROW &&
+                matrix_t::storage_rows() == input_matrix_t::storage_rows()) {
     if (row == 0u) {
       for (std::size_t j = col; j < mCOL; ++j) {
         m[j] = b[j - col];
@@ -270,7 +271,8 @@ ALGEBRA_HOST_DEVICE constexpr void set_block(
   assert(row < matrix_t::rows());
   assert(col < matrix_t::columns());
 
-  if constexpr (ROWS == N && matrix_t::storage_rows() == vector_t::simd_size()) {
+  if constexpr (ROWS == N &&
+                matrix_t::storage_rows() == vector_t::simd_size()) {
     if (row == 0u) {
       m[col] = b;
       return;

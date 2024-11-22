@@ -52,7 +52,15 @@ struct benchmark_base {
     /// @}
 
     /// Print configuration
-    friend std::ostream& operator<<(std::ostream& os, const configuration& c);
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const benchmark_base::configuration& cfg) {
+      os << " -> running:\t " << cfg.n_samples() << " samples" << std::endl;
+      if (cfg.do_sleep()) {
+        os << " -> cool down:\t " << cfg.n_sleep() << "s" << std::endl;
+      }
+      os << std::endl;
+      return os;
+    }
   };
 
   /// The benchmark configuration
@@ -76,15 +84,5 @@ struct benchmark_base {
   /// Benchmark case
   virtual void operator()(::benchmark::State&) = 0;
 };
-
-std::ostream& operator<<(std::ostream& os,
-                         const benchmark_base::configuration& cfg) {
-  os << " -> running:\t " << cfg.n_samples() << " samples" << std::endl;
-  if (cfg.do_sleep()) {
-    os << " -> cool down:\t " << cfg.n_sleep() << "s" << std::endl;
-  }
-  os << std::endl;
-  return os;
-}
 
 }  // namespace algebra

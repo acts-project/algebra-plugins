@@ -76,22 +76,20 @@ class alignas(
 
   /// Construct vector in SoA layout from simd scalars
   template <typename... Scalars>
-    requires(concepts::simd_scalar<scalar_t> && (sizeof...(Scalars) == N) &&
-             ((concepts::simd_scalar<Scalars> ||
-               std::convertible_to<Scalars, scalar_t>) &&
-              ...))
-  ALGEBRA_HOST_DEVICE constexpr vector(Scalars &&...scals)
+  requires(concepts::simd_scalar<scalar_t> && (sizeof...(Scalars) == N) &&
+           ((concepts::simd_scalar<Scalars> ||
+             std::convertible_to<Scalars, scalar_t>)&&...)) ALGEBRA_HOST_DEVICE
+      constexpr vector(Scalars &&... scals)
       : m_data{std::forward<Scalars>(scals)...} {}
 
   /// In order to avoid uninitialized values, which deteriorate the performance
   /// in explicitely vectorized code, the underlying data array is filled with
   /// zeroes if too few arguments are given.
   template <typename... Values>
-    requires(!concepts::simd_scalar<scalar_t> && (sizeof...(Values) > 1) &&
-             ((concepts::value<Values> ||
-               std::convertible_to<Values, scalar_t>) &&
-              ...))
-  ALGEBRA_HOST_DEVICE constexpr vector(Values &&...vals) {
+  requires(!concepts::simd_scalar<scalar_t> && (sizeof...(Values) > 1) &&
+           ((concepts::value<Values> ||
+             std::convertible_to<Values, scalar_t>)&&...)) ALGEBRA_HOST_DEVICE
+      constexpr vector(Values &&... vals) {
 
     static_assert(sizeof...(Values) <= N);
 
@@ -112,18 +110,19 @@ class alignas(
 
   /// Construct from existing array storage @param vals
   template <typename storage_array_t>
-    requires std::convertible_to<storage_array_t, array_type>
-  ALGEBRA_HOST_DEVICE constexpr vector(storage_array_t &&vals)
+  requires(std::convertible_to<storage_array_t, array_type> &&
+           !std::same_as<vector, storage_array_t>) ALGEBRA_HOST_DEVICE
+      constexpr vector(storage_array_t &&vals)
       : m_data{std::forward<storage_array_t>(vals)} {}
 
   /// Assignment operator from a vector with the same underlying storage.
   ///
   /// @param lhs wrap a copy of this data.
   template <std::size_t M>
-    requires(vector<N, scalar_t, array_t>::simd_size() ==
-             vector<M, scalar_t, array_t>::simd_size())
-  ALGEBRA_HOST_DEVICE constexpr const vector &operator=(
-      const vector<M, scalar_t, array_t> &lhs) {
+  requires(vector<N, scalar_t, array_t>::simd_size() ==
+           vector<M, scalar_t, array_t>::simd_size()) ALGEBRA_HOST_DEVICE
+      constexpr const vector &
+      operator=(const vector<M, scalar_t, array_t> &lhs) {
     m_data = lhs;
     return *this;
   }
@@ -159,9 +158,8 @@ class alignas(
   /// @{
   /// AoS
   template <concepts::scalar S = scalar_t>
-    requires(!concepts::simd_scalar<S>)
-  ALGEBRA_HOST_DEVICE constexpr friend bool operator==(
-      const vector &lhs, const vector &rhs) noexcept {
+  requires(!concepts::simd_scalar<S>) ALGEBRA_HOST_DEVICE constexpr friend bool
+  operator==(const vector &lhs, const vector &rhs) noexcept {
 
     const auto comp = lhs.compare(rhs);
     bool is_full = false;
@@ -175,9 +173,8 @@ class alignas(
 
   /// SoA
   template <concepts::scalar S = scalar_t>
-    requires(concepts::simd_scalar<S>)
-  ALGEBRA_HOST_DEVICE constexpr friend bool operator==(
-      const vector &lhs, const vector &rhs) noexcept {
+  requires(concepts::simd_scalar<S>) ALGEBRA_HOST_DEVICE constexpr friend bool
+  operator==(const vector &lhs, const vector &rhs) noexcept {
 
     const auto comp = lhs.compare(rhs);
     bool is_full = false;
@@ -248,16 +245,18 @@ class alignas(
   }                                                                            \
   template <std::size_t N, concepts::scalar scalar_t,                          \
             template <typename, std::size_t> class array_t, typename other_t>  \
-    requires(concepts::vector<other_t> || concepts::simd_scalar<other_t>)      \
-  ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator OP(             \
-      const vector<N, scalar_t, array_t> &lhs, const other_t &rhs) noexcept {  \
+  requires(concepts::vector<other_t> || concepts::simd_scalar<other_t>)        \
+      ALGEBRA_HOST_DEVICE inline constexpr decltype(auto)                      \
+      operator OP(const vector<N, scalar_t, array_t> &lhs,                     \
+                  const other_t &rhs) noexcept {                               \
     return lhs.m_data OP rhs;                                                  \
   }                                                                            \
   template <std::size_t N, concepts::scalar scalar_t,                          \
             template <typename, std::size_t> class array_t, typename other_t>  \
-    requires(concepts::vector<other_t> || concepts::simd_scalar<other_t>)      \
-  ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator OP(             \
-      const other_t &lhs, const vector<N, scalar_t, array_t> &rhs) noexcept {  \
+  requires(concepts::vector<other_t> || concepts::simd_scalar<other_t>)        \
+      ALGEBRA_HOST_DEVICE inline constexpr decltype(auto)                      \
+      operator OP(const other_t &lhs,                                          \
+                  const vector<N, scalar_t, array_t> &rhs) noexcept {          \
     return lhs OP rhs.m_data;                                                  \
   }
 

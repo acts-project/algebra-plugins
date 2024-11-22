@@ -8,6 +8,8 @@
 // Project include(s).
 #include "algebra/vc_soa.hpp"
 
+#include "algebra/utils/print.hpp"
+
 // GoogleTest include(s).
 #include <gtest/gtest.h>
 
@@ -21,6 +23,8 @@ constexpr float tol{1e-5f};
 
 /// This test the vector functions on an SoA (Vc::Vector) based vector
 TEST(test_vc_host, vc_soa_vector) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   using vector3_v = vc_soa::vector3<value_t>;
   // Value type is Vc::Vector<float>
@@ -140,6 +144,8 @@ TEST(test_vc_host, vc_soa_getter) {
 
 /// This test an SoA (Vc::Vector) based affine transform3
 TEST(test_vc_host, vc_soa_transform3) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   using vector3 = vc_soa::vector3<value_t>;
   using point3 = vc_soa::point3<value_t>;
@@ -249,6 +255,8 @@ TEST(test_vc_host, vc_soa_matrix3) {
 
 /// This test an SoA (Vc::Vector) based 6x4 matrix
 TEST(test_vc_host, vc_soa_matrix64) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   // Create the matrix.
   using matrix_6x4_t = vc_soa::matrix_type<value_t, 6, 4>;

@@ -137,7 +137,19 @@ struct block_getter {
       const ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m, unsigned int row,
       unsigned int col) const {
 
-    return m.template SubCol<ROOT::Math::SVector<scalar_t, SIZE>>(col, row);
+    // TODO: SMatrix bug?
+    // return m.template SubCol<ROOT::Math::SVector<scalar_t, SIZE>>(col, row);
+
+    assert(col < COLS);
+    assert(row + SIZE <= ROWS);
+
+    ROOT::Math::SVector<scalar_t, SIZE> ret;
+
+    for (std::size_t irow = row; irow < row + SIZE; ++irow) {
+      ret[irow - row] = m[col][irow];
+    }
+
+    return ret;
   }
 };  // struct block_getter
 
@@ -159,8 +171,8 @@ ALGEBRA_HOST_DEVICE inline auto vector(
     const ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m, std::size_t row,
     std::size_t col) {
 
-  return block_getter{}.template vector<SIZE>(
-      m, static_cast<unsigned int>(row), static_cast<unsigned int>(col));
+  return block_getter{}.template vector<SIZE>(m, static_cast<unsigned int>(row),
+                                              static_cast<unsigned int>(col));
 }
 
 /// Operator setting a block with a matrix

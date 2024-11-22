@@ -36,7 +36,7 @@ using algebra::storage::operator+;
 
 /// Transform wrapper class to ensure standard API within differnt plugins
 template <template <typename, std::size_t> class array_t,
-          concepts::value value_t>
+          concepts::scalar scalar_t>
 struct transform3 {
 
  private:
@@ -53,11 +53,7 @@ struct transform3 {
   /// @{
 
   /// Scalar type used by the transform
-  using value_type = value_t;
-  /// The type of the matrix elements (scalar for AoS, Vc::Vector for SoA)
-  using scalar_type =
-      std::conditional_t<Vc::is_simd_vector<array_t<value_t, 4>>::value,
-                         value_t, Vc::Vector<value_t>>;
+  using scalar_type = scalar_t;
 
   template <std::size_t N>
   using array_type = array_t<scalar_type, N>;

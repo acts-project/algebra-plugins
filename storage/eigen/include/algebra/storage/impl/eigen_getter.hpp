@@ -90,8 +90,8 @@ template <typename derived_type>
 requires std::is_base_of_v<
     Eigen::DenseCoeffsBase<derived_type, Eigen::WriteAccessors>,
     Eigen::MatrixBase<derived_type> >
-    ALGEBRA_HOST_DEVICE inline decltype(auto) element(Eigen::MatrixBase<derived_type> &m,
-                                             std::size_t row, std::size_t col) {
+    ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+        Eigen::MatrixBase<derived_type> &m, std::size_t row, std::size_t col) {
 
   return element_getter()(m, static_cast<Eigen::Index>(row),
                           static_cast<Eigen::Index>(col));
@@ -110,8 +110,8 @@ template <typename derived_type>
 requires std::is_base_of_v<
     Eigen::DenseCoeffsBase<derived_type, Eigen::WriteAccessors>,
     Eigen::MatrixBase<derived_type> >
-    ALGEBRA_HOST_DEVICE inline decltype(auto) element(Eigen::MatrixBase<derived_type> &m,
-                                             std::size_t row) {
+    ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+        Eigen::MatrixBase<derived_type> &m, std::size_t row) {
 
   return element_getter()(m, static_cast<Eigen::Index>(row));
 }
@@ -139,9 +139,9 @@ struct block_getter {
 
   template <int SIZE, typename derived_type, concepts::index size_type_1,
             concepts::index size_type_2>
-  ALGEBRA_HOST_DEVICE decltype(auto) vector(
-      Eigen::MatrixBase<derived_type> &m, size_type_1 row,
-      size_type_2 col) const {
+  ALGEBRA_HOST_DEVICE decltype(auto) vector(Eigen::MatrixBase<derived_type> &m,
+                                            size_type_1 row,
+                                            size_type_2 col) const {
 
     return m.template block<SIZE, 1>(row, col);
   }
@@ -180,8 +180,8 @@ ALGEBRA_HOST_DEVICE inline decltype(auto) vector(
     const Eigen::MatrixBase<derived_type> &m, std::size_t row,
     std::size_t col) {
 
-  return block_getter{}.template vector<SIZE>(
-      m, static_cast<Eigen::Index>(row), static_cast<Eigen::Index>(col));
+  return block_getter{}.template vector<SIZE>(m, static_cast<Eigen::Index>(row),
+                                              static_cast<Eigen::Index>(col));
 }
 
 /// Operator setting a block

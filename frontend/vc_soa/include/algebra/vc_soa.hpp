@@ -10,7 +10,6 @@
 // Project include(s).
 #include "algebra/math/impl/vc_aos_transform3.hpp"
 #include "algebra/math/vc_soa.hpp"
-#include "algebra/print.hpp"
 #include "algebra/storage/vc_soa.hpp"
 
 // System include(s).
@@ -38,9 +37,6 @@ using vc_soa::storage::block;
 using vc_soa::storage::element;
 using vc_soa::storage::set_block;
 using vc_soa::storage::vector;
-
-/// Print the linear algebra types of this backend
-using algebra::operator<<;
 
 /// @}
 
@@ -95,12 +91,12 @@ namespace plugin {
 
 /// Define the plugin types
 /// @{
-template <typename V>
+template <concepts::value V>
 struct vc_soa {
   /// Define scalar precision
   using value_type = V;
 
-  template <typename T>
+  template <concepts::value T>
   using simd = Vc::Vector<T>;
 
   using boolean = Vc::Mask<V>;

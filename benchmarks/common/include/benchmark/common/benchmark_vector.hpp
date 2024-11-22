@@ -30,7 +30,9 @@ struct vector_bm : public benchmark_base {
   /// Prefix for the benchmark name
   inline static const std::string name{"vector"};
 
-  std::vector<vector_t> a, b, results;
+  std::vector<vector_t> a;
+  std::vector<vector_t> b;
+  std::vector<vector_t> results;
 
   /// No default construction: Cannot prepare data
   vector_bm() = delete;
@@ -82,8 +84,8 @@ requires std::invocable<unaryOP, vector_t<scalar_t>> struct vector_unaryOP_bm
     // Run the benchmark
     for (auto _ : state) {
       for (std::size_t i{0}; i < n_samples; ++i) {
-        result_t result = unaryOP{}(this->a[i]);
-        ::benchmark::DoNotOptimize(const_cast<const result_t &>(result));
+        const result_t result = unaryOP{}(this->a[i]);
+        ::benchmark::DoNotOptimize(result);
       }
     }
   }
@@ -117,8 +119,8 @@ requires std::invocable<binaryOP, vector_t<scalar_t>,
     // Run the benchmark
     for (auto _ : state) {
       for (std::size_t i{0}; i < n_samples; ++i) {
-        result_t result = binaryOP{}(this->a[i], this->b[i]);
-        ::benchmark::DoNotOptimize(const_cast<const result_t &>(result));
+        const result_t result = binaryOP{}(this->a[i], this->b[i]);
+        ::benchmark::DoNotOptimize(result);
       }
     }
   }

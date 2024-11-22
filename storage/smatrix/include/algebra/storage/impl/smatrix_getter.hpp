@@ -159,8 +159,8 @@ ALGEBRA_HOST_DEVICE inline auto vector(
     const ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m, std::size_t row,
     std::size_t col) {
 
-  return block_getter{}.template vector<SIZE>(
-      m, static_cast<unsigned int>(row), static_cast<unsigned int>(col));
+  return block_getter{}.template vector<SIZE>(m, static_cast<unsigned int>(row),
+                                              static_cast<unsigned int>(col));
 }
 
 /// Operator setting a block with a matrix

@@ -8,6 +8,8 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/boolean.hpp"
+#include "algebra/math/common.hpp"
 #include "algebra/math/impl/eigen_matrix.hpp"
 #include "algebra/math/impl/eigen_transform3.hpp"
 #include "algebra/math/impl/eigen_vector.hpp"

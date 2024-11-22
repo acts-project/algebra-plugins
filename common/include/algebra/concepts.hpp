@@ -27,11 +27,15 @@ concept value = algebra::concepts::arithmetic<std::decay_t<T>>;
 template <typename T>
 concept scalar = !algebra::traits::is_matrix<T> &&
                  !algebra::traits::is_vector<T> && requires(T a, T b) {
-                   { a + b } -> std::convertible_to<T>;
-                   { a - b } -> std::convertible_to<T>;
-                   { a* b } -> std::convertible_to<T>;
-                   { a / b } -> std::convertible_to<T>;
-                 };
+  { a + b }
+  ->std::convertible_to<T>;
+  { a - b }
+  ->std::convertible_to<T>;
+  { a* b }
+  ->std::convertible_to<T>;
+  { a / b }
+  ->std::convertible_to<T>;
+};
 
 /// Check if a scalar is simd
 template <typename T>
@@ -71,7 +75,7 @@ template <typename M>
 concept matrix = algebra::traits::is_matrix<M>;
 
 template <typename M>
-concept square_matrix = matrix<M> && algebra::traits::is_square<M>;
+concept square_matrix = matrix<M>&& algebra::traits::is_square<M>;
 
 template <typename M>
 concept row_matrix = matrix<M> && (algebra::traits::rows<M> == 1);

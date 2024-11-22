@@ -7,6 +7,9 @@
 
 #pragma once
 
+// Project include(s).
+#include "algebra/utils/print.hpp"
+
 // Local include(s).
 #include "test_base.hpp"
 
@@ -35,6 +38,8 @@ TYPED_TEST_SUITE_P(test_host_basics_transform);
 
 // This defines the local frame test suite
 TYPED_TEST_P(test_host_basics_vector, local_vectors) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   // Construction
   typename TypeParam::point2 vA{0.f, 1.f};
@@ -77,6 +82,8 @@ TYPED_TEST_P(test_host_basics_vector, local_vectors) {
 
 // This defines the vector3 test suite
 TYPED_TEST_P(test_host_basics_vector, vector3) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   // Test concepts
   static_assert(algebra::concepts::scalar<typename TypeParam::scalar>);
@@ -220,6 +227,9 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_2x3) {
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_3x1) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
+
   // Cross product on vector3 and matrix<3,1>
   typename TypeParam::template matrix<3, 1> vF;
   algebra::getter::element(vF, 0, 0) = 5.f;
@@ -241,6 +251,8 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_3x1) {
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   // Create the matrix.
   static constexpr typename TypeParam::size_type ROWS = 6;
@@ -665,6 +677,8 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {
 
 // This defines the transform3 test suite
 TYPED_TEST_P(test_host_basics_transform, transform3) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   static_assert(algebra::concepts::transform3D<typename TypeParam::transform3>);
 

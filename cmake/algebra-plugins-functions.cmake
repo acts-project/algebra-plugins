@@ -1,6 +1,6 @@
 # Algebra plugins library, part of the ACTS project (R&D line)
 #
-# (c) 2021-2023 CERN for the benefit of the ACTS project
+# (c) 2021-2024 CERN for the benefit of the ACTS project
 #
 # Mozilla Public License Version 2.0
 
@@ -8,6 +8,7 @@
 include_guard( GLOBAL )
 
 # CMake include(s).
+include( CheckCXXCompilerFlag )
 include( CMakeParseArguments )
 
 # Helper function for setting up the algebra plugins libraries.
@@ -121,8 +122,18 @@ function( algebra_add_benchmark name )
    set( bench_exe_name "algebra_benchmark_${name}" )
    add_executable( ${bench_exe_name} ${ARG_UNPARSED_ARGUMENTS} )
 
-   target_compile_options( algebra_benchmark_${name} PRIVATE
-   "-march=native" "-ftree-vectorize")
+   # Build benchmarks for the native architecture by default. Can be overridden
+   # from the command line.
+   set( ALGEBRA_BENCHMARK_ARCHITECTURE_FLAG "-march=native" CACHE STRING
+      "Architecture flag for the algebra benchmarks" )
+   mark_as_advanced( ALGEBRA_BENCHMARK_ARCHITECTURE_FLAG )
+   check_cxx_compiler_flag( "${ALGEBRA_BENCHMARK_ARCHITECTURE_FLAG}"
+      ALGEBRA_BENCHMARK_ARCHITECTURE_FLAG_SUPPORTED )
+   if( ALGEBRA_BENCHMARK_ARCHITECTURE_FLAG_SUPPORTED AND
+       ( NOT "${CMAKE_CXX_FLAGS}" MATCHES "-march=" ) )
+      target_compile_options( algebra_benchmark_${name} PRIVATE
+         "${ALGEBRA_BENCHMARK_ARCHITECTURE_FLAG}" )
+   endif()
 
    if( ARG_LINK_LIBRARIES )
       target_link_libraries( ${bench_exe_name} PRIVATE ${ARG_LINK_LIBRARIES} )

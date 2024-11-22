@@ -23,17 +23,17 @@
 namespace algebra::fastor::math {
 
 /// Create zero matrix
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 ALGEBRA_HOST_DEVICE inline matrix_t zero() {
   return matrix_t(0);
 }
 
 /// Create identity matrix
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 ALGEBRA_HOST_DEVICE inline matrix_t identity() {
-  using scalar_t = algebra::trait::value_t<matrix_t>;
-  constexpr auto rows{algebra::trait::rows<matrix_t>};
-  constexpr auto cols{algebra::trait::columns<matrix_t>};
+  using scalar_t = algebra::traits::value_t<matrix_t>;
+  constexpr auto rows{algebra::traits::rows<matrix_t>};
+  constexpr auto cols{algebra::traits::columns<matrix_t>};
 
   if constexpr (rows >= cols) {
     matrix_type<scalar_t, rows, rows> identity_matrix;
@@ -49,13 +49,13 @@ ALGEBRA_HOST_DEVICE inline matrix_t identity() {
 }
 
 /// Set input matrix as zero matrix
-template <std::size_t ROWS, std::size_t COLS, typename scalar_t>
+template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<scalar_t, ROWS, COLS> &m) {
   m.zeros();
 }
 
 /// Set input matrix as identity matrix
-template <std::size_t ROWS, std::size_t COLS, typename scalar_t>
+template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline void set_identity(
     matrix_type<scalar_t, ROWS, COLS> &m) {
 
@@ -63,7 +63,7 @@ ALGEBRA_HOST_DEVICE inline void set_identity(
 }
 
 /// Create transpose matrix
-template <std::size_t ROWS, std::size_t COLS, typename scalar_t>
+template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline matrix_type<scalar_t, COLS, ROWS> transpose(
     const matrix_type<scalar_t, ROWS, COLS> &m) {
 
@@ -71,7 +71,7 @@ ALGEBRA_HOST_DEVICE inline matrix_type<scalar_t, COLS, ROWS> transpose(
 }
 
 /// @returns the determinant of @param m
-template <std::size_t N, typename scalar_t>
+template <std::size_t N, concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline scalar_t determinant(
     const matrix_type<scalar_t, N, N> &m) {
 
@@ -79,7 +79,7 @@ ALGEBRA_HOST_DEVICE inline scalar_t determinant(
 }
 
 /// @returns the inverse of @param m
-template <std::size_t ROWS, std::size_t COLS, typename scalar_t>
+template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline matrix_type<scalar_t, COLS, ROWS> inverse(
     const matrix_type<scalar_t, ROWS, COLS> &m) {
 

@@ -18,7 +18,7 @@
 namespace algebra::smatrix::math {
 
 /// Transform wrapper class to ensure standard API towards the ROOT::SMatrix lib
-template <typename scalar_t>
+template <concepts::scalar scalar_t>
 struct transform3 {
 
   /// @name Type definitions for the struct

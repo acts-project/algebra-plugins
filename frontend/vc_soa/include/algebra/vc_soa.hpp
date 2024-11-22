@@ -10,6 +10,7 @@
 // Project include(s).
 #include "algebra/math/impl/vc_aos_transform3.hpp"
 #include "algebra/math/vc_soa.hpp"
+#include "algebra/print.hpp"
 #include "algebra/storage/vc_soa.hpp"
 
 // System include(s).
@@ -37,6 +38,9 @@ using vc_soa::storage::block;
 using vc_soa::storage::element;
 using vc_soa::storage::set_block;
 using vc_soa::storage::vector;
+
+/// Print the linear algebra types of this backend
+using algebra::operator<<;
 
 /// @}
 
@@ -78,12 +82,44 @@ namespace vc_soa {
 /// @name Vc based transforms on @c algebra::vc_soa types
 /// @{
 
-template <typename T>
+template <concepts::value T>
 using transform3 =
-    algebra::vc_aos::math::transform3<algebra::vc_soa::storage_type, T>;
+    algebra::vc_aos::math::transform3<algebra::vc_soa::storage_type,
+                                      Vc::Vector<T>>;
 
 /// @}
 
 }  // namespace vc_soa
+
+namespace plugin {
+
+/// Define the plugin types
+/// @{
+template <typename V>
+struct vc_soa {
+  /// Define scalar precision
+  using value_type = V;
+
+  template <typename T>
+  using simd = Vc::Vector<T>;
+
+  using boolean = Vc::Mask<V>;
+
+  /// Linear Algebra type definitions
+  /// @{
+  using scalar = simd<value_type>;
+  using size_type = algebra::vc_soa::size_type;
+  using transform3D = algebra::vc_soa::transform3<value_type>;
+  using point2D = algebra::vc_soa::point2<value_type>;
+  using point3D = algebra::vc_soa::point3<value_type>;
+  using vector3D = algebra::vc_soa::vector3<value_type>;
+
+  template <std::size_t ROWS, std::size_t COLS>
+  using matrix = algebra::vc_soa::matrix_type<value_type, ROWS, COLS>;
+  /// @}
+};
+/// @}
+
+}  // namespace plugin
 
 }  // namespace algebra

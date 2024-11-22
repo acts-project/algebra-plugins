@@ -10,6 +10,7 @@
 // Project include(s).
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/generic.hpp"
+#include "algebra/print.hpp"
 #include "algebra/storage/vecmem.hpp"
 
 /// @name Operators on @c algebra::vecmem::storage_type
@@ -18,6 +19,9 @@
 using algebra::cmath::operator*;
 using algebra::cmath::operator-;
 using algebra::cmath::operator+;
+
+/// Print the linear algebra types of this backend
+using algebra::operator<<;
 
 /// @}
 
@@ -58,6 +62,26 @@ using generic::math::theta;
 
 }  // namespace vector
 
+// Use special algorithms for 4 dimensional matrices
+namespace generic {
+
+// Determinant algorithms
+template <concepts::scalar T, auto ROWS, auto COLS>
+struct determinant_selector<4, vecmem::matrix_type<T, ROWS, COLS>> {
+  using type =
+      matrix::determinant::hard_coded<vecmem::matrix_type<T, ROWS, COLS>,
+                                      vecmem::element_getter>;
+};
+
+// Inversion algorithms
+template <concepts::scalar T, auto ROWS, auto COLS>
+struct inversion_selector<4, vecmem::matrix_type<T, ROWS, COLS>> {
+  using type = matrix::inverse::hard_coded<vecmem::matrix_type<T, ROWS, COLS>,
+                                           vecmem::element_getter>;
+};
+
+}  // namespace generic
+
 namespace matrix {
 
 /// @name Matrix functions on @c algebra::vecmem::storage_type
@@ -81,7 +105,7 @@ namespace vecmem {
 /// @name cmath based transforms on @c algebra::vecmem
 /// @{
 
-template <typename T>
+template <concepts::scalar T>
 using transform3 =
     generic::math::transform3<std::size_t, T, vecmem::matrix_type,
                               vecmem::storage_type>;
@@ -89,5 +113,32 @@ using transform3 =
 /// @}
 
 }  // namespace vecmem
+
+namespace plugin {
+
+/// Define the plugin types
+/// @{
+template <typename V>
+struct vecmem {
+    /// Define scalar type
+    using value_type = V;
+
+    template <typename T>
+    using simd = T;
+
+    using boolean = bool;
+    using scalar = value_type;
+    using size_type = algebra::vecmem::size_type;
+    using transform3D = algebra::vecmem::transform3<value_type>;
+    using point2D = algebra::vecmem::point2<value_type>;
+    using point3D = algebra::vecmem::point3<value_type>;
+    using vector3D = algebra::vecmem::vector3<value_type>;
+
+    template <std::size_t ROWS, std::size_t COLS>
+    using matrix = algebra::vecmem::matrix_type<value_type, ROWS, COLS>;
+};
+/// @}
+
+} // namespace plugin
 
 }  // namespace algebra

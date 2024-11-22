@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/math/algorithms/matrix/determinant/cofactor.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/type_traits.hpp"
@@ -20,17 +21,17 @@ namespace algebra::generic::matrix {
 namespace adjoint {
 
 /// "Adjoint getter", assuming a N X N matrix
-template <class matrix_t, class element_getter_t>
+template <concepts::square_matrix matrix_t, class element_getter_t>
 struct cofactor {
 
-  using scalar_type = algebra::trait::value_t<matrix_t>;
-  using size_type = algebra::trait::index_t<matrix_t>;
+  using scalar_type = algebra::traits::value_t<matrix_t>;
+  using size_type = algebra::traits::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
 
   ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t &m) const {
-    return adjoint_getter_helper<algebra::trait::rank<matrix_t>>()(m);
+    return adjoint_getter_helper<algebra::traits::rank<matrix_t>>()(m);
   }
 
   template <size_type N, typename Enable = void>
@@ -94,8 +95,8 @@ namespace inverse {
 template <class matrix_t, class element_getter_t>
 struct cofactor {
 
-  using scalar_type = algebra::trait::value_t<matrix_t>;
-  using size_type = algebra::trait::index_t<matrix_t>;
+  using scalar_type = algebra::traits::value_t<matrix_t>;
+  using size_type = algebra::traits::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
@@ -106,7 +107,7 @@ struct cofactor {
 
   ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t &m) const {
 
-    constexpr size_type N{algebra::trait::rank<matrix_t>};
+    constexpr size_type N{algebra::traits::rank<matrix_t>};
 
     matrix_t ret;
 

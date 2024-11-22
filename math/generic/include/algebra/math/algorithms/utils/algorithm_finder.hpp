@@ -17,26 +17,24 @@ namespace algebra::generic {
 
 /// Get the type of determinant algorithm acording to matrix dimension
 /// @{
+
+// Default algorithm
 template <std::size_t N, typename... Args>
 struct determinant_selector {
   using type = matrix::determinant::partial_pivot_lud<Args...>;
 };
 
+/// Always use hard coded implementation for very small matrices
 template <typename... Args>
 struct determinant_selector<2, Args...> {
   using type = matrix::determinant::hard_coded<Args...>;
 };
 
-template <typename... Args>
-struct determinant_selector<4, Args...> {
-  using type = matrix::determinant::hard_coded<Args...>;
-};
-
 /// @tparam M matrix type
-template <class M>
+template <concepts::square_matrix M>
 using determinant_t =
-    typename determinant_selector<algebra::trait::rank<M>, M,
-                                  algebra::trait::element_getter_t<M>>::type;
+    typename determinant_selector<algebra::traits::rank<M>, M,
+                                  algebra::traits::element_getter_t<M>>::type;
 /// @}
 
 /// Get the type of inversion algorithm acording to matrix dimension
@@ -46,21 +44,17 @@ struct inversion_selector {
   using type = matrix::inverse::partial_pivot_lud<Args...>;
 };
 
+/// Always use hard coded implementation for very small matrices
 template <typename... Args>
 struct inversion_selector<2, Args...> {
   using type = matrix::inverse::hard_coded<Args...>;
 };
 
-template <typename... Args>
-struct inversion_selector<4, Args...> {
-  using type = matrix::inverse::hard_coded<Args...>;
-};
-
 /// @tparam M matrix type
-template <class M>
+template <concepts::square_matrix M>
 using inversion_t =
-    typename inversion_selector<algebra::trait::rank<M>, M,
-                                algebra::trait::element_getter_t<M>>::type;
+    typename inversion_selector<algebra::traits::rank<M>, M,
+                                algebra::traits::element_getter_t<M>>::type;
 /// @}generic
 
 }  // namespace algebra::generic

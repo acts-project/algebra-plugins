@@ -10,6 +10,7 @@
 // Project include(s).
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/generic.hpp"
+#include "algebra/print.hpp"
 #include "algebra/storage/array.hpp"
 
 /// @name Operators on @c algebra::array::storage_type
@@ -18,6 +19,9 @@
 using algebra::cmath::operator*;
 using algebra::cmath::operator-;
 using algebra::cmath::operator+;
+
+/// Print the linear algebra types of this backend
+using algebra::operator<<;
 
 /// @}
 
@@ -47,16 +51,36 @@ using cmath::dot;
 using cmath::normalize;
 
 // generic implementations
-using generic::math::cross;
-using generic::math::eta;
-using generic::math::norm;
-using generic::math::perp;
-using generic::math::phi;
-using generic::math::theta;
+using cmath::cross;
+using cmath::eta;
+using cmath::norm;
+using cmath::perp;
+using cmath::phi;
+using cmath::theta;
 
 /// @}
 
 }  // namespace vector
+
+// Use special algorithms for 4 dimensional matrices
+namespace generic {
+
+// Determinant algorithms
+template <concepts::scalar T, auto ROWS, auto COLS>
+struct determinant_selector<4, array::matrix_type<T, ROWS, COLS>> {
+  using type =
+      matrix::determinant::hard_coded<array::matrix_type<T, ROWS, COLS>,
+                                      array::element_getter>;
+};
+
+// Inversion algorithms
+template <concepts::scalar T, auto ROWS, auto COLS>
+struct inversion_selector<4, array::matrix_type<T, ROWS, COLS>> {
+  using type = matrix::inverse::hard_coded<array::matrix_type<T, ROWS, COLS>,
+                                           array::element_getter>;
+};
+
+}  // namespace generic
 
 namespace matrix {
 
@@ -68,9 +92,10 @@ using cmath::set_identity;
 using cmath::set_zero;
 using cmath::zero;
 
-using generic::math::determinant;
-using generic::math::inverse;
-using generic::math::transpose;
+// Uses generic implementation in the background
+using cmath::determinant;
+using cmath::inverse;
+using cmath::transpose;
 
 /// @}
 
@@ -81,7 +106,7 @@ namespace array {
 /// @name cmath based transforms on @c algebra::array
 /// @{
 
-template <typename T>
+template <concepts::scalar T>
 using transform3 =
     generic::math::transform3<array::size_type, T, array::matrix_type,
                               array::storage_type>;
@@ -89,5 +114,32 @@ using transform3 =
 /// @}
 
 }  // namespace array
+
+namespace plugin {
+
+/// Define the plugin types
+/// @{
+template <typename V>
+struct cmath {
+    /// Define scalar type
+    using value_type = V;
+
+    template <typename T>
+    using simd = T;
+
+    using boolean = bool;
+    using scalar = value_type;
+    using size_type = algebra::array::size_type;
+    using transform3D = algebra::array::transform3<value_type>;
+    using point2D = algebra::array::point2<value_type>;
+    using point3D = algebra::array::point3<value_type>;
+    using vector3D = algebra::array::vector3<value_type>;
+
+    template <std::size_t ROWS, std::size_t COLS>
+    using matrix = algebra::array::matrix_type<value_type, ROWS, COLS>;
+};
+/// @}
+
+} // namespace plugin
 
 }  // namespace algebra

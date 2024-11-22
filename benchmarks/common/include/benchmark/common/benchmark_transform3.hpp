@@ -19,11 +19,11 @@
 
 namespace algebra {
 
-template <typename transform3_t>
+template <concepts::transform3D transform3_t>
 void fill_random_trf(std::vector<transform3_t>&);
 
 /// Benchmark for vector operations
-template <typename transform3_t>
+template <concepts::transform3D transform3_t>
 struct transform3_bm : public vector_bm<typename transform3_t::vector3> {
  private:
   using base_type = vector_bm<typename transform3_t::vector3>;

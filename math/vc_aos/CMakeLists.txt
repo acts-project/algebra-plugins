@@ -7,7 +7,7 @@
 # Set up the library.
 algebra_add_library( algebra_vc_aos_math vc_aos_math
    "include/algebra/math/vc_aos.hpp"
-   "include/algebra/math/impl/vc_aos_getter.hpp"
+   "include/algebra/math/impl/vc_aos_matrix.hpp"
    "include/algebra/math/impl/vc_aos_transform3.hpp"
    "include/algebra/math/impl/vc_aos_vector.hpp" )
 target_link_libraries( algebra_vc_aos_math

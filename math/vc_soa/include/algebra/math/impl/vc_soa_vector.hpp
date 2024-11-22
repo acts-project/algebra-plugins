@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
+#include "algebra/math/impl/vc_soa_math.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/vector.hpp"
 
@@ -32,8 +33,9 @@ namespace algebra::vc_soa::math {
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 2) ALGEBRA_HOST_DEVICE
-    inline auto phi(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+  requires(N >= 2)
+ALGEBRA_HOST_DEVICE inline auto phi(
+    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::atan2(v[1], v[0]);
 }
@@ -47,7 +49,8 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 2) ALGEBRA_HOST_DEVICE inline auto perp(
+  requires(N >= 2)
+ALGEBRA_HOST_DEVICE inline auto perp(
     const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::sqrt(Vc::fma(v[0], v[0], v[1] * v[1]));
@@ -62,7 +65,8 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE inline auto perp(
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 3) ALGEBRA_HOST_DEVICE inline auto theta(
+  requires(N >= 3)
+ALGEBRA_HOST_DEVICE inline auto theta(
     const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::atan2(perp(v), v[2]);
@@ -80,10 +84,10 @@ requires(N >= 3) ALGEBRA_HOST_DEVICE inline auto theta(
 /// @return a vector (expression) representing the cross product
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N == 3) ALGEBRA_HOST_DEVICE
-    inline storage::vector<N, Vc::Vector<value_t>, array_t> cross(
-        const storage::vector<N, Vc::Vector<value_t>, array_t> &a,
-        const storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
+  requires(N == 3)
+ALGEBRA_HOST_DEVICE inline storage::vector<N, Vc::Vector<value_t>, array_t>
+cross(const storage::vector<N, Vc::Vector<value_t>, array_t> &a,
+      const storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
 
   return {Vc::fma(a[1], b[2], -b[1] * a[2]), Vc::fma(a[2], b[0], -b[2] * a[0]),
           Vc::fma(a[0], b[1], -b[0] * a[1])};
@@ -160,8 +164,9 @@ normalize(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 3) ALGEBRA_HOST_DEVICE
-    inline auto eta(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+  requires(N >= 3)
+ALGEBRA_HOST_DEVICE inline auto eta(
+    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   // atanh does not exist in Vc
   auto atanh_func = [](value_t e) { return std::atanh(e); };

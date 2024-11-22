@@ -34,7 +34,7 @@ namespace vc_soa {
 /// Size type for Vc storage model
 using size_type = std::size_t;
 /// Array type used to store Vc::Vectors or matrix columns
-template <concepts::scalar T, size_type N>
+template <concepts::simd_scalar T, size_type N>
 using storage_type = std::array<T, N>;
 /// Value type in a linear algebra vector: SoA layout
 template <concepts::value T>
@@ -90,7 +90,7 @@ struct scalar<
 /// @}
 
 // Vector and storage types are different
-template <typename T, auto N>
+template <concepts::simd_scalar T, auto N>
 struct dimensions<vc_soa::storage_type<T, N>> {
 
   using size_type = vc_soa::size_type;

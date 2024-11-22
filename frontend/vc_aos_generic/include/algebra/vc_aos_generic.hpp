@@ -79,7 +79,7 @@ namespace vc_aos {
 /// @name generic based transforms on @c algebra::vc_aos
 /// @{
 
-template <typename T>
+template <concepts::value T>
 using transform3 =
     generic::math::transform3<vc_aos::size_type, T, vc_aos::matrix_type,
                               vc_aos::storage_type>;

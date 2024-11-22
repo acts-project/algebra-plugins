@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/smatrix.hpp"
 
@@ -17,53 +18,40 @@
 namespace algebra::smatrix::math {
 
 /// Create zero matrix
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 ALGEBRA_HOST_DEVICE inline matrix_t zero() {
   return matrix_t();
 }
 
 /// Create identity matrix
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 ALGEBRA_HOST_DEVICE inline matrix_t identity() {
   return matrix_t(ROOT::Math::SMatrixIdentity());
 }
 
-// Set input matrix as zero matrix
-template <unsigned int ROWS, unsigned int COLS, typename scalar_t>
-ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<scalar_t, ROWS, COLS> &m) {
-
-  for (unsigned int i = 0; i < ROWS; ++i) {
-    for (unsigned int j = 0; j < COLS; ++j) {
-      m(i, j) = 0;
-    }
-  }
+/// Set input matrix as zero matrix
+template <unsigned int ROWS, unsigned int COLS, concepts::scalar scalar_t>
+ALGEBRA_HOST_DEVICE inline void set_zero(
+    ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m) {
+  m = zero<ROOT::Math::SMatrix<scalar_t, ROWS, COLS>>();
 }
 
-// Set input matrix as identity matrix
-template <unsigned int ROWS, unsigned int COLS, typename scalar_t>
+/// Set input matrix as identity matrix
+template <unsigned int ROWS, unsigned int COLS, concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline void set_identity(
-    matrix_type<scalar_t, ROWS, COLS> &m) {
-
-  for (unsigned int i = 0; i < ROWS; ++i) {
-    for (unsigned int j = 0; j < COLS; ++j) {
-      if (i == j) {
-        m(i, j) = 1;
-      } else {
-        m(i, j) = 0;
-      }
-    }
-  }
+    ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m) {
+  m = identity<ROOT::Math::SMatrix<scalar_t, ROWS, COLS>>();
 }
 
-// Create transpose matrix
-template <unsigned int ROWS, unsigned int COLS, typename scalar_t>
+/// Create transpose matrix
+template <unsigned int ROWS, unsigned int COLS, concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline matrix_type<scalar_t, COLS, ROWS> transpose(
-    const matrix_type<scalar_t, ROWS, COLS> &m) {
+    const ROOT::Math::SMatrix<scalar_t, ROWS, COLS> &m) {
   return ROOT::Math::Transpose(m);
 }
 
 /// @returns the determinant of @param m
-template <unsigned int ROWS, unsigned int COLS, typename scalar_t>
+template <unsigned int ROWS, unsigned int COLS, concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline scalar_t determinant(
     const matrix_type<scalar_t, ROWS, COLS> &m) {
 
@@ -74,7 +62,7 @@ ALGEBRA_HOST_DEVICE inline scalar_t determinant(
 }
 
 /// @returns the inverse of @param m
-template <unsigned int ROWS, unsigned int COLS, typename scalar_t>
+template <unsigned int ROWS, unsigned int COLS, concepts::scalar scalar_t>
 ALGEBRA_HOST_DEVICE inline matrix_type<scalar_t, COLS, ROWS> inverse(
     const matrix_type<scalar_t, ROWS, COLS> &m) {
 

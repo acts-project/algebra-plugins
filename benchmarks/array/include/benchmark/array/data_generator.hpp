@@ -9,6 +9,7 @@
 
 // Project include(s)
 #include "algebra/array_cmath.hpp"
+#include "algebra/concepts.hpp"
 
 // System include(s)
 #include <algorithm>
@@ -18,7 +19,7 @@
 namespace algebra {
 
 /// Fill an @c std::array based vector with random values
-template <typename vector_t>
+template <concepts::vector vector_t>
 inline void fill_random_vec(std::vector<vector_t> &collection) {
 
   // Generate a vector of the right type with random values
@@ -33,7 +34,7 @@ inline void fill_random_vec(std::vector<vector_t> &collection) {
 }
 
 /// Fill a @c std::array based transform3 with random values
-template <typename transform3_t>
+template <concepts::transform3D transform3_t>
 inline void fill_random_trf(std::vector<transform3_t> &collection) {
 
   using vector_t = typename transform3_t::vector3;
@@ -64,7 +65,7 @@ inline void fill_random_trf(std::vector<transform3_t> &collection) {
 }
 
 /// Fill a @c std::array based matrix with random values
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 inline void fill_random_matrix(std::vector<matrix_t> &collection) {
 
   using scalar_t = typename matrix_t::value_type::value_type;

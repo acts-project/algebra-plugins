@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
@@ -22,7 +23,7 @@ namespace algebra::cmath::storage {
 struct element_getter {
 
   /// Operator getting a reference to one element of a non-const matrix
-  template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
+  template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline scalar_t &operator()(
       array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
@@ -34,7 +35,7 @@ struct element_getter {
   }
 
   /// Operator getting one value of a const matrix
-  template <std::size_t ROWS, std::size_t COLS, typename scalar_t,
+  template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline scalar_t operator()(
       const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
@@ -46,7 +47,7 @@ struct element_getter {
   }
 
   /// Operator getting a reference to one element of a non-const matrix
-  template <std::size_t N, typename scalar_t,
+  template <std::size_t N, concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline scalar_t &operator()(
       array_t<array_t<scalar_t, N>, 1> &m, std::size_t row) const {
@@ -56,7 +57,7 @@ struct element_getter {
   }
 
   /// Operator getting a reference to one element of a const matrix
-  template <std::size_t N, typename scalar_t,
+  template <std::size_t N, concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline scalar_t operator()(
       const array_t<array_t<scalar_t, N>, 1> &m, std::size_t row) const {
@@ -66,7 +67,7 @@ struct element_getter {
   }
 
   /// Operator getting a reference to one element of a non-const matrix
-  template <std::size_t N, typename scalar_t,
+  template <std::size_t N, concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline scalar_t &operator()(array_t<scalar_t, N> &m,
                                                   std::size_t row) const {
@@ -76,7 +77,7 @@ struct element_getter {
   }
 
   /// Operator getting a reference to one element of a const matrix
-  template <std::size_t N, typename scalar_t,
+  template <std::size_t N, concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline scalar_t operator()(const array_t<scalar_t, N> &m,
                                                  std::size_t row) const {
@@ -88,8 +89,8 @@ struct element_getter {
 };  // struct element_getter
 
 /// Function extracting an element from a matrix (const)
-template <template <typename, std::size_t> class array_t, typename scalar_t,
-          std::size_t ROWS, std::size_t COLS>
+template <template <typename, std::size_t> class array_t,
+          concepts::scalar scalar_t, std::size_t ROWS, std::size_t COLS>
 ALGEBRA_HOST_DEVICE inline scalar_t element(
     const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
     std::size_t col) {
@@ -98,8 +99,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t element(
 }
 
 /// Function extracting an element from a matrix (non-const)
-template <template <typename, std::size_t> class array_t, typename scalar_t,
-          std::size_t ROWS, std::size_t COLS>
+template <template <typename, std::size_t> class array_t,
+          concepts::scalar scalar_t, std::size_t ROWS, std::size_t COLS>
 ALGEBRA_HOST_DEVICE inline scalar_t &element(
     array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
     std::size_t col) {
@@ -108,8 +109,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t &element(
 }
 
 /// Function extracting an element from a matrix (const)
-template <template <typename, std::size_t> class array_t, typename scalar_t,
-          std::size_t N>
+template <template <typename, std::size_t> class array_t,
+          concepts::scalar scalar_t, std::size_t N>
 ALGEBRA_HOST_DEVICE inline scalar_t element(
     const array_t<array_t<scalar_t, N>, 1> &m, std::size_t row) {
 
@@ -117,8 +118,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t element(
 }
 
 /// Function extracting an element from a matrix (non-const)
-template <template <typename, std::size_t> class array_t, typename scalar_t,
-          std::size_t N>
+template <template <typename, std::size_t> class array_t,
+          concepts::scalar scalar_t, std::size_t N>
 ALGEBRA_HOST_DEVICE inline scalar_t &element(
     array_t<array_t<scalar_t, N>, 1> &m, std::size_t row) {
 
@@ -126,8 +127,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t &element(
 }
 
 /// Function extracting an element from a vector (const)
-template <template <typename, std::size_t> class array_t, typename scalar_t,
-          std::size_t N>
+template <template <typename, std::size_t> class array_t,
+          concepts::scalar scalar_t, std::size_t N>
 ALGEBRA_HOST_DEVICE inline scalar_t element(const array_t<scalar_t, N> &v,
                                             std::size_t row) {
 
@@ -135,8 +136,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t element(const array_t<scalar_t, N> &v,
 }
 
 /// Function extracting an element from a vector (non-const)
-template <template <typename, std::size_t> class array_t, typename scalar_t,
-          std::size_t N>
+template <template <typename, std::size_t> class array_t,
+          concepts::scalar scalar_t, std::size_t N>
 ALGEBRA_HOST_DEVICE inline scalar_t &element(array_t<scalar_t, N> &v,
                                              std::size_t row) {
 
@@ -148,7 +149,7 @@ struct block_getter {
 
   /// Operator producing a sub-matrix from a const matrix
   template <std::size_t ROWS, std::size_t COLS, std::size_t oROWS,
-            std::size_t oCOLS, typename scalar_t,
+            std::size_t oCOLS, concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE auto operator()(
       const array_t<array_t<scalar_t, oROWS>, oCOLS> &m, std::size_t row,
@@ -166,7 +167,8 @@ struct block_getter {
 
   /// Operator producing a vector out of a const matrix
   template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
-            typename scalar_t, template <typename, std::size_t> class array_t>
+            concepts::scalar scalar_t,
+            template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> operator()(
       const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
       std::size_t col) {
@@ -196,7 +198,8 @@ ALGEBRA_HOST_DEVICE decltype(auto) block(const input_matrix_type &m,
 
 /// Function extracting a vector from a matrix
 template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
-          typename scalar_t, template <typename, std::size_t> class array_t>
+          concepts::scalar scalar_t,
+          template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> vector(
     const array_t<array_t<scalar_t, ROWS>, COLS> &m, std::size_t row,
     std::size_t col) {
@@ -207,7 +210,8 @@ ALGEBRA_HOST_DEVICE inline array_t<scalar_t, SIZE> vector(
 /// Sets a matrix of dimension @tparam ROW and @tparam COL as submatrix of
 /// @param m beginning at row @param row and column @param col
 template <std::size_t ROWS, std::size_t COLS, class input_matrix_type,
-          typename scalar_t, template <typename, std::size_t> class array_t>
+          concepts::scalar scalar_t,
+          template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE void set_block(
     input_matrix_type &m, const array_t<array_t<scalar_t, ROWS>, COLS> &b,
     std::size_t row, std::size_t col) {
@@ -220,7 +224,7 @@ ALGEBRA_HOST_DEVICE void set_block(
 
 /// Sets a vector of length @tparam ROW as submatrix of
 /// @param m beginning at row @param row and column @param col
-template <std::size_t ROWS, typename scalar_t,
+template <std::size_t ROWS, concepts::scalar scalar_t,
           template <typename, std::size_t> class vector_t,
           class input_matrix_type>
 ALGEBRA_HOST_DEVICE void set_block(input_matrix_type &m,

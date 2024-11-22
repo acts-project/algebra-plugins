@@ -78,7 +78,7 @@ namespace fastor {
 /// @name Transform on @c algebra::fastor::storage_type
 /// @{
 
-template <typename T>
+template <concepts::scalar T>
 using transform3 = math::transform3<T>;
 
 /// @}

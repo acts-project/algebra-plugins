@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/vector.hpp"
@@ -50,11 +51,10 @@ requires(
 /// This method retrieves the norm of a vector, no dimension restriction
 ///
 /// @param v the input vector
-template <typename vector_t,
-          std::enable_if_t<(Vc::is_simd_vector<vector_t>::value ||
-                            algebra::detail::is_storage_vector_v<vector_t>),
-                           bool> = true>
-ALGEBRA_HOST_DEVICE inline auto norm(const vector_t &v) {
+template <typename vector_t>
+requires(Vc::is_simd_vector<vector_t>::value ||
+         algebra::detail::is_storage_vector_v<vector_t>) ALGEBRA_HOST_DEVICE
+    inline auto norm(const vector_t &v) {
 
   return algebra::math::sqrt(dot(v, v));
 }
@@ -76,11 +76,10 @@ requires(Vc::is_simd_vector<vector_type>::value ||
 /// rows >= 3
 ///
 /// @param v the input vector
-template <typename vector_t,
-          std::enable_if_t<(Vc::is_simd_vector<vector_t>::value ||
-                            algebra::detail::is_storage_vector_v<vector_t>),
-                           bool> = true>
-ALGEBRA_HOST_DEVICE inline auto eta(const vector_t &v) noexcept {
+template <typename vector_t>
+requires(Vc::is_simd_vector<vector_t>::value ||
+         algebra::detail::is_storage_vector_v<vector_t>) ALGEBRA_HOST_DEVICE
+    inline auto eta(const vector_t &v) noexcept {
 
   return algebra::math::atanh(v[2] / norm(v));
 }

@@ -77,7 +77,7 @@ namespace vc_aos {
 /// @name Vc based transforms on @c algebra::vc_aos::storage_type
 /// @{
 
-template <typename T>
+template <concepts::value T>
 using transform3 = math::transform3<vc_aos::storage_type, T>;
 
 /// @}

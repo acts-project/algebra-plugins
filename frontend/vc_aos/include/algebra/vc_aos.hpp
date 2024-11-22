@@ -83,4 +83,31 @@ using transform3 = math::transform3<vc_aos::storage_type, T>;
 
 }  // namespace vc_aos
 
+namespace plugin {
+
+/// Define the plugin types
+/// @{
+template <typename V>
+struct vc_aos {
+    /// Define scalar type
+    using value_type = V;
+
+    template <typename T>
+    using simd = T;
+
+    using boolean = bool;
+    using scalar = value_type;
+    using size_type = algebra::vc_aos::size_type;
+    using transform3D = algebra::vc_aos::transform3<value_type>;
+    using point2D = algebra::vc_aos::point2<value_type>;
+    using point3D = algebra::vc_aos::point3<value_type>;
+    using vector3D = algebra::vc_aos::vector3<value_type>;
+
+    template <std::size_t ROWS, std::size_t COLS>
+    using matrix = algebra::vc_aos::matrix_type<value_type, ROWS, COLS>;
+};
+/// @}
+
+} // namespace plugin
+
 }  // namespace algebra

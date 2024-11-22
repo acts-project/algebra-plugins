@@ -114,4 +114,31 @@ using transform3 =
 
 }  // namespace vecmem
 
+namespace plugin {
+
+/// Define the plugin types
+/// @{
+template <typename V>
+struct vecmem {
+    /// Define scalar type
+    using value_type = V;
+
+    template <typename T>
+    using simd = T;
+
+    using boolean = bool;
+    using scalar = value_type;
+    using size_type = algebra::vecmem::size_type;
+    using transform3D = algebra::vecmem::transform3<value_type>;
+    using point2D = algebra::vecmem::point2<value_type>;
+    using point3D = algebra::vecmem::point3<value_type>;
+    using vector3D = algebra::vecmem::vector3<value_type>;
+
+    template <std::size_t ROWS, std::size_t COLS>
+    using matrix = algebra::vecmem::matrix_type<value_type, ROWS, COLS>;
+};
+/// @}
+
+} // namespace plugin
+
 }  // namespace algebra

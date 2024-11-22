@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
+#include "algebra/storage/impl/vc_aos_concepts.hpp"
 #include "algebra/storage/impl/vc_aos_getter.hpp"
 #include "algebra/storage/matrix.hpp"
 #include "algebra/storage/vector.hpp"
@@ -81,19 +82,19 @@ namespace traits {
 
 template <typename T, auto N>
 struct index<vc_aos::storage_type<T, N>> {
-  using size_type = algebra::vc_aos::size_type;
+  using size_type = vc_aos::size_type;
 };
 
 template <typename T, auto N>
 struct index<Vc_1::Vector<T, Vc_1::simd_abi::fixed_size<N>>> {
-  using size_type = algebra::vc_aos::size_type;
+  using size_type = vc_aos::size_type;
 };
 
 // Vector and storage types are different
 template <typename T, auto N>
 struct dimensions<vc_aos::storage_type<T, N>> {
 
-  using size_type = algebra::vc_aos::size_type;
+  using size_type = vc_aos::size_type;
 
   static constexpr size_type dim{1};
   static constexpr size_type rows{N};
@@ -104,7 +105,7 @@ struct dimensions<vc_aos::storage_type<T, N>> {
 template <typename T, auto N>
 struct dimensions<Vc_1::Vector<T, Vc_1::simd_abi::fixed_size<N>>> {
 
-  using size_type = algebra::vc_aos::size_type;
+  using size_type = vc_aos::size_type;
 
   static constexpr size_type dim{1};
   static constexpr size_type rows{N};

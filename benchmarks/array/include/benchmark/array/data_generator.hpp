@@ -46,7 +46,9 @@ inline void fill_random_trf(std::vector<transform3_t> &collection) {
                                                                           1.f);
 
   auto rand_obj = [&]() {
-    vector_t x_axis, z_axis, t;
+    vector_t x_axis;
+    vector_t z_axis;
+    vector_t t;
 
     x_axis = vector::normalize(vector_t{dist(mt), dist(mt), dist(mt)});
     z_axis = {dist(mt), dist(mt), dist(mt)};

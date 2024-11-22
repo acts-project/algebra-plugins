@@ -32,9 +32,9 @@ struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
 
   /// Construct from given column vectors @param v
   template <concepts::vector... vector_t>
-  ALGEBRA_HOST_DEVICE
-    requires(sizeof...(vector_t) == COL)
-  explicit matrix(vector_t &&...v) : m_storage{std::forward<vector_t>(v)...} {}
+  ALGEBRA_HOST_DEVICE requires(sizeof...(vector_t) ==
+                               COL) explicit matrix(vector_t &&... v)
+      : m_storage{std::forward<vector_t>(v)...} {}
 
   /// Equality operator between two matrices
   template <std::size_t R, std::size_t C, concepts::scalar S,
@@ -76,17 +76,17 @@ struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
   /// @{
   // AoS
   template <std::size_t... I>
-  ALGEBRA_HOST_DEVICE
-    requires(!std::is_scalar_v<scalar_t>)
-  constexpr bool equal(const matrix &rhs, std::index_sequence<I...>) const {
+  ALGEBRA_HOST_DEVICE requires(
+      !std::is_scalar_v<scalar_t>) constexpr bool equal(const matrix &rhs,
+                                                        std::index_sequence<
+                                                            I...>) const {
     return (... && (m_storage[I] == rhs[I]));
   }
 
   // SoA
   template <std::size_t... I>
-  ALGEBRA_HOST
-    requires(std::is_scalar_v<scalar_t>)
-  constexpr bool equal(const matrix &rhs, std::index_sequence<I...>) const {
+  ALGEBRA_HOST requires(std::is_scalar_v<scalar_t>) constexpr bool equal(
+      const matrix &rhs, std::index_sequence<I...>) const {
     return (... && ((m_storage[I].get() == rhs[I].get()).isFull()));
   }
   /// @}
@@ -105,13 +105,11 @@ struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
 
   template <std::size_t R, std::size_t C, typename S1, typename S2,
             template <typename, std::size_t> class A>
-  /*requires(std::is_scalar_v<S2> || std::is_same_v<S1, S2>)*/
   ALGEBRA_HOST_DEVICE friend constexpr decltype(auto) operator*(
       const S2 a, const matrix<A, S1, R, C> &rhs) noexcept;
 
   template <std::size_t R, std::size_t C, concepts::scalar S1,
             concepts::scalar S2, template <typename, std::size_t> class A>
-  /*requires(std::is_scalar_v<S2> || std::is_same_v<S1, S2>)*/
   ALGEBRA_HOST_DEVICE friend constexpr decltype(auto) operator*(
       const matrix<A, S1, R, C> &lhs, const S2 a) noexcept;
 

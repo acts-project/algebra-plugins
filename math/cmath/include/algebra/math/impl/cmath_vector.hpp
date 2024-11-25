@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
@@ -19,8 +20,9 @@ namespace algebra::cmath {
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N>
+template <concepts::index size_type,
+          template <typename, size_type> class array_t,
+          concepts::scalar scalar_t, size_type N>
 requires std::is_scalar_v<scalar_t> ALGEBRA_HOST_DEVICE inline scalar_t dot(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) {
   array_t<scalar_t, N> tmp;
@@ -40,8 +42,9 @@ requires std::is_scalar_v<scalar_t> ALGEBRA_HOST_DEVICE inline scalar_t dot(
 /// @param b the second input matrix with single column
 ///
 /// @return the scalar dot product value
-template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N, size_type COLS>
+template <concepts::index size_type,
+          template <typename, size_type> class array_t,
+          concepts::scalar scalar_t, size_type N, size_type COLS>
 requires(COLS == 1 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
     inline scalar_t dot(const array_t<scalar_t, N> &a,
                         const array_t<array_t<scalar_t, N>, COLS> &b) {
@@ -62,8 +65,9 @@ requires(COLS == 1 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N, size_type COLS>
+template <concepts::index size_type,
+          template <typename, size_type> class array_t,
+          concepts::scalar scalar_t, size_type N, size_type COLS>
 requires(COLS == 1 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
     inline scalar_t dot(const array_t<array_t<scalar_t, N>, COLS> &a,
                         const array_t<scalar_t, N> &b) {
@@ -84,8 +88,9 @@ requires(COLS == 1 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
 /// @param b the second input matrix with single column
 ///
 /// @return the scalar dot product value
-template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N, size_type COLS>
+template <concepts::index size_type,
+          template <typename, size_type> class array_t,
+          concepts::scalar scalar_t, size_type N, size_type COLS>
 requires(COLS == 1 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
     inline scalar_t dot(const array_t<array_t<scalar_t, N>, COLS> &a,
                         const array_t<array_t<scalar_t, N>, COLS> &b) {
@@ -103,8 +108,9 @@ requires(COLS == 1 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
 /// This method retrieves the norm of a vector, no dimension restriction
 ///
 /// @param v the input vector
-template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N>
+template <concepts::index size_type,
+          template <typename, size_type> class array_t,
+          concepts::scalar scalar_t, size_type N>
 requires(N >= 2 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
     inline scalar_t norm(const array_t<scalar_t, N> &v) {
 
@@ -115,8 +121,9 @@ requires(N >= 2 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
 /// rows >= 3
 ///
 /// @param v the input vector
-template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N>
+template <concepts::index size_type,
+          template <typename, size_type> class array_t,
+          concepts::scalar scalar_t, size_type N>
 requires(N >= 3 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
     inline scalar_t eta(const array_t<scalar_t, N> &v) noexcept {
 
@@ -126,8 +133,9 @@ requires(N >= 3 && std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE
 /// Get a normalized version of the input vector
 ///
 /// @param v the input vector
-template <typename size_type, template <typename, size_type> class array_t,
-          typename scalar_t, size_type N>
+template <concepts::index size_type,
+          template <typename, size_type> class array_t,
+          concepts::scalar scalar_t, size_type N>
 requires std::is_scalar_v<scalar_t>
     ALGEBRA_HOST_DEVICE inline array_t<scalar_t, N> normalize(
         const array_t<scalar_t, N> &v) {

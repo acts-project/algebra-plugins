@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/matrix.hpp"
 
@@ -22,7 +23,7 @@ using storage::zero;
 /// General case: Compute the determinant of a square matrix
 ///
 /// @returns the determinant
-template <std::size_t N, typename value_t,
+template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr value_t determinant(
     const storage::matrix<array_t, value_t, N, N> &) noexcept {
@@ -30,7 +31,7 @@ ALGEBRA_HOST_DEVICE constexpr value_t determinant(
   return value_t(0);
 }
 
-template <std::size_t ROW, std::size_t COL, typename value_t,
+template <std::size_t ROW, std::size_t COL, concepts::value value_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr storage::matrix<array_t, value_t, ROW, COL>
 inverse(const storage::matrix<array_t, value_t, ROW, COL> &m) noexcept {

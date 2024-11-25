@@ -80,7 +80,7 @@ namespace eigen {
 /// @name generic based transforms on @c algebra::eigen
 /// @{
 
-template <typename T>
+template <concepts::scalar T>
 using transform3 =
     generic::math::transform3<eigen::size_type, T, eigen::matrix_type,
                               eigen::storage_type>;

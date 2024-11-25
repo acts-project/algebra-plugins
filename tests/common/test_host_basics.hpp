@@ -75,6 +75,20 @@ TYPED_TEST_P(test_host_basics_vector, local_vectors) {
 // This defines the vector3 test suite
 TYPED_TEST_P(test_host_basics_vector, vector3) {
 
+  // Test concepts
+  static_assert(algebra::concepts::scalar<typename TypeParam::scalar>);
+  static_assert(!algebra::concepts::vector<typename TypeParam::scalar>);
+
+  static_assert(!algebra::concepts::scalar<typename TypeParam::vector3>);
+  static_assert(algebra::concepts::vector<typename TypeParam::vector3>);
+  static_assert(algebra::concepts::vector3D<typename TypeParam::vector3>);
+  static_assert(!algebra::concepts::vector2D<typename TypeParam::vector3>);
+
+  static_assert(!algebra::concepts::scalar<typename TypeParam::vector2>);
+  static_assert(algebra::concepts::vector<typename TypeParam::vector2>);
+  static_assert(algebra::concepts::vector2D<typename TypeParam::vector2>);
+  static_assert(!algebra::concepts::vector3D<typename TypeParam::vector2>);
+
   // Construction
   typename TypeParam::vector3 vA{0.f, 1.f, 2.f};
   ASSERT_EQ(vA[0], 0.f);
@@ -147,24 +161,39 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_2x3) {
   using matrix_2x3_t = typename TypeParam::template matrix<2, 3>;
 
   // Test type traits
-  static_assert(std::is_same_v<algebra::trait::index_t<matrix_2x3_t>,
+  static_assert(std::is_same_v<algebra::traits::index_t<matrix_2x3_t>,
                                typename TypeParam::size_type>);
-  static_assert(std::is_same_v<algebra::trait::value_t<matrix_2x3_t>,
+  static_assert(std::is_same_v<algebra::traits::value_t<matrix_2x3_t>,
                                typename TypeParam::scalar>);
-  static_assert(std::is_same_v<algebra::trait::scalar_t<matrix_2x3_t>,
+  static_assert(std::is_same_v<algebra::traits::scalar_t<matrix_2x3_t>,
                                typename TypeParam::scalar>);
-  static_assert(std::is_same_v<algebra::trait::vector_t<matrix_2x3_t>,
+  static_assert(std::is_same_v<algebra::traits::vector_t<matrix_2x3_t>,
                                typename TypeParam::vector2>);
 
-  static_assert(algebra::trait::rows<matrix_2x3_t> == 2);
-  static_assert(algebra::trait::columns<matrix_2x3_t> == 3);
-  static_assert(algebra::trait::rank<matrix_2x3_t> == 2);
-  static_assert(algebra::trait::size<matrix_2x3_t> == 6);
-  static_assert(!algebra::trait::is_square<matrix_2x3_t>);
+  static_assert(algebra::traits::rows<matrix_2x3_t> == 2);
+  static_assert(algebra::traits::columns<matrix_2x3_t> == 3);
+  static_assert(algebra::traits::rank<matrix_2x3_t> == 2);
+  static_assert(algebra::traits::size<matrix_2x3_t> == 6);
+  static_assert(!algebra::traits::is_square<matrix_2x3_t>);
   static_assert(
-      algebra::trait::is_square<typename TypeParam::template matrix<2, 2>>);
+      algebra::traits::is_square<typename TypeParam::template matrix<2, 2>>);
   static_assert(
-      algebra::trait::is_square<typename TypeParam::template matrix<3, 3>>);
+      algebra::traits::is_square<typename TypeParam::template matrix<3, 3>>);
+
+  // Test concepts
+  static_assert(algebra::concepts::matrix<matrix_2x3_t>);
+  static_assert(!algebra::concepts::scalar<matrix_2x3_t>);
+  static_assert(!algebra::concepts::vector<matrix_2x3_t>);
+  static_assert(!algebra::concepts::square_matrix<matrix_2x3_t>);
+
+  static_assert(
+      algebra::concepts::index<algebra::traits::index_t<matrix_2x3_t>>);
+  static_assert(
+      algebra::concepts::value<algebra::traits::value_t<matrix_2x3_t>>);
+  static_assert(
+      algebra::concepts::scalar<algebra::traits::scalar_t<matrix_2x3_t>>);
+  static_assert(
+      algebra::concepts::vector<algebra::traits::vector_t<matrix_2x3_t>>);
 
   // Test on matrix - vector operations
   typename TypeParam::vector3 vE{1.f, 2.f, 3.f};
@@ -211,22 +240,28 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   matrix_6x4_t m;
 
   // Test type traits
-  static_assert(std::is_same_v<algebra::trait::index_t<matrix_6x4_t>,
+  static_assert(std::is_same_v<algebra::traits::index_t<matrix_6x4_t>,
                                typename TypeParam::size_type>);
-  static_assert(std::is_same_v<algebra::trait::value_t<matrix_6x4_t>,
+  static_assert(std::is_same_v<algebra::traits::value_t<matrix_6x4_t>,
                                typename TypeParam::scalar>);
-  static_assert(std::is_same_v<algebra::trait::scalar_t<matrix_6x4_t>,
+  static_assert(std::is_same_v<algebra::traits::scalar_t<matrix_6x4_t>,
                                typename TypeParam::scalar>);
 
-  static_assert(algebra::trait::rows<matrix_6x4_t> == 6);
-  static_assert(algebra::trait::columns<matrix_6x4_t> == 4);
-  static_assert(algebra::trait::rank<matrix_6x4_t> == 4);
-  static_assert(algebra::trait::size<matrix_6x4_t> == 24);
-  static_assert(!algebra::trait::is_square<matrix_6x4_t>);
+  static_assert(algebra::traits::rows<matrix_6x4_t> == 6);
+  static_assert(algebra::traits::columns<matrix_6x4_t> == 4);
+  static_assert(algebra::traits::rank<matrix_6x4_t> == 4);
+  static_assert(algebra::traits::size<matrix_6x4_t> == 24);
+  static_assert(!algebra::traits::is_square<matrix_6x4_t>);
   static_assert(
-      algebra::trait::is_square<typename TypeParam::template matrix<4, 4>>);
+      algebra::traits::is_square<typename TypeParam::template matrix<4, 4>>);
   static_assert(
-      algebra::trait::is_square<typename TypeParam::template matrix<6, 6>>);
+      algebra::traits::is_square<typename TypeParam::template matrix<6, 6>>);
+
+  // Test concepts
+  static_assert(algebra::concepts::matrix<matrix_6x4_t>);
+  static_assert(!algebra::concepts::scalar<matrix_6x4_t>);
+  static_assert(!algebra::concepts::vector<matrix_6x4_t>);
+  static_assert(!algebra::concepts::square_matrix<matrix_6x4_t>);
 
   // Fill it.
   for (typename TypeParam::size_type i = 0; i < ROWS; ++i) {
@@ -618,6 +653,8 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {
 
 // This defines the transform3 test suite
 TYPED_TEST_P(test_host_basics_transform, transform3) {
+
+  static_assert(algebra::concepts::transform3D<typename TypeParam::transform3>);
 
   // Preparation work
   typename TypeParam::vector3 z =

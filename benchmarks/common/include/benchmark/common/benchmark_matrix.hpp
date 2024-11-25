@@ -17,14 +17,14 @@
 
 namespace algebra {
 
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 void fill_random_matrix(std::vector<matrix_t>&);
 
-template <typename vector_t>
+template <concepts::vector vector_t>
 void fill_random_vec(std::vector<vector_t>&);
 
 /// Benchmark for matrix operations
-template <typename matrix_t>
+template <concepts::matrix matrix_t>
 struct matrix_bm : public benchmark_base {
 
   /// Prefix for the benchmark name
@@ -59,8 +59,9 @@ struct matrix_bm : public benchmark_base {
 };
 
 /// Benchmark operations on a single matrix (transpose, inverse etc)
-template <typename matrix_t, typename unaryOP>
-struct matrix_unaryOP_bm : public matrix_bm<matrix_t> {
+template <concepts::matrix matrix_t, typename unaryOP>
+requires std::invocable<unaryOP, matrix_t> struct matrix_unaryOP_bm
+    : public matrix_bm<matrix_t> {
   using base_type = matrix_bm<matrix_t>;
 
   matrix_unaryOP_bm() = delete;
@@ -90,8 +91,9 @@ struct matrix_unaryOP_bm : public matrix_bm<matrix_t> {
 };
 
 /// Benchmark elementwise addition/subtraction/multiplication of matrices
-template <typename matrix_t, typename binaryOP>
-struct matrix_binaryOP_bm : public matrix_bm<matrix_t> {
+template <concepts::matrix matrix_t, typename binaryOP>
+requires std::invocable<binaryOP, matrix_t, matrix_t> struct matrix_binaryOP_bm
+    : public matrix_bm<matrix_t> {
   using base_type = matrix_bm<matrix_t>;
 
   matrix_binaryOP_bm() = delete;
@@ -121,7 +123,7 @@ struct matrix_binaryOP_bm : public matrix_bm<matrix_t> {
 };
 
 /// Benchmark matrix vector multiplication
-template <typename matrix_t, typename vector_t>
+template <concepts::matrix matrix_t, concepts::vector vector_t>
 struct matrix_vector_bm : public matrix_bm<matrix_t> {
   using base_type = matrix_bm<matrix_t>;
 
@@ -162,21 +164,21 @@ namespace bench_op {
 
 struct add {
   inline static const std::string name{"add"};
-  template <typename matrix_t>
+  template <concepts::matrix matrix_t>
   matrix_t operator()(const matrix_t& a, const matrix_t& b) const {
     return a + b;
   }
 };
 struct sub {
   inline static const std::string name{"sub"};
-  template <typename matrix_t>
+  template <concepts::matrix matrix_t>
   matrix_t operator()(const matrix_t& a, const matrix_t& b) const {
     return a - b;
   }
 };
 struct mul {
   inline static const std::string name{"mul"};
-  template <typename matrix_t>
+  template <concepts::matrix matrix_t>
   matrix_t operator()(const matrix_t& a, const matrix_t& b) const {
     return a * b;
   }
@@ -184,7 +186,7 @@ struct mul {
 
 struct transpose {
   inline static const std::string name{"transpose"};
-  template <typename matrix_t>
+  template <concepts::matrix matrix_t>
   auto operator()(const matrix_t& a) const {
     return algebra::matrix::transpose(a);
   }

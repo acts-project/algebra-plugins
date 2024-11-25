@@ -75,7 +75,7 @@ using eigen::math::zero;
 
 namespace eigen {
 
-template <typename T>
+template <concepts::scalar T>
 using transform3 = math::transform3<T>;
 
 }  // namespace eigen

@@ -13,7 +13,7 @@ message( STATUS "Building VecMem as part of the Algebra Plugins project" )
 
 # Declare where to get VecMem from.
 set( ALGEBRA_PLUGINS_VECMEM_SOURCE
-   "URL;https://github.com/acts-project/vecmem/archive/refs/tags/v1.8.0.tar.gz;URL_MD5;afddf52d9568964f25062e1c887246b7"
+   "URL;https://github.com/acts-project/vecmem/archive/refs/tags/v1.13.0.tar.gz;URL_MD5;02fe327552c21779f501c224b8c95e87"
    CACHE STRING "Source for VecMem, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_VECMEM_SOURCE )
 

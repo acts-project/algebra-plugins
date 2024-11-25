@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2023 CERN for the benefit of the ACTS project
+ * (c) 2020-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -21,7 +21,7 @@
 #include <gtest/gtest.h>
 
 // SYCL include(s).
-#include <CL/sycl.hpp>
+#include <sycl/sycl.hpp>
 
 /// Test case class, to be specialised for the different plugins
 template <typename T>
@@ -33,7 +33,7 @@ class test_sycl_basics : public test_basics_base<T> {
 
  protected:
   /// Queue to be used by all of the tests.
-  cl::sycl::queue m_queue;
+  ::sycl::queue m_queue;
   /// Memory resource for all of the tests.
   vecmem::sycl::shared_memory_resource m_resource{&m_queue};
 };
@@ -45,7 +45,7 @@ TYPED_TEST_P(test_sycl_basics, vector_2d_ops) {
   // Don't run the test at double precision, if the SYCL device doesn't
   // support it.
   if ((typeid(typename TypeParam::scalar) == typeid(double)) &&
-      (this->m_queue.get_device().has(cl::sycl::aspect::fp64) == false)) {
+      (this->m_queue.get_device().has(::sycl::aspect::fp64) == false)) {
     GTEST_SKIP();
   }
 
@@ -69,7 +69,7 @@ TYPED_TEST_P(test_sycl_basics, vector_3d_ops) {
   // Don't run the test at double precision, if the SYCL device doesn't
   // support it.
   if ((typeid(typename TypeParam::scalar) == typeid(double)) &&
-      (this->m_queue.get_device().has(cl::sycl::aspect::fp64) == false)) {
+      (this->m_queue.get_device().has(::sycl::aspect::fp64) == false)) {
     GTEST_SKIP();
   }
 
@@ -101,7 +101,7 @@ TYPED_TEST_P(test_sycl_basics, matrix64_ops) {
   // Don't run the test at double precision, if the SYCL device doesn't
   // support it.
   if ((typeid(typename TypeParam::scalar) == typeid(double)) &&
-      (this->m_queue.get_device().has(cl::sycl::aspect::fp64) == false)) {
+      (this->m_queue.get_device().has(::sycl::aspect::fp64) == false)) {
     GTEST_SKIP();
   }
 
@@ -123,7 +123,7 @@ TYPED_TEST_P(test_sycl_basics, matrix22_ops) {
   // Don't run the test at double precision, if the SYCL device doesn't
   // support it.
   if ((typeid(typename TypeParam::scalar) == typeid(double)) &&
-      (this->m_queue.get_device().has(cl::sycl::aspect::fp64) == false)) {
+      (this->m_queue.get_device().has(::sycl::aspect::fp64) == false)) {
     GTEST_SKIP();
   }
 
@@ -145,7 +145,7 @@ TYPED_TEST_P(test_sycl_basics, transform3) {
   // Don't run the test at double precision, if the SYCL device doesn't
   // support it.
   if ((typeid(typename TypeParam::scalar) == typeid(double)) &&
-      (this->m_queue.get_device().has(cl::sycl::aspect::fp64) == false)) {
+      (this->m_queue.get_device().has(::sycl::aspect::fp64) == false)) {
     GTEST_SKIP();
   }
 

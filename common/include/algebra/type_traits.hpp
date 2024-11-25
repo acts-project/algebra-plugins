@@ -12,7 +12,9 @@
 #include <cmath>
 #include <type_traits>
 
-namespace algebra::traits {
+namespace algebra {
+
+namespace traits {
 
 /// Matrix traits
 /// @{
@@ -129,7 +131,61 @@ template <class M>
 using block_getter_t = typename block_getter<M>::type;
 /// @}
 
-}  // namespace algebra::traits
+/// The algebra types
+/// @{
+template <typename T>
+struct get_algebra {};
+
+template <typename T>
+requires(!std::is_same_v<typename T::point3D, void>) struct get_algebra<T> {
+  template <typename U>
+  using simd = typename T::template simd<U>;
+  using size_type = typename T::size_type;
+  using boolean = typename T::boolean;
+  using value = typename T::value_type;
+  using scalar = typename T::scalar;
+  using point2D = typename T::point2D;
+  using point3D = typename T::point3D;
+  using vector3D = typename T::vector3D;
+  using transform3D = typename T::transform3D;
+  template <std::size_t ROWS, std::size_t COLS>
+  using matrix = typename T::template matrix<ROWS, COLS>;
+};
+
+}  // namespace traits
+
+template <typename A>
+using get_value_t = typename traits::get_algebra<A>::value;
+
+template <typename A>
+using get_boolean_t = typename traits::get_algebra<A>::boolean;
+
+template <typename A, typename T>
+using get_simd_t = typename traits::get_algebra<A>::template simd<T>;
+
+template <typename A>
+using get_size_t = typename traits::get_algebra<A>::size_type;
+
+template <typename A>
+using get_scalar_t = typename traits::get_algebra<A>::scalar;
+
+template <typename A>
+using get_point2D_t = typename traits::get_algebra<A>::point2D;
+
+template <typename A>
+using get_point3D_t = typename traits::get_algebra<A>::point3D;
+
+template <typename A>
+using get_vector3D_t = typename traits::get_algebra<A>::vector3D;
+
+template <typename A>
+using get_transform3D_t = typename traits::get_algebra<A>::transform3D;
+
+template <typename A, std::size_t R, std::size_t C>
+using get_matrix_t = typename traits::get_algebra<A>::template matrix<R, C>;
+/// @}
+
+}  // namespace algebra
 
 /// Default type trait specializations
 /// @{

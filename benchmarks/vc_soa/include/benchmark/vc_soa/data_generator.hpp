@@ -38,8 +38,13 @@ template <concepts::transform3D transform3_t>
 inline void fill_random_trf(std::vector<transform3_t> &collection) {
   // Generate a random, but valid affine transformation
   auto rand_obj = []() {
+    using vector_t = typename transform3_t::vector3;
     using simd_vector_t = typename transform3_t::scalar_type;
-    typename transform3_t::vector3 x_axis, z_axis, t;
+
+    vector_t x_axis;
+    vector_t z_axis;
+    vector_t t;
+
     x_axis[0] = simd_vector_t::Random();
     x_axis[1] = simd_vector_t::Random();
     x_axis[2] = simd_vector_t::Random();

@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
+#include "algebra/math/impl/vc_soa_math.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/vector.hpp"
 

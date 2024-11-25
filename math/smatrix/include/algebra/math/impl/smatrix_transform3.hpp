@@ -196,7 +196,7 @@ struct transform3 {
   /// This method transform from a point from the local 3D cartesian frame to
   /// the global 3D cartesian frame
   ALGEBRA_HOST
-  inline const point3 point_to_global(const point3 &v) const {
+  inline point3 point_to_global(const point3 &v) const {
 
     ROOT::Math::SVector<scalar_type, 4> vector_4;
     vector_4.Place_at(v, 0);
@@ -208,7 +208,7 @@ struct transform3 {
   /// This method transform from a vector from the global 3D cartesian frame
   /// into the local 3D cartesian frame
   ALGEBRA_HOST
-  inline const point3 point_to_local(const point3 &v) const {
+  inline point3 point_to_local(const point3 &v) const {
 
     ROOT::Math::SVector<scalar_type, 4> vector_4;
     vector_4.Place_at(v, 0);
@@ -220,7 +220,7 @@ struct transform3 {
   /// This method transform from a vector from the local 3D cartesian frame to
   /// the global 3D cartesian frame
   ALGEBRA_HOST
-  inline const point3 vector_to_global(const vector3 &v) const {
+  inline point3 vector_to_global(const vector3 &v) const {
 
     ROOT::Math::SVector<scalar_type, 4> vector_4;
     vector_4.Place_at(v, 0);
@@ -231,7 +231,7 @@ struct transform3 {
   /// This method transform from a vector from the global 3D cartesian frame
   /// into the local 3D cartesian frame
   ALGEBRA_HOST
-  inline const point3 vector_to_local(const vector3 &v) const {
+  inline point3 vector_to_local(const vector3 &v) const {
 
     ROOT::Math::SVector<scalar_type, 4> vector_4;
     vector_4.Place_at(v, 0);

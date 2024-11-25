@@ -8,7 +8,6 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/generic.hpp"
 #include "algebra/math/vc_aos.hpp"
 #include "algebra/storage/vc_aos.hpp"
 
@@ -43,11 +42,9 @@ using vc_aos::math::dot;
 using vc_aos::math::eta;
 using vc_aos::math::norm;
 using vc_aos::math::normalize;
-
-// No specific vectorized implementation needed
-using generic::math::perp;
-using generic::math::phi;
-using generic::math::theta;
+using vc_aos::math::perp;
+using vc_aos::math::phi;
+using vc_aos::math::theta;
 
 /// @}
 
@@ -58,15 +55,13 @@ namespace matrix {
 /// @name Matrix functions on @c algebra::vc_aos types
 /// @{
 
+using vc_aos::math::determinant;
 using vc_aos::math::identity;
+using vc_aos::math::inverse;
 using vc_aos::math::set_identity;
 using vc_aos::math::set_zero;
 using vc_aos::math::transpose;
 using vc_aos::math::zero;
-
-// Placeholder, until vectorization-friendly version is available
-using generic::math::determinant;
-using generic::math::inverse;
 
 /// @}
 
@@ -83,5 +78,32 @@ using transform3 = math::transform3<vc_aos::storage_type, T>;
 /// @}
 
 }  // namespace vc_aos
+
+namespace plugin {
+
+/// Define the plugin types
+/// @{
+template <concepts::value V>
+struct vc_aos {
+  /// Define scalar type
+  using value_type = V;
+
+  template <concepts::value T>
+  using simd = T;
+
+  using boolean = bool;
+  using scalar = value_type;
+  using size_type = algebra::vc_aos::size_type;
+  using transform3D = algebra::vc_aos::transform3<value_type>;
+  using point2D = algebra::vc_aos::point2<value_type>;
+  using point3D = algebra::vc_aos::point3<value_type>;
+  using vector3D = algebra::vc_aos::vector3<value_type>;
+
+  template <std::size_t ROWS, std::size_t COLS>
+  using matrix = algebra::vc_aos::matrix_type<value_type, ROWS, COLS>;
+};
+/// @}
+
+}  // namespace plugin
 
 }  // namespace algebra

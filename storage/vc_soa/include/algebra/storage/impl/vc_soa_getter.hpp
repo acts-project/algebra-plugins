@@ -25,8 +25,7 @@ template <std::size_t SIZE, std::size_t ROW, std::size_t COL,
 ALGEBRA_HOST_DEVICE constexpr auto vector(
     const algebra::storage::matrix<array_t, scalar_t, ROW, COL> &m,
     const std::size_t row, const std::size_t col) noexcept {
-  return algebra::storage::block_getter{}.template operator()<SIZE>(m, row,
-                                                                    col);
+  return algebra::storage::block_getter{}.template vector<SIZE>(m, row, col);
 }
 
 }  // namespace algebra::vc_soa::storage

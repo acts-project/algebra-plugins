@@ -35,7 +35,9 @@ inline void fill_random_trf(std::vector<transform3_t> &collection) {
   // Generate a random, but valid affine transformation
   auto rand_obj = []() {
     using vector_t = typename transform3_t::vector3;
-    vector_t x_axis, z_axis, t;
+    vector_t x_axis;
+    vector_t z_axis;
+    vector_t t;
 
     x_axis = vector_t{vector_t::array_type::Random()};
     x_axis = vector::normalize(x_axis);

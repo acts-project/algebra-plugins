@@ -8,6 +8,8 @@
 // Project include(s).
 #include "algebra/vc_soa.hpp"
 
+#include "algebra/utils/print.hpp"
+
 // GoogleTest include(s).
 #include <gtest/gtest.h>
 
@@ -21,6 +23,8 @@ constexpr float tol{1e-5f};
 
 /// This test the vector functions on an SoA (Vc::Vector) based vector
 TEST(test_vc_host, vc_soa_vector) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   using vector3_v = vc_soa::vector3<value_t>;
   // Value type is Vc::Vector<float>
@@ -32,6 +36,9 @@ TEST(test_vc_host, vc_soa_vector) {
   EXPECT_TRUE((a[0] == scalar_t(1.f)).isFull());
   EXPECT_TRUE((a[1] == scalar_t(2.f)).isFull());
   EXPECT_TRUE((a[2] == scalar_t(3.f)).isFull());
+
+  // Test printing
+  std::cout << a << std::endl;
 
   // Masked comparison
   auto m = a.compare(a);
@@ -137,6 +144,8 @@ TEST(test_vc_host, vc_soa_getter) {
 
 /// This test an SoA (Vc::Vector) based affine transform3
 TEST(test_vc_host, vc_soa_transform3) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   using vector3 = vc_soa::vector3<value_t>;
   using point3 = vc_soa::point3<value_t>;
@@ -170,6 +179,9 @@ TEST(test_vc_host, vc_soa_transform3) {
   ASSERT_TRUE(trf1 == trf1);
   transform3 trf2;
   trf2 = trf1;
+
+  // Test printing
+  std::cout << trf1 << std::endl;
 
   EXPECT_TRUE((trf2(0, 0) == x[0]).isFull());
   EXPECT_TRUE((trf2(1, 0) == x[1]).isFull());
@@ -243,6 +255,8 @@ TEST(test_vc_host, vc_soa_matrix3) {
 
 /// This test an SoA (Vc::Vector) based 6x4 matrix
 TEST(test_vc_host, vc_soa_matrix64) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   // Create the matrix.
   using matrix_6x4_t = vc_soa::matrix_type<value_t, 6, 4>;
@@ -262,4 +276,7 @@ TEST(test_vc_host, vc_soa_matrix64) {
   static_assert(!algebra::traits::is_square<matrix_6x4_t>);
   static_assert(algebra::traits::is_square<vc_soa::matrix_type<value_t, 4, 4>>);
   static_assert(algebra::traits::is_square<vc_soa::matrix_type<value_t, 6, 6>>);
+
+  // Test printing
+  std::cout << m << std::endl;
 }

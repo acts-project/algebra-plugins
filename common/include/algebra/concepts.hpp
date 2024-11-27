@@ -15,9 +15,13 @@
 
 namespace algebra::concepts {
 
+/// Arithmetic types
+template <typename T>
+concept arithmetic = std::is_arithmetic_v<T>;
+
 // Value concept: Single entry
 template <typename T>
-concept value = std::is_arithmetic_v<std::decay_t<T>>;
+concept value = algebra::concepts::arithmetic<std::decay_t<T>>;
 
 /// Scalar concept: Elements of vectors/matrices (can be simd vectors)
 template <typename T>
@@ -103,5 +107,26 @@ concept transform3D = requires(T trf) {
   trf.vector_to_global(typename T::vector3());
   trf.vector_to_local(typename T::vector3());
 };
+
+/// Algebra plugin concept
+template <typename A>
+concept algebra = (concepts::value<typename A::value_type> &&
+                   concepts::scalar<typename A::scalar> &&
+                   concepts::index<typename A::size_type> &&
+                   concepts::simd_scalar<typename A::template simd<float>> &&
+                   concepts::vector3D<typename A::vector3D> &&
+                   concepts::point2D<typename A::point2D> &&
+                   concepts::point3D<typename A::point3D> &&
+                   concepts::transform3D<typename A::transform3D> &&
+                   concepts::matrix<typename A::template matrix<3, 3>>);
+
+/// Check if an algebra has soa layout
+/// @{
+template <typename A>
+concept soa = (!concepts::arithmetic<algebra::get_scalar_t<A>>);
+
+template <typename A>
+concept aos = (!concepts::soa<A>);
+/// @}
 
 }  // namespace algebra::concepts

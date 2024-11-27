@@ -8,6 +8,8 @@
 #pragma once
 
 // Impl include(s).
+#include "algebra/math/boolean.hpp"
+#include "algebra/math/common.hpp"
 #include "algebra/math/impl/cmath_matrix.hpp"
 #include "algebra/math/impl/cmath_operators.hpp"
 #include "algebra/math/impl/cmath_vector.hpp"

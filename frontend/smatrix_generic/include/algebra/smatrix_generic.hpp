@@ -80,4 +80,31 @@ using transform3 =
 
 }  // namespace smatrix
 
+namespace plugin {
+
+/// Define the plugin types
+/// @{
+template <concepts::value V>
+struct smatrix_generic {
+  /// Define scalar type
+  using value_type = V;
+
+  template <concepts::value T>
+  using simd = T;
+
+  using boolean = bool;
+  using scalar = value_type;
+  using size_type = algebra::smatrix::size_type;
+  using transform3D = algebra::smatrix::transform3<value_type>;
+  using point2D = algebra::smatrix::point2<value_type>;
+  using point3D = algebra::smatrix::point3<value_type>;
+  using vector3D = algebra::smatrix::vector3<value_type>;
+
+  template <std::size_t ROWS, std::size_t COLS>
+  using matrix = algebra::smatrix::matrix_type<value_type, ROWS, COLS>;
+};
+/// @}
+
+}  // namespace plugin
+
 }  // namespace algebra

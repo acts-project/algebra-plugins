@@ -8,6 +8,8 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/boolean.hpp"
+#include "algebra/math/common.hpp"
 #include "algebra/math/impl/smatrix_matrix.hpp"
 #include "algebra/math/impl/smatrix_transform3.hpp"
 #include "algebra/math/impl/smatrix_vector.hpp"

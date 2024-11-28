@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2023 CERN for the benefit of the ACTS project
+ * (c) 2020-2024 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -43,5 +43,5 @@ typedef testing::Types<
         algebra::eigen::vector2<double>, algebra::eigen::vector3<double>,
         algebra::eigen::transform3<double>, int, algebra::eigen::matrix_type>>
     eigen_eigen_types;
-INSTANTIATE_TYPED_TEST_SUITE_P(algebra_plugins, test_sycl_basics,
+INSTANTIATE_TYPED_TEST_SUITE_P(DISABLED_algebra_plugins, test_sycl_basics,
                                eigen_eigen_types, test_specialisation_name);

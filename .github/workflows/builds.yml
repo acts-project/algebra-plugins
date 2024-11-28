@@ -72,47 +72,47 @@ jobs:
             CONTAINER: "ghcr.io/acts-project/ubuntu2404:56"
             OPTIONS: --preset eigen -DALGEBRA_PLUGINS_USE_SYSTEM_EIGEN3=TRUE
             RUN_TESTS: true
-            ENVIRONMENT:
           - NAME: "HOST"
             CONTAINER: "ghcr.io/acts-project/ubuntu2404:67"
             OPTIONS: --preset eigen
             RUN_TESTS: true
-            ENVIRONMENT:
           - NAME: "HOST"
             CONTAINER: "ghcr.io/acts-project/ubuntu2404:56"
             OPTIONS: -DALGEBRA_PLUGINS_INCLUDE_SMATRIX=TRUE
             RUN_TESTS: true
-            ENVIRONMENT:
           - NAME: "HOST"
             CONTAINER: "ghcr.io/acts-project/ubuntu2404:67"
             OPTIONS: --preset vc
             RUN_TESTS: true
-            ENVIRONMENT:
           - NAME: "HOST"
             CONTAINER: "ghcr.io/acts-project/ubuntu2404:67"
             OPTIONS: --preset vecmem
             RUN_TESTS: true
-            ENVIRONMENT:
           - NAME: "HOST"
             CONTAINER: "ghcr.io/acts-project/ubuntu2404:67"
             OPTIONS: --preset fastor
             RUN_TESTS: true
-            ENVIRONMENT:
           - NAME: "CUDA"
             CONTAINER: "ghcr.io/acts-project/ubuntu2404_cuda:67"
             OPTIONS: --preset cuda
             RUN_TESTS: false
-            ENVIRONMENT:
           - NAME: "SYCL Intel"
-            CONTAINER: "ghcr.io/acts-project/ubuntu2404_oneapi:67"
+            CONTAINER: "ghcr.io/acts-project/ubuntu2404_oneapi:69"
             OPTIONS: --preset sycl
-            RUN_TESTS: false
-            ENVIRONMENT: export SYCLFLAGS="-fsycl"
-          - NAME: "SYCL AMD"
-            CONTAINER: "ghcr.io/acts-project/ubuntu2404_rocm_oneapi:67"
-            OPTIONS: --preset sycl
-            RUN_TESTS: false
-            ENVIRONMENT:
+            RUN_TESTS: true
+        include:
+          - BUILD_TYPE: "Release"
+            PLATFORM:
+              NAME: "SYCL AMD"
+              CONTAINER: "ghcr.io/acts-project/ubuntu2404_rocm_oneapi:69"
+              OPTIONS: --preset sycl
+              RUN_TESTS: false
+          - BUILD_TYPE: "Release"
+            PLATFORM:
+              NAME: "SYCL NVIDIA"
+              CONTAINER: "ghcr.io/acts-project/ubuntu2404_cuda_oneapi:69"
+              OPTIONS: --preset sycl -DALGEBRA_PLUGINS_TEST_CUDA=FALSE
+              RUN_TESTS: false
 
     # The system to run on.
     runs-on: ubuntu-latest
@@ -131,13 +131,11 @@ jobs:
     - name: Configure
       run: |
         source ${GITHUB_WORKSPACE}/.github/ci_setup.sh ${{ matrix.PLATFORM.NAME }}
-        ${{ matrix.PLATFORM.ENVIRONMENT }}
         cmake ${{ matrix.PLATFORM.OPTIONS }} -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }} -S ${GITHUB_WORKSPACE} -B build
     # Perform the build.
     - name: Build
       run: |
         source ${GITHUB_WORKSPACE}/.github/ci_setup.sh ${{ matrix.PLATFORM.NAME }}
-        ${{ matrix.PLATFORM.ENVIRONMENT }}
         cmake --build build
     # Run the unit test(s).
     - name: Test
@@ -145,5 +143,4 @@ jobs:
       run: |
         cd build
         source ${GITHUB_WORKSPACE}/.github/ci_setup.sh ${{ matrix.PLATFORM.NAME }}
-        ${{ matrix.PLATFORM.ENVIRONMENT }}
         ctest --output-on-failure

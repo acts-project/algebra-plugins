@@ -7,6 +7,9 @@
 
 #pragma once
 
+// Project include(s).
+#include "algebra/utils/print.hpp"
+
 // Local include(s).
 #include "test_base.hpp"
 
@@ -35,11 +38,16 @@ TYPED_TEST_SUITE_P(test_host_basics_transform);
 
 // This defines the local frame test suite
 TYPED_TEST_P(test_host_basics_vector, local_vectors) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   // Construction
   typename TypeParam::point2 vA{0.f, 1.f};
   ASSERT_EQ(vA[0], 0.f);
   ASSERT_EQ(vA[1], 1.f);
+
+  // Test printing
+  std::cout << vA << std::endl;
 
   // Assignment
   typename TypeParam::point2 vB = vA;
@@ -74,6 +82,8 @@ TYPED_TEST_P(test_host_basics_vector, local_vectors) {
 
 // This defines the vector3 test suite
 TYPED_TEST_P(test_host_basics_vector, vector3) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   // Test concepts
   static_assert(algebra::concepts::scalar<typename TypeParam::scalar>);
@@ -94,6 +104,9 @@ TYPED_TEST_P(test_host_basics_vector, vector3) {
   ASSERT_EQ(vA[0], 0.f);
   ASSERT_EQ(vA[1], 1.f);
   ASSERT_EQ(vA[2], 2.f);
+
+  // Test printing
+  std::cout << vA << std::endl;
 
   // Assignment
   typename TypeParam::vector3 vB = vA;
@@ -214,11 +227,17 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_2x3) {
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_3x1) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
+
   // Cross product on vector3 and matrix<3,1>
   typename TypeParam::template matrix<3, 1> vF;
   algebra::getter::element(vF, 0, 0) = 5.f;
   algebra::getter::element(vF, 1, 0) = 6.f;
   algebra::getter::element(vF, 2, 0) = 13.f;
+
+  // Test printing
+  std::cout << vF << std::endl;
 
   typename TypeParam::vector3 vD{1.f, 1.f, 1.f};
   typename TypeParam::vector3 vG = algebra::vector::cross(vD, vF);
@@ -232,6 +251,8 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_3x1) {
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   // Create the matrix.
   static constexpr typename TypeParam::size_type ROWS = 6;
@@ -342,6 +363,9 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
   ASSERT_NEAR(algebra::getter::element(m, 0, 2), 10., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 1, 2), 20., this->m_epsilon);
   ASSERT_NEAR(algebra::getter::element(m, 2, 2), 30., this->m_epsilon);
+
+  // Test printing
+  std::cout << m << std::endl;
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_3x3) {
@@ -653,6 +677,8 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {
 
 // This defines the transform3 test suite
 TYPED_TEST_P(test_host_basics_transform, transform3) {
+  // Print the linear algebra types of this backend
+  using algebra::operator<<;
 
   static_assert(algebra::concepts::transform3D<typename TypeParam::transform3>);
 
@@ -669,6 +695,9 @@ TYPED_TEST_P(test_host_basics_transform, transform3) {
   ASSERT_TRUE(trf1 == trf1);
   typename TypeParam::transform3 trf2;
   trf2 = trf1;
+
+  // Test printing
+  std::cout << trf1 << std::endl;
 
   const auto rot = trf2.rotation();
   ASSERT_NEAR(algebra::getter::element(rot, 0, 0), x[0], this->m_epsilon);

@@ -182,7 +182,7 @@ struct block_getter {
   template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
             concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE constexpr auto operator()(
+  ALGEBRA_HOST_DEVICE constexpr auto vector(
       const matrix<array_t, scalar_t, ROWS, COLS> &m, const std::size_t row,
       const std::size_t col) noexcept {
 
@@ -192,7 +192,7 @@ struct block_getter {
     assert(col <= COLS);
 
     using input_matrix_t = matrix<array_t, scalar_t, ROWS, COLS>;
-    using vector_t = vector<SIZE, scalar_t, array_t>;
+    using vector_t = algebra::storage::vector<SIZE, scalar_t, array_t>;
 
     vector_t res_v{};
 
@@ -203,7 +203,7 @@ struct block_getter {
       }
     }
     for (std::size_t i = row; i < row + SIZE; ++i) {
-      res_v[i] = m[col][i];
+      res_v[i - row] = m[col][i];
     }
 
     return res_v;
@@ -238,7 +238,8 @@ ALGEBRA_HOST_DEVICE constexpr void set_block(
   using matrix_t = matrix<array_t, scalar_t, ROWS, COLS>;
 
   // Don't access single elements in underlying vectors unless necessary
-  if constexpr (matrix_t::storage_rows() == input_matrix_t::storage_rows()) {
+  if constexpr (ROWS == mROW &&
+                matrix_t::storage_rows() == input_matrix_t::storage_rows()) {
     if (row == 0u) {
       for (std::size_t j = col; j < mCOL; ++j) {
         m[j] = b[j - col];
@@ -254,22 +255,30 @@ ALGEBRA_HOST_DEVICE constexpr void set_block(
 }
 
 /// Operator setting a block with a vector
-template <class matrix_t, std::size_t ROW, concepts::scalar scalar_t,
+template <std::size_t ROWS, std::size_t COLS, std::size_t N,
+          concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr void set_block(
-    matrix_t &m, const storage::vector<ROW, scalar_t, array_t> &b,
-    std::size_t row, std::size_t col) noexcept {
-  assert(row < ROW);
+    matrix<array_t, scalar_t, ROWS, COLS> &m,
+    const vector<N, scalar_t, array_t> &b, const std::size_t row,
+    const std::size_t col) noexcept {
+
+  using matrix_t = matrix<array_t, scalar_t, ROWS, COLS>;
+  using vector_t = vector<N, scalar_t, array_t>;
+
+  static_assert(N <= ROWS);
+  assert(row + N <= matrix_t::rows());
   assert(row < matrix_t::rows());
   assert(col < matrix_t::columns());
 
-  if constexpr (matrix_t::storage_rows() == ROW) {
+  if constexpr (ROWS == N &&
+                matrix_t::storage_rows() == vector_t::simd_size()) {
     if (row == 0u) {
       m[col] = b;
       return;
     }
   }
-  for (std::size_t i = row; i < ROW; ++i) {
+  for (std::size_t i = row; i < N + row; ++i) {
     m[col][i] = b[i - row];
   }
 }

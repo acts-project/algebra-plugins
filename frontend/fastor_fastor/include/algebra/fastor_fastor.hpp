@@ -9,7 +9,6 @@
 
 // Project include(s).
 #include "algebra/math/fastor.hpp"
-#include "algebra/math/generic.hpp"
 #include "algebra/storage/fastor.hpp"
 
 // Fastor include(s).
@@ -48,9 +47,8 @@ using fastor::math::eta;
 using fastor::math::norm;
 using fastor::math::normalize;
 using fastor::math::perp;
+using fastor::math::phi;
 using fastor::math::theta;
-
-using generic::math::phi;
 
 /// @}
 
@@ -84,5 +82,32 @@ using transform3 = math::transform3<T>;
 /// @}
 
 }  // namespace fastor
+
+namespace plugin {
+
+/// Define the plugin types
+/// @{
+template <concepts::value V>
+struct fastor {
+  /// Define scalar type
+  using value_type = V;
+
+  template <concepts::value T>
+  using simd = T;
+
+  using boolean = bool;
+  using scalar = value_type;
+  using size_type = algebra::fastor::size_type;
+  using transform3D = algebra::fastor::transform3<value_type>;
+  using point2D = algebra::fastor::point2<value_type>;
+  using point3D = algebra::fastor::point3<value_type>;
+  using vector3D = algebra::fastor::vector3<value_type>;
+
+  template <std::size_t ROWS, std::size_t COLS>
+  using matrix = algebra::fastor::matrix_type<value_type, ROWS, COLS>;
+};
+/// @}
+
+}  // namespace plugin
 
 }  // namespace algebra

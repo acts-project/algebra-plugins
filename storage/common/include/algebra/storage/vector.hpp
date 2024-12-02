@@ -75,16 +75,21 @@ class alignas(
   /// @{
 
   /// Construct vector in SoA layout from simd scalars
-  template <concepts::simd_scalar... Scalars>
-  ALGEBRA_HOST_DEVICE requires(sizeof...(Scalars) ==
-                               N) constexpr vector(Scalars &&... scals)
+  template <typename... Scalars>
+  requires(concepts::simd_scalar<scalar_t> && (sizeof...(Scalars) == N) &&
+           ((concepts::simd_scalar<Scalars> ||
+             std::convertible_to<Scalars, scalar_t>)&&...)) ALGEBRA_HOST_DEVICE
+      constexpr vector(Scalars &&... scals)
       : m_data{std::forward<Scalars>(scals)...} {}
 
   /// In order to avoid uninitialized values, which deteriorate the performance
   /// in explicitely vectorized code, the underlying data array is filled with
   /// zeroes if too few arguments are given.
-  template <concepts::value... Values>
-  ALGEBRA_HOST_DEVICE constexpr vector(Values &&... vals) {
+  template <typename... Values>
+  requires(!concepts::simd_scalar<scalar_t> && (sizeof...(Values) > 1) &&
+           ((concepts::value<Values> ||
+             std::convertible_to<Values, scalar_t>)&&...)) ALGEBRA_HOST_DEVICE
+      constexpr vector(Values &&... vals) {
 
     static_assert(sizeof...(Values) <= N);
 
@@ -104,24 +109,21 @@ class alignas(
   /// @}
 
   /// Construct from existing array storage @param vals
-  ALGEBRA_HOST_DEVICE
-  constexpr vector(const array_type &vals) : m_data{vals} {}
+  template <typename storage_array_t>
+  requires(std::convertible_to<storage_array_t, array_type> &&
+           !std::same_as<vector, storage_array_t>) ALGEBRA_HOST_DEVICE
+      constexpr vector(storage_array_t &&vals)
+      : m_data{std::forward<storage_array_t>(vals)} {}
 
-  /// Assignment operator from wrapped data.
+  /// Assignment operator from a vector with the same underlying storage.
   ///
   /// @param lhs wrap a copy of this data.
-  ALGEBRA_HOST_DEVICE
-  constexpr const vector &operator=(const array_type &lhs) {
+  template <std::size_t M>
+  requires(vector<N, scalar_t, array_t>::simd_size() ==
+           vector<M, scalar_t, array_t>::simd_size()) ALGEBRA_HOST_DEVICE
+      constexpr const vector &
+      operator=(const vector<M, scalar_t, array_t> &lhs) {
     m_data = lhs;
-    return *this;
-  }
-
-  /// Assignment operator from @c std::initializer_list .
-  ///
-  /// @param list wrap an array of this data.
-  ALGEBRA_HOST_DEVICE
-  constexpr vector &operator=(std::initializer_list<scalar_type> &list) {
-    m_data = array_type(list);
     return *this;
   }
 
@@ -152,21 +154,38 @@ class alignas(
     return m_data *= factor;
   }
 
-  /// Equality operators
+  /// Equality operator
   /// @{
-  template <std::size_t M, concepts::scalar o_scalar_t,
-            template <typename, std::size_t> class o_array_t,
-            template <typename, std::size_t> class p_array_t>
-  ALGEBRA_HOST_DEVICE friend constexpr bool operator==(
-      const vector<M, o_scalar_t, o_array_t> &,
-      const vector<M, o_scalar_t, p_array_t> &) noexcept;
+  /// AoS
+  template <concepts::scalar S = scalar_t>
+  requires(!concepts::simd_scalar<S>) ALGEBRA_HOST_DEVICE constexpr friend bool
+  operator==(const vector &lhs, const vector &rhs) noexcept {
 
-  template <std::size_t M, concepts::scalar o_scalar_t,
-            template <typename, std::size_t> class o_array_t,
-            template <typename, std::size_t> class p_array_t, bool>
-  ALGEBRA_HOST_DEVICE friend constexpr bool operator==(
-      const vector<M, o_scalar_t, o_array_t> &,
-      const p_array_t<o_scalar_t, M> &) noexcept;
+    const auto comp = lhs.compare(rhs);
+    bool is_full = false;
+
+    for (unsigned int i{0u}; i < N; ++i) {
+      is_full |= comp[i];
+    }
+
+    return is_full;
+  }
+
+  /// SoA
+  template <concepts::scalar S = scalar_t>
+  requires(concepts::simd_scalar<S>) ALGEBRA_HOST_DEVICE constexpr friend bool
+  operator==(const vector &lhs, const vector &rhs) noexcept {
+
+    const auto comp = lhs.compare(rhs);
+    bool is_full = false;
+
+    for (unsigned int i{0u}; i < N; ++i) {
+      // Ducktyping the Vc::Vector::MaskType
+      is_full |= comp[i].isFull();
+    }
+
+    return is_full;
+  }
   /// @}
 
   /// Inequality operator
@@ -202,55 +221,6 @@ class alignas(
     ((m_data[simd_size() - sizeof...(Is) + Is] = scalar_t(0)), ...);
   }
 };
-
-/// Friend operators
-/// @{
-
-template <std::size_t N, concepts::scalar scalar_t,
-          template <typename, std::size_t> class array_t,
-          template <typename, std::size_t> class o_array_t>
-requires(std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE constexpr bool
-operator==(const vector<N, scalar_t, array_t> &lhs,
-           const o_array_t<scalar_t, N> &rhs) noexcept {
-
-  const auto comp = lhs.compare(rhs);
-  bool is_full = false;
-
-  for (unsigned int i{0u}; i < N; ++i) {
-    is_full |= comp[i];
-  }
-
-  return is_full;
-}
-
-template <std::size_t N, concepts::scalar scalar_t,
-          template <typename, std::size_t> class array_t,
-          template <typename, std::size_t> class o_array_t>
-requires(!std::is_scalar_v<scalar_t>) ALGEBRA_HOST_DEVICE constexpr bool
-operator==(const vector<N, scalar_t, array_t> &lhs,
-           const o_array_t<scalar_t, N> &rhs) noexcept {
-
-  const auto comp = lhs.compare(rhs);
-  bool is_full = false;
-
-  for (unsigned int i{0u}; i < N; ++i) {
-    // Ducktyping the Vc::Vector::MaskType
-    is_full |= comp[i].isFull();
-  }
-
-  return is_full;
-}
-
-template <std::size_t N, concepts::scalar scalar_t,
-          template <typename, std::size_t> class array_t,
-          template <typename, std::size_t> class o_array_t>
-ALGEBRA_HOST_DEVICE constexpr bool operator==(
-    const vector<N, scalar_t, array_t> &lhs,
-    const vector<N, scalar_t, o_array_t> &rhs) noexcept {
-  return (lhs == rhs.m_data);
-}
-
-/// @}
 
 /// Macro declaring all instances of a specific arithmetic operator
 #define DECLARE_VECTOR_OPERATORS(OP)                                           \

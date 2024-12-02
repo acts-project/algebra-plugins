@@ -1,6 +1,6 @@
 # Algebra plugins library, part of the ACTS project (R&D line)
 #
-# (c) 2021-2022 CERN for the benefit of the ACTS project
+# (c) 2021-2024 CERN for the benefit of the ACTS project
 #
 # Mozilla Public License Version 2.0
 
@@ -11,6 +11,7 @@ include( algebra-plugins-compiler-options-cpp )
 add_library( algebra_tests_common INTERFACE )
 target_include_directories( algebra_tests_common INTERFACE
    "${CMAKE_CURRENT_SOURCE_DIR}/common" )
+target_link_libraries( algebra_tests_common INTERFACE algebra::utils )
 if( "${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC" )
    target_compile_definitions( algebra_tests_common INTERFACE
       -D_USE_MATH_DEFINES )
@@ -46,7 +47,7 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
 
       algebra_add_test( vc_soa
          "vc_soa/vc_soa.cpp"
-         LINK_LIBRARIES GTest::gtest_main algebra::vc_soa )
+         LINK_LIBRARIES GTest::gtest_main algebra::utils algebra::vc_soa )
    endif()
 endif()
 

@@ -88,6 +88,34 @@ concept column_matrix = matrix<M> && (algebra::traits::columns<M> == 1);
 
 template <typename M>
 concept column_matrix3D = column_matrix<M> && (algebra::traits::rows<M> == 3);
+
+template <typename MA, typename MB>
+concept matrix_compatible = matrix<MA>&& matrix<MB>&& std::convertible_to<
+    algebra::traits::index_t<MA>, algebra::traits::index_t<MB>>&&
+    std::convertible_to<algebra::traits::index_t<MB>,
+                        algebra::traits::index_t<MA>>;
+
+template <typename MA, typename MB>
+concept matrix_multipliable =
+    matrix_compatible<MA, MB> &&
+    (algebra::traits::columns<MA> ==
+     algebra::traits::rows<MB>)&&requires(algebra::traits::scalar_t<MA> sa,
+                                          algebra::traits::scalar_t<MB> sb) {
+  {(sa * sb) + (sa * sb)};
+};
+
+template <typename MA, typename MB, typename MC>
+concept matrix_multipliable_into =
+    matrix_multipliable<MA, MB>&& matrix_compatible<MA, MC>&&
+        matrix_compatible<MB, MC> &&
+    (algebra::traits::rows<MC> == algebra::traits::rows<MA>)&&(
+        algebra::traits::columns<MC> ==
+        algebra::traits::columns<
+            MB>)&&requires(algebra::traits::scalar_t<MA> sa,
+                           algebra::traits::scalar_t<MB> sb,
+                           algebra::traits::scalar_t<MC>& sc) {
+  {sc += (sa * sb)};
+};
 /// @}
 
 /// Transform concept

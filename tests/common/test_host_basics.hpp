@@ -20,6 +20,7 @@
 #include <array>
 #include <climits>
 #include <cmath>
+#include <cstddef>
 
 /// Test case class, to be specialised for the different plugins - vectors
 template <typename T>
@@ -28,7 +29,240 @@ TYPED_TEST_SUITE_P(test_host_basics_vector);
 
 /// Test case class, to be specialised for the different plugins - matrices
 template <typename T>
-class test_host_basics_matrix : public testing::Test, public test_base<T> {};
+class test_host_basics_matrix : public testing::Test, public test_base<T> {
+ protected:
+  template <typename A, std::size_t ROWS, std::size_t COLS>
+  void test_matrix_ops_any_matrix() {
+    // Test the set_product method.
+    {
+      typename A::template matrix<ROWS, ROWS> m1;
+      typename A::template matrix<ROWS, COLS> m2;
+
+      for (std::size_t i = 0; i < ROWS; ++i) {
+        for (std::size_t j = 0; j < ROWS; ++j) {
+          algebra::getter::element(m1, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * ROWS +
+                                                                   j);
+        }
+      }
+
+      for (std::size_t i = 0; i < ROWS; ++i) {
+        for (std::size_t j = 0; j < COLS; ++j) {
+          algebra::getter::element(m2, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * COLS +
+                                                                   j);
+        }
+      }
+
+      {
+        typename A::template matrix<ROWS, COLS> r1 = m1 * m2;
+        typename A::template matrix<ROWS, COLS> r2;
+        algebra::matrix::set_product(r2, m1, m2);
+
+        for (std::size_t i = 0; i < ROWS; ++i) {
+          for (std::size_t j = 0; j < COLS; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+    }
+
+    // Test the set_product_right_transpose method.
+    {
+      typename A::template matrix<ROWS, ROWS> m1;
+      typename A::template matrix<COLS, ROWS> m2;
+
+      for (std::size_t i = 0; i < ROWS; ++i) {
+        for (std::size_t j = 0; j < ROWS; ++j) {
+          algebra::getter::element(m1, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * ROWS +
+                                                                   j);
+        }
+      }
+
+      for (std::size_t i = 0; i < COLS; ++i) {
+        for (std::size_t j = 0; j < ROWS; ++j) {
+          algebra::getter::element(m2, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * COLS +
+                                                                   j);
+        }
+      }
+
+      {
+        typename A::template matrix<ROWS, COLS> r1 =
+            m1 * algebra::matrix::transpose(m2);
+        typename A::template matrix<ROWS, COLS> r2;
+        algebra::matrix::set_product_right_transpose(r2, m1, m2);
+
+        for (std::size_t i = 0; i < ROWS; ++i) {
+          for (std::size_t j = 0; j < COLS; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+    }
+
+    // Test the set_product_left_transpose method.
+    {
+      typename A::template matrix<ROWS, ROWS> m1;
+      typename A::template matrix<ROWS, COLS> m2;
+
+      for (std::size_t i = 0; i < ROWS; ++i) {
+        for (std::size_t j = 0; j < ROWS; ++j) {
+          algebra::getter::element(m1, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * ROWS +
+                                                                   j);
+        }
+      }
+
+      for (std::size_t i = 0; i < ROWS; ++i) {
+        for (std::size_t j = 0; j < COLS; ++j) {
+          algebra::getter::element(m2, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * COLS +
+                                                                   j);
+        }
+      }
+
+      {
+        typename A::template matrix<ROWS, COLS> r1 =
+            algebra::matrix::transpose(m1) * m2;
+        typename A::template matrix<ROWS, COLS> r2;
+        algebra::matrix::set_product_left_transpose(r2, m1, m2);
+
+        for (std::size_t i = 0; i < ROWS; ++i) {
+          for (std::size_t j = 0; j < COLS; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+    }
+  }
+
+  template <typename A, std::size_t N>
+  void test_matrix_ops_square_matrix() {
+    {
+      typename A::template matrix<N, N> m1;
+      typename A::template matrix<N, N> m2;
+
+      for (std::size_t i = 0; i < N; ++i) {
+        for (std::size_t j = 0; j < N; ++j) {
+          algebra::getter::element(m1, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * N + j);
+          algebra::getter::element(m2, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(
+                  -1 * (i * N + j) + 42);
+        }
+      }
+
+      // Test the set_product method.
+      {
+        typename A::template matrix<N, N> r1 = m1 * m2;
+        typename A::template matrix<N, N> r2;
+        algebra::matrix::set_product(r2, m1, m2);
+
+        for (std::size_t i = 0; i < N; ++i) {
+          for (std::size_t j = 0; j < N; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+
+      // Test the set_product_right_transpose method.
+      {
+        typename A::template matrix<N, N> r1 =
+            m1 * algebra::matrix::transpose(m2);
+        typename A::template matrix<N, N> r2;
+        algebra::matrix::set_product_right_transpose(r2, m1, m2);
+
+        for (std::size_t i = 0; i < N; ++i) {
+          for (std::size_t j = 0; j < N; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+
+      // Test the set_product_left_transpose method.
+      {
+        typename A::template matrix<N, N> r1 =
+            algebra::matrix::transpose(m1) * m2;
+        typename A::template matrix<N, N> r2;
+        algebra::matrix::set_product_left_transpose(r2, m1, m2);
+
+        for (std::size_t i = 0; i < N; ++i) {
+          for (std::size_t j = 0; j < N; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+
+      // Test the set_inplace_product_right method.
+      {
+        typename A::template matrix<N, N> r1 = m1 * m2;
+        typename A::template matrix<N, N> r2 = m1;
+        algebra::matrix::set_inplace_product_right(r2, m2);
+
+        for (std::size_t i = 0; i < N; ++i) {
+          for (std::size_t j = 0; j < N; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+
+      // Test the set_inplace_product_left method.
+      {
+        typename A::template matrix<N, N> r1 = m1 * m2;
+        typename A::template matrix<N, N> r2 = m2;
+        algebra::matrix::set_inplace_product_left(r2, m1);
+
+        for (std::size_t i = 0; i < N; ++i) {
+          for (std::size_t j = 0; j < N; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+
+      // Test the set_inplace_product_right_transpose method.
+      {
+        typename A::template matrix<N, N> r1 =
+            m1 * algebra::matrix::transpose(m2);
+        typename A::template matrix<N, N> r2 = m1;
+        algebra::matrix::set_inplace_product_right_transpose(r2, m2);
+
+        for (std::size_t i = 0; i < N; ++i) {
+          for (std::size_t j = 0; j < N; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+
+      // Test the set_inplace_product_left_transpose method.
+      {
+        typename A::template matrix<N, N> r1 =
+            algebra::matrix::transpose(m1) * m2;
+        typename A::template matrix<N, N> r2 = m2;
+        algebra::matrix::set_inplace_product_left_transpose(r2, m1);
+
+        for (std::size_t i = 0; i < N; ++i) {
+          for (std::size_t j = 0; j < N; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+    }
+
+    this->template test_matrix_ops_any_matrix<A, N, N>();
+  }
+};
 TYPED_TEST_SUITE_P(test_host_basics_matrix);
 
 /// Test case class, to be specialised for the different plugins - transforms
@@ -170,6 +404,8 @@ TYPED_TEST_P(test_host_basics_vector, getter) {
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_2x3) {
+  static constexpr typename TypeParam::size_type ROWS = 2;
+  static constexpr typename TypeParam::size_type COLS = 3;
 
   using matrix_2x3_t = typename TypeParam::template matrix<2, 3>;
 
@@ -224,11 +460,16 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_2x3) {
 
   ASSERT_NEAR(v2[0], 14, this->m_epsilon);
   ASSERT_NEAR(v2[1], 32, this->m_epsilon);
+
+  this->template test_matrix_ops_any_matrix<TypeParam, ROWS, COLS>();
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_3x1) {
   // Print the linear algebra types of this backend
   using algebra::operator<<;
+
+  static constexpr typename TypeParam::size_type ROWS = 3;
+  static constexpr typename TypeParam::size_type COLS = 1;
 
   // Cross product on vector3 and matrix<3,1>
   typename TypeParam::template matrix<3, 1> vF;
@@ -248,6 +489,8 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_3x1) {
   // Dot product on vector3 and matrix<3,1>
   auto dot = algebra::vector::dot(vG, vF);
   ASSERT_NEAR(dot, 0.f, this->m_epsilon);
+
+  this->template test_matrix_ops_any_matrix<TypeParam, ROWS, COLS>();
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
@@ -366,9 +609,13 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x4) {
 
   // Test printing
   std::cout << m << std::endl;
+
+  this->template test_matrix_ops_any_matrix<TypeParam, ROWS, COLS>();
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_3x3) {
+  static constexpr typename TypeParam::size_type N = 3;
+
   {
     typename TypeParam::vector3 v = {10.f, 20.f, 30.f};
     typename TypeParam::template matrix<3, 3> m33;
@@ -425,9 +672,12 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_3x3) {
     ASSERT_NEAR(algebra::getter::element(m33_inv, 2, 2), -10.f / 20.f,
                 this->m_isclose);
   }
+
+  this->template test_matrix_ops_square_matrix<TypeParam, N>();
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_2x2) {
+  static constexpr typename TypeParam::size_type N = 2;
 
   typename TypeParam::template matrix<2, 2> m22;
   algebra::getter::element(m22, 0, 0) = 4.f;
@@ -449,9 +699,12 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_2x2) {
               this->m_isclose);
   ASSERT_NEAR(algebra::getter::element(m22_inv, 1, 1), 4.f / 16.f,
               this->m_isclose);
+
+  this->template test_matrix_ops_square_matrix<TypeParam, N>();
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_6x6) {
+  static constexpr typename TypeParam::size_type N = 6;
 
   // Test 6 X 6 big matrix determinant
   typename TypeParam::template matrix<6, 6> m66_big;
@@ -584,6 +837,8 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x6) {
   auto m66_small_det = algebra::matrix::determinant(m66_small);
   ASSERT_NEAR((m66_small_det - 4.30636e-11f) / 4.30636e-11f, 0.f,
               2.f * this->m_isclose);
+
+  this->template test_matrix_ops_square_matrix<TypeParam, N>();
 }
 
 TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {

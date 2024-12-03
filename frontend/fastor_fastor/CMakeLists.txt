@@ -8,6 +8,6 @@
 algebra_add_library( algebra_fastor_fastor fastor_fastor
    "include/algebra/fastor_fastor.hpp" )
 target_link_libraries( algebra_fastor_fastor
-   INTERFACE algebra::common algebra::fastor_storage algebra::fastor_math )
+   INTERFACE algebra::common algebra::fastor_storage algebra::fastor_math algebra::generic_math )
 algebra_test_public_headers( algebra_fastor_fastor
    "algebra/fastor_fastor.hpp" )

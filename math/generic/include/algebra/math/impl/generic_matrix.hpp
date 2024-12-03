@@ -83,6 +83,196 @@ ALGEBRA_HOST_DEVICE inline auto transpose(const M &m) {
   return ret;
 }
 
+// Set matrix C to the product AB
+template <concepts::matrix MC, concepts::matrix MA, concepts::matrix MB>
+ALGEBRA_HOST_DEVICE inline void
+set_product(MC &C, const MA &A, const MB &B) requires(
+    algebra::concepts::matrix_multipliable_into<MA, MB, MC>) {
+  using index_t = algebra::traits::index_t<MC>;
+  using value_t = algebra::traits::value_t<MC>;
+
+  for (index_t i = 0; i < algebra::traits::rows<MC>; ++i) {
+    for (index_t j = 0; j < algebra::traits::columns<MC>; ++j) {
+      value_t t = 0.f;
+
+      for (index_t k = 0; k < algebra::traits::rows<MB>; ++k) {
+        t += algebra::traits::element_getter_t<MA>()(A, i, k) *
+             algebra::traits::element_getter_t<MB>()(B, k, j);
+      }
+
+      algebra::traits::element_getter_t<MC>()(C, i, j) = t;
+    }
+  }
+}
+
+// Set matrix C to the product A^TB
+template <concepts::matrix MC, concepts::matrix MA, concepts::matrix MB>
+ALGEBRA_HOST_DEVICE inline void
+set_product_left_transpose(MC &C, const MA &A, const MB &B) requires(
+    algebra::concepts::matrix_multipliable_into<
+        decltype(transpose(std::declval<MA>())), MB, MC>) {
+  using index_t = algebra::traits::index_t<MC>;
+  using value_t = algebra::traits::value_t<MC>;
+
+  for (index_t i = 0; i < algebra::traits::rows<MC>; ++i) {
+    for (index_t j = 0; j < algebra::traits::columns<MC>; ++j) {
+      value_t t = 0.f;
+
+      for (index_t k = 0; k < algebra::traits::rows<MB>; ++k) {
+        t += algebra::traits::element_getter_t<MA>()(A, k, i) *
+             algebra::traits::element_getter_t<MB>()(B, k, j);
+      }
+
+      algebra::traits::element_getter_t<MC>()(C, i, j) = t;
+    }
+  }
+}
+
+// Set matrix C to the product AB^T
+template <concepts::matrix MC, concepts::matrix MA, concepts::matrix MB>
+ALGEBRA_HOST_DEVICE inline void
+set_product_right_transpose(MC &C, const MA &A, const MB &B) requires(
+    algebra::concepts::matrix_multipliable_into<
+        MA, decltype(transpose(std::declval<MB>())), MC>) {
+  using index_t = algebra::traits::index_t<MC>;
+  using value_t = algebra::traits::value_t<MC>;
+
+  for (index_t i = 0; i < algebra::traits::rows<MC>; ++i) {
+    for (index_t j = 0; j < algebra::traits::columns<MC>; ++j) {
+      value_t t = 0.f;
+
+      for (index_t k = 0; k < algebra::traits::columns<MA>; ++k) {
+        t += algebra::traits::element_getter_t<MA>()(A, i, k) *
+             algebra::traits::element_getter_t<MB>()(B, j, k);
+      }
+
+      algebra::traits::element_getter_t<MC>()(C, i, j) = t;
+    }
+  }
+}
+
+// Set matrix A to the product AB in place
+template <concepts::matrix MA, concepts::matrix MB>
+ALGEBRA_HOST_DEVICE inline void
+set_inplace_product_right(MA &A, const MB &B) requires(
+    algebra::concepts::matrix_multipliable_into<MA, MB, MA>) {
+  using index_t = algebra::traits::index_t<MA>;
+  using value_t = algebra::traits::value_t<MA>;
+
+  for (index_t i = 0; i < algebra::traits::rows<MA>; ++i) {
+    algebra::traits::get_matrix_t<MA, 1, algebra::traits::columns<MA>, value_t>
+        Q;
+
+    for (index_t j = 0; j < algebra::traits::columns<MA>; ++j) {
+      algebra::traits::element_getter_t<decltype(Q)>()(Q, 0, j) =
+          algebra::traits::element_getter_t<MA>()(A, i, j);
+    }
+
+    for (index_t j = 0; j < algebra::traits::columns<MA>; ++j) {
+      value_t t = 0.f;
+
+      for (index_t k = 0; k < algebra::traits::rows<MB>; ++k) {
+        t += algebra::traits::element_getter_t<decltype(Q)>()(Q, 0, k) *
+             algebra::traits::element_getter_t<MB>()(B, k, j);
+      }
+
+      algebra::traits::element_getter_t<MA>()(A, i, j) = t;
+    }
+  }
+}
+
+// Set matrix A to the product BA in place
+template <concepts::matrix MA, concepts::matrix MB>
+ALGEBRA_HOST_DEVICE inline void
+set_inplace_product_left(MA &A, const MB &B) requires(
+    algebra::concepts::matrix_multipliable_into<MB, MA, MA>) {
+  using index_t = algebra::traits::index_t<MA>;
+  using value_t = algebra::traits::value_t<MA>;
+
+  for (index_t j = 0; j < algebra::traits::columns<MA>; ++j) {
+    algebra::traits::get_matrix_t<MA, 1, algebra::traits::columns<MA>, value_t>
+        Q;
+
+    for (index_t i = 0; i < algebra::traits::rows<MA>; ++i) {
+      algebra::traits::element_getter_t<decltype(Q)>()(Q, 0, i) =
+          algebra::traits::element_getter_t<MA>()(A, i, j);
+    }
+
+    for (index_t i = 0; i < algebra::traits::rows<MA>; ++i) {
+      value_t t = 0.f;
+
+      for (index_t k = 0; k < algebra::traits::columns<MB>; ++k) {
+        t += algebra::traits::element_getter_t<MB>()(B, i, k) *
+             algebra::traits::element_getter_t<decltype(Q)>()(Q, 0, k);
+      }
+
+      algebra::traits::element_getter_t<MA>()(A, i, j) = t;
+    }
+  }
+}
+
+// Set matrix A to the product AB^T in place
+template <concepts::matrix MA, concepts::matrix MB>
+ALGEBRA_HOST_DEVICE inline void
+set_inplace_product_right_transpose(MA &A, const MB &B) requires(
+    algebra::concepts::matrix_multipliable_into<
+        MA, decltype(transpose(std::declval<MB>())), MA>) {
+  using index_t = algebra::traits::index_t<MA>;
+  using value_t = algebra::traits::value_t<MA>;
+
+  for (index_t i = 0; i < algebra::traits::rows<MA>; ++i) {
+    algebra::traits::get_matrix_t<MA, 1, algebra::traits::columns<MA>, value_t>
+        Q;
+
+    for (index_t j = 0; j < algebra::traits::columns<MA>; ++j) {
+      algebra::traits::element_getter_t<decltype(Q)>()(Q, 0, j) =
+          algebra::traits::element_getter_t<MA>()(A, i, j);
+    }
+
+    for (index_t j = 0; j < algebra::traits::columns<MA>; ++j) {
+      value_t T = 0.f;
+
+      for (index_t k = 0; k < algebra::traits::columns<MB>; ++k) {
+        T += algebra::traits::element_getter_t<decltype(Q)>()(Q, 0, k) *
+             algebra::traits::element_getter_t<MB>()(B, j, k);
+      }
+
+      algebra::traits::element_getter_t<MA>()(A, i, j) = T;
+    }
+  }
+}
+
+// Set matrix A to the product B^TA in place
+template <concepts::matrix MA, concepts::matrix MB>
+ALGEBRA_HOST_DEVICE inline void
+set_inplace_product_left_transpose(MA &A, const MB &B) requires(
+    algebra::concepts::matrix_multipliable_into<
+        decltype(transpose(std::declval<MB>())), MA, MA>) {
+  using index_t = algebra::traits::index_t<MA>;
+  using value_t = algebra::traits::value_t<MA>;
+
+  for (index_t j = 0; j < algebra::traits::columns<MA>; ++j) {
+    algebra::traits::get_matrix_t<MA, 1, algebra::traits::columns<MA>, value_t>
+        Q;
+
+    for (index_t i = 0; i < algebra::traits::rows<MA>; ++i) {
+      algebra::traits::element_getter_t<decltype(Q)>()(Q, 0, i) =
+          algebra::traits::element_getter_t<MA>()(A, i, j);
+    }
+
+    for (index_t i = 0; i < algebra::traits::rows<MA>; ++i) {
+      value_t T = 0.f;
+
+      for (index_t k = 0; k < algebra::traits::rows<MB>; ++k) {
+        T += algebra::traits::element_getter_t<MB>()(B, k, i) *
+             algebra::traits::element_getter_t<decltype(Q)>()(Q, 0, k);
+      }
+
+      algebra::traits::element_getter_t<MA>()(A, i, j) = T;
+    }
+  }
+}
+
 /// @returns the determinant of @param m
 template <concepts::square_matrix M>
 ALGEBRA_HOST_DEVICE inline algebra::traits::scalar_t<M> determinant(

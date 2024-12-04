@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/math/eigen.hpp"
+#include "algebra/math/generic.hpp"
 #include "algebra/storage/eigen.hpp"
 
 // Eigen include(s).
@@ -64,6 +65,14 @@ using eigen::math::set_identity;
 using eigen::math::set_zero;
 using eigen::math::transpose;
 using eigen::math::zero;
+
+using generic::math::set_inplace_product_left;
+using generic::math::set_inplace_product_left_transpose;
+using generic::math::set_inplace_product_right;
+using generic::math::set_inplace_product_right_transpose;
+using generic::math::set_product;
+using generic::math::set_product_left_transpose;
+using generic::math::set_product_right_transpose;
 
 /// @}
 

@@ -29,9 +29,10 @@ namespace getter {
 /// @{
 
 using cmath::storage::block;
+using cmath::storage::column;
 using cmath::storage::element;
+using cmath::storage::row;
 using cmath::storage::set_block;
-using cmath::storage::vector;
 
 /// @}
 

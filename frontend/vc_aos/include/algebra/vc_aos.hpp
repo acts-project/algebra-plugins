@@ -24,9 +24,10 @@ namespace getter {
 /// @{
 
 using vc_aos::storage::block;
+using vc_aos::storage::column;
 using vc_aos::storage::element;
+using vc_aos::storage::row;
 using vc_aos::storage::set_block;
-using vc_aos::storage::vector;
 
 /// @}
 

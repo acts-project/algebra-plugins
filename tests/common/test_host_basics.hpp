@@ -21,6 +21,8 @@
 #include <climits>
 #include <cmath>
 
+using namespace algebra;
+
 /// Test case class, to be specialised for the different plugins - vectors
 template <typename T>
 class test_host_basics_vector : public testing::Test, public test_base<T> {};

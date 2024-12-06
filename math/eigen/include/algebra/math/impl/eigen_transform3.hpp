@@ -65,10 +65,8 @@ struct transform3 {
   /// @name Data objects
   /// @{
 
-  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data =
-      Eigen::Transform<scalar_type, 3, Eigen::Affine>::Identity();
-  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data_inv =
-      Eigen::Transform<scalar_type, 3, Eigen::Affine>::Identity();
+  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data;
+  Eigen::Transform<scalar_type, 3, Eigen::Affine> _data_inv;
 
   /// @}
 
@@ -81,6 +79,8 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   transform3(const vector3 &t, const vector3 &x, const vector3 &y,
              const vector3 &z, bool get_inverse = true) {
+    _data.setIdentity();
+
     auto &matrix = _data.matrix();
     matrix.template block<3, 1>(0, 0) = x;
     matrix.template block<3, 1>(0, 1) = y;
@@ -89,6 +89,8 @@ struct transform3 {
 
     if (get_inverse) {
       _data_inv = _data.inverse();
+    } else {
+      _data_inv.setIdentity();
     }
   }
 

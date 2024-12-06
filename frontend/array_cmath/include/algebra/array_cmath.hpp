@@ -12,6 +12,8 @@
 #include "algebra/math/generic.hpp"
 #include "algebra/storage/array.hpp"
 
+namespace algebra {
+
 /// @name Operators on @c algebra::array::storage_type
 /// @{
 
@@ -20,8 +22,6 @@ using algebra::cmath::operator-;
 using algebra::cmath::operator+;
 
 /// @}
-
-namespace algebra {
 
 namespace getter {
 

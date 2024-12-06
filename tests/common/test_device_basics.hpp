@@ -40,6 +40,7 @@ class test_device_basics : public test_base<T> {
   /// Perform various 2D vector operations, and produce a scalar output
   ALGEBRA_HOST_DEVICE
   scalar vector_2d_ops(point2 a, point2 b) const {
+    using namespace algebra;
 
     point2 c = a + b;
     point2 c2 = c * 2.0;
@@ -58,6 +59,7 @@ class test_device_basics : public test_base<T> {
   /// Perform various 3D vector operations, and produce a scalar output
   ALGEBRA_HOST_DEVICE
   scalar vector_3d_ops(vector3 a, vector3 b) const {
+    using namespace algebra;
 
     vector3 c = a + b;
     vector3 c2 = c * 2.0;
@@ -78,6 +80,7 @@ class test_device_basics : public test_base<T> {
   /// Perform some trivial operations on an asymmetrix matrix
   ALGEBRA_HOST_DEVICE
   scalar matrix64_ops(const matrix<6, 4>& m) const {
+    using namespace algebra;
 
     matrix<6, 4> m2;
     for (size_type i = 0; i < 6; ++i) {
@@ -139,6 +142,7 @@ class test_device_basics : public test_base<T> {
   /// Perform some trivial operations on an asymmetrix matrix
   ALGEBRA_HOST_DEVICE
   scalar matrix22_ops(const matrix<2, 2>& m22) const {
+    using namespace algebra;
 
     // Test 2 X 2 matrix determinant
     auto m22_det = algebra::matrix::determinant(m22);
@@ -202,6 +206,7 @@ class test_device_basics : public test_base<T> {
   ALGEBRA_HOST_DEVICE
   scalar transform3_ops(vector3 t1, vector3 t2, vector3 t3, vector3 a,
                         vector3 b) const {
+    using namespace algebra;
 
     transform3 tr1(t1, t2, t3);
     transform3 tr2;

@@ -145,8 +145,8 @@ struct block_getter {
 
     ROOT::Math::SVector<scalar_t, SIZE> ret;
 
-    for (std::size_t irow = row; irow < row + SIZE; ++irow) {
-      ret[irow - row] = m[col][irow];
+    for (unsigned int irow = row; irow < row + SIZE; ++irow) {
+      ret[irow - row] = m(irow, col);
     }
 
     return ret;

@@ -241,7 +241,7 @@ ALGEBRA_HOST_DEVICE constexpr void set_block(
   if constexpr (ROWS == mROW &&
                 matrix_t::storage_rows() == input_matrix_t::storage_rows()) {
     if (row == 0u) {
-      for (std::size_t j = col; j < mCOL; ++j) {
+      for (std::size_t j = col; j < col + COLS; ++j) {
         m[j] = b[j - col];
       }
       return;

@@ -19,7 +19,15 @@ namespace algebra::cmath {
 template <concepts::matrix matrix_t>
 requires(std::is_scalar_v<typename matrix_t::value_type::value_type>)
     ALGEBRA_HOST_DEVICE inline matrix_t zero() {
-  return matrix_t{};
+  matrix_t ret;
+
+  for (std::size_t j = 0; j < algebra::traits::columns<matrix_t>; ++j) {
+    for (std::size_t i = 0; i < algebra::traits::rows<matrix_t>; ++i) {
+      ret[j][i] = 0;
+    }
+  }
+
+  return ret;
 }
 
 /// @returns identity matrix of type @tparam matrix_t

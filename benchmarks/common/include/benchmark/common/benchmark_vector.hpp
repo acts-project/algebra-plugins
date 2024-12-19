@@ -84,7 +84,7 @@ requires std::invocable<unaryOP, vector_t<scalar_t>> struct vector_unaryOP_bm
     // Run the benchmark
     for (auto _ : state) {
       for (std::size_t i{0}; i < n_samples; ++i) {
-        const result_t result = unaryOP{}(this->a[i]);
+        result_t result = unaryOP{}(this->a[i]);
         ::benchmark::DoNotOptimize(result);
       }
     }
@@ -119,7 +119,7 @@ requires std::invocable<binaryOP, vector_t<scalar_t>,
     // Run the benchmark
     for (auto _ : state) {
       for (std::size_t i{0}; i < n_samples; ++i) {
-        const result_t result = binaryOP{}(this->a[i], this->b[i]);
+        result_t result = binaryOP{}(this->a[i], this->b[i]);
         ::benchmark::DoNotOptimize(result);
       }
     }
@@ -132,48 +132,49 @@ namespace bench_op {
 struct add {
   inline static const std::string name{"add"};
   template <concepts::vector vector_t>
-  auto operator()(const vector_t &a, const vector_t &b) const {
+  vector_t operator()(const vector_t &a, const vector_t &b) const {
     return a + b;
   }
 };
 struct sub {
   inline static const std::string name{"sub"};
   template <concepts::vector vector_t>
-  auto operator()(const vector_t &a, const vector_t &b) const {
+  vector_t operator()(const vector_t &a, const vector_t &b) const {
     return a - b;
   }
 };
 struct dot {
   inline static const std::string name{"dot"};
   template <concepts::vector vector_t>
-  auto operator()(const vector_t &a, const vector_t &b) const {
+  algebra::traits::scalar_t<vector_t> operator()(const vector_t &a,
+                                                 const vector_t &b) const {
     return algebra::vector::dot(a, b);
   }
 };
 struct cross {
   inline static const std::string name{"cross"};
   template <concepts::vector vector_t>
-  auto operator()(const vector_t &a, const vector_t &b) const {
+  vector_t operator()(const vector_t &a, const vector_t &b) const {
     return algebra::vector::cross(a, b);
   }
 };
 
 // Macro for declaring vector unary ops
-#define ALGEBRA_PLUGINS_BENCH_VECTOR(OP)       \
+#define ALGEBRA_PLUGINS_BENCH_VECTOR(OP, RES)  \
   struct OP {                                  \
     inline static const std::string name{#OP}; \
     template <concepts::vector vector_t>       \
-    auto operator()(const vector_t &a) const { \
+    RES operator()(const vector_t &a) const {  \
       return algebra::vector::OP(a);           \
     }                                          \
   };
 
-ALGEBRA_PLUGINS_BENCH_VECTOR(phi)
-ALGEBRA_PLUGINS_BENCH_VECTOR(theta)
-ALGEBRA_PLUGINS_BENCH_VECTOR(eta)
-ALGEBRA_PLUGINS_BENCH_VECTOR(perp)
-ALGEBRA_PLUGINS_BENCH_VECTOR(norm)
-ALGEBRA_PLUGINS_BENCH_VECTOR(normalize)
+ALGEBRA_PLUGINS_BENCH_VECTOR(phi, algebra::traits::scalar_t<vector_t>)
+ALGEBRA_PLUGINS_BENCH_VECTOR(theta, algebra::traits::scalar_t<vector_t>)
+ALGEBRA_PLUGINS_BENCH_VECTOR(eta, algebra::traits::scalar_t<vector_t>)
+ALGEBRA_PLUGINS_BENCH_VECTOR(perp, algebra::traits::scalar_t<vector_t>)
+ALGEBRA_PLUGINS_BENCH_VECTOR(norm, algebra::traits::scalar_t<vector_t>)
+ALGEBRA_PLUGINS_BENCH_VECTOR(normalize, vector_t)
 
 }  // namespace bench_op
 

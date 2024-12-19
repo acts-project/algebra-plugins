@@ -35,9 +35,10 @@ namespace getter {
 /// @{
 
 using vc_soa::storage::block;
+using vc_soa::storage::column;
 using vc_soa::storage::element;
+using vc_soa::storage::row;
 using vc_soa::storage::set_block;
-using vc_soa::storage::vector;
 
 /// @}
 

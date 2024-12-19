@@ -87,6 +87,12 @@ struct scalar<
     algebra::storage::matrix<vc_soa::storage_type, Vc::Vector<T>, ROWS, COLS>> {
   using type = Vc::Vector<T>;
 };
+
+template <concepts::value T, std::size_t N>
+struct scalar<
+    algebra::storage::vector<N, Vc::Vector<T>, vc_soa::storage_type>> {
+  using type = Vc::Vector<T>;
+};
 /// @}
 
 // Vector and storage types are different

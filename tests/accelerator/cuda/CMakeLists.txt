@@ -27,7 +27,7 @@ target_include_directories( algebra_tests_cuda_common PUBLIC
 target_link_libraries( algebra_tests_cuda_common
    PUBLIC    CUDA::cudart
    INTERFACE GTest::gtest algebra::common algebra::tests_common
-             algebra::tests_accel_common vecmem::core vecmem::cuda )
+             algebra::tests_accel_common )
 target_compile_options( algebra_tests_cuda_common INTERFACE
    $<$<COMPILE_LANGUAGE:CUDA>:-Xcudafe --diag_suppress=177>
    $<$<COMPILE_LANGUAGE:CUDA>:--ftz=false --prec-div=true>
@@ -51,17 +51,10 @@ target_compile_options( algebra_test_array_cuda
    PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )
 
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
-   algebra_add_test( eigen_cuda "eigen_generic.cu" "eigen_eigen.cu"
-      LINK_LIBRARIES algebra::eigen_generic algebra::eigen_eigen
+   algebra_add_test( eigen_cuda "eigen_eigen.cu"
+      LINK_LIBRARIES algebra::eigen_eigen
                      algebra::tests_cuda_common GTest::gtest_main )
    target_compile_options( algebra_test_eigen_cuda
       PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )
 endif()
 
-if( ALGEBRA_PLUGINS_INCLUDE_VECMEM )
-   algebra_add_test( vecmem_cuda "vecmem_cmath.cu"
-      LINK_LIBRARIES algebra::vecmem_cmath
-                     algebra::tests_cuda_common GTest::gtest_main )
-   target_compile_options( algebra_test_vecmem_cuda
-      PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )
-endif()

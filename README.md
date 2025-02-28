@@ -8,7 +8,6 @@ for the R&D projects [detray](https://github.com/acts-project/detray) and
 | ------------------------------------------------------------------------- | --- | ---- | ---- |
 | generic                                                                     | ✅  | ✅  | ✅   |
 | [Eigen](https://eigen.tuxfamily.org)                                      | ✅  | ✅  | ✅   |
-| [SMatrix](https://root.cern.ch/doc/master/group__SMatrixGroup.html)       | ✅  | ⚪  | ⚪   |
 | [VC](https://github.com/VcDevel/Vc)                                       | ✅  | ⚪  | ⚪   |
 | [Fastor](https://github.com/romeric/Fastor)                               | ✅  | ⚪  | ⚪   |
 
@@ -28,18 +27,13 @@ Available options:
   the following plugins:
   * `EIGEN`: Plugin using [Eigen](https://eigen.tuxfamily.org)
     (`OFF` by default)
-  * `SMATRIX`: Plugin using
-    [SMatrix](https://root.cern/doc/master/group__SMatrixGroup.html)
-    (`OFF` by default)
   * `VC`: Plugin using [Vc](https://github.com/VcDevel/Vc)
     (`OFF` by default)
   * `FASTOR`: Plugin using [Fastor](https://github.com/romeric/Fastor)
     (`OFF` by default)
-  * `VECMEM`: Plugin using [VecMem](https://github.com/acts-project/vecmem)
-    (`OFF` by default)
 - `ALGEBRA_PLUGINS_USE_SYSTEM_LIBS`: Boolean configuring whether to search for all external libraries "on the system" or not
 - `ALGEBRA_PLUGINS_SETUP_<XXX>`: Boolean to turn on/off the explicit "setup" of
-  the external libraries (`GOOGLETEST`, [`BENCHMARK`](https://github.com/google/benchmark), `EIGEN3`, `VC`, `FASTOR`, and `VECMEM`)
+  the external libraries (`GOOGLETEST`, [`BENCHMARK`](https://github.com/google/benchmark), `EIGEN3`, `VC`, `FASTOR`)
 - `ALGEBRA_PLUGINS_USE_SYSTEM_<XXX>`: Boolean configuring how to set up a given
   external library
   * `ON`: The external library is searched for "on the system" using

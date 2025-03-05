@@ -10,9 +10,7 @@
 # Set up variables describing which plugins were enabled during the Algebra
 # Plugins build.
 set( ALGEBRA_PLUGINS_INCLUDE_EIGEN @ALGEBRA_PLUGINS_INCLUDE_EIGEN@ )
-set( ALGEBRA_PLUGINS_INCLUDE_SMATRIX @ALGEBRA_PLUGINS_INCLUDE_SMATRIX@ )
 set( ALGEBRA_PLUGINS_INCLUDE_VC @ALGEBRA_PLUGINS_INCLUDE_VC@ )
-set( ALGEBRA_PLUGINS_INCLUDE_VECMEM @ALGEBRA_PLUGINS_INCLUDE_VECMEM@ )
 
 # Set up some simple variables for using the package.
 set( algebra_plugins_VERSION "@PROJECT_VERSION@" )
@@ -25,14 +23,8 @@ include( CMakeFindDependencyMacro )
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
    find_dependency( Eigen3 )
 endif()
-if( ALGEBRA_PLUGINS_INCLUDE_SMATRIX )
-   find_dependency( ROOT COMPONENTS Smatrix )
-endif()
 if( ALGEBRA_PLUGINS_INCLUDE_VC )
    find_dependency( Vc 1.4.2 )
-endif()
-if( ALGEBRA_PLUGINS_INCLUDE_VECMEM )
-   find_dependency( vecmem )
 endif()
 
 # Print a standard information message about the package being found.

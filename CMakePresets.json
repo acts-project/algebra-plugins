@@ -16,15 +16,6 @@
          }
       },
       {
-         "name" : "vecmem",
-         "displayName" : "VecMem Enabled Configuration",
-         "inherits" : [ "base" ],
-         "cacheVariables": {
-            "ALGEBRA_PLUGINS_SETUP_VECMEM"   : "TRUE",
-            "ALGEBRA_PLUGINS_INCLUDE_VECMEM" : "TRUE"
-         }
-      },
-      {
          "name" : "eigen",
          "displayName" : "Eigen Enabled Configuration",
          "inherits" : [ "base" ],
@@ -54,17 +45,17 @@
       {
          "name" : "default-x86-64",
          "displayName" : "Default Developer Configuration for x86_64",
-         "inherits" : [ "vecmem", "eigen", "vc", "fastor" ]
+         "inherits" : [ "eigen", "vc", "fastor" ]
       },
       {
          "name" : "default-aarch64",
          "displayName" : "Default Developer Configuration for ARM64",
-         "inherits" : [ "vecmem", "eigen", "vc" ]
+         "inherits" : [ "eigen", "vc" ]
       },
       {
          "name" : "cuda",
          "displayName" : "CUDA Developer Configuration",
-         "inherits" : [ "vecmem", "eigen" ],
+         "inherits" : [ "eigen" ],
          "cacheVariables" : {
             "ALGEBRA_PLUGINS_TEST_CUDA" : "TRUE"
          }
@@ -72,10 +63,9 @@
       {
          "name" : "sycl",
          "displayName" : "SYCL Developer Configuration",
-         "inherits" : [ "vecmem", "eigen" ],
+         "inherits" : [ "eigen" ],
          "cacheVariables" : {
-            "ALGEBRA_PLUGINS_TEST_SYCL" : "TRUE",
-            "VECMEM_BUILD_SYCL_LIBRARY" : "TRUE"
+            "ALGEBRA_PLUGINS_TEST_SYCL" : "TRUE"
          }
       }
    ]

@@ -42,14 +42,10 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 # Flags controlling how the Algebra Plugins code should behave.
 option( ALGEBRA_PLUGINS_INCLUDE_EIGEN
    "Include Eigen types in Algebra Plugins" FALSE )
-option( ALGEBRA_PLUGINS_INCLUDE_SMATRIX
-   "Include Smatrix types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_INCLUDE_VC
    "Include Vc types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_INCLUDE_FASTOR
    "Include Fastor types in Algebra Plugins" FALSE )
-option( ALGEBRA_PLUGINS_INCLUDE_VECMEM
-   "Include VecMem types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_BUILD_TESTING "Build the unit tests of Algebra Plugins"
    TRUE )
 option( ALGEBRA_PLUGINS_BUILD_BENCHMARKS "Build the benchmark suite of Algebra Plugins"
@@ -66,22 +62,6 @@ include( algebra-plugins-functions )
 if( NOT DEFINED CMAKE_SUPPRESS_DEVELOPER_WARNINGS )
    set( CMAKE_SUPPRESS_DEVELOPER_WARNINGS TRUE )
    set( _unsetDevWarningFlag TRUE )
-endif()
-
-# Set up VecMem.
-option( ALGEBRA_PLUGINS_SETUP_VECMEM
-   "Set up the VecMem target(s) explicitly" TRUE )
-option( ALGEBRA_PLUGINS_USE_SYSTEM_VECMEM
-   "Pick up an existing installation of VecMem from the build environment"
-   ${ALGEBRA_PLUGINS_USE_SYSTEM_LIBS} )
-if( ALGEBRA_PLUGINS_SETUP_VECMEM )
-   if( ALGEBRA_PLUGINS_USE_SYSTEM_VECMEM )
-      find_package( vecmem 0.7.0 REQUIRED COMPONENTS LANGUAGE )
-   else()
-      add_subdirectory( extern/vecmem )
-      # Make the "VecMem language code" available for the whole project.
-      include( "${VECMEM_LANGUAGE_DIR}/vecmem-check-language.cmake" )
-   endif()
 endif()
 
 # Set up GoogleTest.

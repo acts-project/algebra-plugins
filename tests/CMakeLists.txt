@@ -26,24 +26,17 @@ algebra_add_test( array
 
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
    algebra_add_test( eigen
-      "eigen/eigen_generic.cpp" "eigen/eigen_eigen.cpp"
+      "eigen/eigen_eigen.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
-                     algebra::eigen_generic algebra::eigen_eigen )
-endif()
-
-if( ALGEBRA_PLUGINS_INCLUDE_SMATRIX )
-   algebra_add_test( smatrix
-      "smatrix/smatrix_generic.cpp" "smatrix/smatrix_smatrix.cpp"
-      LINK_LIBRARIES GTest::gtest_main algebra::tests_common
-                     algebra::smatrix_generic algebra::smatrix_smatrix )
+                     algebra::eigen_eigen )
 endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_VC )
    if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang" )
       algebra_add_test( vc_aos
-         "vc_aos/vc_aos_generic.cpp" "vc_aos/vc_aos.cpp"
+         "vc_aos/vc_aos.cpp"
          LINK_LIBRARIES GTest::gtest_main algebra::tests_common
-                        algebra::vc_aos_generic algebra::vc_aos )
+                        algebra::vc_aos )
 
       algebra_add_test( vc_soa
          "vc_soa/vc_soa.cpp"
@@ -56,13 +49,6 @@ if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )
       "fastor/fastor_fastor.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                      algebra::fastor_fastor )
-endif()
-
-if( ALGEBRA_PLUGINS_INCLUDE_VECMEM )
-   algebra_add_test( vecmem
-      "vecmem/vecmem_cmath.cpp"
-      LINK_LIBRARIES GTest::gtest_main algebra::tests_common
-                     algebra::vecmem_cmath )
 endif()
 
 # Set up all of the (available) "device" tests.

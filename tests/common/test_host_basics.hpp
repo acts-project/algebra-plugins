@@ -705,6 +705,101 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_2x2) {
   this->template test_matrix_ops_square_matrix<TypeParam, N>();
 }
 
+TYPED_TEST_P(test_host_basics_matrix, matrix_5x5) {
+
+  // Test 5 X 5 matrix
+  typename TypeParam::template matrix<5, 5> m55;
+  algebra::getter::element(m55, 0, 0) = 1.f;
+  algebra::getter::element(m55, 0, 1) = 3.f;
+  algebra::getter::element(m55, 0, 2) = -9.f;
+  algebra::getter::element(m55, 0, 3) = -5.f;
+  algebra::getter::element(m55, 0, 4) = -2.f;
+
+  algebra::getter::element(m55, 1, 0) = -6.f;
+  algebra::getter::element(m55, 1, 1) = -3.f;
+  algebra::getter::element(m55, 1, 2) = 1.f;
+  algebra::getter::element(m55, 1, 3) = 0.f;
+  algebra::getter::element(m55, 1, 4) = 2.f;
+
+  algebra::getter::element(m55, 2, 0) = 12.f;
+  algebra::getter::element(m55, 2, 1) = 7.f;
+  algebra::getter::element(m55, 2, 2) = -9.f;
+  algebra::getter::element(m55, 2, 3) = 11.f;
+  algebra::getter::element(m55, 2, 4) = 2.f;
+
+  algebra::getter::element(m55, 3, 0) = -3.f;
+  algebra::getter::element(m55, 3, 1) = 4.f;
+  algebra::getter::element(m55, 3, 2) = 5.f;
+  algebra::getter::element(m55, 3, 3) = -6.f;
+  algebra::getter::element(m55, 3, 4) = 7.f;
+
+  algebra::getter::element(m55, 4, 0) = 9.f;
+  algebra::getter::element(m55, 4, 1) = 6.f;
+  algebra::getter::element(m55, 4, 2) = 3.f;
+  algebra::getter::element(m55, 4, 3) = 0.f;
+  algebra::getter::element(m55, 4, 4) = -3.f;
+
+  auto m55_det = algebra::matrix::determinant(m55);
+  ASSERT_NEAR((m55_det - 17334.f) / 17334.f, 0.f, this->m_isclose);
+
+  auto m55_inv = algebra::matrix::inverse(m55);
+
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 0, 0), -2106.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 0, 1), -12312.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 0, 2), -486.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 0, 3), 864.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 0, 4), -5112.f / 17334.f,
+              this->m_isclose);
+
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 1, 0), 2754.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 1, 1), 13878.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 1, 2), 1080.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 1, 3), -315.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 1, 4), 7401.f / 17334.f,
+              this->m_isclose);
+
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 2, 0), -918.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 2, 1), 1152.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 2, 2), -360.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 2, 3), 105.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 2, 4), 1385.f / 17334.f,
+              this->m_isclose);
+
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 3, 0), 108.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 3, 1), 7002.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 3, 2), 1062.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 3, 3), -1032.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 3, 4), 2896.f / 17334.f,
+              this->m_isclose);
+
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 4, 0), -1728.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 4, 1), -8028.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 4, 2), 342.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 4, 3), 2067.f / 17334.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m55_inv, 4, 4), -4927.f / 17334.f,
+              this->m_isclose);
+}
+
 TYPED_TEST_P(test_host_basics_matrix, matrix_6x6) {
   static constexpr typename TypeParam::size_type N = 6;
 
@@ -754,6 +849,86 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x6) {
 
   auto m66_big_det = algebra::matrix::determinant(m66_big);
   ASSERT_NEAR(m66_big_det, 216.f, 2.f * this->m_isclose);
+
+  auto m66_big_inv = algebra::matrix::inverse(m66_big);
+
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 0, 0), 36.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 0, 1), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 0, 2), -36.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 0, 3), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 0, 4), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 0, 5), 0.f / 36.f,
+              this->m_isclose);
+
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 1, 0), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 1, 1), -18.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 1, 2), 24.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 1, 3), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 1, 4), 10.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 1, 5), 0.f / 36.f,
+              this->m_isclose);
+
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 2, 0), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 2, 1), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 2, 2), 12.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 2, 3), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 2, 4), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 2, 5), 0.f / 36.f,
+              this->m_isclose);
+
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 3, 0), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 3, 1), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 3, 2), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 3, 3), 9.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 3, 4), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 3, 5), 0.f / 36.f,
+              this->m_isclose);
+
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 4, 0), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 4, 1), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 4, 2), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 4, 3), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 4, 4), 4.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 4, 5), 0.f / 36.f,
+              this->m_isclose);
+
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 5, 0), -36.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 5, 1), 18.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 5, 2), 0.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 5, 3), -9.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 5, 4), -14.f / 36.f,
+              this->m_isclose);
+  ASSERT_NEAR(algebra::getter::element(m66_big_inv, 5, 5), -36.f / 36.f,
+              this->m_isclose);
 
   // Test 6 X 6 small matrix determinant
   typename TypeParam::template matrix<6, 6> m66_small;
@@ -927,6 +1102,7 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {
     , matrix_3x1 \
     , matrix_3x3 \
     , matrix_6x4 \
+    , matrix_5x5 \
     , matrix_6x6 \
     , matrix_small_mixed \
     )

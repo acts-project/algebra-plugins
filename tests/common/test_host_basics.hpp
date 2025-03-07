@@ -1157,17 +1157,17 @@ TYPED_TEST_P(test_host_basics_transform, transform3) {
       test_vector;  // we need to declare a variable in order to use the
                     // [[maybe_unused]] attribute here
 
-  test_vector = algebra::getter::vector<3>(m44, 0, 0);
-  test_vector = algebra::getter::vector<3>(m44, 0, 1);
-  test_vector = algebra::getter::vector<3>(m44, 0, 2);
+  test_vector = algebra::getter::column<3>(m44, 0, 0);
+  test_vector = algebra::getter::column<3>(m44, 0, 1);
+  test_vector = algebra::getter::column<3>(m44, 0, 2);
 
   // Test constructor from inverse matrix
   auto m44_inv = trf2.matrix_inverse();
 
   // Make sure that algebra::getter:vector can be called.
-  test_vector = algebra::getter::vector<3>(m44_inv, 0, 0);
-  test_vector = algebra::getter::vector<3>(m44_inv, 0, 1);
-  test_vector = algebra::getter::vector<3>(m44_inv, 0, 2);
+  test_vector = algebra::getter::column<3>(m44_inv, 0, 0);
+  test_vector = algebra::getter::column<3>(m44_inv, 0, 1);
+  test_vector = algebra::getter::column<3>(m44_inv, 0, 2);
 
   // Re-evaluate rot and trn
   auto rotm = trfm.rotation();

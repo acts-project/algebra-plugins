@@ -52,7 +52,7 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
 endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )
-   algebra_add_test( fastor 
+   algebra_add_test( fastor
       "fastor/fastor_fastor.cpp"
       LINK_LIBRARIES GTest::gtest_main algebra::tests_common
                      algebra::fastor_fastor )

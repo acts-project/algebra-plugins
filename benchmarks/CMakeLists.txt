@@ -19,9 +19,9 @@ add_library( algebra::bench_common ALIAS algebra_bench_common )
 
 # Set up all of the (available) "host" benchmarks.
 add_library( algebra_bench_array INTERFACE )
-target_include_directories( algebra_bench_array INTERFACE 
+target_include_directories( algebra_bench_array INTERFACE
    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/array/include>" )
-target_link_libraries(algebra_bench_array INTERFACE algebra::array_cmath 
+target_link_libraries(algebra_bench_array INTERFACE algebra::array_cmath
                                                     algebra::common_storage)
 algebra_add_benchmark( array_getter
    "array/array_getter.cpp"
@@ -42,7 +42,7 @@ algebra_add_benchmark( array_matrix
 
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
    add_library( algebra_bench_eigen INTERFACE )
-   target_include_directories( algebra_bench_eigen INTERFACE 
+   target_include_directories( algebra_bench_eigen INTERFACE
       "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/eigen/include>" )
    target_link_libraries(algebra_bench_eigen INTERFACE algebra::eigen_eigen
                                                     algebra::common_storage)
@@ -66,7 +66,7 @@ endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_VC )
    add_library( algebra_bench_vc_aos INTERFACE )
-   target_include_directories( algebra_bench_vc_aos INTERFACE 
+   target_include_directories( algebra_bench_vc_aos INTERFACE
       "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vc_aos/include>" )
    target_link_libraries(algebra_bench_vc_aos INTERFACE
                                                    algebra::vc_aos
@@ -90,7 +90,7 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
 
    if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang" )
       add_library( algebra_bench_vc_soa INTERFACE )
-      target_include_directories( algebra_bench_vc_soa INTERFACE 
+      target_include_directories( algebra_bench_vc_soa INTERFACE
          "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vc_soa/include>" )
       target_link_libraries(algebra_bench_vc_soa INTERFACE
                                                       algebra::vc_soa

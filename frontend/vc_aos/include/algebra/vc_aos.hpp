@@ -51,6 +51,28 @@ using vc_aos::math::theta;
 
 }  // namespace vector
 
+// Use special algorithms for 4 dimensional matrices
+namespace generic {
+
+// Determinant algorithms
+template <concepts::scalar T, auto ROWS, auto COLS>
+struct determinant_selector<4, vc_aos::matrix_type<T, ROWS, COLS>,
+                            vc_aos::element_getter> {
+  using type =
+      matrix::determinant::hard_coded<vc_aos::matrix_type<T, ROWS, COLS>,
+                                      vc_aos::element_getter>;
+};
+
+// Inversion algorithms
+template <concepts::scalar T, auto ROWS, auto COLS>
+struct inversion_selector<4, vc_aos::matrix_type<T, ROWS, COLS>,
+                          vc_aos::element_getter> {
+  using type = matrix::inverse::hard_coded<vc_aos::matrix_type<T, ROWS, COLS>,
+                                           vc_aos::element_getter>;
+};
+
+}  // namespace generic
+
 namespace matrix {
 
 /// @name Matrix functions on @c algebra::vc_aos types

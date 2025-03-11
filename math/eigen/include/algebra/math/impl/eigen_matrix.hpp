@@ -73,8 +73,11 @@ determinant(const Eigen::MatrixBase<derived_type> &m) {
 
 /// @returns the inverse of @param m
 template <typename derived_type>
-ALGEBRA_HOST_DEVICE inline auto inverse(
-    const Eigen::MatrixBase<derived_type> &m) {
+ALGEBRA_HOST_DEVICE inline matrix_type<
+    typename Eigen::MatrixBase<derived_type>::value_type,
+    Eigen::MatrixBase<derived_type>::RowsAtCompileTime,
+    Eigen::MatrixBase<derived_type>::ColsAtCompileTime>
+inverse(const Eigen::MatrixBase<derived_type> &m) {
   return m.inverse();
 }
 

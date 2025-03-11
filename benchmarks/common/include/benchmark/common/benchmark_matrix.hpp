@@ -12,7 +12,7 @@
 #include "register_benchmark.hpp"
 
 // System include(s)
-#include <string>
+#include <string_view>
 #include <vector>
 
 namespace algebra {
@@ -28,7 +28,7 @@ template <concepts::matrix matrix_t>
 struct matrix_bm : public benchmark_base {
 
   /// Prefix for the benchmark name
-  inline static const std::string name{"matrix"};
+  static constexpr std::string_view name{"matrix"};
 
   std::vector<matrix_t> a;
   std::vector<matrix_t> b;
@@ -70,11 +70,11 @@ requires std::invocable<unaryOP, matrix_t> struct matrix_unaryOP_bm
   matrix_unaryOP_bm(const matrix_unaryOP_bm& bm) = default;
   matrix_unaryOP_bm& operator=(matrix_unaryOP_bm& other) = default;
 
-  std::string name() const override {
-    return base_type::name + "_" + unaryOP::name;
+  constexpr std::string name() const override {
+    return std::string{base_type::name} + "_" + std::string{unaryOP::name};
   }
 
-  void operator()(::benchmark::State& state) override {
+  inline void operator()(::benchmark::State& state) const override {
 
     using result_t = std::invoke_result_t<unaryOP, matrix_t>;
 
@@ -102,11 +102,11 @@ requires std::invocable<binaryOP, matrix_t, matrix_t> struct matrix_binaryOP_bm
   matrix_binaryOP_bm(const matrix_binaryOP_bm& bm) = default;
   matrix_binaryOP_bm& operator=(matrix_binaryOP_bm& other) = default;
 
-  std::string name() const override {
-    return base_type::name + "_" + binaryOP::name;
+  constexpr std::string name() const override {
+    return std::string{base_type::name} + "_" + std::string{binaryOP::name};
   }
 
-  void operator()(::benchmark::State& state) override {
+  inline void operator()(::benchmark::State& state) const override {
 
     using result_t = std::invoke_result_t<binaryOP, matrix_t, matrix_t>;
 
@@ -143,9 +143,11 @@ struct matrix_vector_bm : public matrix_bm<matrix_t> {
   /// Clear state
   ~matrix_vector_bm() override { v.clear(); }
 
-  std::string name() const override { return base_type::name + "_vector"; }
+  constexpr std::string name() const override {
+    return std::string{base_type::name} + "_vector";
+  }
 
-  void operator()(::benchmark::State& state) override {
+  inline void operator()(::benchmark::State& state) const override {
 
     const std::size_t n_samples{this->m_cfg.n_samples()};
 
@@ -163,65 +165,92 @@ struct matrix_vector_bm : public matrix_bm<matrix_t> {
 namespace bench_op {
 
 struct add {
-  inline static const std::string name{"add"};
+  static constexpr std::string_view name{"add"};
   template <concepts::matrix matrix_t>
-  matrix_t operator()(const matrix_t& a, const matrix_t& b) const {
+  constexpr matrix_t operator()(const matrix_t& a, const matrix_t& b) const {
     return a + b;
   }
 };
 struct sub {
-  inline static const std::string name{"sub"};
+  static constexpr std::string_view name{"sub"};
   template <concepts::matrix matrix_t>
-  matrix_t operator()(const matrix_t& a, const matrix_t& b) const {
+  constexpr matrix_t operator()(const matrix_t& a, const matrix_t& b) const {
     return a - b;
   }
 };
 struct mul {
-  inline static const std::string name{"mul"};
+  static constexpr std::string_view name{"mul"};
   template <concepts::matrix matrix_t>
-  matrix_t operator()(const matrix_t& a, const matrix_t& b) const {
+  constexpr matrix_t operator()(const matrix_t& a, const matrix_t& b) const {
     return a * b;
   }
 };
-
 struct transpose {
-  inline static const std::string name{"transpose"};
+  static constexpr std::string_view name{"transpose"};
   template <concepts::matrix matrix_t>
-  auto operator()(const matrix_t& a) const {
+  constexpr auto operator()(const matrix_t& a) const {
     return algebra::matrix::transpose(a);
+  }
+};
+struct determinant {
+  static constexpr std::string_view name{"determinant"};
+  template <concepts::matrix matrix_t>
+  constexpr auto operator()(const matrix_t& a) const {
+    return algebra::matrix::determinant(a);
+  }
+};
+struct invert {
+  static constexpr std::string_view name{"invert"};
+  template <concepts::matrix matrix_t>
+  constexpr auto operator()(const matrix_t& a) const {
+    return algebra::matrix::inverse(a);
   }
 };
 
 }  // namespace bench_op
 
 // Macro for registering all vector benchmarks
-#define ALGEBRA_PLUGINS_REGISTER_MATRIX_BENCH(CFG)                             \
-  algebra::register_benchmark<mat44_transp_f_t>(cfg, "_4x4_transpose_single"); \
-  algebra::register_benchmark<mat44_transp_d_t>(cfg, "_4x4_transpose_double"); \
-  algebra::register_benchmark<mat66_transp_f_t>(cfg, "_6x6_transpose_single"); \
-  algebra::register_benchmark<mat66_transp_d_t>(cfg, "_6x6_transpose_double"); \
-  algebra::register_benchmark<mat88_transp_f_t>(cfg, "_8x8_transpose_single"); \
-  algebra::register_benchmark<mat88_transp_d_t>(cfg, "_8x8_transpose_double"); \
-                                                                               \
-  algebra::register_benchmark<mat44_add_f_t>(CFG, "_4x4_add_single");          \
-  algebra::register_benchmark<mat44_add_d_t>(CFG, "_4x4_add_double");          \
-  algebra::register_benchmark<mat66_add_f_t>(CFG, "_6x6_add_single");          \
-  algebra::register_benchmark<mat66_add_d_t>(CFG, "_6x6_add_double");          \
-  algebra::register_benchmark<mat88_add_f_t>(CFG, "_8x8_add_single");          \
-  algebra::register_benchmark<mat88_add_d_t>(CFG, "_8x8_add_double");          \
-                                                                               \
-  algebra::register_benchmark<mat44_mul_f_t>(CFG, "_4x4_mul_single");          \
-  algebra::register_benchmark<mat44_mul_d_t>(CFG, "_4x4_mul_double");          \
-  algebra::register_benchmark<mat66_mul_f_t>(CFG, "_6x6_mul_single");          \
-  algebra::register_benchmark<mat66_mul_d_t>(CFG, "_6x6_mul_double");          \
-  algebra::register_benchmark<mat88_mul_f_t>(CFG, "_8x8_mul_single");          \
-  algebra::register_benchmark<mat88_mul_d_t>(CFG, "_8x8_mul_double");          \
-                                                                               \
-  algebra::register_benchmark<mat44_vec_f_t>(CFG, "_4x4_vec_single");          \
-  algebra::register_benchmark<mat44_vec_d_t>(CFG, "_4x4_vec_double");          \
-  algebra::register_benchmark<mat66_vec_f_t>(CFG, "_6x6_vec_single");          \
-  algebra::register_benchmark<mat66_vec_d_t>(CFG, "_6x6_vec_double");          \
-  algebra::register_benchmark<mat88_vec_f_t>(CFG, "_8x8_vec_single");          \
-  algebra::register_benchmark<mat88_vec_d_t>(CFG, "_8x8_vec_double");
+#define ALGEBRA_PLUGINS_REGISTER_MATRIX_BENCH(CFG)                   \
+  algebra::register_benchmark<mat44_transp_f_t>(CFG, "_4x4_single"); \
+  algebra::register_benchmark<mat44_transp_d_t>(CFG, "_4x4_double"); \
+  algebra::register_benchmark<mat66_transp_f_t>(CFG, "_6x6_single"); \
+  algebra::register_benchmark<mat66_transp_d_t>(CFG, "_6x6_double"); \
+  algebra::register_benchmark<mat88_transp_f_t>(CFG, "_8x8_single"); \
+  algebra::register_benchmark<mat88_transp_d_t>(CFG, "_8x8_double"); \
+                                                                     \
+  algebra::register_benchmark<mat44_inv_f_t>(CFG, "_4x4_single");    \
+  algebra::register_benchmark<mat44_inv_d_t>(CFG, "_4x4_double");    \
+  algebra::register_benchmark<mat66_inv_f_t>(CFG, "_6x6_single");    \
+  algebra::register_benchmark<mat66_inv_d_t>(CFG, "_6x6_double");    \
+  algebra::register_benchmark<mat88_inv_f_t>(CFG, "_8x8_single");    \
+  algebra::register_benchmark<mat88_inv_d_t>(CFG, "_8x8_double");    \
+                                                                     \
+  algebra::register_benchmark<mat44_det_f_t>(CFG, "_4x4_single");    \
+  algebra::register_benchmark<mat44_det_d_t>(CFG, "_4x4_double");    \
+  algebra::register_benchmark<mat66_det_f_t>(CFG, "_6x6_single");    \
+  algebra::register_benchmark<mat66_det_d_t>(CFG, "_6x6_double");    \
+  algebra::register_benchmark<mat88_det_f_t>(CFG, "_8x8_single");    \
+  algebra::register_benchmark<mat88_det_d_t>(CFG, "_8x8_double");    \
+                                                                     \
+  algebra::register_benchmark<mat44_add_f_t>(CFG, "_4x4_single");    \
+  algebra::register_benchmark<mat44_add_d_t>(CFG, "_4x4_double");    \
+  algebra::register_benchmark<mat66_add_f_t>(CFG, "_6x6_single");    \
+  algebra::register_benchmark<mat66_add_d_t>(CFG, "_6x6_double");    \
+  algebra::register_benchmark<mat88_add_f_t>(CFG, "_8x8_single");    \
+  algebra::register_benchmark<mat88_add_d_t>(CFG, "_8x8_double");    \
+                                                                     \
+  algebra::register_benchmark<mat44_mul_f_t>(CFG, "_4x4_single");    \
+  algebra::register_benchmark<mat44_mul_d_t>(CFG, "_4x4_double");    \
+  algebra::register_benchmark<mat66_mul_f_t>(CFG, "_6x6_single");    \
+  algebra::register_benchmark<mat66_mul_d_t>(CFG, "_6x6_double");    \
+  algebra::register_benchmark<mat88_mul_f_t>(CFG, "_8x8_single");    \
+  algebra::register_benchmark<mat88_mul_d_t>(CFG, "_8x8_double");    \
+                                                                     \
+  algebra::register_benchmark<mat44_vec_f_t>(CFG, "_4x4_single");    \
+  algebra::register_benchmark<mat44_vec_d_t>(CFG, "_4x4_double");    \
+  algebra::register_benchmark<mat66_vec_f_t>(CFG, "_6x6_single");    \
+  algebra::register_benchmark<mat66_vec_d_t>(CFG, "_6x6_double");    \
+  algebra::register_benchmark<mat88_vec_f_t>(CFG, "_8x8_single");    \
+  algebra::register_benchmark<mat88_vec_d_t>(CFG, "_8x8_double");
 
 }  // namespace algebra

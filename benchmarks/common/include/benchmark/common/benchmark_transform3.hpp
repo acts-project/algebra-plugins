@@ -13,7 +13,7 @@
 // System include(s)
 #include <chrono>
 #include <iostream>
-#include <string>
+#include <string_view>
 #include <thread>
 #include <vector>
 
@@ -30,7 +30,7 @@ struct transform3_bm : public vector_bm<typename transform3_t::vector3> {
 
  public:
   /// Prefix for the benchmark name
-  inline static const std::string bm_name{"transform3"};
+  static constexpr std::string_view bm_name{"transform3"};
 
   std::vector<transform3_t> trfs;
 
@@ -49,10 +49,12 @@ struct transform3_bm : public vector_bm<typename transform3_t::vector3> {
   /// Clear state
   ~transform3_bm() override { trfs.clear(); }
 
-  std::string name() const override { return base_type::name + "_" + bm_name; }
+  constexpr std::string name() const override {
+    return std::string{base_type::name} + "_" + std::string{bm_name};
+  }
 
   /// Benchmark case
-  void operator()(::benchmark::State& state) override {
+  inline void operator()(::benchmark::State& state) const override {
 
     using vector_t = typename transform3_t::vector3;
     using point_t = typename transform3_t::point3;

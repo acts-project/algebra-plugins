@@ -79,10 +79,10 @@ struct benchmark_base {
   virtual ~benchmark_base() = default;
 
   /// @returns the benchmark name
-  virtual std::string name() const = 0;
+  virtual constexpr std::string name() const = 0;
 
   /// Benchmark case
-  virtual void operator()(::benchmark::State&) = 0;
+  virtual void operator()(::benchmark::State&) const = 0;
 };
 
 }  // namespace algebra

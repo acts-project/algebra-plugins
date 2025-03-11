@@ -109,11 +109,13 @@ class alignas(
   /// @}
 
   /// Construct from existing array storage @param vals
-  template <typename storage_array_t>
-  requires(std::convertible_to<storage_array_t, array_type> &&
-           !std::same_as<vector, storage_array_t>) ALGEBRA_HOST_DEVICE
-      constexpr vector(storage_array_t &&vals)
-      : m_data{std::forward<storage_array_t>(vals)} {}
+  /// @{
+  ALGEBRA_HOST_DEVICE
+  constexpr vector(array_type &&vals) : m_data{std::move(vals)} {}
+
+  ALGEBRA_HOST_DEVICE
+  constexpr vector(const array_type &vals) : m_data{vals} {}
+  /// @}
 
   /// Assignment operator from a vector with the same underlying storage.
   ///

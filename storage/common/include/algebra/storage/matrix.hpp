@@ -36,12 +36,6 @@ struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
                                COL) explicit matrix(vector_t &&... v)
       : m_storage{std::forward<vector_t>(v)...} {}
 
-  /// Equality operator between two matrices
-  template <std::size_t R, std::size_t C, concepts::scalar S,
-            template <typename, std::size_t> class A>
-  ALGEBRA_HOST_DEVICE friend constexpr bool operator==(
-      const matrix<A, S, R, C> &lhs, const matrix<A, S, R, C> &rhs);
-
   /// Subscript operator
   /// @{
   ALGEBRA_HOST_DEVICE
@@ -72,6 +66,12 @@ struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
   static consteval std::size_t columns() { return COL; }
 
  private:
+  /// Equality operator between two matrices
+  template <std::size_t R, std::size_t C, typename S,
+            template <typename, std::size_t> class A>
+  ALGEBRA_HOST_DEVICE friend constexpr bool operator==(
+      const matrix<A, S, R, C> &lhs, const matrix<A, S, R, C> &rhs);
+
   /// Sets the trailing uninitialized values to zero.
   /// @{
   // AoS
@@ -197,7 +197,7 @@ ALGEBRA_HOST_DEVICE constexpr auto transpose(const matrix_t &m) noexcept {
 }
 
 /// Equality operator between two matrices
-template <std::size_t ROW, std::size_t COL, concepts::scalar scalar_t,
+template <std::size_t ROW, std::size_t COL, typename scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr bool operator==(
     const matrix<array_t, scalar_t, ROW, COL> &lhs,

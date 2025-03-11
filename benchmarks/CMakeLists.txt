@@ -88,28 +88,26 @@ if( ALGEBRA_PLUGINS_INCLUDE_VC )
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                      algebra_bench_vc_aos algebra::vc_aos )
 
-   if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang" )
-      add_library( algebra_bench_vc_soa INTERFACE )
-      target_include_directories( algebra_bench_vc_soa INTERFACE
-         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vc_soa/include>" )
-      target_link_libraries(algebra_bench_vc_soa INTERFACE
-                                                      algebra::vc_soa
-                                                      algebra::common_storage)
-      algebra_add_benchmark( vc_soa_getter
-         "vc_soa/vc_soa_getter.cpp"
-         LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                        algebra_bench_vc_soa algebra::vc_soa )
-      algebra_add_benchmark( vc_soa_vector
-         "vc_soa/vc_soa_vector.cpp"
-         LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                        algebra_bench_vc_soa algebra::vc_soa )
-      algebra_add_benchmark( vc_soa_transform3
-         "vc_soa/vc_soa_transform3.cpp"
-         LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                        algebra_bench_vc_soa algebra::vc_soa )
-      algebra_add_benchmark( vc_soa_matrix
-         "vc_soa/vc_soa_matrix.cpp"
-         LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                        algebra_bench_vc_soa algebra::vc_soa )
-   endif()
+   add_library( algebra_bench_vc_soa INTERFACE )
+   target_include_directories( algebra_bench_vc_soa INTERFACE
+      "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vc_soa/include>" )
+   target_link_libraries(algebra_bench_vc_soa INTERFACE
+                                                   algebra::vc_soa
+                                                   algebra::common_storage)
+   algebra_add_benchmark( vc_soa_getter
+      "vc_soa/vc_soa_getter.cpp"
+      LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                     algebra_bench_vc_soa algebra::vc_soa )
+   algebra_add_benchmark( vc_soa_vector
+      "vc_soa/vc_soa_vector.cpp"
+      LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                     algebra_bench_vc_soa algebra::vc_soa )
+   algebra_add_benchmark( vc_soa_transform3
+      "vc_soa/vc_soa_transform3.cpp"
+      LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                     algebra_bench_vc_soa algebra::vc_soa )
+   algebra_add_benchmark( vc_soa_matrix
+      "vc_soa/vc_soa_matrix.cpp"
+      LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                     algebra_bench_vc_soa algebra::vc_soa )
 endif()

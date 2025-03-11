@@ -39,16 +39,14 @@ if( ALGEBRA_PLUGINS_INCLUDE_SMATRIX )
 endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_VC )
-   if( NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang" )
-      algebra_add_test( vc_aos
-         "vc_aos/vc_aos_generic.cpp" "vc_aos/vc_aos.cpp"
-         LINK_LIBRARIES GTest::gtest_main algebra::tests_common
-                        algebra::vc_aos_generic algebra::vc_aos )
+   algebra_add_test( vc_aos
+      "vc_aos/vc_aos_generic.cpp" "vc_aos/vc_aos.cpp"
+      LINK_LIBRARIES GTest::gtest_main algebra::tests_common
+                     algebra::vc_aos_generic algebra::vc_aos )
 
-      algebra_add_test( vc_soa
-         "vc_soa/vc_soa.cpp"
-         LINK_LIBRARIES GTest::gtest_main algebra::utils algebra::vc_soa )
-   endif()
+   algebra_add_test( vc_soa
+      "vc_soa/vc_soa.cpp"
+      LINK_LIBRARIES GTest::gtest_main algebra::utils algebra::vc_soa )
 endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )

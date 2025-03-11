@@ -31,3 +31,14 @@
 #else
 #define ALGEBRA_ALIGN(x) alignas(x)
 #endif
+
+// @see https://stackoverflow.com/questions/78071873/gcc-preprocessor-macro-and-pragma-gcc-unroll
+#if defined(__clang__)
+#define ARG_TO_STRING(A) #A
+#define ALGEBRA_UNROLL_N(n) _Pragma(ARG_TO_STRING(clang loop unroll_count(n)))
+#elif defined(__GNUC__) || defined(__GNUG__)
+#define ARG_TO_STRING(A) #A
+#define ALGEBRA_UNROLL_N(n) _Pragma(ARG_TO_STRING(GCC unroll n))
+#else
+#define ALGEBRA_UNROLL_N(n)
+#endif

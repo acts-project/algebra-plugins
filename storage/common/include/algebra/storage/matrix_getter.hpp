@@ -22,7 +22,7 @@ struct element_getter {
   /// Get const access to a matrix element
   template <template <typename, std::size_t> class array_t,
             concepts::scalar scalar_t, std::size_t ROW, std::size_t COL>
-  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
+  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator()(
       const matrix<array_t, scalar_t, ROW, COL> &m, std::size_t row,
       std::size_t col) const {
 
@@ -37,7 +37,7 @@ struct element_getter {
   /// Get non-const access to a matrix element
   template <template <typename, std::size_t> class array_t,
             concepts::scalar scalar_t, std::size_t ROW, std::size_t COL>
-  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
+  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator()(
       matrix<array_t, scalar_t, ROW, COL> &m, std::size_t row,
       std::size_t col) const {
     assert(row < ROW);
@@ -49,7 +49,7 @@ struct element_getter {
   /// Get const access to a matrix element
   template <template <typename, std::size_t> class array_t,
             concepts::scalar scalar_t, std::size_t ROW>
-  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
+  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator()(
       const matrix<array_t, scalar_t, ROW, 1> &m, std::size_t row) const {
 
     assert(row < ROW);
@@ -59,7 +59,7 @@ struct element_getter {
   /// Get non-const access to a matrix element
   template <template <typename, std::size_t> class array_t,
             concepts::scalar scalar_t, std::size_t ROW>
-  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
+  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator()(
       matrix<array_t, scalar_t, ROW, 1> &m, std::size_t row) const {
 
     assert(row < ROW);
@@ -69,7 +69,7 @@ struct element_getter {
   /// Get const access to a vector element
   template <template <typename, std::size_t> class array_t,
             concepts::scalar scalar_t, std::size_t N>
-  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
+  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator()(
       const vector<N, scalar_t, array_t> &v, std::size_t row) const {
 
     assert(row < N);
@@ -79,7 +79,7 @@ struct element_getter {
   /// Get non-const access to a vector element
   template <template <typename, std::size_t> class array_t,
             concepts::scalar scalar_t, std::size_t N>
-  ALGEBRA_HOST_DEVICE inline decltype(auto) operator()(
+  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator()(
       vector<N, scalar_t, array_t> &v, std::size_t row) const {
 
     assert(row < N);
@@ -91,7 +91,7 @@ struct element_getter {
 /// Function extracting an element from a matrix (const)
 template <std::size_t ROW, std::size_t COL, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+ALGEBRA_HOST_DEVICE constexpr decltype(auto) element(
     const matrix<array_t, scalar_t, ROW, COL> &m, std::size_t row,
     std::size_t col) {
   return element_getter{}(m, row, col);
@@ -100,7 +100,7 @@ ALGEBRA_HOST_DEVICE inline decltype(auto) element(
 /// Function extracting an element from a matrix (non-const)
 template <std::size_t ROW, std::size_t COL, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+ALGEBRA_HOST_DEVICE constexpr decltype(auto) element(
     matrix<array_t, scalar_t, ROW, COL> &m, std::size_t row, std::size_t col) {
   return element_getter{}(m, row, col);
 }
@@ -108,7 +108,7 @@ ALGEBRA_HOST_DEVICE inline decltype(auto) element(
 /// Function extracting an element from a 1D matrix (const)
 template <std::size_t ROW, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+ALGEBRA_HOST_DEVICE constexpr decltype(auto) element(
     const matrix<array_t, scalar_t, ROW, 1> &m, std::size_t row) {
   return element_getter{}(m, row);
 }
@@ -116,7 +116,7 @@ ALGEBRA_HOST_DEVICE inline decltype(auto) element(
 /// Function extracting an element from a 1D matrix (non-const)
 template <std::size_t ROW, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+ALGEBRA_HOST_DEVICE constexpr decltype(auto) element(
     matrix<array_t, scalar_t, ROW, 1> &m, std::size_t row) {
   return element_getter{}(m, row);
 }
@@ -124,7 +124,7 @@ ALGEBRA_HOST_DEVICE inline decltype(auto) element(
 /// Function extracting an element from a vector (const)
 template <std::size_t N, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+ALGEBRA_HOST_DEVICE constexpr decltype(auto) element(
     const vector<N, scalar_t, array_t> &v, std::size_t row) {
   return element_getter{}(v, row);
 }
@@ -132,7 +132,7 @@ ALGEBRA_HOST_DEVICE inline decltype(auto) element(
 /// Function extracting an element from a vector (non-const)
 template <std::size_t N, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+ALGEBRA_HOST_DEVICE constexpr decltype(auto) element(
     vector<N, scalar_t, array_t> &v, std::size_t row) {
   return element_getter{}(v, row);
 }

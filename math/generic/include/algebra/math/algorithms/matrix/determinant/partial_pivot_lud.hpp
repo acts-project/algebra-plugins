@@ -29,7 +29,7 @@ struct partial_pivot_lud {
       typename algebra::generic::matrix::decomposition::partial_pivot_lud<
           matrix_t, element_getter_t>;
 
-  ALGEBRA_HOST_DEVICE inline scalar_type operator()(const matrix_t& m) const {
+  ALGEBRA_HOST_DEVICE constexpr scalar_type operator()(const matrix_t& m) const {
 
     constexpr size_type N{algebra::traits::rank<matrix_t>};
 

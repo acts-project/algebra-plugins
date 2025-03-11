@@ -171,7 +171,7 @@ struct transform3 {
 
   /// Equality operator
   ALGEBRA_HOST_DEVICE
-  inline bool operator==(const transform3 &rhs) const {
+  constexpr bool operator==(const transform3 &rhs) const {
 
     for (index_t j = 0; j < 4; j++) {
       // Check only the rows that can differ
@@ -191,7 +191,7 @@ struct transform3 {
   /// @param m is the rotation matrix
   /// @param v is the vector to be rotated
   ALGEBRA_HOST_DEVICE
-  static inline vector3 rotate(const matrix44 &m, const vector3 &v) {
+  static constexpr vector3 rotate(const matrix44 &m, const vector3 &v) {
 
     vector3 ret{0.f, 0.f, 0.f};
 
@@ -221,49 +221,49 @@ struct transform3 {
 
   /// This method retrieves the rotation of a transform
   ALGEBRA_HOST_DEVICE
-  auto inline rotation() const {
+  auto constexpr rotation() const {
     return block_getter{}.template operator()<3, 3>(_data, 0, 0);
   }
 
   /// This method retrieves x axis
   ALGEBRA_HOST_DEVICE
-  inline point3 x() const {
+  constexpr point3 x() const {
     return {element_getter{}(_data, 0, 0), element_getter{}(_data, 1, 0),
             element_getter{}(_data, 2, 0)};
   }
 
   /// This method retrieves y axis
   ALGEBRA_HOST_DEVICE
-  inline point3 y() const {
+  constexpr point3 y() const {
     return {element_getter{}(_data, 0, 1), element_getter{}(_data, 1, 1),
             element_getter{}(_data, 2, 1)};
   }
 
   /// This method retrieves z axis
   ALGEBRA_HOST_DEVICE
-  inline point3 z() const {
+  constexpr point3 z() const {
     return {element_getter{}(_data, 0, 2), element_getter{}(_data, 1, 2),
             element_getter{}(_data, 2, 2)};
   }
 
   /// This method retrieves the translation of a transform
   ALGEBRA_HOST_DEVICE
-  inline point3 translation() const {
+  constexpr point3 translation() const {
     return {element_getter{}(_data, 0, 3), element_getter{}(_data, 1, 3),
             element_getter{}(_data, 2, 3)};
   }
 
   /// This method retrieves the 4x4 matrix of a transform
   ALGEBRA_HOST_DEVICE
-  inline const matrix44 &matrix() const { return _data; }
+  constexpr const matrix44 &matrix() const { return _data; }
 
   /// This method retrieves the 4x4 matrix of an inverse transform
   ALGEBRA_HOST_DEVICE
-  inline const matrix44 &matrix_inverse() const { return _data_inv; }
+  constexpr const matrix44 &matrix_inverse() const { return _data_inv; }
 
   /// This method transform from a point from the local 3D cartesian frame to
   /// the global 3D cartesian frame
-  ALGEBRA_HOST_DEVICE inline point3 point_to_global(const point3 &v) const {
+  ALGEBRA_HOST_DEVICE constexpr point3 point_to_global(const point3 &v) const {
 
     const vector3 rg = rotate(_data, v);
 
@@ -274,7 +274,7 @@ struct transform3 {
 
   /// This method transform from a vector from the global 3D cartesian frame
   /// into the local 3D cartesian frame
-  ALGEBRA_HOST_DEVICE inline point3 point_to_local(const point3 &v) const {
+  ALGEBRA_HOST_DEVICE constexpr point3 point_to_local(const point3 &v) const {
 
     const vector3 rg = rotate(_data_inv, v);
 
@@ -285,13 +285,13 @@ struct transform3 {
 
   /// This method transform from a vector from the local 3D cartesian frame to
   /// the global 3D cartesian frame
-  ALGEBRA_HOST_DEVICE inline vector3 vector_to_global(const vector3 &v) const {
+  ALGEBRA_HOST_DEVICE constexpr vector3 vector_to_global(const vector3 &v) const {
     return rotate(_data, v);
   }
 
   /// This method transform from a vector from the global 3D cartesian frame
   /// into the local 3D cartesian frame
-  ALGEBRA_HOST_DEVICE inline vector3 vector_to_local(const vector3 &v) const {
+  ALGEBRA_HOST_DEVICE constexpr vector3 vector_to_local(const vector3 &v) const {
     return rotate(_data_inv, v);
   }
 

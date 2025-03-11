@@ -47,7 +47,7 @@ consteval std::size_t nearest_power_of_two(std::size_t min_value,
 /// SIMD vector.
 template <std::size_t N, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
-class alignas(
+class ALGEBRA_ALIGN(
     alignof(array_t<scalar_t, detail::nearest_power_of_two(N, 2u)>)) vector {
 
  public:
@@ -181,6 +181,7 @@ class alignas(
     const auto comp = lhs.compare(rhs);
     bool is_full = false;
 
+    ALGEBRA_UNROLL_N(N)
     for (unsigned int i{0u}; i < N; ++i) {
       // Ducktyping the Vc::Vector::MaskType
       is_full |= comp[i].isFull();
@@ -205,6 +206,7 @@ class alignas(
 
     std::array<result_t, N> comp;
 
+    ALGEBRA_UNROLL_N(N)
     for (unsigned int i{0u}; i < N; ++i) {
       comp[i] = (m_data[i] == rhs[i]);
     }
@@ -228,19 +230,19 @@ class alignas(
 #define DECLARE_VECTOR_OPERATORS(OP)                                           \
   template <std::size_t N, concepts::scalar scalar_t, concepts::value value_t, \
             template <typename, std::size_t> class array_t>                    \
-  ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator OP(             \
+  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator OP(                    \
       const vector<N, scalar_t, array_t> &lhs, value_t rhs) noexcept {         \
     return lhs.m_data OP static_cast<scalar_t>(rhs);                           \
   }                                                                            \
   template <std::size_t N, concepts::scalar scalar_t, concepts::value value_t, \
             template <typename, std::size_t> class array_t>                    \
-  ALGEBRA_HOST_DEVICE inline decltype(auto) operator OP(                       \
+  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator OP(                    \
       value_t lhs, const vector<N, scalar_t, array_t> &rhs) noexcept {         \
     return static_cast<scalar_t>(lhs) OP rhs.m_data;                           \
   }                                                                            \
   template <std::size_t N, concepts::scalar scalar_t,                          \
             template <typename, std::size_t> class array_t>                    \
-  ALGEBRA_HOST_DEVICE inline constexpr decltype(auto) operator OP(             \
+  ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator OP(                    \
       const vector<N, scalar_t, array_t> &lhs,                                 \
       const vector<N, scalar_t, array_t> &rhs) noexcept {                      \
     return lhs.m_data OP rhs.m_data;                                           \
@@ -248,7 +250,7 @@ class alignas(
   template <std::size_t N, concepts::scalar scalar_t,                          \
             template <typename, std::size_t> class array_t, typename other_t>  \
   requires(concepts::vector<other_t> || concepts::simd_scalar<other_t>)        \
-      ALGEBRA_HOST_DEVICE inline constexpr decltype(auto)                      \
+      ALGEBRA_HOST_DEVICE constexpr decltype(auto)                             \
       operator OP(const vector<N, scalar_t, array_t> &lhs,                     \
                   const other_t &rhs) noexcept {                               \
     return lhs.m_data OP rhs;                                                  \
@@ -256,7 +258,7 @@ class alignas(
   template <std::size_t N, concepts::scalar scalar_t,                          \
             template <typename, std::size_t> class array_t, typename other_t>  \
   requires(concepts::vector<other_t> || concepts::simd_scalar<other_t>)        \
-      ALGEBRA_HOST_DEVICE inline constexpr decltype(auto)                      \
+      ALGEBRA_HOST_DEVICE constexpr decltype(auto)                             \
       operator OP(const other_t &lhs,                                          \
                   const vector<N, scalar_t, array_t> &rhs) noexcept {          \
     return lhs OP rhs.m_data;                                                  \
@@ -286,7 +288,7 @@ struct is_storage_vector<storage::vector<N, scalar_t, array_t>>
     : public std::true_type {};
 
 template <typename T>
-inline constexpr bool is_storage_vector_v = is_storage_vector<T>::value;
+constexpr bool is_storage_vector_v = is_storage_vector<T>::value;
 
 }  // namespace detail
 

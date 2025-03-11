@@ -139,14 +139,14 @@ struct transform3 {
 
   /// Equality operator
   ALGEBRA_HOST
-  inline bool operator==(const transform3 &rhs) const {
+  constexpr bool operator==(const transform3 &rhs) const {
 
     return Fastor::isequal(_data, rhs._data);
   }
 
   /// This method retrieves the rotation of a transform
   ALGEBRA_HOST
-  inline auto rotation() const {
+  constexpr auto rotation() const {
 
     return Fastor::Tensor<scalar_t, 3, 3>(
         _data(Fastor::fseq<0, 3>(), Fastor::fseq<0, 3>()));
@@ -154,32 +154,32 @@ struct transform3 {
 
   /// This method retrieves x axis
   ALGEBRA_HOST_DEVICE
-  inline point3 x() const { return _data(Fastor::fseq<0, 3>(), 0); }
+  constexpr point3 x() const { return _data(Fastor::fseq<0, 3>(), 0); }
 
   /// This method retrieves y axis
   ALGEBRA_HOST_DEVICE
-  inline point3 y() const { return _data(Fastor::fseq<0, 3>(), 1); }
+  constexpr point3 y() const { return _data(Fastor::fseq<0, 3>(), 1); }
 
   /// This method retrieves z axis
   ALGEBRA_HOST_DEVICE
-  inline point3 z() const { return _data(Fastor::fseq<0, 3>(), 2); }
+  constexpr point3 z() const { return _data(Fastor::fseq<0, 3>(), 2); }
 
   /// This method retrieves the translation of a transform
   ALGEBRA_HOST
-  inline vector3 translation() const { return _data(Fastor::fseq<0, 3>(), 3); }
+  constexpr vector3 translation() const { return _data(Fastor::fseq<0, 3>(), 3); }
 
   /// This method retrieves the 4x4 matrix of a transform
   ALGEBRA_HOST
-  inline matrix44 matrix() const { return _data; }
+  constexpr matrix44 matrix() const { return _data; }
 
   /// This method retrieves the 4x4 matrix of an inverse transform
   ALGEBRA_HOST
-  inline matrix44 matrix_inverse() const { return _data_inv; }
+  constexpr matrix44 matrix_inverse() const { return _data_inv; }
 
   /// This method transform from a point from the local 3D cartesian frame to
   /// the global 3D cartesian frame
   ALGEBRA_HOST
-  inline point3 point_to_global(const point3 &v) const {
+  constexpr point3 point_to_global(const point3 &v) const {
 
     Fastor::Tensor<scalar_type, 4> vector_4;
     vector_4(Fastor::fseq<0, 3>()) = v;
@@ -191,7 +191,7 @@ struct transform3 {
   /// This method transform from a vector from the global 3D cartesian frame
   /// into the local 3D cartesian frame
   ALGEBRA_HOST
-  inline point3 point_to_local(const point3 &v) const {
+  constexpr point3 point_to_local(const point3 &v) const {
 
     Fastor::Tensor<scalar_type, 4> vector_4;
     vector_4(Fastor::fseq<0, 3>()) = v;
@@ -203,7 +203,7 @@ struct transform3 {
   /// This method transform from a vector from the local 3D cartesian frame to
   /// the global 3D cartesian frame
   ALGEBRA_HOST
-  inline point3 vector_to_global(const vector3 &v) const {
+  constexpr point3 vector_to_global(const vector3 &v) const {
 
     Fastor::Tensor<scalar_type, 4> vector_4;
     vector_4(Fastor::fseq<0, 3>()) = v;
@@ -215,7 +215,7 @@ struct transform3 {
   /// This method transform from a vector from the global 3D cartesian frame
   /// into the local 3D cartesian frame
   ALGEBRA_HOST
-  inline point3 vector_to_local(const vector3 &v) const {
+  constexpr point3 vector_to_local(const vector3 &v) const {
 
     Fastor::Tensor<scalar_type, 4> vector_4;
     vector_4(Fastor::fseq<0, 3>()) = v;

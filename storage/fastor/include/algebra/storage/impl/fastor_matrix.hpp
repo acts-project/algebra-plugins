@@ -57,7 +57,7 @@ class Matrix : public Fastor::Tensor<T, M1, N> {
   /// The `static_cast` is there to signal both to the compiler and the reader
   /// that we wish to interpret the `Matrix` object as a `Fastor::Tensor` here.
   template <concepts::scalar U, std::size_t M2>
-  inline Matrix<T, M1, M2> operator*(const Matrix<U, N, M2>& other) const {
+  constexpr Matrix<T, M1, M2> operator*(const Matrix<U, N, M2>& other) const {
     return Fastor::matmul(static_cast<Fastor::Tensor<T, M1, N>>(*this),
                           static_cast<Fastor::Tensor<T, N, M2>>(other));
   }
@@ -74,7 +74,7 @@ class Matrix : public Fastor::Tensor<T, M1, N> {
   /// The `static_cast` is there to signal both to the compiler and the reader
   /// that we wish to interpret the `Matrix` object as a `Fastor::Tensor` here.
   template <concepts::scalar U>
-  inline Fastor::Tensor<T, M1> operator*(
+  constexpr Fastor::Tensor<T, M1> operator*(
       const Fastor::Tensor<U, N>& other) const {
     return Fastor::matmul(static_cast<Fastor::Tensor<T, M1, N>>(*this),
                           static_cast<Fastor::Tensor<T, N>>(other));

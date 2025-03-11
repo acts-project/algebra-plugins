@@ -43,7 +43,8 @@ ALGEBRA_HOST_DEVICE constexpr matrix_t identity() {
 
 /// Set input matrix as zero matrix
 template <typename derived_type>
-ALGEBRA_HOST_DEVICE constexpr void set_zero(Eigen::MatrixBase<derived_type> &m) {
+ALGEBRA_HOST_DEVICE constexpr void set_zero(
+    Eigen::MatrixBase<derived_type> &m) {
   m.setZero();
 }
 
@@ -66,18 +67,19 @@ transpose(const Eigen::MatrixBase<derived_type> &m) {
 
 /// @returns the determinant of @param m
 template <typename derived_type>
-ALGEBRA_HOST_DEVICE constexpr typename Eigen::MatrixBase<derived_type>::value_type
-determinant(const Eigen::MatrixBase<derived_type> &m) {
+ALGEBRA_HOST_DEVICE constexpr
+    typename Eigen::MatrixBase<derived_type>::value_type
+    determinant(const Eigen::MatrixBase<derived_type> &m) {
   return m.determinant();
 }
 
 /// @returns the inverse of @param m
 template <typename derived_type>
 ALGEBRA_HOST_DEVICE constexpr matrix_type<
-typename Eigen::MatrixBase<derived_type>::value_type,
-Eigen::MatrixBase<derived_type>::RowsAtCompileTime,
-Eigen::MatrixBase<derived_type>::ColsAtCompileTime> inverse(
-    const Eigen::MatrixBase<derived_type> &m) {
+    typename Eigen::MatrixBase<derived_type>::value_type,
+    Eigen::MatrixBase<derived_type>::RowsAtCompileTime,
+    Eigen::MatrixBase<derived_type>::ColsAtCompileTime>
+inverse(const Eigen::MatrixBase<derived_type> &m) {
   return m.inverse();
 }
 

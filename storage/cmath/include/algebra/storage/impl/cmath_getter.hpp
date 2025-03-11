@@ -70,7 +70,7 @@ struct element_getter {
   template <std::size_t N, concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
   ALGEBRA_HOST_DEVICE constexpr scalar_t &operator()(array_t<scalar_t, N> &m,
-                                                  std::size_t row) const {
+                                                     std::size_t row) const {
 
     assert(row < N);
     return m[row];
@@ -79,8 +79,8 @@ struct element_getter {
   /// Operator getting a reference to one element of a const matrix
   template <std::size_t N, concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE constexpr scalar_t operator()(const array_t<scalar_t, N> &m,
-                                                 std::size_t row) const {
+  ALGEBRA_HOST_DEVICE constexpr scalar_t operator()(
+      const array_t<scalar_t, N> &m, std::size_t row) const {
 
     assert(row < N);
     return m[row];
@@ -130,7 +130,7 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t &element(
 template <template <typename, std::size_t> class array_t,
           concepts::scalar scalar_t, std::size_t N>
 ALGEBRA_HOST_DEVICE constexpr scalar_t element(const array_t<scalar_t, N> &v,
-                                            std::size_t row) {
+                                               std::size_t row) {
 
   return element_getter()(v, row);
 }
@@ -139,7 +139,7 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t element(const array_t<scalar_t, N> &v,
 template <template <typename, std::size_t> class array_t,
           concepts::scalar scalar_t, std::size_t N>
 ALGEBRA_HOST_DEVICE constexpr scalar_t &element(array_t<scalar_t, N> &v,
-                                             std::size_t row) {
+                                                std::size_t row) {
 
   return element_getter()(v, row);
 }
@@ -191,7 +191,8 @@ struct block_getter {
 /// @param col
 template <std::size_t ROWS, std::size_t COLS, class input_matrix_type>
 ALGEBRA_HOST_DEVICE constexpr decltype(auto) block(const input_matrix_type &m,
-                                         std::size_t row, std::size_t col) {
+                                                   std::size_t row,
+                                                   std::size_t col) {
 
   return block_getter().template operator()<ROWS, COLS>(m, row, col);
 }
@@ -228,8 +229,8 @@ template <std::size_t ROWS, concepts::scalar scalar_t,
           template <typename, std::size_t> class vector_t,
           class input_matrix_type>
 ALGEBRA_HOST_DEVICE constexpr void set_block(input_matrix_type &m,
-                                   const vector_t<scalar_t, ROWS> &b,
-                                   std::size_t row, std::size_t col) {
+                                             const vector_t<scalar_t, ROWS> &b,
+                                             std::size_t row, std::size_t col) {
   for (std::size_t i = 0; i < ROWS; ++i) {
     m[col][i + row] = b[i];
   }

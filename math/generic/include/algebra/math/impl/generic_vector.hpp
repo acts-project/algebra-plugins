@@ -69,7 +69,7 @@ requires(
         concepts::vector3D<vector2_t> ||
         concepts::column_matrix3D<vector2_t>)) ALGEBRA_HOST_DEVICE
     constexpr algebra::traits::vector_t<vector1_t> cross(const vector1_t &a,
-                                                      const vector2_t &b) {
+                                                         const vector2_t &b) {
 
   using element_getter_t = algebra::traits::element_getter_t<vector1_t>;
 
@@ -96,7 +96,7 @@ requires((concepts::vector<vector1_t> || concepts::column_matrix<vector1_t>)&&(
     concepts::vector<vector2_t> ||
     concepts::column_matrix<vector2_t>)) ALGEBRA_HOST_DEVICE
     constexpr algebra::traits::scalar_t<vector1_t> dot(const vector1_t &a,
-                                                    const vector2_t &b) {
+                                                       const vector2_t &b) {
 
   using scalar_t = algebra::traits::scalar_t<vector1_t>;
   using index_t = algebra::traits::index_t<vector1_t>;

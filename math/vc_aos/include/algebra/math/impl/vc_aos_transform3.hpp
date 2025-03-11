@@ -156,7 +156,8 @@ struct transform3 {
 
   /// Matrix access operator
   ALGEBRA_HOST_DEVICE
-  constexpr const scalar_type &operator()(std::size_t row, std::size_t col) const {
+  constexpr const scalar_type &operator()(std::size_t row,
+                                          std::size_t col) const {
     return _data[col][row];
   }
   ALGEBRA_HOST_DEVICE
@@ -279,7 +280,8 @@ struct transform3 {
   ///
   /// @return a global point
   template <concepts::point3D point3_type>
-  ALGEBRA_HOST_DEVICE constexpr auto point_to_global(const point3_type &p) const {
+  ALGEBRA_HOST_DEVICE constexpr auto point_to_global(
+      const point3_type &p) const {
     return rotate(_data, p) + _data[e_t];
   }
 
@@ -292,7 +294,8 @@ struct transform3 {
   ///
   /// @return a local point
   template <concepts::point3D point3_type>
-  ALGEBRA_HOST_DEVICE constexpr auto point_to_local(const point3_type &p) const {
+  ALGEBRA_HOST_DEVICE constexpr auto point_to_local(
+      const point3_type &p) const {
     return rotate(_data_inv, p) + _data_inv[e_t];
   }
 
@@ -319,7 +322,8 @@ struct transform3 {
   ///
   /// @return a vector in global coordinates
   template <concepts::vector3D vector3_type>
-  ALGEBRA_HOST_DEVICE constexpr auto vector_to_local(const vector3_type &v) const {
+  ALGEBRA_HOST_DEVICE constexpr auto vector_to_local(
+      const vector3_type &v) const {
     return rotate(_data_inv, v);
   }
 };  // struct transform3

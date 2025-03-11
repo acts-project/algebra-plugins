@@ -50,7 +50,8 @@ ALGEBRA_HOST_DEVICE constexpr matrix_t identity() {
 
 /// Set input matrix as zero matrix
 template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t>
-ALGEBRA_HOST_DEVICE constexpr void set_zero(matrix_type<scalar_t, ROWS, COLS> &m) {
+ALGEBRA_HOST_DEVICE constexpr void set_zero(
+    matrix_type<scalar_t, ROWS, COLS> &m) {
   m.zeros();
 }
 

@@ -27,7 +27,8 @@ struct cofactor {
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
 
-  ALGEBRA_HOST_DEVICE constexpr scalar_type operator()(const matrix_t &m) const {
+  ALGEBRA_HOST_DEVICE constexpr scalar_type operator()(
+      const matrix_t &m) const {
     return determinant_getter_helper<algebra::traits::rank<matrix_t>>()(m);
   }
 
@@ -74,8 +75,8 @@ struct cofactor {
 
     template <class input_matrix_type>
     ALGEBRA_HOST_DEVICE constexpr void get_cofactor(const input_matrix_type &m,
-                                                 matrix_t &temp, size_type p,
-                                                 size_type q) const {
+                                                    matrix_t &temp, size_type p,
+                                                    size_type q) const {
 
       size_type i = 0;
       size_type j = 0;

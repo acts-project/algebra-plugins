@@ -86,8 +86,9 @@ ALGEBRA_HOST constexpr Fastor::Tensor<scalar_t, N> normalize(
 ///
 /// @return the scalar dot product value
 template <concepts::scalar scalar_t, auto N>
-ALGEBRA_HOST_DEVICE constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
-                                        const Fastor::Tensor<scalar_t, N> &b) {
+ALGEBRA_HOST_DEVICE constexpr scalar_t dot(
+    const Fastor::Tensor<scalar_t, N> &a,
+    const Fastor::Tensor<scalar_t, N> &b) {
   return Fastor::inner(a, b);
 }
 
@@ -99,7 +100,7 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
 /// @return the scalar dot product value
 template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
-                                 const Fastor::Tensor<scalar_t, N, 1> &b) {
+                                    const Fastor::Tensor<scalar_t, N, 1> &b) {
 
   // We need to specify the type of the Tensor slice because Fastor by default
   // is lazy, so it returns an intermediate type which does not play well with
@@ -116,7 +117,7 @@ ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
 /// @return the scalar dot product value
 template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
-                                 const Fastor::Tensor<scalar_t, N> &b) {
+                                    const Fastor::Tensor<scalar_t, N> &b) {
 
   return Fastor::inner(Fastor::Tensor<scalar_t, N>(a(Fastor::fseq<0, N>(), 0)),
                        b);
@@ -130,7 +131,7 @@ ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
 /// @return the scalar dot product value
 template <concepts::scalar scalar_t, auto N>
 ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
-                                 const Fastor::Tensor<scalar_t, N, 1> &b) {
+                                    const Fastor::Tensor<scalar_t, N, 1> &b) {
 
   return Fastor::inner(Fastor::Tensor<scalar_t, N>(a(Fastor::fseq<0, 3>(), 0)),
                        Fastor::Tensor<scalar_t, N>(b(Fastor::fseq<0, 3>(), 0)));

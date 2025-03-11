@@ -33,8 +33,8 @@ namespace algebra::vc_soa::math {
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 2) ALGEBRA_HOST_DEVICE
-    constexpr auto phi(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr auto phi(
+    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::atan2(v[1], v[0]);
 }
@@ -161,8 +161,8 @@ normalize(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 3) ALGEBRA_HOST_DEVICE
-    constexpr auto eta(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr auto eta(
+    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   // atanh does not exist in Vc
   auto atanh_func = [](value_t e) { return std::atanh(e); };

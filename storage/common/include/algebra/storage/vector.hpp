@@ -288,7 +288,7 @@ struct is_storage_vector<storage::vector<N, scalar_t, array_t>>
     : public std::true_type {};
 
 template <typename T>
-constexpr bool is_storage_vector_v = is_storage_vector<T>::value;
+inline constexpr bool is_storage_vector_v = is_storage_vector<T>::value;
 
 }  // namespace detail
 

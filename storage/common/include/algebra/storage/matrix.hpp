@@ -153,7 +153,8 @@ ALGEBRA_HOST_DEVICE constexpr void set_zero(matrix_t &m) noexcept {
 }
 
 /// Build an identity matrix
-template <concepts::matrix matrix_t, std::size_t R =algebra::traits::rank<matrix_t>>
+template <concepts::matrix matrix_t,
+          std::size_t R = algebra::traits::rank<matrix_t>>
 ALGEBRA_HOST_DEVICE constexpr matrix_t identity() noexcept {
 
   // Zero initialized

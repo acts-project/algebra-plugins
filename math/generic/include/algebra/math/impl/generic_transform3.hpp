@@ -285,13 +285,15 @@ struct transform3 {
 
   /// This method transform from a vector from the local 3D cartesian frame to
   /// the global 3D cartesian frame
-  ALGEBRA_HOST_DEVICE constexpr vector3 vector_to_global(const vector3 &v) const {
+  ALGEBRA_HOST_DEVICE constexpr vector3 vector_to_global(
+      const vector3 &v) const {
     return rotate(_data, v);
   }
 
   /// This method transform from a vector from the global 3D cartesian frame
   /// into the local 3D cartesian frame
-  ALGEBRA_HOST_DEVICE constexpr vector3 vector_to_local(const vector3 &v) const {
+  ALGEBRA_HOST_DEVICE constexpr vector3 vector_to_local(
+      const vector3 &v) const {
     return rotate(_data_inv, v);
   }
 

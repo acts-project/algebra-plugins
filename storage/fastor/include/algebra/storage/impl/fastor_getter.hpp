@@ -109,8 +109,8 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t element(
 
 /// Function extracting an element from a matrix (non-const)
 template <concepts::scalar scalar_t, std::size_t N>
-ALGEBRA_HOST_DEVICE constexpr scalar_t &element(Fastor::Tensor<scalar_t, N, 1> &m,
-                                             std::size_t row) {
+ALGEBRA_HOST_DEVICE constexpr scalar_t &element(
+    Fastor::Tensor<scalar_t, N, 1> &m, std::size_t row) {
   return element_getter()(m, row);
 }
 
@@ -124,7 +124,7 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t element(
 /// Function extracting an element from a vector (non-const)
 template <concepts::scalar scalar_t, std::size_t N>
 ALGEBRA_HOST_DEVICE constexpr scalar_t &element(Fastor::Tensor<scalar_t, N> &m,
-                                             std::size_t row) {
+                                                std::size_t row) {
   return element_getter()(m, row);
 }
 

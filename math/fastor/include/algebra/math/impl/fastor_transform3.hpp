@@ -166,7 +166,9 @@ struct transform3 {
 
   /// This method retrieves the translation of a transform
   ALGEBRA_HOST
-  constexpr vector3 translation() const { return _data(Fastor::fseq<0, 3>(), 3); }
+  constexpr vector3 translation() const {
+    return _data(Fastor::fseq<0, 3>(), 3);
+  }
 
   /// This method retrieves the 4x4 matrix of a transform
   ALGEBRA_HOST

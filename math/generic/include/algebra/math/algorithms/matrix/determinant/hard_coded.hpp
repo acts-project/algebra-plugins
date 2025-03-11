@@ -29,8 +29,9 @@ struct hard_coded {
 
   // 2 X 2 matrix determinant
   template <typename M = matrix_t>
-  requires(algebra::traits::rank<M> == 2) ALGEBRA_HOST_DEVICE constexpr scalar_type
-  operator()(const matrix_t &m) const {
+  requires(algebra::traits::rank<M> == 2) ALGEBRA_HOST_DEVICE
+      constexpr scalar_type
+      operator()(const matrix_t &m) const {
 
     return element_getter()(m, 0, 0) * element_getter()(m, 1, 1) -
            element_getter()(m, 0, 1) * element_getter()(m, 1, 0);
@@ -38,8 +39,9 @@ struct hard_coded {
 
   // 4 X 4 matrix determinant
   template <typename M = matrix_t>
-  requires(algebra::traits::rank<M> == 4) ALGEBRA_HOST_DEVICE constexpr scalar_type
-  operator()(const matrix_t &m) const {
+  requires(algebra::traits::rank<M> == 4) ALGEBRA_HOST_DEVICE
+      constexpr scalar_type
+      operator()(const matrix_t &m) const {
 
     return element_getter()(m, 0, 3) * element_getter()(m, 1, 2) *
                element_getter()(m, 2, 1) * element_getter()(m, 3, 0) -

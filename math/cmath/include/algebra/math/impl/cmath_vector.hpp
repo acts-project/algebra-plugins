@@ -65,7 +65,7 @@ template <concepts::index size_type,
           concepts::scalar scalar_t, size_type N>
 requires(N >= 3) ALGEBRA_HOST_DEVICE
     constexpr array_t<scalar_t, N> cross(const array_t<scalar_t, N> &a,
-                                      const array_t<scalar_t, N> &b) {
+                                         const array_t<scalar_t, N> &b) {
   return algebra::generic::math::cross(a, b);
 }
 
@@ -80,9 +80,8 @@ requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
 template <concepts::index size_type,
           template <typename, size_type> class array_t,
           concepts::scalar scalar_t, size_type N>
-requires(N >= 3) ALGEBRA_HOST_DEVICE
-    constexpr array_t<scalar_t, N> cross(const array_t<array_t<scalar_t, N>, 1> &a,
-                                      const array_t<scalar_t, N> &b) {
+requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
+    const array_t<array_t<scalar_t, N>, 1> &a, const array_t<scalar_t, N> &b) {
   return algebra::generic::math::cross(a, b);
 }
 
@@ -107,7 +106,7 @@ template <concepts::index size_type,
           template <typename, size_type> class array_t,
           concepts::scalar scalar_t, size_type N>
 ALGEBRA_HOST_DEVICE constexpr scalar_t dot(const array_t<scalar_t, N> &a,
-                                        const array_t<scalar_t, N> &b) {
+                                           const array_t<scalar_t, N> &b) {
   array_t<scalar_t, N> tmp;
   for (size_type i = 0; i < N; i++) {
     tmp[i] = a[i] * b[i];

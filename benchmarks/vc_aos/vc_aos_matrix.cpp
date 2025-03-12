@@ -40,6 +40,32 @@ int main(int argc, char** argv) {
   using mat88_transp_d_t =
       matrix_unaryOP_bm<vc_aos::matrix_type<double, 8, 8>, bench_op::transpose>;
 
+  using mat44_inv_f_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<float, 4, 4>, bench_op::invert>;
+  using mat44_inv_d_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<double, 4, 4>, bench_op::invert>;
+  using mat66_inv_f_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<float, 6, 6>, bench_op::invert>;
+  using mat66_inv_d_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<double, 6, 6>, bench_op::invert>;
+  using mat88_inv_f_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<float, 8, 8>, bench_op::invert>;
+  using mat88_inv_d_t =
+      matrix_unaryOP_bm<vc_aos::matrix_type<double, 8, 8>, bench_op::invert>;
+
+  using mat44_det_f_t = matrix_unaryOP_bm<vc_aos::matrix_type<float, 4, 4>,
+                                          bench_op::determinant>;
+  using mat44_det_d_t = matrix_unaryOP_bm<vc_aos::matrix_type<double, 4, 4>,
+                                          bench_op::determinant>;
+  using mat66_det_f_t = matrix_unaryOP_bm<vc_aos::matrix_type<float, 6, 6>,
+                                          bench_op::determinant>;
+  using mat66_det_d_t = matrix_unaryOP_bm<vc_aos::matrix_type<double, 6, 6>,
+                                          bench_op::determinant>;
+  using mat88_det_f_t = matrix_unaryOP_bm<vc_aos::matrix_type<float, 8, 8>,
+                                          bench_op::determinant>;
+  using mat88_det_d_t = matrix_unaryOP_bm<vc_aos::matrix_type<double, 8, 8>,
+                                          bench_op::determinant>;
+
   using mat44_add_f_t =
       matrix_binaryOP_bm<vc_aos::matrix_type<float, 4, 4>, bench_op::add>;
   using mat44_add_d_t =

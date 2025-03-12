@@ -14,7 +14,7 @@
 // System include(s)
 #include <chrono>
 #include <iostream>
-#include <string>
+#include <string_view>
 #include <thread>
 #include <vector>
 
@@ -28,7 +28,7 @@ template <concepts::vector vector_t>
 struct vector_bm : public benchmark_base {
 
   /// Prefix for the benchmark name
-  inline static const std::string name{"vector"};
+  static constexpr std::string_view name{"vector"};
 
   std::vector<vector_t> a;
   std::vector<vector_t> b;
@@ -71,11 +71,11 @@ requires std::invocable<unaryOP, vector_t<scalar_t>> struct vector_unaryOP_bm
   vector_unaryOP_bm(const vector_unaryOP_bm &bm) = default;
   vector_unaryOP_bm &operator=(vector_unaryOP_bm &other) = default;
 
-  std::string name() const override {
-    return base_type::name + "_" + unaryOP::name;
+  constexpr std::string name() const override {
+    return std::string{base_type::name} + "_" + std::string{unaryOP::name};
   }
 
-  void operator()(::benchmark::State &state) override {
+  inline void operator()(::benchmark::State &state) const override {
 
     using result_t = std::invoke_result_t<unaryOP, vector_t<scalar_t>>;
 
@@ -105,11 +105,11 @@ requires std::invocable<binaryOP, vector_t<scalar_t>,
   vector_binaryOP_bm(const vector_binaryOP_bm &bm) = default;
   vector_binaryOP_bm &operator=(vector_binaryOP_bm &other) = default;
 
-  std::string name() const override {
-    return base_type::name + "_" + binaryOP::name;
+  constexpr std::string name() const override {
+    return std::string{base_type::name} + "_" + std::string{binaryOP::name};
   }
 
-  void operator()(::benchmark::State &state) override {
+  inline void operator()(::benchmark::State &state) const override {
 
     using result_t =
         std::invoke_result_t<binaryOP, vector_t<scalar_t>, vector_t<scalar_t>>;
@@ -130,43 +130,43 @@ requires std::invocable<binaryOP, vector_t<scalar_t>,
 namespace bench_op {
 
 struct add {
-  inline static const std::string name{"add"};
+  static constexpr std::string_view name{"add"};
   template <concepts::vector vector_t>
-  vector_t operator()(const vector_t &a, const vector_t &b) const {
+  constexpr vector_t operator()(const vector_t &a, const vector_t &b) const {
     return a + b;
   }
 };
 struct sub {
-  inline static const std::string name{"sub"};
+  static constexpr std::string_view name{"sub"};
   template <concepts::vector vector_t>
-  vector_t operator()(const vector_t &a, const vector_t &b) const {
+  constexpr vector_t operator()(const vector_t &a, const vector_t &b) const {
     return a - b;
   }
 };
 struct dot {
-  inline static const std::string name{"dot"};
+  static constexpr std::string_view name{"dot"};
   template <concepts::vector vector_t>
-  algebra::traits::scalar_t<vector_t> operator()(const vector_t &a,
-                                                 const vector_t &b) const {
+  constexpr algebra::traits::scalar_t<vector_t> operator()(
+      const vector_t &a, const vector_t &b) const {
     return algebra::vector::dot(a, b);
   }
 };
 struct cross {
-  inline static const std::string name{"cross"};
+  static constexpr std::string_view name{"cross"};
   template <concepts::vector vector_t>
-  vector_t operator()(const vector_t &a, const vector_t &b) const {
+  constexpr vector_t operator()(const vector_t &a, const vector_t &b) const {
     return algebra::vector::cross(a, b);
   }
 };
 
 // Macro for declaring vector unary ops
-#define ALGEBRA_PLUGINS_BENCH_VECTOR(OP, RES)  \
-  struct OP {                                  \
-    inline static const std::string name{#OP}; \
-    template <concepts::vector vector_t>       \
-    RES operator()(const vector_t &a) const {  \
-      return algebra::vector::OP(a);           \
-    }                                          \
+#define ALGEBRA_PLUGINS_BENCH_VECTOR(OP, RES)           \
+  struct OP {                                           \
+    static constexpr std::string_view name{#OP};        \
+    template <concepts::vector vector_t>                \
+    constexpr RES operator()(const vector_t &a) const { \
+      return algebra::vector::OP(a);                    \
+    }                                                   \
   };
 
 ALGEBRA_PLUGINS_BENCH_VECTOR(phi, algebra::traits::scalar_t<vector_t>)

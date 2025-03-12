@@ -63,7 +63,8 @@ namespace generic {
 
 // Determinant algorithms
 template <concepts::scalar T, auto ROWS, auto COLS>
-struct determinant_selector<4, array::matrix_type<T, ROWS, COLS>> {
+struct determinant_selector<4, array::matrix_type<T, ROWS, COLS>,
+                            array::element_getter> {
   using type =
       matrix::determinant::hard_coded<array::matrix_type<T, ROWS, COLS>,
                                       array::element_getter>;
@@ -71,7 +72,8 @@ struct determinant_selector<4, array::matrix_type<T, ROWS, COLS>> {
 
 // Inversion algorithms
 template <concepts::scalar T, auto ROWS, auto COLS>
-struct inversion_selector<4, array::matrix_type<T, ROWS, COLS>> {
+struct inversion_selector<4, array::matrix_type<T, ROWS, COLS>,
+                          array::element_getter> {
   using type = matrix::inverse::hard_coded<array::matrix_type<T, ROWS, COLS>,
                                            array::element_getter>;
 };

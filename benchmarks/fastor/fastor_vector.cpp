@@ -49,7 +49,8 @@ int main(int argc, char** argv) {
   using add_d_t = vector_binaryOP_bm<fastor::vector3, double, bench_op::add>;
   using sub_d_t = vector_binaryOP_bm<fastor::vector3, double, bench_op::sub>;
   using dot_d_t = vector_binaryOP_bm<fastor::vector3, double, bench_op::dot>;
-  using cross_d_t = vector_binaryOP_bm<fastor::vector3, double, bench_op::cross>;
+  using cross_d_t =
+      vector_binaryOP_bm<fastor::vector3, double, bench_op::cross>;
   using normlz_d_t =
       vector_unaryOP_bm<fastor::vector3, double, bench_op::normalize>;
 

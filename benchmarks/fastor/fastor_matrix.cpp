@@ -53,16 +53,16 @@ int main(int argc, char** argv) {
   using mat88_inv_d_t =
       matrix_unaryOP_bm<fastor::matrix_type<double, 8, 8>, bench_op::invert>;
 
-  using mat44_det_f_t =
-      matrix_unaryOP_bm<fastor::matrix_type<float, 4, 4>, bench_op::determinant>;
+  using mat44_det_f_t = matrix_unaryOP_bm<fastor::matrix_type<float, 4, 4>,
+                                          bench_op::determinant>;
   using mat44_det_d_t = matrix_unaryOP_bm<fastor::matrix_type<double, 4, 4>,
                                           bench_op::determinant>;
-  using mat66_det_f_t =
-      matrix_unaryOP_bm<fastor::matrix_type<float, 6, 6>, bench_op::determinant>;
+  using mat66_det_f_t = matrix_unaryOP_bm<fastor::matrix_type<float, 6, 6>,
+                                          bench_op::determinant>;
   using mat66_det_d_t = matrix_unaryOP_bm<fastor::matrix_type<double, 6, 6>,
                                           bench_op::determinant>;
-  using mat88_det_f_t =
-      matrix_unaryOP_bm<fastor::matrix_type<float, 8, 8>, bench_op::determinant>;
+  using mat88_det_f_t = matrix_unaryOP_bm<fastor::matrix_type<float, 8, 8>,
+                                          bench_op::determinant>;
   using mat88_det_d_t = matrix_unaryOP_bm<fastor::matrix_type<double, 8, 8>,
                                           bench_op::determinant>;
 

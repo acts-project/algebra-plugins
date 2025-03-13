@@ -5,26 +5,26 @@
  * Mozilla Public License Version 2.0
  */
 
- #pragma once
+#pragma once
 
- // Project include(s)
- #include "algebra/fastor_fastor.hpp"
+// Project include(s)
+#include "algebra/fastor_fastor.hpp"
 
 namespace algebra {
 
 /// Fill an @c Fastor based vector with random values
 template <concepts::vector vector_t>
-inline void fill_random_vec(std::vector<vector_t> &collection) {
+inline void fill_random_vec(std::vector<vector_t>& collection) {
 
-auto rand_obj = [](vector_t& v) { v.random(); };
+  auto rand_obj = [](vector_t& v) { v.random(); };
 
-collection.resize(collection.capacity());
-std::ranges::for_each(collection, rand_obj);
+  collection.resize(collection.capacity());
+  std::ranges::for_each(collection, rand_obj);
 }
 
 /// Fill a @c Fastor based transform3 with random values
 template <concepts::transform3D transform3_t>
-inline void fill_random_trf(std::vector<transform3_t> &collection) {
+inline void fill_random_trf(std::vector<transform3_t>& collection) {
 
   using vector_t = typename transform3_t::vector3;
 
@@ -53,12 +53,12 @@ inline void fill_random_trf(std::vector<transform3_t> &collection) {
 
 /// Fill a @c Fastor based matrix with random values
 template <concepts::matrix matrix_t>
-inline void fill_random_matrix(std::vector<matrix_t> &collection) {
+inline void fill_random_matrix(std::vector<matrix_t>& collection) {
 
-auto rand_obj = [](matrix_t& m) { m.random(); };
+  auto rand_obj = [](matrix_t& m) { m.random(); };
 
-collection.resize(collection.capacity());
-std::ranges::for_each(collection, rand_obj);
+  collection.resize(collection.capacity());
+  std::ranges::for_each(collection, rand_obj);
 }
 
-}
+}  // namespace algebra

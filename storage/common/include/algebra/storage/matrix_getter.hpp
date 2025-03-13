@@ -178,18 +178,42 @@ struct block_getter {
     return res_m;
   }
 
-  /// Get a vector of a const matrix
+  /// Get a row vector of a const matrix
   template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
             concepts::scalar scalar_t,
             template <typename, std::size_t> class array_t>
-  ALGEBRA_HOST_DEVICE constexpr auto vector(
+  ALGEBRA_HOST_DEVICE constexpr auto row(
+      const matrix<array_t, scalar_t, ROWS, COLS> &m, const std::size_t row,
+      const std::size_t col) noexcept {
+
+    static_assert(SIZE <= ROWS);
+    static_assert(SIZE <= COLS);
+    assert(row < ROWS);
+    assert(col + SIZE <= COLS);
+
+    using vector_t = algebra::storage::vector<SIZE, scalar_t, array_t>;
+
+    vector_t res_v{};
+
+    for (std::size_t i = col; i < col + SIZE; ++i) {
+      res_v[i - col] = m[i][row];
+    }
+
+    return res_v;
+  }
+
+  /// Get a column vector of a const matrix
+  template <std::size_t SIZE, std::size_t ROWS, std::size_t COLS,
+            concepts::scalar scalar_t,
+            template <typename, std::size_t> class array_t>
+  ALGEBRA_HOST_DEVICE constexpr auto column(
       const matrix<array_t, scalar_t, ROWS, COLS> &m, const std::size_t row,
       const std::size_t col) noexcept {
 
     static_assert(SIZE <= ROWS);
     static_assert(SIZE <= COLS);
     assert(row + SIZE <= ROWS);
-    assert(col <= COLS);
+    assert(col < COLS);
 
     using input_matrix_t = matrix<array_t, scalar_t, ROWS, COLS>;
     using vector_t = algebra::storage::vector<SIZE, scalar_t, array_t>;
@@ -281,6 +305,24 @@ ALGEBRA_HOST_DEVICE constexpr void set_block(
   for (std::size_t i = row; i < N + row; ++i) {
     m[col][i] = b[i - row];
   }
+}
+
+template <std::size_t SIZE, std::size_t ROW, std::size_t COL,
+          concepts::scalar scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE constexpr auto row(
+    const algebra::storage::matrix<array_t, scalar_t, ROW, COL> &m,
+    const std::size_t row, const std::size_t col) noexcept {
+  return algebra::storage::block_getter{}.template row<SIZE>(m, row, col);
+}
+
+template <std::size_t SIZE, std::size_t ROW, std::size_t COL,
+          concepts::scalar scalar_t,
+          template <typename, std::size_t> class array_t>
+ALGEBRA_HOST_DEVICE constexpr auto column(
+    const algebra::storage::matrix<array_t, scalar_t, ROW, COL> &m,
+    const std::size_t row, const std::size_t col) noexcept {
+  return algebra::storage::block_getter{}.template column<SIZE>(m, row, col);
 }
 
 }  // namespace algebra::storage

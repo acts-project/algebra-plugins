@@ -119,10 +119,10 @@ if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )
       "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/fastor/include>" )
    target_link_libraries(algebra_bench_fastor INTERFACE algebra::fastor_fastor
                                                     algebra::common_storage)
-   # algebra_add_benchmark( fastor_getter
-   #    "fastor/fastor_getter.cpp"
-   #    LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-   #                   algebra_bench_fastor algebra::fastor_fastor )
+   algebra_add_benchmark( fastor_getter
+      "fastor/fastor_getter.cpp"
+      LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                     algebra_bench_fastor algebra::fastor_fastor )
    algebra_add_benchmark( fastor_vector
       "fastor/fastor_vector.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common

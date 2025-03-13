@@ -38,7 +38,7 @@ requires(N >= 3) ALGEBRA_HOST inline scalar_t
   return algebra::math::atan2(Fastor::norm(v(Fastor::fseq<0, 2>())), v[2]);
 }
 
-/// This method retrieves the perpenticular magnitude of a vector with rows >= 2
+/// This method retrieves the perpendicular magnitude of a vector with rows >= 2
 ///
 /// @param v the input vector
 template <concepts::scalar scalar_t, auto N>

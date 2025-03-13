@@ -131,8 +131,8 @@ if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )
    #    "fastor/fastor_transform3.cpp"
    #    LINK_LIBRARIES benchmark::benchmark algebra::bench_common
    #                   algebra_bench_fastor algebra::fastor_fastor )
-   # algebra_add_benchmark( fastor_matrix
-   #    "fastor/fastor_matrix.cpp"
-   #    LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-   #                   algebra_bench_fastor algebra::fastor_fastor )
+   algebra_add_benchmark( fastor_matrix
+      "fastor/fastor_matrix.cpp"
+      LINK_LIBRARIES benchmark::benchmark algebra::bench_common
+                     algebra_bench_fastor algebra::fastor_fastor )
 endif()

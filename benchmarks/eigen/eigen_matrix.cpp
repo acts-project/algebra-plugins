@@ -106,8 +106,8 @@ int main(int argc, char** argv) {
                                          eigen::vector_type<double, 8>>;
 
   std::cout << "------------------------------------------\n"
-            << "Algebra-Plugins 'matrix' benchmark (Eigen3)\n"
-            << "-------------------------------------------\n\n"
+            << "Algebra-Plugins 'matrix' benchmark (Eigen)\n"
+            << "------------------------------------------\n\n"
             << cfg;
 
   //

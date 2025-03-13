@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
   using mat88_vec_d_t = matrix_vector_bm<vc_aos::matrix_type<double, 8, 8>,
                                          vc_aos::vector_type<double, 8>>;
 
-  std::cout << "------------------------------------------\n"
+  std::cout << "-------------------------------------------\n"
             << "Algebra-Plugins 'matrix' benchmark (Vc AoS)\n"
             << "-------------------------------------------\n\n"
             << cfg;

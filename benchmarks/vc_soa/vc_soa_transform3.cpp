@@ -14,6 +14,9 @@
 // Benchmark include
 #include <benchmark/benchmark.h>
 
+// System include(s)
+#include <iostream>
+
 using namespace algebra;
 
 /// Run vector benchmarks

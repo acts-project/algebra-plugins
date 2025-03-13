@@ -14,6 +14,9 @@
 // Benchmark include
 #include <benchmark/benchmark.h>
 
+// System include(s)
+#include <iostream>
+
 using namespace algebra;
 
 /// Run vector benchmarks
@@ -28,7 +31,7 @@ int main(int argc, char** argv) {
   using trf_f_t = transform3_bm<array::transform3<float>>;
   using trf_d_t = transform3_bm<array::transform3<double>>;
 
-  std::cout << "-----------------------------------------------\n"
+  std::cout << "---------------------------------------------------\n"
             << "Algebra-Plugins 'transform3' benchmark (std::array)\n"
             << "---------------------------------------------------\n\n"
             << cfg;

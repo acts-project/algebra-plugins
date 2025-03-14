@@ -10,6 +10,10 @@
 // Project include(s)
 #include "algebra/fastor_fastor.hpp"
 
+// System include(s)
+#include <algorithm>
+#include <vector>
+
 namespace algebra {
 
 /// Fill an @c Fastor based vector with random values

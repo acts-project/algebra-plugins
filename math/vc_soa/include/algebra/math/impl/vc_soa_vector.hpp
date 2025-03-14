@@ -39,7 +39,7 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE
   return Vc::atan2(v[1], v[0]);
 }
 
-/// This method retrieves the perpenticular magnitude of a vector with rows >= 2
+/// This method retrieves the perpendicular magnitude of a vector with rows >= 2
 ///
 /// @tparam N dimension of the vector
 /// @tparam value_t value type in the simd vectors

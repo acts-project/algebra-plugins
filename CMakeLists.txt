@@ -43,7 +43,7 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 option( ALGEBRA_PLUGINS_INCLUDE_EIGEN
    "Include Eigen types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_INCLUDE_SMATRIX
-   "Include Smatrix types in Algebra Plugins" FALSE )
+   "Include SMatrix types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_INCLUDE_VC
    "Include Vc types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_INCLUDE_FASTOR

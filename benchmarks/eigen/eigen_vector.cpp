@@ -14,7 +14,7 @@
 #include <benchmark/benchmark.h>
 
 // System include(s)
-#include <string>
+#include <iostream>
 
 using namespace algebra;
 

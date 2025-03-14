@@ -48,3 +48,5 @@ Available options:
     [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html).
 - `ALGEBRA_PLUGINS_BUILD_TESTING`: Turn the build/setup of the unit tests on/off
   (`ON` by default)
+- `ALGEBRA_PLUGINS_BUILD_BENCHMARKS`: Turn the build/setup of the benchmarks on/off
+  (`OFF` by default)

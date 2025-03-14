@@ -31,3 +31,21 @@
 #else
 #define ALGEBRA_ALIGN(x) alignas(x)
 #endif
+
+// @see
+// https://stackoverflow.com/questions/78071873/gcc-preprocessor-macro-and-pragma-gcc-unroll
+#if defined(__clang__)
+#define ARG_TO_STRING(A) #A
+#define ALGEBRA_UNROLL_N(n) _Pragma(ARG_TO_STRING(clang loop unroll_count(n)))
+#elif defined(__GNUC__) || defined(__GNUG__)
+#define ARG_TO_STRING(A) #A
+#if __GNUC__ >= 14
+#define ALGEBRA_UNROLL_N(n) _Pragma(ARG_TO_STRING(GCC unroll n))
+#else
+// For versions below 14, template parameters apparently cannot be used
+#define ALGEBRA_UNROLL_N(n) _Pragma(ARG_TO_STRING(GCC unroll 8))
+#endif
+#else
+// Unknown compiler or does not support unrolling directives
+#define ALGEBRA_UNROLL_N(n)
+#endif

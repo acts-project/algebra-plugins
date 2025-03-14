@@ -30,7 +30,7 @@ struct cofactor {
   /// Function (object) used for accessing a matrix element
   using element_getter = element_getter_t;
 
-  ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t &m) const {
+  ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(const matrix_t &m) const {
     return adjoint_getter_helper<algebra::traits::rank<matrix_t>>()(m);
   }
 
@@ -39,7 +39,7 @@ struct cofactor {
 
   template <size_type N>
   struct adjoint_getter_helper<N, typename std::enable_if_t<N == 1>> {
-    ALGEBRA_HOST_DEVICE inline matrix_t operator()(
+    ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(
         const matrix_t & /*m*/) const {
       matrix_t ret;
       element_getter()(ret, 0, 0) = 1;
@@ -53,7 +53,7 @@ struct cofactor {
     using determinant_getter =
         determinant::cofactor<matrix_t, element_getter_t>;
 
-    ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t &m) const {
+    ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(const matrix_t &m) const {
 
       matrix_t adj;
 
@@ -105,7 +105,7 @@ struct cofactor {
 
   using adjoint_getter = adjoint::cofactor<matrix_t, element_getter_t>;
 
-  ALGEBRA_HOST_DEVICE inline matrix_t operator()(const matrix_t &m) const {
+  ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(const matrix_t &m) const {
 
     constexpr size_type N{algebra::traits::rank<matrix_t>};
 

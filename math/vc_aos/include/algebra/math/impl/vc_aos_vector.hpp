@@ -31,19 +31,19 @@ namespace algebra::vc_aos::math {
 
 /// This method retrieves phi from a vector @param v
 template <algebra::concepts::vc_aos_vector vector_t>
-ALGEBRA_HOST_DEVICE inline auto phi(const vector_t &v) {
+ALGEBRA_HOST_DEVICE constexpr auto phi(const vector_t &v) {
   return algebra::math::atan2(v[1], v[0]);
 }
 
 /// This method retrieves the perpendicular magnitude of a vector @param v
 template <algebra::concepts::vc_aos_vector vector_t>
-ALGEBRA_HOST_DEVICE inline auto perp(const vector_t &v) {
+ALGEBRA_HOST_DEVICE constexpr auto perp(const vector_t &v) {
   return algebra::math::sqrt(algebra::math::fma(v[0], v[0], v[1] * v[1]));
 }
 
 /// This method retrieves theta from a vector @param v
 template <algebra::concepts::vc_aos_vector vector_t>
-ALGEBRA_HOST_DEVICE inline auto theta(const vector_t &v) {
+ALGEBRA_HOST_DEVICE constexpr auto theta(const vector_t &v) {
   return algebra::math::atan2(perp(v), v[2]);
 }
 
@@ -57,7 +57,7 @@ ALGEBRA_HOST_DEVICE inline auto theta(const vector_t &v) {
 /// @return the scalar dot product value
 template <algebra::concepts::vc_aos_vector vector_t1,
           algebra::concepts::vc_aos_vector vector_t2>
-ALGEBRA_HOST_DEVICE inline auto dot(const vector_t1 &a, const vector_t2 &b) {
+ALGEBRA_HOST_DEVICE constexpr auto dot(const vector_t1 &a, const vector_t2 &b) {
 
   return (a * b).sum();
 }
@@ -66,7 +66,7 @@ ALGEBRA_HOST_DEVICE inline auto dot(const vector_t1 &a, const vector_t2 &b) {
 ///
 /// @param v the input vector
 template <algebra::concepts::vc_aos_vector vector_t>
-ALGEBRA_HOST_DEVICE inline auto norm(const vector_t &v) {
+ALGEBRA_HOST_DEVICE constexpr auto norm(const vector_t &v) {
 
   return algebra::math::sqrt(dot(v, v));
 }
@@ -77,7 +77,7 @@ ALGEBRA_HOST_DEVICE inline auto norm(const vector_t &v) {
 ///
 /// @param v the input vector
 template <algebra::concepts::vc_aos_vector vector_t>
-ALGEBRA_HOST_DEVICE inline auto normalize(const vector_t &v) {
+ALGEBRA_HOST_DEVICE constexpr auto normalize(const vector_t &v) {
 
   return v / norm(v);
 }
@@ -87,7 +87,7 @@ ALGEBRA_HOST_DEVICE inline auto normalize(const vector_t &v) {
 ///
 /// @param v the input vector
 template <algebra::concepts::vc_aos_vector vector_t>
-ALGEBRA_HOST_DEVICE inline auto eta(const vector_t &v) noexcept {
+ALGEBRA_HOST_DEVICE constexpr auto eta(const vector_t &v) noexcept {
 
   return algebra::math::atanh(v[2] / norm(v));
 }
@@ -102,7 +102,7 @@ ALGEBRA_HOST_DEVICE inline auto eta(const vector_t &v) noexcept {
 /// @return a vector representing the cross product
 template <algebra::concepts::vc_aos_vector vector_t1,
           algebra::concepts::vc_aos_vector vector_t2>
-ALGEBRA_HOST_DEVICE inline auto cross(const vector_t1 &a, const vector_t2 &b)
+ALGEBRA_HOST_DEVICE constexpr auto cross(const vector_t1 &a, const vector_t2 &b)
     -> decltype(a * b - b * a) {
 
   return {algebra::math::fma(a[1], b[2], -b[1] * a[2]),
@@ -118,7 +118,7 @@ ALGEBRA_HOST_DEVICE inline auto cross(const vector_t1 &a, const vector_t2 &b)
 ///
 /// @return the sum of the elements
 template <algebra::concepts::vc_aos_vector vector_t>
-ALGEBRA_HOST_DEVICE inline auto sum(const vector_t &v) {
+ALGEBRA_HOST_DEVICE constexpr auto sum(const vector_t &v) {
   return v.get().sum();
 }
 

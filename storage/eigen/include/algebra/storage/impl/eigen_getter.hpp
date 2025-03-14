@@ -41,7 +41,7 @@ struct element_getter {
   requires std::is_base_of_v<
       Eigen::DenseCoeffsBase<derived_type, Eigen::WriteAccessors>,
       Eigen::MatrixBase<derived_type> >
-      ALGEBRA_HOST_DEVICE inline auto &operator()(
+      ALGEBRA_HOST_DEVICE constexpr auto &operator()(
           Eigen::MatrixBase<derived_type> &m, size_type_1 row,
           size_type_2 col) const {
 
@@ -50,7 +50,7 @@ struct element_getter {
   /// Get const access to a matrix element
   template <typename derived_type, concepts::index size_type_1,
             concepts::index size_type_2>
-  ALGEBRA_HOST_DEVICE inline auto operator()(
+  ALGEBRA_HOST_DEVICE constexpr auto operator()(
       const Eigen::MatrixBase<derived_type> &m, size_type_1 row,
       size_type_2 col) const {
 
@@ -61,14 +61,14 @@ struct element_getter {
   requires std::is_base_of_v<
       Eigen::DenseCoeffsBase<derived_type, Eigen::WriteAccessors>,
       Eigen::MatrixBase<derived_type> >
-      ALGEBRA_HOST_DEVICE inline auto &operator()(
+      ALGEBRA_HOST_DEVICE constexpr auto &operator()(
           Eigen::MatrixBase<derived_type> &m, size_type row) const {
 
     return m(static_cast<Eigen::Index>(row));
   }
   /// Get const access to a matrix element
   template <typename derived_type, concepts::index size_type>
-  ALGEBRA_HOST_DEVICE inline auto operator()(
+  ALGEBRA_HOST_DEVICE constexpr auto operator()(
       const Eigen::MatrixBase<derived_type> &m, size_type row) const {
 
     return m(static_cast<Eigen::Index>(row));
@@ -77,7 +77,7 @@ struct element_getter {
 
 /// Function extracting an element from a matrix (const)
 template <typename derived_type>
-ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+ALGEBRA_HOST_DEVICE constexpr decltype(auto) element(
     const Eigen::MatrixBase<derived_type> &m, std::size_t row,
     std::size_t col) {
 
@@ -90,7 +90,7 @@ template <typename derived_type>
 requires std::is_base_of_v<
     Eigen::DenseCoeffsBase<derived_type, Eigen::WriteAccessors>,
     Eigen::MatrixBase<derived_type> >
-    ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+    ALGEBRA_HOST_DEVICE constexpr decltype(auto) element(
         Eigen::MatrixBase<derived_type> &m, std::size_t row, std::size_t col) {
 
   return element_getter()(m, static_cast<Eigen::Index>(row),
@@ -99,7 +99,7 @@ requires std::is_base_of_v<
 
 /// Function extracting an element from a matrix (const)
 template <typename derived_type>
-ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+ALGEBRA_HOST_DEVICE constexpr decltype(auto) element(
     const Eigen::MatrixBase<derived_type> &m, std::size_t row) {
 
   return element_getter()(m, static_cast<Eigen::Index>(row));
@@ -110,7 +110,7 @@ template <typename derived_type>
 requires std::is_base_of_v<
     Eigen::DenseCoeffsBase<derived_type, Eigen::WriteAccessors>,
     Eigen::MatrixBase<derived_type> >
-    ALGEBRA_HOST_DEVICE inline decltype(auto) element(
+    ALGEBRA_HOST_DEVICE constexpr decltype(auto) element(
         Eigen::MatrixBase<derived_type> &m, std::size_t row) {
 
   return element_getter()(m, static_cast<Eigen::Index>(row));
@@ -176,7 +176,7 @@ ALGEBRA_HOST_DEVICE decltype(auto) block(Eigen::MatrixBase<derived_type> &m,
 
 /// Function extracting a slice from the matrix
 template <int SIZE, typename derived_type>
-ALGEBRA_HOST_DEVICE inline decltype(auto) vector(
+ALGEBRA_HOST_DEVICE constexpr decltype(auto) vector(
     const Eigen::MatrixBase<derived_type> &m, std::size_t row,
     std::size_t col) {
 

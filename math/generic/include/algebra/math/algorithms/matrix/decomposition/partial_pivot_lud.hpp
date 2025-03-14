@@ -41,7 +41,7 @@ struct partial_pivot_lud {
     int n_pivot = 0;
   };
 
-  ALGEBRA_HOST_DEVICE inline lud<algebra::traits::rank<matrix_t>> operator()(
+  ALGEBRA_HOST_DEVICE constexpr lud<algebra::traits::rank<matrix_t>> operator()(
       const matrix_t& m) const {
 
     constexpr size_type N{algebra::traits::rank<matrix_t>};

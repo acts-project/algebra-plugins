@@ -24,13 +24,13 @@ namespace algebra::fastor::math {
 
 /// Create zero matrix
 template <concepts::matrix matrix_t>
-ALGEBRA_HOST_DEVICE inline matrix_t zero() {
+ALGEBRA_HOST_DEVICE constexpr matrix_t zero() {
   return matrix_t(0);
 }
 
 /// Create identity matrix
 template <concepts::matrix matrix_t>
-ALGEBRA_HOST_DEVICE inline matrix_t identity() {
+ALGEBRA_HOST_DEVICE constexpr matrix_t identity() {
   using scalar_t = algebra::traits::value_t<matrix_t>;
   constexpr auto rows{algebra::traits::rows<matrix_t>};
   constexpr auto cols{algebra::traits::columns<matrix_t>};
@@ -50,13 +50,14 @@ ALGEBRA_HOST_DEVICE inline matrix_t identity() {
 
 /// Set input matrix as zero matrix
 template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t>
-ALGEBRA_HOST_DEVICE inline void set_zero(matrix_type<scalar_t, ROWS, COLS> &m) {
+ALGEBRA_HOST_DEVICE constexpr void set_zero(
+    matrix_type<scalar_t, ROWS, COLS> &m) {
   m.zeros();
 }
 
 /// Set input matrix as identity matrix
 template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t>
-ALGEBRA_HOST_DEVICE inline void set_identity(
+ALGEBRA_HOST_DEVICE constexpr void set_identity(
     matrix_type<scalar_t, ROWS, COLS> &m) {
 
   m = identity<matrix_type<scalar_t, ROWS, COLS>>();
@@ -64,7 +65,7 @@ ALGEBRA_HOST_DEVICE inline void set_identity(
 
 /// Create transpose matrix
 template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t>
-ALGEBRA_HOST_DEVICE inline matrix_type<scalar_t, COLS, ROWS> transpose(
+ALGEBRA_HOST_DEVICE constexpr matrix_type<scalar_t, COLS, ROWS> transpose(
     const matrix_type<scalar_t, ROWS, COLS> &m) {
 
   return Fastor::transpose(m);
@@ -72,7 +73,7 @@ ALGEBRA_HOST_DEVICE inline matrix_type<scalar_t, COLS, ROWS> transpose(
 
 /// @returns the determinant of @param m
 template <std::size_t N, concepts::scalar scalar_t>
-ALGEBRA_HOST_DEVICE inline scalar_t determinant(
+ALGEBRA_HOST_DEVICE constexpr scalar_t determinant(
     const matrix_type<scalar_t, N, N> &m) {
 
   return Fastor::determinant(m);
@@ -80,7 +81,7 @@ ALGEBRA_HOST_DEVICE inline scalar_t determinant(
 
 /// @returns the inverse of @param m
 template <std::size_t ROWS, std::size_t COLS, concepts::scalar scalar_t>
-ALGEBRA_HOST_DEVICE inline matrix_type<scalar_t, COLS, ROWS> inverse(
+ALGEBRA_HOST_DEVICE constexpr matrix_type<scalar_t, COLS, ROWS> inverse(
     const matrix_type<scalar_t, ROWS, COLS> &m) {
 
   return Fastor::inverse(m);

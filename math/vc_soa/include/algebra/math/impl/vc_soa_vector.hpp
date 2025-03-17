@@ -33,8 +33,8 @@ namespace algebra::vc_soa::math {
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 2) ALGEBRA_HOST_DEVICE
-    inline auto phi(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr auto phi(
+    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::atan2(v[1], v[0]);
 }
@@ -48,7 +48,7 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 2) ALGEBRA_HOST_DEVICE inline auto perp(
+requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr auto perp(
     const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::sqrt(Vc::fma(v[0], v[0], v[1] * v[1]));
@@ -63,7 +63,7 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE inline auto perp(
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 3) ALGEBRA_HOST_DEVICE inline auto theta(
+requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr auto theta(
     const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::atan2(perp(v), v[2]);
@@ -82,7 +82,7 @@ requires(N >= 3) ALGEBRA_HOST_DEVICE inline auto theta(
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
 requires(N == 3) ALGEBRA_HOST_DEVICE
-    inline storage::vector<N, Vc::Vector<value_t>, array_t> cross(
+    constexpr storage::vector<N, Vc::Vector<value_t>, array_t> cross(
         const storage::vector<N, Vc::Vector<value_t>, array_t> &a,
         const storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
 
@@ -102,7 +102,7 @@ requires(N == 3) ALGEBRA_HOST_DEVICE
 /// @return the scalar dot product value
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline Vc::Vector<value_t> dot(
+ALGEBRA_HOST_DEVICE constexpr Vc::Vector<value_t> dot(
     const storage::vector<N, Vc::Vector<value_t>, array_t> &a,
     const storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
 
@@ -124,7 +124,7 @@ ALGEBRA_HOST_DEVICE inline Vc::Vector<value_t> dot(
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline auto norm(
+ALGEBRA_HOST_DEVICE constexpr auto norm(
     const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::sqrt(dot(v, v));
@@ -139,7 +139,7 @@ ALGEBRA_HOST_DEVICE inline auto norm(
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline storage::vector<N, Vc::Vector<value_t>, array_t>
+ALGEBRA_HOST_DEVICE constexpr storage::vector<N, Vc::Vector<value_t>, array_t>
 normalize(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return (Vc::Vector<value_t>::One() / norm(v)) * v;
@@ -161,8 +161,8 @@ normalize(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 3) ALGEBRA_HOST_DEVICE
-    inline auto eta(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr auto eta(
+    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   // atanh does not exist in Vc
   auto atanh_func = [](value_t e) { return std::atanh(e); };
@@ -187,7 +187,7 @@ requires(N >= 3) ALGEBRA_HOST_DEVICE
 /// @return the sum of the elements
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE inline Vc::Vector<value_t> sum(
+ALGEBRA_HOST_DEVICE constexpr Vc::Vector<value_t> sum(
     const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   Vc::Vector<value_t> res{v[0]};

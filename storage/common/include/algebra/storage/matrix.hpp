@@ -20,7 +20,7 @@ namespace algebra::storage {
 /// Generic matrix type that can take vectors as columns
 template <template <typename, std::size_t> class array_t,
           concepts::scalar scalar_t, std::size_t ROW, std::size_t COL>
-struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
+struct ALGEBRA_ALIGN(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
 
   // The matrix consists of column vectors
   using vector_type = storage::vector<ROW, scalar_t, array_t>;
@@ -132,12 +132,13 @@ struct alignas(alignof(storage::vector<ROW, scalar_t, array_t>)) matrix {
 };  // struct matrix
 
 /// Get a zero-initialized matrix
-template <concepts::matrix matrix_t>
+template <concepts::matrix matrix_t, std::size_t COLS = matrix_t::columns()>
 ALGEBRA_HOST_DEVICE constexpr matrix_t zero() noexcept {
 
   matrix_t m;
 
-  for (std::size_t j = 0u; j < matrix_t::columns(); ++j) {
+  ALGEBRA_UNROLL_N(COLS)
+  for (std::size_t j = 0u; j < COLS; ++j) {
     // Fill zero initialized vector
     m[j] = typename matrix_t::vector_type{};
   }
@@ -152,13 +153,15 @@ ALGEBRA_HOST_DEVICE constexpr void set_zero(matrix_t &m) noexcept {
 }
 
 /// Build an identity matrix
-template <concepts::matrix matrix_t>
+template <concepts::matrix matrix_t,
+          std::size_t R = algebra::traits::rank<matrix_t>>
 ALGEBRA_HOST_DEVICE constexpr matrix_t identity() noexcept {
 
   // Zero initialized
   matrix_t m{zero<matrix_t>()};
 
-  for (std::size_t i = 0u; i < algebra::traits::rank<matrix_t>; ++i) {
+  ALGEBRA_UNROLL_N(R)
+  for (std::size_t i = 0u; i < R; ++i) {
     m[i][i] = typename matrix_t::scalar_type(1);
   }
 
@@ -183,6 +186,7 @@ ALGEBRA_HOST_DEVICE constexpr auto transpose(
 
   matrix_T_t res_m;
 
+  ALGEBRA_UNROLL_N(ROW)
   for (std::size_t j = 0u; j < ROW; ++j) {
     res_m[j] = column_t{m[I][j]...};
   }
@@ -285,6 +289,7 @@ ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator*(
   vector<ROW, scalar_t, array_t> res_v{v[0] * lhs[0]};
 
   // Add the rest per column
+  ALGEBRA_UNROLL_N(COL)
   for (std::size_t j = 1u; j < COL; ++j) {
     // fma
     res_v = res_v + v[j] * lhs[j];
@@ -303,11 +308,13 @@ ALGEBRA_HOST_DEVICE constexpr decltype(auto) operator*(
 
   matrix<array_t, scalar_t, LROW, RCOL> res_m;
 
+  ALGEBRA_UNROLL_N(RCOL)
   for (std::size_t j = 0u; j < RCOL; ++j) {
     // Init column j
     res_m[j] = rhs[j][0] * lhs[0];
 
     // Add the rest per column
+    ALGEBRA_UNROLL_N(COL)
     for (std::size_t i = 1u; i < COL; ++i) {
       // fma
       res_m[j] = res_m[j] + rhs[j][i] * lhs[i];

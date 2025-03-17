@@ -19,7 +19,7 @@ namespace algebra::generic::math {
 ///
 /// @param v the input vector
 template <concepts::vector vector_t>
-ALGEBRA_HOST_DEVICE inline algebra::traits::scalar_t<vector_t> phi(
+ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> phi(
     const vector_t &v) noexcept {
 
   using element_getter_t = algebra::traits::element_getter_t<vector_t>;
@@ -32,7 +32,7 @@ ALGEBRA_HOST_DEVICE inline algebra::traits::scalar_t<vector_t> phi(
 ///
 /// @param v the input vector
 template <concepts::vector vector_t>
-ALGEBRA_HOST_DEVICE inline algebra::traits::scalar_t<vector_t> perp(
+ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> perp(
     const vector_t &v) noexcept {
 
   using element_getter_t = algebra::traits::element_getter_t<vector_t>;
@@ -46,7 +46,7 @@ ALGEBRA_HOST_DEVICE inline algebra::traits::scalar_t<vector_t> perp(
 ///
 /// @param v the input vector
 template <concepts::vector vector_t>
-ALGEBRA_HOST_DEVICE inline algebra::traits::scalar_t<vector_t> theta(
+ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> theta(
     const vector_t &v) noexcept {
 
   using element_getter_t = algebra::traits::element_getter_t<vector_t>;
@@ -68,8 +68,8 @@ requires(
     (concepts::vector3D<vector1_t> || concepts::column_matrix3D<vector1_t>)&&(
         concepts::vector3D<vector2_t> ||
         concepts::column_matrix3D<vector2_t>)) ALGEBRA_HOST_DEVICE
-    inline algebra::traits::vector_t<vector1_t> cross(const vector1_t &a,
-                                                      const vector2_t &b) {
+    constexpr algebra::traits::vector_t<vector1_t> cross(const vector1_t &a,
+                                                         const vector2_t &b) {
 
   using element_getter_t = algebra::traits::element_getter_t<vector1_t>;
 
@@ -95,8 +95,8 @@ template <typename vector1_t, typename vector2_t>
 requires((concepts::vector<vector1_t> || concepts::column_matrix<vector1_t>)&&(
     concepts::vector<vector2_t> ||
     concepts::column_matrix<vector2_t>)) ALGEBRA_HOST_DEVICE
-    inline algebra::traits::scalar_t<vector1_t> dot(const vector1_t &a,
-                                                    const vector2_t &b) {
+    constexpr algebra::traits::scalar_t<vector1_t> dot(const vector1_t &a,
+                                                       const vector2_t &b) {
 
   using scalar_t = algebra::traits::scalar_t<vector1_t>;
   using index_t = algebra::traits::index_t<vector1_t>;
@@ -115,7 +115,7 @@ requires((concepts::vector<vector1_t> || concepts::column_matrix<vector1_t>)&&(
 ///
 /// @param v the input vector
 template <concepts::vector vector_t>
-ALGEBRA_HOST_DEVICE inline algebra::traits::scalar_t<vector_t> norm(
+ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> norm(
     const vector_t &v) {
 
   return algebra::math::sqrt(dot(v, v));
@@ -126,7 +126,7 @@ ALGEBRA_HOST_DEVICE inline algebra::traits::scalar_t<vector_t> norm(
 ///
 /// @param v the input vector
 template <concepts::vector vector_t>
-ALGEBRA_HOST_DEVICE inline algebra::traits::scalar_t<vector_t> eta(
+ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> eta(
     const vector_t &v) noexcept {
 
   using element_getter_t = algebra::traits::element_getter_t<vector_t>;
@@ -142,7 +142,7 @@ ALGEBRA_HOST_DEVICE inline algebra::traits::scalar_t<vector_t> eta(
 ///
 /// @returns the normalized vector
 template <concepts::vector vector_t>
-ALGEBRA_HOST_DEVICE inline vector_t normalize(const vector_t &v) {
+ALGEBRA_HOST_DEVICE constexpr vector_t normalize(const vector_t &v) {
 
   using scalar_t = algebra::traits::scalar_t<vector_t>;
 

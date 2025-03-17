@@ -153,8 +153,7 @@ struct transform3 {
 
   /// Equality operator
   ALGEBRA_HOST_DEVICE
-  inline bool operator==(const transform3 &rhs) const {
-
+  constexpr bool operator==(const transform3 &rhs) const {
     return (_data.isApprox(rhs._data));
   }
 
@@ -166,46 +165,51 @@ struct transform3 {
   requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3 &&
            Eigen::MatrixBase<derived_type>::ColsAtCompileTime ==
                1) ALGEBRA_HOST_DEVICE
-      static inline auto rotate(
+      static constexpr auto rotate(
           const Eigen::Transform<scalar_type, 3, Eigen::Affine> &m,
           const Eigen::MatrixBase<derived_type> &v) {
-
     return m.matrix().template block<3, 3>(0, 0) * v;
   }
 
   /// This method retrieves the rotation of a transform
   ALGEBRA_HOST_DEVICE
-  inline auto rotation() const {
-
+  constexpr auto rotation() const {
     return _data.matrix().template block<3, 3>(0, 0);
   }
 
   /// This method retrieves x axis
   ALGEBRA_HOST_DEVICE
-  inline point3 x() const { return _data.matrix().template block<3, 1>(0, 0); }
+  constexpr point3 x() const {
+    return _data.matrix().template block<3, 1>(0, 0);
+  }
 
   /// This method retrieves y axis
   ALGEBRA_HOST_DEVICE
-  inline point3 y() const { return _data.matrix().template block<3, 1>(0, 1); }
+  constexpr point3 y() const {
+    return _data.matrix().template block<3, 1>(0, 1);
+  }
 
   /// This method retrieves z axis
   ALGEBRA_HOST_DEVICE
-  inline point3 z() const { return _data.matrix().template block<3, 1>(0, 2); }
+  constexpr point3 z() const {
+    return _data.matrix().template block<3, 1>(0, 2);
+  }
 
   /// This method retrieves the translation of a transform
   ALGEBRA_HOST_DEVICE
-  inline point3 translation() const {
-
+  constexpr point3 translation() const {
     return _data.matrix().template block<3, 1>(0, 3);
   }
 
   /// This method retrieves the 4x4 matrix of a transform
   ALGEBRA_HOST_DEVICE
-  inline const matrix44 &matrix() const { return _data.matrix(); }
+  constexpr const matrix44 &matrix() const { return _data.matrix(); }
 
   /// This method retrieves the 4x4 matrix of an inverse transform
   ALGEBRA_HOST_DEVICE
-  inline const matrix44 &matrix_inverse() const { return _data_inv.matrix(); }
+  constexpr const matrix44 &matrix_inverse() const {
+    return _data_inv.matrix();
+  }
 
   /// This method transform from a point from the local 3D cartesian frame to
   /// the global 3D cartesian frame
@@ -213,9 +217,8 @@ struct transform3 {
   requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3 &&
            Eigen::MatrixBase<derived_type>::ColsAtCompileTime ==
                1) ALGEBRA_HOST_DEVICE
-      inline auto point_to_global(
+      constexpr auto point_to_global(
           const Eigen::MatrixBase<derived_type> &v) const {
-
     return (_data * v);
   }
 
@@ -225,9 +228,8 @@ struct transform3 {
   requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3 &&
            Eigen::MatrixBase<derived_type>::ColsAtCompileTime ==
                1) ALGEBRA_HOST_DEVICE
-      inline auto point_to_local(
+      constexpr auto point_to_local(
           const Eigen::MatrixBase<derived_type> &v) const {
-
     return (_data_inv * v);
   }
 
@@ -237,9 +239,8 @@ struct transform3 {
   requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3 &&
            Eigen::MatrixBase<derived_type>::ColsAtCompileTime ==
                1) ALGEBRA_HOST_DEVICE
-      inline auto vector_to_global(
+      constexpr auto vector_to_global(
           const Eigen::MatrixBase<derived_type> &v) const {
-
     return (_data.linear() * v);
   }
 
@@ -249,9 +250,8 @@ struct transform3 {
   requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime == 3 &&
            Eigen::MatrixBase<derived_type>::ColsAtCompileTime ==
                1) ALGEBRA_HOST_DEVICE
-      inline auto vector_to_local(
+      constexpr auto vector_to_local(
           const Eigen::MatrixBase<derived_type> &v) const {
-
     return (_data_inv.linear() * v);
   }
 };  // struct transform3

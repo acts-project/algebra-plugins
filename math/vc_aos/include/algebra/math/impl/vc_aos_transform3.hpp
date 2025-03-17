@@ -156,11 +156,12 @@ struct transform3 {
 
   /// Matrix access operator
   ALGEBRA_HOST_DEVICE
-  inline const scalar_type &operator()(std::size_t row, std::size_t col) const {
+  constexpr const scalar_type &operator()(std::size_t row,
+                                          std::size_t col) const {
     return _data[col][row];
   }
   ALGEBRA_HOST_DEVICE
-  inline scalar_type &operator()(std::size_t row, std::size_t col) {
+  constexpr scalar_type &operator()(std::size_t row, std::size_t col) {
     return _data[col][row];
   }
 
@@ -235,7 +236,7 @@ struct transform3 {
 
   /// This method retrieves the rotation of a transform
   ALGEBRA_HOST_DEVICE
-  inline auto rotation() const {
+  constexpr auto rotation() const {
 
     using matrix_t = storage::matrix<array_t, scalar_type, 3u, 3u>;
 
@@ -248,27 +249,27 @@ struct transform3 {
 
   /// This method retrieves the new x-axis
   ALGEBRA_HOST_DEVICE
-  inline const auto &x() const { return _data[e_x]; }
+  constexpr const auto &x() const { return _data[e_x]; }
 
   /// This method retrieves the new y-axis
   ALGEBRA_HOST_DEVICE
-  inline const auto &y() const { return _data[e_y]; }
+  constexpr const auto &y() const { return _data[e_y]; }
 
   /// This method retrieves the new z-axis
   ALGEBRA_HOST_DEVICE
-  inline const auto &z() const { return _data[e_z]; }
+  constexpr const auto &z() const { return _data[e_z]; }
 
   /// This method retrieves the translation
   ALGEBRA_HOST_DEVICE
-  inline const auto &translation() const { return _data[e_t]; }
+  constexpr const auto &translation() const { return _data[e_t]; }
 
   /// This method retrieves the 4x4 matrix of a transform
   ALGEBRA_HOST_DEVICE
-  inline const matrix44 &matrix() const { return _data; }
+  constexpr const matrix44 &matrix() const { return _data; }
 
   /// This method retrieves the 4x4 matrix of an inverse transform
   ALGEBRA_HOST_DEVICE
-  inline const matrix44 &matrix_inverse() const { return _data_inv; }
+  constexpr const matrix44 &matrix_inverse() const { return _data_inv; }
 
   /// This method transform from a point from the local 3D cartesian frame
   ///  to the global 3D cartesian frame
@@ -279,8 +280,8 @@ struct transform3 {
   ///
   /// @return a global point
   template <concepts::point3D point3_type>
-  ALGEBRA_HOST_DEVICE inline auto point_to_global(const point3_type &p) const {
-
+  ALGEBRA_HOST_DEVICE constexpr auto point_to_global(
+      const point3_type &p) const {
     return rotate(_data, p) + _data[e_t];
   }
 
@@ -293,8 +294,8 @@ struct transform3 {
   ///
   /// @return a local point
   template <concepts::point3D point3_type>
-  ALGEBRA_HOST_DEVICE inline auto point_to_local(const point3_type &p) const {
-
+  ALGEBRA_HOST_DEVICE constexpr auto point_to_local(
+      const point3_type &p) const {
     return rotate(_data_inv, p) + _data_inv[e_t];
   }
 
@@ -307,9 +308,8 @@ struct transform3 {
   ///
   /// @return a vector in global coordinates
   template <concepts::vector3D vector3_type>
-  ALGEBRA_HOST_DEVICE inline auto vector_to_global(
+  ALGEBRA_HOST_DEVICE constexpr auto vector_to_global(
       const vector3_type &v) const {
-
     return rotate(_data, v);
   }
 
@@ -322,8 +322,8 @@ struct transform3 {
   ///
   /// @return a vector in global coordinates
   template <concepts::vector3D vector3_type>
-  ALGEBRA_HOST_DEVICE inline auto vector_to_local(const vector3_type &v) const {
-
+  ALGEBRA_HOST_DEVICE constexpr auto vector_to_local(
+      const vector3_type &v) const {
     return rotate(_data_inv, v);
   }
 };  // struct transform3

@@ -24,7 +24,7 @@ namespace algebra::fastor::math {
 /// This method retrieves phi from a vector @param v
 template <concepts::scalar scalar_t, auto N>
 requires(N >= 2) ALGEBRA_HOST_DEVICE
-    inline auto phi(const Fastor::Tensor<scalar_t, N> &v) {
+    constexpr auto phi(const Fastor::Tensor<scalar_t, N> &v) {
   return algebra::math::atan2(v[1], v[0]);
 }
 
@@ -32,7 +32,7 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE
 ///
 /// @param v the input vector
 template <concepts::scalar scalar_t, auto N>
-requires(N >= 3) ALGEBRA_HOST inline scalar_t
+requires(N >= 3) ALGEBRA_HOST constexpr scalar_t
     theta(const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
   return algebra::math::atan2(Fastor::norm(v(Fastor::fseq<0, 2>())), v[2]);
@@ -42,7 +42,7 @@ requires(N >= 3) ALGEBRA_HOST inline scalar_t
 ///
 /// @param v the input vector
 template <concepts::scalar scalar_t, auto N>
-requires(N >= 2) ALGEBRA_HOST inline scalar_t
+requires(N >= 2) ALGEBRA_HOST constexpr scalar_t
     perp(const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
   return algebra::math::sqrt(
@@ -53,7 +53,7 @@ requires(N >= 2) ALGEBRA_HOST inline scalar_t
 ///
 /// @param v the input vector
 template <concepts::scalar scalar_t, auto N>
-ALGEBRA_HOST inline scalar_t norm(const Fastor::Tensor<scalar_t, N> &v) {
+ALGEBRA_HOST constexpr scalar_t norm(const Fastor::Tensor<scalar_t, N> &v) {
 
   return Fastor::norm(v);
 }
@@ -63,7 +63,7 @@ ALGEBRA_HOST inline scalar_t norm(const Fastor::Tensor<scalar_t, N> &v) {
 ///
 /// @param v the input vector
 template <concepts::scalar scalar_t, auto N>
-requires(N >= 3) ALGEBRA_HOST inline scalar_t
+requires(N >= 3) ALGEBRA_HOST constexpr scalar_t
     eta(const Fastor::Tensor<scalar_t, N> &v) noexcept {
 
   return algebra::math::atanh(v[2] / Fastor::norm(v));
@@ -73,7 +73,7 @@ requires(N >= 3) ALGEBRA_HOST inline scalar_t
 ///
 /// @param v the input vector
 template <concepts::scalar scalar_t, auto N>
-ALGEBRA_HOST inline Fastor::Tensor<scalar_t, N> normalize(
+ALGEBRA_HOST constexpr Fastor::Tensor<scalar_t, N> normalize(
     const Fastor::Tensor<scalar_t, N> &v) {
 
   return (static_cast<scalar_t>(1.0) / Fastor::norm(v)) * v;
@@ -86,8 +86,9 @@ ALGEBRA_HOST inline Fastor::Tensor<scalar_t, N> normalize(
 ///
 /// @return the scalar dot product value
 template <concepts::scalar scalar_t, auto N>
-ALGEBRA_HOST_DEVICE inline scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
-                                        const Fastor::Tensor<scalar_t, N> &b) {
+ALGEBRA_HOST_DEVICE constexpr scalar_t dot(
+    const Fastor::Tensor<scalar_t, N> &a,
+    const Fastor::Tensor<scalar_t, N> &b) {
   return Fastor::inner(a, b);
 }
 
@@ -98,8 +99,8 @@ ALGEBRA_HOST_DEVICE inline scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
 ///
 /// @return the scalar dot product value
 template <concepts::scalar scalar_t, auto N>
-ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
-                                 const Fastor::Tensor<scalar_t, N, 1> &b) {
+ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
+                                    const Fastor::Tensor<scalar_t, N, 1> &b) {
 
   // We need to specify the type of the Tensor slice because Fastor by default
   // is lazy, so it returns an intermediate type which does not play well with
@@ -115,8 +116,8 @@ ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
 ///
 /// @return the scalar dot product value
 template <concepts::scalar scalar_t, auto N>
-ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
-                                 const Fastor::Tensor<scalar_t, N> &b) {
+ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
+                                    const Fastor::Tensor<scalar_t, N> &b) {
 
   return Fastor::inner(Fastor::Tensor<scalar_t, N>(a(Fastor::fseq<0, N>(), 0)),
                        b);
@@ -129,8 +130,8 @@ ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
 ///
 /// @return the scalar dot product value
 template <concepts::scalar scalar_t, auto N>
-ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
-                                 const Fastor::Tensor<scalar_t, N, 1> &b) {
+ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
+                                    const Fastor::Tensor<scalar_t, N, 1> &b) {
 
   return Fastor::inner(Fastor::Tensor<scalar_t, N>(a(Fastor::fseq<0, 3>(), 0)),
                        Fastor::Tensor<scalar_t, N>(b(Fastor::fseq<0, 3>(), 0)));
@@ -143,7 +144,7 @@ ALGEBRA_HOST inline scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
 ///
 /// @return a vector (expression) representing the cross product
 template <concepts::scalar scalar_t>
-ALGEBRA_HOST_DEVICE inline Fastor::Tensor<scalar_t, 3> cross(
+ALGEBRA_HOST_DEVICE constexpr Fastor::Tensor<scalar_t, 3> cross(
     const Fastor::Tensor<scalar_t, 3> &a,
     const Fastor::Tensor<scalar_t, 3> &b) {
   return Fastor::cross(a, b);
@@ -156,7 +157,7 @@ ALGEBRA_HOST_DEVICE inline Fastor::Tensor<scalar_t, 3> cross(
 ///
 /// @return a vector representing the cross product
 template <concepts::scalar scalar_t>
-ALGEBRA_HOST inline Fastor::Tensor<scalar_t, 3> cross(
+ALGEBRA_HOST constexpr Fastor::Tensor<scalar_t, 3> cross(
     const Fastor::Tensor<scalar_t, 3> &a,
     const Fastor::Tensor<scalar_t, 3, 1> &b) {
 
@@ -174,7 +175,7 @@ ALGEBRA_HOST inline Fastor::Tensor<scalar_t, 3> cross(
 ///
 /// @return a vector representing the cross product
 template <concepts::scalar scalar_t>
-ALGEBRA_HOST inline Fastor::Tensor<scalar_t, 3> cross(
+ALGEBRA_HOST constexpr Fastor::Tensor<scalar_t, 3> cross(
     const Fastor::Tensor<scalar_t, 3, 1> &a,
     const Fastor::Tensor<scalar_t, 3> &b) {
 
@@ -189,7 +190,7 @@ ALGEBRA_HOST inline Fastor::Tensor<scalar_t, 3> cross(
 ///
 /// @return a vector representing the cross product
 template <concepts::scalar scalar_t>
-ALGEBRA_HOST inline Fastor::Tensor<scalar_t, 3> cross(
+ALGEBRA_HOST constexpr Fastor::Tensor<scalar_t, 3> cross(
     const Fastor::Tensor<scalar_t, 3, 1> &a,
     const Fastor::Tensor<scalar_t, 3, 1> &b) {
 

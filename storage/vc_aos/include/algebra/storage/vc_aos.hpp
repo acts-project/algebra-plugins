@@ -90,6 +90,16 @@ struct index<Vc_1::Vector<T, Vc_1::simd_abi::fixed_size<N>>> {
   using size_type = vc_aos::size_type;
 };
 
+template <typename T, auto N>
+struct value<vc_aos::storage_type<T, N>> {
+  using type = T;
+};
+
+template <typename T, auto N>
+struct value<Vc_1::Vector<T, Vc_1::simd_abi::fixed_size<N>>> {
+  using type = T;
+};
+
 // Vector and storage types are different
 template <typename T, auto N>
 struct dimensions<vc_aos::storage_type<T, N>> {

@@ -12,6 +12,7 @@
 #include "algebra/qualifiers.hpp"
 
 // System include(s).
+#include <iomanip>
 #include <iostream>
 
 namespace algebra {
@@ -49,10 +50,8 @@ ALGEBRA_HOST std::ostream& operator<<(std::ostream& out, const vector_t& v) {
 
   out << "[";
   for (index_t i = 0; i < rows; ++i) {
-    out << element_getter_t{}(v, i, 0);
-    if (i != rows - 1) {
-      out << ", ";
-    }
+    // Account for the sign of negative elements
+    out << std::setw(i == 0 ? 15 : 16) << element_getter_t{}(v, i, 0);
   }
   out << "]";
 
@@ -71,16 +70,14 @@ ALGEBRA_HOST std::ostream& operator<<(std::ostream& out, const matrix_t& m) {
 
   out << "[";
   for (index_t i = 0; i < rows; ++i) {
-    out << "[";
+    out << (i == 0 ? "[" : " [");
     for (index_t j = 0; j < columns; ++j) {
-      out << element_getter_t{}(m, i, j);
-      if (j != columns - 1) {
-        out << ", ";
-      }
+      // Account for the sign of negative elements
+      out << std::setw(j == 0 ? 15 : 16) << element_getter_t{}(m, i, j);
     }
     out << "]";
     if (i != rows - 1) {
-      out << ", ";
+      out << "\n";
     }
   }
   out << "]";

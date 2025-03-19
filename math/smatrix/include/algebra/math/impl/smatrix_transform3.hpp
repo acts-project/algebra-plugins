@@ -41,6 +41,10 @@ struct transform3 {
   /// 4x4 matrix type
   using matrix44 = ROOT::Math::SMatrix<scalar_type, 4, 4>;
 
+  /// Helper type to cast this to another floating point precision
+  template <concepts::scalar o_scalar_t>
+  using other_type = transform3<o_scalar_t>;
+
   /// @}
 
   /// @name Data objects
@@ -116,6 +120,14 @@ struct transform3 {
     _data_inv = _data.Inverse(ifail);
     SMATRIX_CHECK(ifail);
   }
+
+  /// Constructor with arguments: matrix and its inverse
+  ///
+  /// @param m is the full 4x4 matrix
+  /// @param m_inv is the inverse to m
+  ALGEBRA_HOST
+  transform3(const matrix44 &m, const matrix44 &m_inv)
+      : _data{m}, _data_inv{m_inv} {}
 
   /// Constructor with arguments: matrix as ROOT::Math::SVector<scalar_t, 16> of
   /// scalars

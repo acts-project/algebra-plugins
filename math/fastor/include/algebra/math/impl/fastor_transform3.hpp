@@ -48,6 +48,10 @@ struct transform3 {
   /// 4x4 matrix type
   using matrix44 = fastor::Matrix<scalar_type, 4UL, 4UL>;
 
+  /// Helper type to cast this to another floating point precision
+  template <concepts::scalar o_scalar_t>
+  using other_type = transform3<o_scalar_t>;
+
   /// @}
 
   /// @name Data objects
@@ -116,20 +120,24 @@ struct transform3 {
   ///
   /// @param m is the full 4x4 matrix
   ALGEBRA_HOST
-  explicit transform3(const matrix44 &m) {
-    _data = m;
-
+  explicit transform3(const matrix44 &m) : _data{m} {
     _data_inv = Fastor::inverse(_data);
   }
+
+  /// Constructor with arguments: matrix and its inverse
+  ///
+  /// @param m is the full 4x4 matrix
+  /// @param m_inv is the inverse to m
+  ALGEBRA_HOST
+  transform3(const matrix44 &m, const matrix44 &m_inv)
+      : _data{m}, _data_inv{m_inv} {}
 
   /// Constructor with arguments: matrix as Fastor::Tensor<scalar_t, 16> of
   /// scalars
   ///
   /// @param ma is the full 4x4 matrix as a 16-element array
   ALGEBRA_HOST
-  explicit transform3(const array_type<16> &ma) {
-    _data = ma;
-
+  explicit transform3(const array_type<16> &ma) : _data{ma} {
     _data_inv = Fastor::inverse(_data);
   }
 

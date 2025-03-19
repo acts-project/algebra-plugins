@@ -72,6 +72,10 @@ struct transform3 {
   /// Function (object) used for accessing a matrix element
   using element_getter = storage::element_getter;
 
+  /// Helper type to cast this to another floating point precision
+  template <concepts::scalar o_scalar_t>
+  using other_type = transform3<array_t, o_scalar_t>;
+
   /// @}
 
   /// @name Data objects
@@ -127,6 +131,14 @@ struct transform3 {
   /// @param m is the full 4x4 matrix with simd-vector elements
   ALGEBRA_HOST_DEVICE
   explicit transform3(const matrix44 &m) : _data{m}, _data_inv{invert(_data)} {}
+
+  /// Constructor with arguments: matrix and its inverse
+  ///
+  /// @param m is the full 4x4 matrix
+  /// @param m_inv is the inverse to m
+  ALGEBRA_HOST_DEVICE
+  transform3(const matrix44 &m, const matrix44 &m_inv)
+      : _data{m}, _data_inv{m_inv} {}
 
   /// Constructor with arguments: matrix as std::aray of scalar
   ///

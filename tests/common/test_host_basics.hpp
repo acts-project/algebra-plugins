@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/utils/approximately_equal.hpp"
+#include "algebra/utils/casts.hpp"
 #include "algebra/utils/print.hpp"
 
 // Local include(s).
@@ -301,6 +302,33 @@ TYPED_TEST_P(test_host_basics_vector, local_vectors) {
   vA_err = rel_err * vA;
   ASSERT_TRUE(algebra::approx_equal(vA, vA_err, 18.f * epsilon));
   ASSERT_FALSE(algebra::approx_equal(vA, vA_err, 16.f * epsilon));
+  // Cast to (different) precision
+  const auto vA_cast_f = algebra::cast_to<float>(vA);
+
+  for (typename TypeParam::size_type i = 0; i < 2; ++i) {
+    auto elem_i = vA_cast_f[i];
+
+    static_assert(std::same_as<decltype(elem_i), float>);
+    ASSERT_FLOAT_EQ(elem_i, static_cast<float>(vA[i]));
+  }
+
+  const auto vA_cast_d = algebra::cast_to<double>(vA);
+
+  for (typename TypeParam::size_type i = 0; i < 2; ++i) {
+    auto elem_i = vA_cast_d[i];
+
+    static_assert(std::same_as<decltype(elem_i), double>);
+    ASSERT_DOUBLE_EQ(elem_i, static_cast<double>(vA[i]));
+  }
+
+  const auto vA_cast_i = algebra::cast_to<int>(vA);
+
+  for (typename TypeParam::size_type i = 0; i < 2; ++i) {
+    auto elem_i = vA_cast_i[i];
+
+    static_assert(std::same_as<decltype(elem_i), int>);
+    ASSERT_EQ(elem_i, static_cast<int>(vA[i]));
+  }
 
   // Assignment
   typename TypeParam::point2 vB = vA;
@@ -380,6 +408,34 @@ TYPED_TEST_P(test_host_basics_vector, vector3) {
 
   // Test printing
   std::cout << vA << std::endl;
+
+  // Cast to (different) precision
+  const auto vA_cast_f = algebra::cast_to<float>(vA);
+
+  for (typename TypeParam::size_type i = 0; i < 3; ++i) {
+    auto elem_i = vA_cast_f[i];
+
+    static_assert(std::same_as<decltype(elem_i), float>);
+    ASSERT_FLOAT_EQ(elem_i, static_cast<float>(vA[i]));
+  }
+
+  const auto vA_cast_d = algebra::cast_to<double>(vA);
+
+  for (typename TypeParam::size_type i = 0; i < 3; ++i) {
+    auto elem_i = vA_cast_d[i];
+
+    static_assert(std::same_as<decltype(elem_i), double>);
+    ASSERT_DOUBLE_EQ(elem_i, static_cast<double>(vA[i]));
+  }
+
+  const auto vA_cast_i = algebra::cast_to<int>(vA);
+
+  for (typename TypeParam::size_type i = 0; i < 3; ++i) {
+    auto elem_i = vA_cast_i[i];
+
+    static_assert(std::same_as<decltype(elem_i), int>);
+    ASSERT_EQ(elem_i, static_cast<int>(vA[i]));
+  }
 
   // Assignment
   typename TypeParam::vector3 vB = vA;
@@ -495,6 +551,42 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_2x3) {
   algebra::getter::element(m23, 1, 1) = 5.f;
   algebra::getter::element(m23, 1, 2) = 6.f;
 
+  // Cast to (different) precision
+  const auto m23_cast_f = algebra::cast_to<float>(m23);
+
+  for (typename TypeParam::size_type j = 0; j < 3; ++j) {
+    for (typename TypeParam::size_type i = 0; i < 2; ++i) {
+      auto elem_i = algebra::getter::element(m23_cast_f, i, j);
+
+      static_assert(std::same_as<decltype(elem_i), float>);
+      ASSERT_FLOAT_EQ(elem_i,
+                      static_cast<float>(algebra::getter::element(m23, i, j)));
+    }
+  }
+
+  const auto m23_cast_d = algebra::cast_to<double>(m23);
+
+  for (typename TypeParam::size_type j = 0; j < 3; ++j) {
+    for (typename TypeParam::size_type i = 0; i < 2; ++i) {
+      auto elem_i = algebra::getter::element(m23_cast_d, i, j);
+
+      static_assert(std::same_as<decltype(elem_i), double>);
+      ASSERT_DOUBLE_EQ(
+          elem_i, static_cast<double>(algebra::getter::element(m23, i, j)));
+    }
+  }
+
+  const auto m23_cast_i = algebra::cast_to<int>(m23);
+
+  for (typename TypeParam::size_type j = 0; j < 3; ++j) {
+    for (typename TypeParam::size_type i = 0; i < 2; ++i) {
+      auto elem_i = algebra::getter::element(m23_cast_i, i, j);
+
+      static_assert(std::same_as<decltype(elem_i), int>);
+      ASSERT_EQ(elem_i, static_cast<int>(algebra::getter::element(m23, i, j)));
+    }
+  }
+
   typename TypeParam::vector2 v2 = m23 * vE;
 
   ASSERT_NEAR(v2[0], 14, this->m_epsilon);
@@ -518,6 +610,36 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_3x1) {
 
   // Test printing
   std::cout << vF << std::endl;
+
+  // Cast to (different) precision
+  const auto vF_cast_f = algebra::cast_to<float>(vF);
+
+  for (typename TypeParam::size_type i = 0; i < 3; ++i) {
+    auto elem_i = algebra::getter::element(vF_cast_f, i, 0);
+
+    static_assert(std::same_as<decltype(elem_i), float>);
+    ASSERT_FLOAT_EQ(elem_i,
+                    static_cast<float>(algebra::getter::element(vF, i, 0)));
+  }
+
+  const auto vF_cast_d = algebra::cast_to<double>(vF);
+
+  for (typename TypeParam::size_type i = 0; i < 3; ++i) {
+    auto elem_i = algebra::getter::element(vF_cast_d, i, 0);
+
+    static_assert(std::same_as<decltype(elem_i), double>);
+    ASSERT_DOUBLE_EQ(elem_i,
+                     static_cast<double>(algebra::getter::element(vF, i, 0)));
+  }
+
+  const auto vF_cast_i = algebra::cast_to<int>(vF);
+
+  for (typename TypeParam::size_type i = 0; i < 3; ++i) {
+    auto elem_i = algebra::getter::element(vF_cast_i, i, 0);
+
+    static_assert(std::same_as<decltype(elem_i), int>);
+    ASSERT_EQ(elem_i, static_cast<int>(algebra::getter::element(vF, i, 0)));
+  }
 
   typename TypeParam::vector3 vD{1.f, 1.f, 1.f};
   typename TypeParam::vector3 vG = algebra::vector::cross(vD, vF);
@@ -991,6 +1113,43 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x6) {
   ASSERT_NEAR(algebra::getter::element(m66_big_inv, 5, 5), -36.f / 36.f,
               this->m_isclose);
 
+  // Cast to (different) precision
+  const auto m66_cast_f = algebra::cast_to<float>(m66_big_inv);
+
+  for (typename TypeParam::size_type j = 0; j < 6; ++j) {
+    for (typename TypeParam::size_type i = 0; i < 6; ++i) {
+      auto elem_i = algebra::getter::element(m66_cast_f, i, j);
+
+      static_assert(std::same_as<decltype(elem_i), float>);
+      ASSERT_FLOAT_EQ(elem_i, static_cast<float>(
+                                  algebra::getter::element(m66_big_inv, i, j)));
+    }
+  }
+
+  const auto m66_cast_d = algebra::cast_to<double>(m66_big_inv);
+
+  for (typename TypeParam::size_type j = 0; j < 6; ++j) {
+    for (typename TypeParam::size_type i = 0; i < 6; ++i) {
+      auto elem_i = algebra::getter::element(m66_cast_d, i, j);
+
+      static_assert(std::same_as<decltype(elem_i), double>);
+      ASSERT_DOUBLE_EQ(elem_i, static_cast<double>(algebra::getter::element(
+                                   m66_big_inv, i, j)));
+    }
+  }
+
+  const auto m66_cast_i = algebra::cast_to<int>(m66_big_inv);
+
+  for (typename TypeParam::size_type j = 0; j < 6; ++j) {
+    for (typename TypeParam::size_type i = 0; i < 6; ++i) {
+      auto elem_i = algebra::getter::element(m66_cast_i, i, j);
+
+      static_assert(std::same_as<decltype(elem_i), int>);
+      ASSERT_EQ(elem_i,
+                static_cast<int>(algebra::getter::element(m66_big_inv, i, j)));
+    }
+  }
+
   // Test 6 X 6 small matrix determinant
   typename TypeParam::template matrix<6, 6> m66_small;
 
@@ -1205,6 +1364,63 @@ TYPED_TEST_P(test_host_basics_transform, transform3) {
                                           rel_err * x);
   ASSERT_TRUE(algebra::approx_equal(trf1, trf1_err, 200.f * epsilon));
   ASSERT_FALSE(algebra::approx_equal(trf1, trf1_err, 10.f * epsilon));
+  // Cast to (different) precision
+  const auto trf1_cast_f = algebra::cast_to<float>(trf1);
+  const auto& mat_f = trf1_cast_f.matrix();
+  const auto& mat_inv_f = trf1_cast_f.matrix_inverse();
+
+  for (typename TypeParam::size_type j = 0; j < 3; ++j) {
+    for (typename TypeParam::size_type i = 0; i < 2; ++i) {
+
+      auto elem_i = algebra::getter::element(mat_f, i, j);
+      auto elem_inv_i = algebra::getter::element(mat_inv_f, i, j);
+
+      static_assert(std::same_as<decltype(elem_i), float>);
+      static_assert(std::same_as<decltype(elem_inv_i), float>);
+      ASSERT_FLOAT_EQ(
+          elem_i, static_cast<float>(algebra::getter::element(mat_f, i, j)));
+      ASSERT_FLOAT_EQ(elem_inv_i, static_cast<float>(algebra::getter::element(
+                                      mat_inv_f, i, j)));
+    }
+  }
+
+  const auto trf1_cast_d = algebra::cast_to<double>(trf1);
+  const auto& mat_d = trf1_cast_d.matrix();
+  const auto& mat_inv_d = trf1_cast_d.matrix_inverse();
+
+  for (typename TypeParam::size_type j = 0; j < 3; ++j) {
+    for (typename TypeParam::size_type i = 0; i < 2; ++i) {
+
+      auto elem_i = algebra::getter::element(mat_d, i, j);
+      auto elem_inv_i = algebra::getter::element(mat_inv_d, i, j);
+
+      static_assert(std::same_as<decltype(elem_i), double>);
+      static_assert(std::same_as<decltype(elem_inv_i), double>);
+      ASSERT_DOUBLE_EQ(
+          elem_i, static_cast<double>(algebra::getter::element(mat_d, i, j)));
+      ASSERT_DOUBLE_EQ(elem_inv_i, static_cast<double>(algebra::getter::element(
+                                       mat_inv_d, i, j)));
+    }
+  }
+
+  const auto trf1_cast_i = algebra::cast_to<int>(trf1);
+  const auto& mat_i = trf1_cast_i.matrix();
+  const auto& mat_inv_i = trf1_cast_i.matrix_inverse();
+
+  for (typename TypeParam::size_type j = 0; j < 3; ++j) {
+    for (typename TypeParam::size_type i = 0; i < 2; ++i) {
+
+      auto elem_i = algebra::getter::element(mat_i, i, j);
+      auto elem_inv_i = algebra::getter::element(mat_inv_i, i, j);
+
+      static_assert(std::same_as<decltype(elem_i), int>);
+      static_assert(std::same_as<decltype(elem_inv_i), int>);
+      ASSERT_EQ(elem_i,
+                static_cast<int>(algebra::getter::element(mat_i, i, j)));
+      ASSERT_EQ(elem_inv_i,
+                static_cast<int>(algebra::getter::element(mat_inv_i, i, j)));
+    }
+  }
 
   const auto rot = trf2.rotation();
   ASSERT_NEAR(algebra::getter::element(rot, 0, 0), x[0], this->m_epsilon);

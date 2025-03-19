@@ -9,6 +9,7 @@
 #include "algebra/vc_soa.hpp"
 
 #include "algebra/utils/approximately_equal.hpp"
+#include "algebra/utils/casts.hpp"
 #include "algebra/utils/print.hpp"
 
 // GoogleTest include(s).
@@ -16,6 +17,7 @@
 
 // System inlcude(s)
 #include <array>
+#include <concepts>
 #include <limits>
 
 using namespace algebra;
@@ -32,6 +34,27 @@ TEST(test_vc_host, vc_soa_vector) {
   using vector3_v = vc_soa::vector3<value_t>;
   // Value type is Vc::Vector<float>
   using scalar_t = typename vector3_v::scalar_type;
+
+  static_assert(concepts::scalar<scalar_t>);
+  static_assert(concepts::vector<vector3_v>);
+  static_assert(concepts::vector3D<vector3_v>);
+
+  // Cast simd scalar to different precisions
+  using scalar_f = Vc::float_v;
+  using scalar_d = Vc::double_v;
+  using scalar_i = Vc::int_v;
+
+  auto s1 = algebra::cast_to<float>(scalar_t(1.f));
+  auto s2 = algebra::cast_to<double>(scalar_t(2.f));
+  auto s3 = algebra::cast_to<int>(scalar_t(3.f));
+
+  static_assert(std::same_as<decltype(s1), scalar_f>);
+  static_assert(std::same_as<decltype(s2), scalar_d>);
+  static_assert(std::same_as<decltype(s3), scalar_i>);
+
+  ASSERT_TRUE((s1 == scalar_f(1.f)).isFull());
+  ASSERT_TRUE((s2 == scalar_d(2.f)).isFull());
+  ASSERT_TRUE((s3 == scalar_i(3.f)).isFull());
 
   vector3_v a{1.f, 2.f, 3.f};
   vector3_v b{4.f, 5.f, 6.f};
@@ -69,6 +92,20 @@ TEST(test_vc_host, vc_soa_vector) {
   vec_elem[0] += 1.f;
   EXPECT_FALSE(a_err_cpy == a_err);
   EXPECT_FALSE(algebra::approx_equal(a_err_cpy, a_err));
+  // Cast simd vectors to different precision
+  auto a_cast_f = algebra::cast_to<float>(a);
+  auto a_cast_d = algebra::cast_to<double>(a);
+  auto a_cast_i = algebra::cast_to<int>(a);
+
+  static_assert(std::same_as<decltype(a_cast_f), vc_soa::vector3<float>>);
+  static_assert(std::same_as<decltype(a_cast_d), vc_soa::vector3<double>>);
+  static_assert(std::same_as<decltype(a_cast_i), vc_soa::vector3<int>>);
+
+  for (int i = 0; i < 3; ++i) {
+    EXPECT_TRUE((a_cast_f[i] == algebra::cast_to<float>(a[i])).isFull());
+    EXPECT_TRUE((a_cast_d[i] == algebra::cast_to<double>(a[i])).isFull());
+    EXPECT_TRUE((a_cast_i[i] == algebra::cast_to<int>(a[i])).isFull());
+  }
 
   // Masked comparison
   auto m = a.compare(a);
@@ -183,6 +220,8 @@ TEST(test_vc_host, vc_soa_transform3) {
   using scalar_t = typename vector3::scalar_type;
   using transform3 = vc_soa::transform3<value_t>;
 
+  static_assert(concepts::transform3D<transform3>);
+
   transform3 idty{};
 
   EXPECT_TRUE((idty(0, 0) == scalar_t::One()).isFull());
@@ -224,6 +263,27 @@ TEST(test_vc_host, vc_soa_transform3) {
   EXPECT_FALSE(trf1 == trf1_err);
   EXPECT_TRUE(algebra::approx_equal(trf1, trf1_err, 200.f * epsilon));
   EXPECT_FALSE(algebra::approx_equal(trf1, trf1_err, 10.f * epsilon));
+  // Cast simd vectors to different precision
+  auto trf1_cast_f = algebra::cast_to<float>(trf1);
+  auto trf1_cast_d = algebra::cast_to<double>(trf1);
+  auto trf1_cast_i = algebra::cast_to<int>(trf1);
+
+  static_assert(std::same_as<decltype(trf1_cast_f), vc_soa::transform3<float>>);
+  static_assert(
+      std::same_as<decltype(trf1_cast_d), vc_soa::transform3<double>>);
+  static_assert(std::same_as<decltype(trf1_cast_i), vc_soa::transform3<int>>);
+
+  const auto& mat_f = trf1_cast_f.matrix();
+  const auto& mat_d = trf1_cast_d.matrix();
+  const auto& mat_i = trf1_cast_i.matrix();
+  for (int j = 0; j < 3; ++j) {
+    for (int i = 0; i < 3; ++i) {
+      const auto& elem_ij = trf1.matrix()[i][j];
+      EXPECT_TRUE((mat_f[i][j] == algebra::cast_to<float>(elem_ij)).isFull());
+      EXPECT_TRUE((mat_d[i][j] == algebra::cast_to<double>(elem_ij)).isFull());
+      EXPECT_TRUE((mat_i[i][j] == algebra::cast_to<int>(elem_ij)).isFull());
+    }
+  }
 
   EXPECT_TRUE((trf2(0, 0) == x[0]).isFull());
   EXPECT_TRUE((trf2(1, 0) == x[1]).isFull());
@@ -338,4 +398,15 @@ TEST(test_vc_host, vc_soa_matrix64) {
   EXPECT_FALSE(I64 == I64_err);
   EXPECT_TRUE(algebra::approx_equal(I64, I64_err, 11.f * epsilon));
   EXPECT_FALSE(algebra::approx_equal(I64, I64_err, 9.f * epsilon));
+  // Cast simd vectors to different precision
+  auto m_cast_f = algebra::cast_to<float>(m);
+  auto m_cast_d = algebra::cast_to<double>(m);
+  auto m_cast_i = algebra::cast_to<int>(m);
+
+  static_assert(
+      std::same_as<decltype(m_cast_f), vc_soa::matrix_type<float, 6, 4>>);
+  static_assert(
+      std::same_as<decltype(m_cast_d), vc_soa::matrix_type<double, 6, 4>>);
+  static_assert(
+      std::same_as<decltype(m_cast_i), vc_soa::matrix_type<int, 6, 4>>);
 }

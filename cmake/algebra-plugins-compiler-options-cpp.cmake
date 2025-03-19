@@ -4,6 +4,10 @@
 #
 # Mozilla Public License Version 2.0
 
+cmake_minimum_required(VERSION 3.21)
+
+# Only set these compiler flags if we are the top level project.
+if(PROJECT_IS_TOP_LEVEL)
 # Include the helper function(s).
 include( algebra-plugins-functions )
 
@@ -38,4 +42,5 @@ elseif( "${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC" )
    # Turn on the correct setting for the __cplusplus macro with MSVC.
    algebra_add_flag( CMAKE_CXX_FLAGS "/Zc:__cplusplus" )
 
+endif()
 endif()

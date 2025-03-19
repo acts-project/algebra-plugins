@@ -13,7 +13,7 @@ message( STATUS "Building Vc as part of the Algebra Plugins project" )
 
 # Declare where to get Vc from.
 set( ALGEBRA_PLUGINS_VC_SOURCE
-   "URL;https://github.com/VcDevel/Vc/archive/refs/tags/1.4.3.tar.gz;URL_MD5;02d33a9d560a14bb23204be235713f65"
+   "URL;https://github.com/VcDevel/Vc/archive/refs/tags/1.4.5.tar.gz;URL_MD5;03831cbf0921a10322d8baf08001cbf5"
    CACHE STRING "Source for Vc, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_VC_SOURCE )
 

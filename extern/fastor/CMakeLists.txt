@@ -20,7 +20,7 @@ endif()
 # We need to use this alternative syntax for FetchContent_Declare because the
 # latest release for Fastor does not have a CMakeLists.txt file.
 set( ALGEBRA_PLUGINS_FASTOR_SOURCE
-   "fastor;GIT_REPOSITORY;https://github.com/romeric/Fastor.git;GIT_TAG;e96e63fe8a05898d732d0b9faba3667d9a25a38f"
+   "URL;https://github.com/romeric/Fastor/archive/refs/tags/V0.6.4.tar.gz;URL_MD5;0644a0bf6337e0ffc9e0173be757aa45"
    CACHE STRING "Source for Fastor, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_FASTOR_SOURCE )
 

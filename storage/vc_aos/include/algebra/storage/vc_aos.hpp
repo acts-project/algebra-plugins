@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
+#include "algebra/storage/impl/vc_aos_approximately_equal.hpp"
 #include "algebra/storage/impl/vc_aos_concepts.hpp"
 #include "algebra/storage/impl/vc_aos_getter.hpp"
 #include "algebra/storage/matrix.hpp"
@@ -34,6 +35,12 @@ namespace vc_aos {
 
 /// Size type for Vc storage model
 using size_type = std::size_t;
+/// Value type for Vc storage model
+template <concepts::value T>
+using value_type = T;
+/// Scalar type for Vc storage model
+template <concepts::value T>
+using scalar_type = T;
 /// Array type used to store Vc::Vectors
 template <concepts::value T, size_type N>
 using storage_type = Vc::SimdArray<T, N>;

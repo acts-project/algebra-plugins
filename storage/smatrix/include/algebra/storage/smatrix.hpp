@@ -25,6 +25,12 @@ namespace smatrix {
 
 /// size type for SMatrix storage model
 using size_type = unsigned int;
+/// Value type for SMatrix storage model
+template <concepts::value T>
+using value_type = T;
+/// Scalar type for SMatrix storage model
+template <concepts::value T>
+using scalar_type = T;
 /// Array type used in the SMatrix storage model
 template <concepts::scalar T, size_type N>
 using storage_type = ROOT::Math::SVector<T, N>;

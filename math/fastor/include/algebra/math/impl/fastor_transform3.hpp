@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/math/impl/fastor_matrix.hpp"
 #include "algebra/qualifiers.hpp"
 
 // Fastor include(s).
@@ -45,7 +46,7 @@ struct transform3 {
   using point2 = array_type<2>;
 
   /// 4x4 matrix type
-  using matrix44 = Fastor::Tensor<scalar_type, 4UL, 4UL>;
+  using matrix44 = fastor::Matrix<scalar_type, 4UL, 4UL>;
 
   /// @}
 

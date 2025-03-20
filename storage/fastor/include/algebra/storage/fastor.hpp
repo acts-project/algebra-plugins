@@ -22,6 +22,12 @@ namespace fastor {
 
 /// size type for Fastor storage model
 using size_type = std::size_t;
+/// Value type for Fastor storage model
+template <concepts::value T>
+using value_type = T;
+/// Scalar type for Fastor storage model
+template <concepts::value T>
+using scalar_type = T;
 /// Array type used in the Fastor storage model
 template <concepts::scalar T, size_type N>
 using storage_type = Fastor::Tensor<T, N>;

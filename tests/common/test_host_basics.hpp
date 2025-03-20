@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/utils/approximately_equal.hpp"
 #include "algebra/utils/print.hpp"
 
 // Local include(s).
@@ -18,9 +19,9 @@
 
 // System include(s).
 #include <array>
-#include <climits>
 #include <cmath>
 #include <cstddef>
+#include <limits>
 
 using namespace algebra;
 
@@ -285,6 +286,22 @@ TYPED_TEST_P(test_host_basics_vector, local_vectors) {
   // Test printing
   std::cout << vA << std::endl;
 
+  // Test comparison
+  constexpr auto epsilon{
+      std::numeric_limits<typename TypeParam::scalar>::epsilon()};
+  ASSERT_TRUE(algebra::approx_equal(vA, vA));
+  ASSERT_TRUE(algebra::approx_equal(vA, vA, epsilon));
+
+  typename TypeParam::scalar rel_err{1.f + 10.f * epsilon};
+  typename TypeParam::point2 vA_err = rel_err * vA;
+  ASSERT_TRUE(algebra::approx_equal(vA, vA_err, 11.f * epsilon));
+  ASSERT_FALSE(algebra::approx_equal(vA, vA_err, 9.f * epsilon));
+
+  rel_err = 1.f + 17.f * epsilon;
+  vA_err = rel_err * vA;
+  ASSERT_TRUE(algebra::approx_equal(vA, vA_err, 18.f * epsilon));
+  ASSERT_FALSE(algebra::approx_equal(vA, vA_err, 16.f * epsilon));
+
   // Assignment
   typename TypeParam::point2 vB = vA;
   ASSERT_EQ(vB[0], 0.f);
@@ -314,6 +331,26 @@ TYPED_TEST_P(test_host_basics_vector, local_vectors) {
   typename TypeParam::vector2 vDnorm = algebra::vector::normalize(vD);
   ASSERT_NEAR(vDnorm[0], 1. / std::sqrt(2.), this->m_epsilon);
   ASSERT_NEAR(vDnorm[1], 1. / std::sqrt(2.), this->m_epsilon);
+
+  // Test comparison
+  typename TypeParam::point2 vE{100.f, 462809.f};
+
+  ASSERT_TRUE(algebra::approx_equal(vE, vE));
+  ASSERT_TRUE(algebra::approx_equal(vE, vE, epsilon));
+
+  rel_err = 1.f + 10.f * epsilon;
+  typename TypeParam::point2 vE_err = rel_err * vE;
+  ASSERT_TRUE(algebra::approx_equal(vE, vE_err, 11.f * epsilon));
+  ASSERT_FALSE(algebra::approx_equal(vE, vE_err, 9.f * epsilon));
+
+  typename TypeParam::point2 vE_abs_err{100.00001f, 462809.05f};
+  ASSERT_TRUE(algebra::approx_equal(vE, vE_abs_err, 0.00001f));
+  ASSERT_FALSE(algebra::approx_equal(vE, vE_abs_err, epsilon));
+
+  rel_err = 1.f + 17.f * epsilon;
+  vE_err = rel_err * vE;
+  ASSERT_TRUE(algebra::approx_equal(vE, vE_err, 18.f * epsilon));
+  ASSERT_FALSE(algebra::approx_equal(vE, vE_err, 16.f * epsilon));
 }
 
 // This defines the vector3 test suite
@@ -852,6 +889,30 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x6) {
 
   auto m66_big_inv = algebra::matrix::inverse(m66_big);
 
+  // Test comparison
+  constexpr auto epsilon{
+      std::numeric_limits<typename TypeParam::scalar>::epsilon()};
+
+  ASSERT_TRUE(algebra::approx_equal(m66_big, m66_big));
+  ASSERT_TRUE(algebra::approx_equal(m66_big, m66_big, epsilon));
+  ASSERT_TRUE(algebra::approx_equal(m66_big_inv, m66_big_inv));
+  ASSERT_TRUE(algebra::approx_equal(m66_big_inv, m66_big_inv, epsilon));
+
+  typename TypeParam::scalar rel_err{1.f + 10.f * epsilon};
+  typename TypeParam::template matrix<6, 6> m66_big_err = rel_err * m66_big;
+  ASSERT_TRUE(algebra::approx_equal(m66_big, m66_big_err, 11.f * epsilon));
+  ASSERT_FALSE(algebra::approx_equal(m66_big, m66_big_err, 9.f * epsilon));
+
+  rel_err = 1.f + 17.f * epsilon;
+  m66_big_err = rel_err * m66_big;
+  ASSERT_TRUE(algebra::approx_equal(m66_big, m66_big_err, 18.f * epsilon));
+  ASSERT_FALSE(algebra::approx_equal(m66_big, m66_big_err, 16.f * epsilon));
+
+  typename TypeParam::template matrix<6, 6> prod66 = m66_big_inv * m66_big;
+  auto I66 = algebra::matrix::identity<decltype(m66_big)>();
+  // Set the max error for Fastor and SMatrix plugins
+  ASSERT_TRUE(algebra::approx_equal(prod66, I66, epsilon, 2.f * epsilon));
+
   ASSERT_NEAR(algebra::getter::element(m66_big_inv, 0, 0), 36.f / 36.f,
               this->m_isclose);
   ASSERT_NEAR(algebra::getter::element(m66_big_inv, 0, 1), 0.f / 36.f,
@@ -1131,6 +1192,19 @@ TYPED_TEST_P(test_host_basics_transform, transform3) {
 
   // Test printing
   std::cout << trf1 << std::endl;
+
+  // Test comparison
+  constexpr auto epsilon{
+      std::numeric_limits<typename TypeParam::scalar>::epsilon()};
+
+  ASSERT_TRUE(algebra::approx_equal(trf1, trf1));
+  ASSERT_TRUE(algebra::approx_equal(trf1, trf1, epsilon));
+
+  typename TypeParam::scalar rel_err{1.f + 10.f * epsilon};
+  typename TypeParam::transform3 trf1_err(rel_err * t, rel_err * z,
+                                          rel_err * x);
+  ASSERT_TRUE(algebra::approx_equal(trf1, trf1_err, 200.f * epsilon));
+  ASSERT_FALSE(algebra::approx_equal(trf1, trf1_err, 10.f * epsilon));
 
   const auto rot = trf2.rotation();
   ASSERT_NEAR(algebra::getter::element(rot, 0, 0), x[0], this->m_epsilon);

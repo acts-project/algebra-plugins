@@ -24,6 +24,12 @@ namespace vecmem {
 
 /// size type for VecMem storage model
 using size_type = std::size_t;
+/// Value type for VecMem storage model
+template <concepts::value T>
+using value_type = T;
+/// Scalar type for VecMem storage model
+template <concepts::value T>
+using scalar_type = T;
 /// Array type used in the VecMem storage model
 template <typename T, std::size_t N>
 using storage_type = ::vecmem::static_array<T, N>;

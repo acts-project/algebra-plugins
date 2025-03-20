@@ -164,10 +164,11 @@ class ALGEBRA_ALIGN(
   operator==(const vector &lhs, const vector &rhs) noexcept {
 
     const auto comp = lhs.compare(rhs);
-    bool is_full = false;
+    bool is_full = true;
 
+    ALGEBRA_UNROLL_N(N)
     for (unsigned int i{0u}; i < N; ++i) {
-      is_full |= comp[i];
+      is_full &= comp[i];
     }
 
     return is_full;
@@ -179,12 +180,12 @@ class ALGEBRA_ALIGN(
   operator==(const vector &lhs, const vector &rhs) noexcept {
 
     const auto comp = lhs.compare(rhs);
-    bool is_full = false;
+    bool is_full = true;
 
     ALGEBRA_UNROLL_N(N)
     for (unsigned int i{0u}; i < N; ++i) {
       // Ducktyping the Vc::Vector::MaskType
-      is_full |= comp[i].isFull();
+      is_full &= comp[i].isFull();
     }
 
     return is_full;

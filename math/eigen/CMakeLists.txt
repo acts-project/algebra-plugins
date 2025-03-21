@@ -11,7 +11,7 @@ algebra_add_library(algebra_eigen_math eigen_math
    "include/algebra/math/impl/eigen_transform3.hpp"
    "include/algebra/math/impl/eigen_vector.hpp")
 target_link_libraries(algebra_eigen_math
-   INTERFACE Eigen3::Eigen algebra::common algebra::common_math
+   INTERFACE Eigen3::Eigen algebra::common algebra::utils algebra::common_math
              algebra::eigen_storage)
 algebra_test_public_headers( algebra_eigen_math
    "algebra/math/eigen.hpp" )

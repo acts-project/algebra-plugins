@@ -13,6 +13,12 @@
 #include "algebra/math/impl/generic_vector.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/type_traits.hpp"
+#include "algebra/utils/approximately_equal.hpp"
+
+// System include(s)
+#include <cassert>
+#include <concepts>
+#include <limits>
 
 namespace algebra::generic::math {
 
@@ -52,6 +58,10 @@ struct transform3 {
   /// Matrix inversion algorithm
   using matrix_inversion =
       generic::matrix::inverse::hard_coded<matrix44, element_getter>;
+
+  /// Helper type to cast this to another floating point precision
+  template <concepts::scalar o_scalar_t>
+  using other_type = transform3<index_t, o_scalar_t, matrix_t, array_t>;
 
   /// @}
 
@@ -141,6 +151,35 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   explicit transform3(const matrix44 &m) : _data{m} {
     _data_inv = matrix_inversion{}(_data);
+  }
+
+  /// Constructor with arguments: matrix and its inverse
+  ///
+  /// @param m is the full 4x4 matrix
+  /// @param m_inv is the inverse to m
+  ALGEBRA_HOST_DEVICE
+  transform3(const matrix44 &m, const matrix44 &m_inv)
+      : _data{m}, _data_inv{m_inv} {
+    // The assertion will not hold for (casts to) int
+    if constexpr (std::floating_point<scalar_type>) {
+      // The concrete type of matrix mult is not available at this point
+      auto prod = generic::math::zero<matrix44>();
+
+      constexpr element_getter elem{};
+
+      for (index_t i = 0; i < 4; ++i) {
+        for (index_t j = 0; j < 4; ++j) {
+          for (index_t k = 0; k < 4; ++k) {
+            elem(prod, k, j) += elem(m, k, i) * elem(m_inv, i, j);
+          }
+        }
+      }
+
+      [[maybe_unused]] constexpr auto epsilon{
+          std::numeric_limits<scalar_type>::epsilon()};
+      assert(algebra::approx_equal(prod, generic::math::identity<matrix44>(),
+                                   16.f * epsilon, 1e-6f));
+    }
   }
 
   /// Constructor with arguments: matrix as array of scalar

@@ -7,6 +7,7 @@
 # Set up the library.
 algebra_add_library( algebra_vc_soa_storage vc_soa_storage
    "include/algebra/storage/vc_soa.hpp"
+   "include/algebra/storage/impl/vc_soa_casts.hpp"
    "include/algebra/storage/impl/vc_soa_concepts.hpp"
    "include/algebra/storage/impl/vc_soa_getter.hpp" )
 target_link_libraries( algebra_vc_soa_storage

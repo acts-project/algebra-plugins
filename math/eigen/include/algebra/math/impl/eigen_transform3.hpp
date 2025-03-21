@@ -10,6 +10,7 @@
 // Project include(s).
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/impl/eigen_array.hpp"
+#include "algebra/utils/approximately_equal.hpp"
 
 // Eigen include(s).
 #ifdef _MSC_VER
@@ -31,6 +32,9 @@
 #endif  // __NVCC_DIAG_PRAGMA_SUPPORT__
 
 // System include(s).
+#include <cassert>
+#include <concepts>
+#include <limits>
 #include <type_traits>
 
 namespace algebra::eigen::math {
@@ -59,6 +63,10 @@ struct transform3 {
   /// 4x4 matrix type
   using matrix44 =
       typename Eigen::Transform<scalar_type, 3, Eigen::Affine>::MatrixType;
+
+  /// Helper type to cast this to another floating point precision
+  template <concepts::scalar o_scalar_t>
+  using other_type = transform3<o_scalar_t>;
 
   /// @}
 
@@ -126,6 +134,23 @@ struct transform3 {
     _data.matrix() = m;
 
     _data_inv = _data.inverse();
+  }
+
+  /// Constructor with arguments: matrix and its inverse
+  ///
+  /// @param m is the full 4x4 matrix
+  /// @param m_inv is the inverse to m
+  ALGEBRA_HOST_DEVICE
+  transform3(const matrix44 &m, const matrix44 &m_inv)
+      : _data{m}, _data_inv{m_inv} {
+    // The assertion will not hold for (casts to) int
+    if constexpr (std::floating_point<scalar_type>) {
+      [[maybe_unused]] constexpr auto epsilon{
+          std::numeric_limits<scalar_type>::epsilon()};
+      assert(algebra::approx_equal(matrix44(m * m_inv),
+                                   matrix44(matrix44::Identity()),
+                                   16.f * epsilon, 1e-6f));
+    }
   }
 
   /// Constructor with arguments: matrix as std::aray of scalar

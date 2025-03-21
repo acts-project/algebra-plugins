@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/generic.hpp"
+#include "algebra/math/impl/generic_matrix.hpp"
 #include "algebra/math/impl/vc_aos_transform3.hpp"
 #include "algebra/math/vc_soa.hpp"
 #include "algebra/storage/vc_soa.hpp"

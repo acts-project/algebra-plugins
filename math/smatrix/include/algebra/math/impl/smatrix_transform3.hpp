@@ -10,10 +10,16 @@
 // Project include(s).
 #include "algebra/math/impl/smatrix_errorcheck.hpp"
 #include "algebra/qualifiers.hpp"
+#include "algebra/utils/approximately_equal.hpp"
 
 // ROOT/Smatrix include(s).
 #include "Math/SMatrix.h"
 #include "Math/SVector.h"
+
+// System include(s)
+#include <cassert>
+#include <concepts>
+#include <limits>
 
 namespace algebra::smatrix::math {
 
@@ -40,6 +46,10 @@ struct transform3 {
 
   /// 4x4 matrix type
   using matrix44 = ROOT::Math::SMatrix<scalar_type, 4, 4>;
+
+  /// Helper type to cast this to another floating point precision
+  template <concepts::scalar o_scalar_t>
+  using other_type = transform3<o_scalar_t>;
 
   /// @}
 
@@ -115,6 +125,23 @@ struct transform3 {
     int ifail = 0;
     _data_inv = _data.Inverse(ifail);
     SMATRIX_CHECK(ifail);
+  }
+
+  /// Constructor with arguments: matrix and its inverse
+  ///
+  /// @param m is the full 4x4 matrix
+  /// @param m_inv is the inverse to m
+  ALGEBRA_HOST
+  transform3(const matrix44 &m, const matrix44 &m_inv)
+      : _data{m}, _data_inv{m_inv} {
+    // The assertion will not hold for (casts to) int
+    if constexpr (std::floating_point<scalar_type>) {
+      [[maybe_unused]] constexpr auto epsilon{
+          std::numeric_limits<scalar_type>::epsilon()};
+      assert(algebra::approx_equal(matrix44(m * m_inv),
+                                   matrix44(ROOT::Math::SMatrixIdentity()),
+                                   16.f * epsilon, 1e-6f));
+    }
   }
 
   /// Constructor with arguments: matrix as ROOT::Math::SVector<scalar_t, 16> of

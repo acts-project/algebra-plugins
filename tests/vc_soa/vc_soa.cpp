@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023 CERN for the benefit of the ACTS project
+ * (c) 2023-2025 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.f
  */
@@ -8,12 +8,15 @@
 // Project include(s).
 #include "algebra/vc_soa.hpp"
 
+#include "algebra/utils/approximately_equal.hpp"
 #include "algebra/utils/print.hpp"
 
 // GoogleTest include(s).
 #include <gtest/gtest.h>
 
+// System inlcude(s)
 #include <array>
+#include <limits>
 
 using namespace algebra;
 
@@ -39,6 +42,33 @@ TEST(test_vc_host, vc_soa_vector) {
 
   // Test printing
   std::cout << a << std::endl;
+
+  // Test comparison
+  constexpr auto epsilon{std::numeric_limits<value_t>::epsilon()};
+
+  EXPECT_TRUE(algebra::approx_equal(a, a));
+  EXPECT_TRUE(algebra::approx_equal(a, a, epsilon));
+  EXPECT_FALSE(algebra::approx_equal(a, b));
+
+  value_t rel_err = 1.f + 10.f * epsilon;
+  vector3_v a_err = rel_err * a;
+  EXPECT_TRUE(algebra::approx_equal(a, a_err, 11.f * epsilon));
+  EXPECT_FALSE(algebra::approx_equal(a, a_err, 9.f * epsilon));
+
+  rel_err = 1.f + 17.f * epsilon;
+  a_err = rel_err * a;
+  EXPECT_TRUE(algebra::approx_equal(a, a_err, 18.f * epsilon));
+  EXPECT_FALSE(algebra::approx_equal(a, a_err, 16.f * epsilon));
+
+  // Swap an element
+  vector3_v a_err_cpy = a_err;
+  EXPECT_TRUE(a_err_cpy == a_err);
+  EXPECT_TRUE(algebra::approx_equal(a_err_cpy, a_err));
+
+  auto& vec_elem = a_err[0];
+  vec_elem[0] += 1.f;
+  EXPECT_FALSE(a_err_cpy == a_err);
+  EXPECT_FALSE(algebra::approx_equal(a_err_cpy, a_err));
 
   // Masked comparison
   auto m = a.compare(a);
@@ -183,6 +213,18 @@ TEST(test_vc_host, vc_soa_transform3) {
   // Test printing
   std::cout << trf1 << std::endl;
 
+  // Test comparison
+  constexpr auto epsilon{std::numeric_limits<value_t>::epsilon()};
+
+  EXPECT_TRUE(algebra::approx_equal(trf1, trf1));
+  EXPECT_TRUE(algebra::approx_equal(trf1, trf1, epsilon));
+
+  value_t rel_err{1.f + 10.f * epsilon};
+  transform3 trf1_err(rel_err * t, rel_err * z, rel_err * x);
+  EXPECT_FALSE(trf1 == trf1_err);
+  EXPECT_TRUE(algebra::approx_equal(trf1, trf1_err, 200.f * epsilon));
+  EXPECT_FALSE(algebra::approx_equal(trf1, trf1_err, 10.f * epsilon));
+
   EXPECT_TRUE((trf2(0, 0) == x[0]).isFull());
   EXPECT_TRUE((trf2(1, 0) == x[1]).isFull());
   EXPECT_TRUE((trf2(2, 0) == x[2]).isFull());
@@ -260,14 +302,16 @@ TEST(test_vc_host, vc_soa_matrix64) {
 
   // Create the matrix.
   using matrix_6x4_t = vc_soa::matrix_type<value_t, 6, 4>;
+  using scalar_t = algebra::traits::scalar_t<matrix_6x4_t>;
   matrix_6x4_t m;
 
   // Test type traits
   static_assert(
       std::is_same_v<algebra::traits::index_t<matrix_6x4_t>, std::size_t>);
-  static_assert(std::is_same_v<algebra::traits::value_t<matrix_6x4_t>, float>);
+  static_assert(
+      std::is_same_v<algebra::traits::value_t<matrix_6x4_t>, value_t>);
   static_assert(std::is_same_v<algebra::traits::scalar_t<matrix_6x4_t>,
-                               Vc::Vector<float>>);
+                               Vc::Vector<value_t>>);
 
   static_assert(algebra::traits::rows<matrix_6x4_t> == 6);
   static_assert(algebra::traits::columns<matrix_6x4_t> == 4);
@@ -279,4 +323,19 @@ TEST(test_vc_host, vc_soa_matrix64) {
 
   // Test printing
   std::cout << m << std::endl;
+
+  auto I64 = algebra::matrix::identity<matrix_6x4_t>();
+
+  // Test comparison
+  constexpr auto epsilon{std::numeric_limits<value_t>::epsilon()};
+
+  EXPECT_TRUE(algebra::approx_equal(m, m));
+  EXPECT_TRUE(algebra::approx_equal(m, m, epsilon));
+  EXPECT_FALSE(algebra::approx_equal(m, I64));
+
+  value_t rel_err{1.f + 10.f * epsilon};
+  matrix_6x4_t I64_err = scalar_t(rel_err) * I64;
+  EXPECT_FALSE(I64 == I64_err);
+  EXPECT_TRUE(algebra::approx_equal(I64, I64_err, 11.f * epsilon));
+  EXPECT_FALSE(algebra::approx_equal(I64, I64_err, 9.f * epsilon));
 }

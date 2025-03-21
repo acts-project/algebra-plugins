@@ -22,6 +22,12 @@ namespace array {
 
 /// size type for Array storage model
 using size_type = std::size_t;
+/// Value type for Array storage model
+template <concepts::value T>
+using value_type = T;
+/// Scalar type for Array storage model
+template <concepts::value T>
+using scalar_type = T;
 /// Array type used in the Array storage model
 template <typename T, size_type N>
 using storage_type = std::array<T, N>;

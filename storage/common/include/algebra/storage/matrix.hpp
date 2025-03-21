@@ -214,7 +214,7 @@ template <concepts::matrix matrix_t, concepts::scalar scalar_t,
           std::size_t... J>
 ALGEBRA_HOST_DEVICE constexpr matrix_t matrix_scalar_mul(
     scalar_t a, const matrix_t &rhs, std::index_sequence<J...>) noexcept {
-  using mat_scalar_t = algebra::traits::value_t<matrix_t>;
+  using mat_scalar_t = algebra::traits::scalar_t<matrix_t>;
 
   return matrix_t{(static_cast<mat_scalar_t>(a) * rhs[J])...};
 }

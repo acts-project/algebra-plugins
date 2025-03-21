@@ -22,6 +22,12 @@ namespace eigen {
 
 /// size type for Eigen storage model
 using size_type = int;
+/// Value type for Eigen storage model
+template <concepts::value T>
+using value_type = T;
+/// Scalar type for Eigen storage model
+template <concepts::value T>
+using scalar_type = T;
 /// Array type used in the Eigen storage model
 template <concepts::scalar T, size_type N>
 using storage_type = array<T, N>;

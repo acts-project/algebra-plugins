@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
+#include "algebra/storage/impl/vc_aos_approximately_equal.hpp"
 #include "algebra/storage/impl/vc_soa_getter.hpp"
 #include "algebra/storage/matrix.hpp"
 #include "algebra/storage/vector.hpp"
@@ -33,15 +34,15 @@ namespace vc_soa {
 
 /// Size type for Vc storage model
 using size_type = std::size_t;
-/// Array type used to store Vc::Vectors or matrix columns
-template <concepts::simd_scalar T, size_type N>
-using storage_type = std::array<T, N>;
 /// Value type in a linear algebra vector: SoA layout
 template <concepts::value T>
 using value_type = T;
 /// Scalar type in a linear algebra vector: SoA layout
 template <concepts::value T>
 using scalar_type = Vc::Vector<T>;
+/// Array type used to store Vc::Vectors or matrix columns
+template <concepts::simd_scalar T, size_type N>
+using storage_type = std::array<T, N>;
 /// Vector type used in the Vc SoA storage model
 template <concepts::value T, std::size_t N>
 using vector_type = algebra::storage::vector<N, Vc::Vector<T>, storage_type>;
@@ -92,6 +93,14 @@ template <concepts::value T, std::size_t N>
 struct scalar<
     algebra::storage::vector<N, Vc::Vector<T>, vc_soa::storage_type>> {
   using type = Vc::Vector<T>;
+};
+/// @}
+
+/// Get the single value type from the simd scalar type
+/// @{
+template <concepts::value T>
+struct value<Vc::Vector<T>> {
+  using type = T;
 };
 /// @}
 

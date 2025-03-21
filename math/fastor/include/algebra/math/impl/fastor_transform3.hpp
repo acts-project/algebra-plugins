@@ -10,6 +10,7 @@
 // Project include(s).
 #include "algebra/math/impl/fastor_matrix.hpp"
 #include "algebra/qualifiers.hpp"
+#include "algebra/utils/approximately_equal.hpp"
 
 // Fastor include(s).
 #ifdef _MSC_VER
@@ -21,7 +22,10 @@
 #endif  // MSVC
 
 // System include(s).
+#include <cassert>
+#include <concepts>
 #include <cstddef>
+#include <limits>
 
 namespace algebra::fastor::math {
 
@@ -130,7 +134,16 @@ struct transform3 {
   /// @param m_inv is the inverse to m
   ALGEBRA_HOST
   transform3(const matrix44 &m, const matrix44 &m_inv)
-      : _data{m}, _data_inv{m_inv} {}
+      : _data{m}, _data_inv{m_inv} {
+    // The assertion will not hold for (casts to) int
+    if constexpr (std::floating_point<scalar_type>) {
+      [[maybe_unused]] constexpr auto epsilon{
+          std::numeric_limits<scalar_type>::epsilon()};
+      assert(algebra::approx_equal(m * m_inv,
+                                   fastor::math::identity<matrix44>(),
+                                   16.f * epsilon, 1e-6f));
+    }
+  }
 
   /// Constructor with arguments: matrix as Fastor::Tensor<scalar_t, 16> of
   /// scalars

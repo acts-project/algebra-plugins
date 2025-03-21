@@ -11,9 +11,11 @@
 #include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
+#include "algebra/storage/impl/vc_aos_approximately_equal.hpp"
 #include "algebra/storage/matrix.hpp"
 #include "algebra/storage/matrix_getter.hpp"
 #include "algebra/storage/vector.hpp"
+#include "algebra/utils/approximately_equal.hpp"
 
 // Vc include(s).
 #ifdef _MSC_VER
@@ -26,6 +28,8 @@
 
 // System include(s).
 #include <cassert>
+#include <concepts>
+#include <limits>
 
 namespace algebra::vc_aos::math {
 
@@ -138,7 +142,14 @@ struct transform3 {
   /// @param m_inv is the inverse to m
   ALGEBRA_HOST_DEVICE
   transform3(const matrix44 &m, const matrix44 &m_inv)
-      : _data{m}, _data_inv{m_inv} {}
+      : _data{m}, _data_inv{m_inv} {
+    // The assertion will not hold for (casts to) int
+    if constexpr (std::floating_point<scalar_type>) {
+      [[maybe_unused]] constexpr auto epsilon{
+          std::numeric_limits<float>::epsilon()};
+      assert(algebra::approx_equal(invert(m), m_inv, 16.f * epsilon, 1e-6f));
+    }
+  }
 
   /// Constructor with arguments: matrix as std::aray of scalar
   ///

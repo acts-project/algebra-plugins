@@ -13,7 +13,4 @@ algebra_add_library( algebra_vc_aos_storage vc_aos_storage
 target_link_libraries( algebra_vc_aos_storage
    INTERFACE algebra::common algebra::common_storage Vc::Vc algebra::common_math )
 algebra_test_public_headers( algebra_vc_aos_storage
-   "algebra/storage/vc_aos.hpp"
-   "algebra/storage/impl/vc_aos_approximately_equal.hpp"
-   "algebra/storage/impl/vc_aos_concepts.hpp"
-   "algebra/storage/impl/vc_aos_getter.hpp" )
+   "algebra/storage/vc_aos.hpp" )

@@ -34,7 +34,7 @@ struct test_specialisation_name {
 
 // Register the tests
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics_vector, local_vectors, vector3,
-                            getter);
+                            getter, dot_product_sum);
 /*REGISTER_TYPED_TEST_SUITE_P(test_host_basics_matrix, matrix3, matrix64,
                             matrix22);*/
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics_transform, transform3,

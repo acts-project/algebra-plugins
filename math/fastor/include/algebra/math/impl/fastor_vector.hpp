@@ -109,6 +109,12 @@ ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
                        Fastor::Tensor<scalar_t, N>(b(Fastor::fseq<0, N>(), 0)));
 }
 
+template <typename Derived0, auto N1, typename Derived1, auto N2>
+ALGEBRA_HOST constexpr Derived0::scalar_type dot(const Fastor::AbstractTensor<Derived0, N1> &a,
+                                    const Fastor::AbstractTensor<Derived1, N2> &b) {
+  return Fastor::inner(a, b);
+}
+
 /// Dot product between Tensor<scalar_t, N> and Tensor<scalar_t, N, 1>
 ///
 /// @param a the second input Tensor<scalar_t, N, 1>
@@ -196,6 +202,12 @@ ALGEBRA_HOST constexpr Fastor::Tensor<scalar_t, 3> cross(
 
   return Fastor::cross(Fastor::Tensor<scalar_t, 3>(a(Fastor::fseq<0, 3>(), 0)),
                        Fastor::Tensor<scalar_t, 3>(b(Fastor::fseq<0, 3>(), 0)));
+}
+
+template <typename Derived0, auto N1, typename Derived1, auto N2>
+ALGEBRA_HOST constexpr auto cross(const Fastor::AbstractTensor<Derived0, N1> &a,
+                                    const Fastor::AbstractTensor<Derived1, N2> &b) {
+  return Fastor::cross(a, b);
 }
 
 }  // namespace algebra::fastor::math

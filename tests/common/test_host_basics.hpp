@@ -498,6 +498,14 @@ TYPED_TEST_P(test_host_basics_vector, getter) {
   ASSERT_NEAR(algebra::vector::dot(z, x), 0.f, this->m_epsilon);
 }
 
+// This defines the vector operation test suite
+TYPED_TEST_P(test_host_basics_vector, dot_product_sum) {
+  typename TypeParam::vector3 v1{1.f, 2.f, 3.f};
+  typename TypeParam::vector3 v2{3.f, 4.f, 5.f};
+
+  ASSERT_NEAR(algebra::vector::dot(v1 + v2, v2), 111.f, this->m_epsilon);
+}
+
 TYPED_TEST_P(test_host_basics_matrix, matrix_2x3) {
   static constexpr typename TypeParam::size_type ROWS = 2;
   static constexpr typename TypeParam::size_type COLS = 3;

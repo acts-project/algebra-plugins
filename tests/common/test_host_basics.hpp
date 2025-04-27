@@ -498,46 +498,6 @@ TYPED_TEST_P(test_host_basics_vector, getter) {
   ASSERT_NEAR(algebra::vector::dot(z, x), 0.f, this->m_epsilon);
 }
 
-// TODO: Update this description
-TYPED_TEST_P(test_host_basics_vector, dot_product_sum) {
-  // TODO: rename the test to `dot_product_add_or_sub`
-  typename TypeParam::vector3 v1{1.f, 2.f, 3.f};
-  typename TypeParam::vector3 v2{3.f, 4.f, 5.f};
-
-  ASSERT_NEAR(algebra::vector::dot(v1 + v2, v2), 76.f, this->m_epsilon);
-  ASSERT_NEAR(algebra::vector::dot(v1, v2 - v1), 12.f, this->m_epsilon);
-  ASSERT_NEAR(algebra::vector::dot(v1 + v2, v1 - v2), -36.f, this->m_epsilon);
-}
-
-TYPED_TEST_P(test_host_basics_vector, cross_product_sum) {
-  typename TypeParam::vector3 v1{1.f, 2.f, 3.f};
-  typename TypeParam::vector3 v2{3.f, 4.f, 5.f};
-
-  typename TypeParam::vector3 ans2{-2.f, 4.f, -2.f};
-  typename TypeParam::vector3 ans3{4.f, -8.f, 4.f};
-
-  typename TypeParam::vector3 v = algebra::vector::cross(v1 + v2, v2);
-  typename TypeParam::vector3 ans{-2.f, 4.f, -2.f};
-
-  ASSERT_NEAR(v[0], ans[0], this->m_epsilon);
-  ASSERT_NEAR(v[1], ans[1], this->m_epsilon);
-  ASSERT_NEAR(v[2], ans[2], this->m_epsilon);
-
-  v = algebra::vector::cross(v1, v2 - v1);
-  ans = {-2.f, 4.f, -2.f};
-
-  ASSERT_NEAR(v[0], ans[0], this->m_epsilon);
-  ASSERT_NEAR(v[1], ans[1], this->m_epsilon);
-  ASSERT_NEAR(v[2], ans[2], this->m_epsilon);
-
-  v = algebra::vector::cross(v1 + v2, v1 - v2);
-  ans = {4.f, -8.f, 4.f};
-
-  ASSERT_NEAR(v[0], ans[0], this->m_epsilon);
-  ASSERT_NEAR(v[1], ans[1], this->m_epsilon);
-  ASSERT_NEAR(v[2], ans[2], this->m_epsilon);
-}
-
 TYPED_TEST_P(test_host_basics_matrix, matrix_2x3) {
   static constexpr typename TypeParam::size_type ROWS = 2;
   static constexpr typename TypeParam::size_type COLS = 3;

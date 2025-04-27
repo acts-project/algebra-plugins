@@ -33,9 +33,9 @@ struct test_specialisation_name {
   }
 };
 
-
-// This test checks to see if the `dot` function can handle when one of its operands is a sum or difference of two vectors.
-// We also test to see if the `dot` function plays nicely with scalar multiplication (just to be safe).
+// This test checks to see if the `dot` function can handle when one of its
+// operands is a sum or difference of two vectors. We also test to see if the
+// `dot` function plays nicely with scalar multiplication (just to be safe).
 TYPED_TEST_P(test_host_basics_vector, dot_product_with_ops) {
   typename TypeParam::vector3 v1{1.f, 2.f, 3.f};
   typename TypeParam::vector3 v2{3.f, 4.f, 5.f};
@@ -43,11 +43,12 @@ TYPED_TEST_P(test_host_basics_vector, dot_product_with_ops) {
   ASSERT_NEAR(algebra::vector::dot(v1 + v2, v2), 76.f, this->m_epsilon);
   ASSERT_NEAR(algebra::vector::dot(v1, v2 - v1), 12.f, this->m_epsilon);
   ASSERT_NEAR(algebra::vector::dot(v1 + v2, v1 - v2), -36.f, this->m_epsilon);
-  ASSERT_NEAR(algebra::vector::dot(v1 + v2, 2 * v2), 152.f, this->m_epsilon);  
+  ASSERT_NEAR(algebra::vector::dot(v1 + v2, 2 * v2), 152.f, this->m_epsilon);
 }
 
-// This test checks to see if the `cross` function can handle when one of its operands is a sum or difference of two vectors.
-// We also test to see if the `cross` function plays nicely with scalar multiplication (just to be safe).
+// This test checks to see if the `cross` function can handle when one of its
+// operands is a sum or difference of two vectors. We also test to see if the
+// `cross` function plays nicely with scalar multiplication (just to be safe).
 TYPED_TEST_P(test_host_basics_vector, cross_product_add_sub) {
   typename TypeParam::vector3 v1{1.f, 2.f, 3.f};
   typename TypeParam::vector3 v2{3.f, 4.f, 5.f};
@@ -70,7 +71,8 @@ TYPED_TEST_P(test_host_basics_vector, cross_product_add_sub) {
 
 // Register the tests
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics_vector, local_vectors, vector3,
-                            getter, dot_product_with_ops, cross_product_add_sub);
+                            getter, dot_product_with_ops,
+                            cross_product_add_sub);
 TEST_HOST_BASICS_MATRIX_TESTS();
 REGISTER_TYPED_TEST_SUITE_P(test_host_basics_transform, transform3,
                             global_transformations);

@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/qualifiers.hpp"
 #include "algebra/concepts.hpp"
+#include "algebra/qualifiers.hpp"
 
 // Fastor include(s).
 #ifdef _MSC_VER
@@ -22,17 +22,20 @@
 
 namespace algebra::fastor::math {
 
-// Note that for all `Fastor::AbstractTensors`, the `N` template parameters refers to the number of dimensions, not the number of elements.
+// Note that for all `Fastor::AbstractTensors`, the `N` template parameters
+// refers to the number of dimensions, not the number of elements.
 
 /// This method retrieves phi from a vector @param v
 template <typename Derived, auto N>
 // requires(N >= 2)
-ALGEBRA_HOST_DEVICE
-    constexpr auto phi(const Fastor::AbstractTensor<Derived, N> &a) {
+ALGEBRA_HOST_DEVICE constexpr auto phi(
+    const Fastor::AbstractTensor<Derived, N> &a) {
   // we first force evaluation of whatever was passed in.
   auto v = Fastor::evaluate(a);
-  // using `auto` relieves us from having to extract the exact dimension of the vector from somewhere. For all intents and purposes, we can consider the type to be `Fastor::Tensor<scalar_t, SIZE>`.
-  
+  // using `auto` relieves us from having to extract the exact dimension of the
+  // vector from somewhere. For all intents and purposes, we can consider the
+  // type to be `Fastor::Tensor<scalar_t, SIZE>`.
+
   // we use the cmath version of `atan2` because Fastor's `atan2` works on
   // `Fastor::Tensor`s element-wise, which we don't want.
   return algebra::math::atan2(v[1], v[0]);
@@ -43,12 +46,14 @@ ALGEBRA_HOST_DEVICE
 /// @param v the input vector
 template <typename Derived, auto N>
 // requires(N >= 3)
-ALGEBRA_HOST constexpr auto
-    theta(const Fastor::AbstractTensor<Derived, N> &a) noexcept {
+ALGEBRA_HOST constexpr auto theta(
+    const Fastor::AbstractTensor<Derived, N> &a) noexcept {
   // we first force evaluation of whatever was passed in.
   auto v = Fastor::evaluate(a);
-  // using `auto` relieves us from having to extract the exact dimension of the vector from somewhere. For all intents and purposes, we can consider the type to be `Fastor::Tensor<scalar_t, SIZE>`.
-  
+  // using `auto` relieves us from having to extract the exact dimension of the
+  // vector from somewhere. For all intents and purposes, we can consider the
+  // type to be `Fastor::Tensor<scalar_t, SIZE>`.
+
   // we use the cmath version of `atan2` because Fastor's `atan2` works on
   // `Fastor::Tensor`s element-wise, which we don't want.
   return algebra::math::atan2(Fastor::norm(v(Fastor::fseq<0, 2>())), v[2]);
@@ -59,11 +64,13 @@ ALGEBRA_HOST constexpr auto
 /// @param v the input vector
 template <typename Derived, auto N>
 // requires(N >= 2)
-ALGEBRA_HOST constexpr auto
-    perp(const Fastor::AbstractTensor<Derived, N> &a) noexcept {
+ALGEBRA_HOST constexpr auto perp(
+    const Fastor::AbstractTensor<Derived, N> &a) noexcept {
 
   // we first force evaluation of whatever was passed in.
-  // using `auto` relieves us from having to extract the exact dimension of the vector from somewhere. For all intents and purposes, we can consider the type to be `Fastor::Tensor<scalar_t, SIZE>`.
+  // using `auto` relieves us from having to extract the exact dimension of the
+  // vector from somewhere. For all intents and purposes, we can consider the
+  // type to be `Fastor::Tensor<scalar_t, SIZE>`.
   auto v = Fastor::evaluate(a);
 
   // we use the cmath version of `sqrt` because Fastor's `sqrt` works on
@@ -87,9 +94,9 @@ ALGEBRA_HOST constexpr auto norm(const Fastor::AbstractTensor<Derived, N> &v) {
 /// @param v the input vector
 template <typename Derived, auto N>
 // requires(N >= 3)
-ALGEBRA_HOST constexpr auto
-    eta(const Fastor::AbstractTensor<Derived, N> &a) noexcept {
-      auto v = Fastor::evaluate(a);
+ALGEBRA_HOST constexpr auto eta(
+    const Fastor::AbstractTensor<Derived, N> &a) noexcept {
+  auto v = Fastor::evaluate(a);
 
   // we use the cmath version of `atanh` because Fastor's `atanh` works on
   // `Fastor::Tensor`s element-wise, which we don't want.
@@ -101,7 +108,7 @@ ALGEBRA_HOST constexpr auto
 /// @param v the input vector
 template <typename Derived, auto N>
 ALGEBRA_HOST constexpr auto normalize(
-  const Fastor::AbstractTensor<Derived, N> &v) {
+    const Fastor::AbstractTensor<Derived, N> &v) {
 
   return v / Fastor::norm(v);
 }
@@ -185,8 +192,9 @@ ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
 ///
 /// @return a vector (expression) representing the cross product
 template <typename Derived0, auto N0, typename Derived1, auto N1>
-ALGEBRA_HOST constexpr auto cross(const Fastor::AbstractTensor<Derived0, N0> &a,
-                                  const Fastor::AbstractTensor<Derived1, N1> &b) {
+ALGEBRA_HOST constexpr auto cross(
+    const Fastor::AbstractTensor<Derived0, N0> &a,
+    const Fastor::AbstractTensor<Derived1, N1> &b) {
   return Fastor::cross(a, b);
 }
 
@@ -209,9 +217,8 @@ ALGEBRA_HOST constexpr auto cross(const Fastor::Tensor<scalar_t, 3> &a,
 ///
 /// @return a vector (expression) representing the cross product
 template <concepts::scalar scalar_t>
-ALGEBRA_HOST constexpr auto cross(
-    const Fastor::Tensor<scalar_t, 3> &a,
-    const Fastor::Tensor<scalar_t, 3, 1> &b) {
+ALGEBRA_HOST constexpr auto cross(const Fastor::Tensor<scalar_t, 3> &a,
+                                  const Fastor::Tensor<scalar_t, 3, 1> &b) {
 
   // We need to specify the type of the Tensor slice because Fastor by default
   // is lazy, so it returns an intermediate type which does not play well with
@@ -227,9 +234,8 @@ ALGEBRA_HOST constexpr auto cross(
 ///
 /// @return a vector (expression) representing the cross product
 template <concepts::scalar scalar_t>
-ALGEBRA_HOST constexpr auto cross(
-    const Fastor::Tensor<scalar_t, 3, 1> &a,
-    const Fastor::Tensor<scalar_t, 3> &b) {
+ALGEBRA_HOST constexpr auto cross(const Fastor::Tensor<scalar_t, 3, 1> &a,
+                                  const Fastor::Tensor<scalar_t, 3> &b) {
 
   return Fastor::cross(Fastor::Tensor<scalar_t, 3>(a(Fastor::fseq<0, 3>(), 0)),
                        b);
@@ -242,9 +248,8 @@ ALGEBRA_HOST constexpr auto cross(
 ///
 /// @return a vector (expression) representing the cross product
 template <concepts::scalar scalar_t>
-ALGEBRA_HOST constexpr auto cross(
-    const Fastor::Tensor<scalar_t, 3, 1> &a,
-    const Fastor::Tensor<scalar_t, 3, 1> &b) {
+ALGEBRA_HOST constexpr auto cross(const Fastor::Tensor<scalar_t, 3, 1> &a,
+                                  const Fastor::Tensor<scalar_t, 3, 1> &b) {
 
   return Fastor::cross(Fastor::Tensor<scalar_t, 3>(a(Fastor::fseq<0, 3>(), 0)),
                        Fastor::Tensor<scalar_t, 3>(b(Fastor::fseq<0, 3>(), 0)));

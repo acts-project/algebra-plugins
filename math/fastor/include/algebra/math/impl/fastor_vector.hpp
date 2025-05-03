@@ -149,8 +149,6 @@ ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
   // the Fastor::inner function.
   return Fastor::inner(a,
                        Fastor::Tensor<scalar_t, N>(b(Fastor::fseq<0, N>(), 0)));
-  // TODO:
-  // return Fastor::inner(a, b(Fastor::fseq<0, N>(), 0));
 }
 
 /// Dot product between a matrix slice and a vector

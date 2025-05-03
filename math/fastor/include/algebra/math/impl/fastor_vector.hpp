@@ -30,9 +30,8 @@ template <typename Derived, auto N>
 ALGEBRA_HOST_DEVICE
     constexpr auto phi(const Fastor::AbstractTensor<Derived, N> &a) {
   // we first force evaluation of whatever was passed in.
-  // using `auto` relieves us from having to extract the exact dimension of the vector from somewhere. For all intents and purposes, we can consider the type to be `Fastor::Tensor<scalar_t, SIZE>`.
   auto v = Fastor::evaluate(a);
-  // Fastor::Tensor<typename Derived::scalar_type, Derived::size()> v = Fastor::evaluate(a);
+  // using `auto` relieves us from having to extract the exact dimension of the vector from somewhere. For all intents and purposes, we can consider the type to be `Fastor::Tensor<scalar_t, SIZE>`.
   
   // we use the cmath version of `atan2` because Fastor's `atan2` works on
   // `Fastor::Tensor`s element-wise, which we don't want.
@@ -47,8 +46,8 @@ template <typename Derived, auto N>
 ALGEBRA_HOST constexpr auto
     theta(const Fastor::AbstractTensor<Derived, N> &a) noexcept {
   // we first force evaluation of whatever was passed in.
-  // using `auto` relieves us from having to extract the exact dimension of the vector from somewhere. For all intents and purposes, we can consider the type to be `Fastor::Tensor<scalar_t, SIZE>`.
   auto v = Fastor::evaluate(a);
+  // using `auto` relieves us from having to extract the exact dimension of the vector from somewhere. For all intents and purposes, we can consider the type to be `Fastor::Tensor<scalar_t, SIZE>`.
   
   // we use the cmath version of `atan2` because Fastor's `atan2` works on
   // `Fastor::Tensor`s element-wise, which we don't want.

@@ -22,9 +22,22 @@
 namespace algebra::fastor::math {
 
 /// This method retrieves phi from a vector @param v
-template <concepts::scalar scalar_t, auto N>
-requires(N >= 2) ALGEBRA_HOST_DEVICE
-    constexpr auto phi(const Fastor::Tensor<scalar_t, N> &v) {
+// template <concepts::scalar scalar_t, auto N>
+// requires(N >= 2) ALGEBRA_HOST_DEVICE
+//     constexpr auto phi(const Fastor::Tensor<scalar_t, N> &v) {
+//   return algebra::math::atan2(v[1], v[0]);
+// }
+
+// Note that for all Fastor::AbstractTensors, the `N` template parameters refers to the number of dimensions, not the number of elements.
+
+template <typename Derived, auto N>
+ALGEBRA_HOST_DEVICE
+    constexpr auto phi(const Fastor::AbstractTensor<Derived, N> &a) {
+  // we first force evaluation of whatever was passed in.
+  auto v = Fastor::evaluate(a);
+  
+  // we use the cmath version of `atan2` because Fastor's `atan2` works on
+  // `Fastor::Tensor`s element-wise, which we don't want.
   return algebra::math::atan2(v[1], v[0]);
 }
 

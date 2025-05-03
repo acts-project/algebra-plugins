@@ -61,8 +61,8 @@ TYPED_TEST_P(test_host_basics_vector, cross_product_add_sub) {
   ASSERT_NEAR(v[1], ans[1], this->m_epsilon);
   ASSERT_NEAR(v[2], ans[2], this->m_epsilon);
 
-  v = algebra::vector::cross(v3 - v1, v1 + v2);
-  ans = {112.f, 8.f, -62.f};
+  v = algebra::vector::cross(v3 - 2 * v1, 3 * (v1 + v2));
+  ans = {342.f, 12.f, -180.f};
 
   ASSERT_NEAR(v[0], ans[0], this->m_epsilon);
   ASSERT_NEAR(v[1], ans[1], this->m_epsilon);

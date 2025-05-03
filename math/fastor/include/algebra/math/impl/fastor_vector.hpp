@@ -9,6 +9,7 @@
 
 // Project include(s).
 #include "algebra/qualifiers.hpp"
+#include "algebra/concepts.hpp"
 
 // Fastor include(s).
 #ifdef _MSC_VER
@@ -103,10 +104,22 @@ template <typename Derived, auto N>
 ALGEBRA_HOST constexpr auto normalize(
   const Fastor::AbstractTensor<Derived, N> &v) {
 
-  return (static_cast<scalar_t>(1.0) / Fastor::norm(v)) * v;
+  return v / Fastor::norm(v);
 }
 
 /// Dot product between two input vectors
+///
+/// @param a the first input vector
+/// @param b the second input vector
+///
+/// @return the scalar dot product value
+template <typename Derived0, auto N0, typename Derived1, auto N1>
+ALGEBRA_HOST constexpr auto dot(const Fastor::AbstractTensor<Derived0, N0> &a,
+                                const Fastor::AbstractTensor<Derived1, N1> &b) {
+  return Fastor::inner(a, b);
+}
+
+/// Dot product between two pure vectors (of type `Tensor<scalar_t, N>`)
 ///
 /// @param a the first input vector
 /// @param b the second input vector
@@ -119,10 +132,10 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t dot(
   return Fastor::inner(a, b);
 }
 
-/// Dot product between Tensor<scalar_t, N> and Tensor<scalar_t, N, 1>
+/// Dot product between a vector and a matrix slice
 ///
-/// @param a the first input vector
-/// @param b the second input Tensor<scalar_t, N, 1>
+/// @param a the first input: a vector (`Tensor<scalar_t, N>`)
+/// @param b the second input: a matrix (`Tensor<scalar_t, N, 1>`)
 ///
 /// @return the scalar dot product value
 template <concepts::scalar scalar_t, auto N>
@@ -134,18 +147,14 @@ ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N> &a,
   // the Fastor::inner function.
   return Fastor::inner(a,
                        Fastor::Tensor<scalar_t, N>(b(Fastor::fseq<0, N>(), 0)));
+  // TODO:
+  // return Fastor::inner(a, b(Fastor::fseq<0, N>(), 0));
 }
 
-template <typename Derived0, auto N1, typename Derived1, auto N2>
-ALGEBRA_HOST constexpr Derived0::scalar_type dot(const Fastor::AbstractTensor<Derived0, N1> &a,
-                                    const Fastor::AbstractTensor<Derived1, N2> &b) {
-  return Fastor::inner(a, b);
-}
-
-/// Dot product between Tensor<scalar_t, N> and Tensor<scalar_t, N, 1>
+/// Dot product between a matrix slice and a vector
 ///
-/// @param a the second input Tensor<scalar_t, N, 1>
-/// @param b the first input vector
+/// @param a the first input: a matrix (`Tensor<scalar_t, N, 1>`)
+/// @param b the second input: a vector (`Tensor<scalar_t, N>`)
 ///
 /// @return the scalar dot product value
 template <concepts::scalar scalar_t, auto N>
@@ -156,10 +165,10 @@ ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
                        b);
 }
 
-/// Dot product between two Tensor<scalar_t, 3, 1>
+/// Dot product between two matrix slices
 ///
-/// @param a the second input Tensor<scalar_t, 3, 1>
-/// @param b the first input Tensor<scalar_t, 3, 1>
+/// @param a the first input: a matrix (`Tensor<scalar_t, N, 1>`)
+/// @param b the second input: a matrix (`Tensor<scalar_t, N, 1>`)
 ///
 /// @return the scalar dot product value
 template <concepts::scalar scalar_t, auto N>
@@ -176,21 +185,32 @@ ALGEBRA_HOST constexpr scalar_t dot(const Fastor::Tensor<scalar_t, N, 1> &a,
 /// @param b the second input vector
 ///
 /// @return a vector (expression) representing the cross product
-template <concepts::scalar scalar_t>
-ALGEBRA_HOST_DEVICE constexpr Fastor::Tensor<scalar_t, 3> cross(
-    const Fastor::Tensor<scalar_t, 3> &a,
-    const Fastor::Tensor<scalar_t, 3> &b) {
+template <typename Derived0, auto N0, typename Derived1, auto N1>
+ALGEBRA_HOST constexpr auto cross(const Fastor::AbstractTensor<Derived0, N0> &a,
+                                  const Fastor::AbstractTensor<Derived1, N1> &b) {
   return Fastor::cross(a, b);
 }
 
-/// Cross product between Tensor<scalar_t, 3> and Tensor<scalar_t, 3, 1>
+/// Cross product between two pure vectors (of type `Tensor<scalar_t, 3>`)
 ///
 /// @param a the first input vector
-/// @param b the second input Tensor<scalar_t, 3, 1>
+/// @param b the second input vector
 ///
-/// @return a vector representing the cross product
+/// @return a vector (expression) representing the cross product
 template <concepts::scalar scalar_t>
-ALGEBRA_HOST constexpr Fastor::Tensor<scalar_t, 3> cross(
+ALGEBRA_HOST constexpr auto cross(const Fastor::Tensor<scalar_t, 3> &a,
+                                  const Fastor::Tensor<scalar_t, 3> &b) {
+  return Fastor::cross(a, b);
+}
+
+/// Cross product between a vector and a matrix slice
+///
+/// @param a the first input: a vector (`Tensor<scalar_t, 3>`)
+/// @param b the second input: a matrix (`Tensor<scalar_t, 3, 1>`)
+///
+/// @return a vector (expression) representing the cross product
+template <concepts::scalar scalar_t>
+ALGEBRA_HOST constexpr auto cross(
     const Fastor::Tensor<scalar_t, 3> &a,
     const Fastor::Tensor<scalar_t, 3, 1> &b) {
 
@@ -201,14 +221,14 @@ ALGEBRA_HOST constexpr Fastor::Tensor<scalar_t, 3> cross(
                        Fastor::Tensor<scalar_t, 3>(b(Fastor::fseq<0, 3>(), 0)));
 }
 
-/// Cross product between Tensor<scalar_t, 3> and Tensor<scalar_t, 3, 1>
+/// Cross product between a matrix slice and a vector
 ///
-/// @param a the second input Tensor<scalar_t, 3, 1>
-/// @param b the first input vector
+/// @param a the first input: a matrix (`Tensor<scalar_t, 3, 1>`)
+/// @param b the second input: a vector (`Tensor<scalar_t, 3>`)
 ///
-/// @return a vector representing the cross product
+/// @return a vector (expression) representing the cross product
 template <concepts::scalar scalar_t>
-ALGEBRA_HOST constexpr Fastor::Tensor<scalar_t, 3> cross(
+ALGEBRA_HOST constexpr auto cross(
     const Fastor::Tensor<scalar_t, 3, 1> &a,
     const Fastor::Tensor<scalar_t, 3> &b) {
 
@@ -216,25 +236,19 @@ ALGEBRA_HOST constexpr Fastor::Tensor<scalar_t, 3> cross(
                        b);
 }
 
-/// Cross product between two Tensor<scalar_t, 3, 1>
+/// Cross product between two matrix slices
 ///
-/// @param a the second input Tensor<scalar_t, 3, 1>
-/// @param b the first input Tensor<scalar_t, 3, 1>
+/// @param a the second input matrix (`Tensor<scalar_t, 3, 1>`)
+/// @param b the first input matrix (`Tensor<scalar_t, 3, 1>`)
 ///
-/// @return a vector representing the cross product
+/// @return a vector (expression) representing the cross product
 template <concepts::scalar scalar_t>
-ALGEBRA_HOST constexpr Fastor::Tensor<scalar_t, 3> cross(
+ALGEBRA_HOST constexpr auto cross(
     const Fastor::Tensor<scalar_t, 3, 1> &a,
     const Fastor::Tensor<scalar_t, 3, 1> &b) {
 
   return Fastor::cross(Fastor::Tensor<scalar_t, 3>(a(Fastor::fseq<0, 3>(), 0)),
                        Fastor::Tensor<scalar_t, 3>(b(Fastor::fseq<0, 3>(), 0)));
-}
-
-template <typename Derived0, auto N1, typename Derived1, auto N2>
-ALGEBRA_HOST constexpr auto cross(const Fastor::AbstractTensor<Derived0, N1> &a,
-                                    const Fastor::AbstractTensor<Derived1, N2> &b) {
-  return Fastor::cross(a, b);
 }
 
 }  // namespace algebra::fastor::math

@@ -27,7 +27,6 @@ namespace algebra::fastor::math {
 
 /// This method retrieves phi from a vector @param v
 template <typename Derived, auto N>
-// requires(N >= 2)
 ALGEBRA_HOST_DEVICE constexpr auto phi(
     const Fastor::AbstractTensor<Derived, N> &a) {
   // we first force evaluation of whatever was passed in.
@@ -45,7 +44,6 @@ ALGEBRA_HOST_DEVICE constexpr auto phi(
 ///
 /// @param v the input vector
 template <typename Derived, auto N>
-// requires(N >= 3)
 ALGEBRA_HOST constexpr auto theta(
     const Fastor::AbstractTensor<Derived, N> &a) noexcept {
   // we first force evaluation of whatever was passed in.
@@ -63,7 +61,6 @@ ALGEBRA_HOST constexpr auto theta(
 ///
 /// @param v the input vector
 template <typename Derived, auto N>
-// requires(N >= 2)
 ALGEBRA_HOST constexpr auto perp(
     const Fastor::AbstractTensor<Derived, N> &a) noexcept {
 
@@ -93,7 +90,6 @@ ALGEBRA_HOST constexpr auto norm(const Fastor::AbstractTensor<Derived, N> &v) {
 ///
 /// @param v the input vector
 template <typename Derived, auto N>
-// requires(N >= 3)
 ALGEBRA_HOST constexpr auto eta(
     const Fastor::AbstractTensor<Derived, N> &a) noexcept {
   auto v = Fastor::evaluate(a);

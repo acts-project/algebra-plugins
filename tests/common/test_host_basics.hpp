@@ -142,6 +142,23 @@ class test_host_basics_matrix : public testing::Test, public test_base<T> {
           }
         }
       }
+
+      // Test the transposable_product method.
+      {
+        // Both untransposed
+        {
+          typename A::template matrix<ROWS, COLS> r1 = m1 * m2;
+          typename A::template matrix<ROWS, COLS> r2 =
+              algebra::matrix::transposed_product<false, false>(m1, m2);
+
+          for (std::size_t i = 0; i < ROWS; ++i) {
+            for (std::size_t j = 0; j < COLS; ++j) {
+              ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                          algebra::getter::element(r2, i, j), this->m_epsilon);
+            }
+          }
+        }
+      }
     }
   }
 
@@ -262,11 +279,198 @@ class test_host_basics_matrix : public testing::Test, public test_base<T> {
           }
         }
       }
+
+      // Test the transposable_product method.
+      {
+        // Only left transposed
+        {
+          typename A::template matrix<N, N> r1 =
+              algebra::matrix::transpose(m1) * m2;
+          typename A::template matrix<N, N> r2 =
+              algebra::matrix::transposed_product<true, false>(m1, m2);
+
+          for (std::size_t i = 0; i < N; ++i) {
+            for (std::size_t j = 0; j < N; ++j) {
+              ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                          algebra::getter::element(r2, i, j), this->m_epsilon);
+            }
+          }
+        }
+
+        // Only right transposed
+        {
+          typename A::template matrix<N, N> r1 =
+              m1 * algebra::matrix::transpose(m2);
+          typename A::template matrix<N, N> r2 =
+              algebra::matrix::transposed_product<false, true>(m1, m2);
+
+          for (std::size_t i = 0; i < N; ++i) {
+            for (std::size_t j = 0; j < N; ++j) {
+              ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                          algebra::getter::element(r2, i, j), this->m_epsilon);
+            }
+          }
+        }
+
+        // Both transposed
+        {
+          typename A::template matrix<N, N> r1 =
+              algebra::matrix::transpose(m1) * algebra::matrix::transpose(m2);
+          typename A::template matrix<N, N> r2 =
+              algebra::matrix::transposed_product<true, true>(m1, m2);
+
+          for (std::size_t i = 0; i < N; ++i) {
+            for (std::size_t j = 0; j < N; ++j) {
+              ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                          algebra::getter::element(r2, i, j), this->m_epsilon);
+            }
+          }
+        }
+      }
     }
 
     this->template test_matrix_ops_any_matrix<A, N, N>();
   }
+
+  template <typename A, std::size_t M, std::size_t N, std::size_t O>
+  void test_matrix_ops_inhomogeneous_multipliable_matrices() {
+    // Test NxM and MxO matrix multiplication
+    {
+      typename A::template matrix<N, M> m1;
+      typename A::template matrix<M, O> m2;
+
+      for (std::size_t i = 0; i < N; ++i) {
+        for (std::size_t j = 0; j < M; ++j) {
+          algebra::getter::element(m1, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * N + j);
+        }
+      }
+
+      for (std::size_t i = 0; i < M; ++i) {
+        for (std::size_t j = 0; j < O; ++j) {
+          algebra::getter::element(m2, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * M + j);
+        }
+      }
+
+      {
+        typename A::template matrix<N, O> r1 = m1 * m2;
+        typename A::template matrix<N, O> r2 =
+            algebra::matrix::transposed_product<false, false>(m1, m2);
+
+        for (std::size_t i = 0; i < N; ++i) {
+          for (std::size_t j = 0; j < O; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+    }
+
+    // Test NxM and (OxM)^T matrix multiplication
+    {
+      typename A::template matrix<N, M> m1;
+      typename A::template matrix<O, M> m2;
+
+      for (std::size_t i = 0; i < N; ++i) {
+        for (std::size_t j = 0; j < M; ++j) {
+          algebra::getter::element(m1, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * N + j);
+        }
+      }
+
+      for (std::size_t i = 0; i < O; ++i) {
+        for (std::size_t j = 0; j < M; ++j) {
+          algebra::getter::element(m2, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * O + j);
+        }
+      }
+
+      {
+        typename A::template matrix<N, O> r1 =
+            m1 * algebra::matrix::transpose(m2);
+        typename A::template matrix<N, O> r2 =
+            algebra::matrix::transposed_product<false, true>(m1, m2);
+
+        for (std::size_t i = 0; i < N; ++i) {
+          for (std::size_t j = 0; j < O; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+    }
+
+    // Test (MxN)^T and MxO matrix multiplication
+    {
+      typename A::template matrix<M, N> m1;
+      typename A::template matrix<M, O> m2;
+
+      for (std::size_t i = 0; i < M; ++i) {
+        for (std::size_t j = 0; j < N; ++j) {
+          algebra::getter::element(m1, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * M + j);
+        }
+      }
+
+      for (std::size_t i = 0; i < M; ++i) {
+        for (std::size_t j = 0; j < O; ++j) {
+          algebra::getter::element(m2, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * M + j);
+        }
+      }
+
+      {
+        typename A::template matrix<N, O> r1 =
+            algebra::matrix::transpose(m1) * m2;
+        typename A::template matrix<N, O> r2 =
+            algebra::matrix::transposed_product<true, false>(m1, m2);
+
+        for (std::size_t i = 0; i < N; ++i) {
+          for (std::size_t j = 0; j < O; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+    }
+
+    // Test (MxN)^T and (OxM)^T matrix multiplication
+    {
+      typename A::template matrix<M, N> m1;
+      typename A::template matrix<O, M> m2;
+
+      for (std::size_t i = 0; i < M; ++i) {
+        for (std::size_t j = 0; j < N; ++j) {
+          algebra::getter::element(m1, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * M + j);
+        }
+      }
+
+      for (std::size_t i = 0; i < O; ++i) {
+        for (std::size_t j = 0; j < M; ++j) {
+          algebra::getter::element(m2, i, j) =
+              static_cast<algebra::traits::scalar_t<decltype(m1)>>(i * O + j);
+        }
+      }
+
+      {
+        typename A::template matrix<N, O> r1 =
+            algebra::matrix::transpose(m1) * algebra::matrix::transpose(m2);
+        typename A::template matrix<N, O> r2 =
+            algebra::matrix::transposed_product<true, true>(m1, m2);
+
+        for (std::size_t i = 0; i < N; ++i) {
+          for (std::size_t j = 0; j < O; ++j) {
+            ASSERT_NEAR(algebra::getter::element(r1, i, j),
+                        algebra::getter::element(r2, i, j), this->m_epsilon);
+          }
+        }
+      }
+    }
+  }
 };
+
 TYPED_TEST_SUITE_P(test_host_basics_matrix);
 
 /// Test case class, to be specialised for the different plugins - transforms
@@ -1238,6 +1442,21 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_6x6) {
   this->template test_matrix_ops_square_matrix<TypeParam, N>();
 }
 
+TYPED_TEST_P(test_host_basics_matrix, matrix_7x4_4x12) {
+  this->template test_matrix_ops_inhomogeneous_multipliable_matrices<
+      TypeParam, 7, 4, 12>();
+}
+
+TYPED_TEST_P(test_host_basics_matrix, matrix_17x9_9x4) {
+  this->template test_matrix_ops_inhomogeneous_multipliable_matrices<
+      TypeParam, 17, 9, 4>();
+}
+
+TYPED_TEST_P(test_host_basics_matrix, matrix_5x2_2x3) {
+  this->template test_matrix_ops_inhomogeneous_multipliable_matrices<TypeParam,
+                                                                     5, 2, 3>();
+}
+
 TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {
 
   typename TypeParam::template matrix<2, 2> m22;
@@ -1324,6 +1543,9 @@ TYPED_TEST_P(test_host_basics_matrix, matrix_small_mixed) {
     , matrix_6x4 \
     , matrix_5x5 \
     , matrix_6x6 \
+    , matrix_7x4_4x12 \
+    , matrix_17x9_9x4 \
+    , matrix_5x2_2x3 \
     , matrix_small_mixed \
     )
 // clang-format on

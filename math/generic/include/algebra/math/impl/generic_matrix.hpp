@@ -273,6 +273,56 @@ set_inplace_product_left_transpose(MA &A, const MB &B) requires(
   }
 }
 
+template <bool transpose, concepts::matrix M>
+ALGEBRA_HOST_DEVICE constexpr algebra::traits::value_t<M> transposable_get(
+    const M &A, const algebra::traits::index_t<M> i,
+    const algebra::traits::index_t<M> j) {
+  if constexpr (transpose) {
+    return algebra::traits::element_getter_t<M>()(A, j, i);
+  } else {
+    return algebra::traits::element_getter_t<M>()(A, i, j);
+  }
+}
+
+template <bool transpose_left, bool transpose_right, concepts::matrix MA,
+          concepts::matrix MB>
+ALGEBRA_HOST_DEVICE constexpr auto
+transposed_product(const MA &A, const MB &B) requires(
+    algebra::concepts::matrix_multipliable<
+        std::conditional_t<transpose_left,
+                           decltype(transpose(std::declval<MA>())), MA>,
+        std::conditional_t<transpose_right,
+                           decltype(transpose(std::declval<MB>())), MB> >) {
+  using index_t = algebra::traits::index_t<MA>;
+  using value_t = algebra::traits::value_t<MA>;
+
+  using effective_lhs_t =
+      std::conditional_t<transpose_left,
+                         decltype(transpose(std::declval<MA>())), MA>;
+  using effective_rhs_t =
+      std::conditional_t<transpose_right,
+                         decltype(transpose(std::declval<MB>())), MB>;
+
+  using result_t =
+      algebra::traits::get_matrix_t<MA, algebra::traits::rows<effective_lhs_t>,
+                                    algebra::traits::columns<effective_rhs_t>,
+                                    value_t>;
+
+  result_t C = zero<result_t>();
+
+  for (index_t i = 0; i < algebra::traits::columns<effective_lhs_t>; ++i) {
+    for (index_t j = 0; j < algebra::traits::columns<result_t>; ++j) {
+      for (index_t k = 0; k < algebra::traits::rows<result_t>; ++k) {
+        algebra::traits::element_getter_t<result_t>()(C, k, j) +=
+            transposable_get<transpose_left>(A, k, i) *
+            transposable_get<transpose_right>(B, i, j);
+      }
+    }
+  }
+
+  return C;
+}
+
 /// @returns the determinant of @param m
 template <concepts::square_matrix M>
 ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<M> determinant(

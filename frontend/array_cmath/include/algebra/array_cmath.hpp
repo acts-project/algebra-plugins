@@ -10,6 +10,7 @@
 // Project include(s).
 #include "algebra/math/cmath.hpp"
 #include "algebra/math/generic.hpp"
+#include "algebra/math/impl/generic_matrix.hpp"
 #include "algebra/storage/array.hpp"
 
 namespace algebra {
@@ -102,6 +103,7 @@ using generic::math::set_inplace_product_right_transpose;
 using generic::math::set_product;
 using generic::math::set_product_left_transpose;
 using generic::math::set_product_right_transpose;
+using generic::math::transposed_product;
 
 /// @}
 

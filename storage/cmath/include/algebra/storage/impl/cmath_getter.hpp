@@ -17,6 +17,10 @@
 #include <cstddef>
 #include <type_traits>
 
+#if defined(__HIP__)
+#include <hip/hip_runtime.h>
+#endif
+
 namespace algebra::cmath::storage {
 
 /// "Element getter", assuming a simple 2D array access

@@ -33,13 +33,13 @@ using index_t = typename index<M>::type;
 template <class M>
 struct value {};
 
-template <class M>
-using value_t = typename value<M>::type;
-
 template <typename T>
 requires(std::is_arithmetic_v<T>&& std::is_scalar_v<T>) struct value<T> {
   using type = T;
 };
+
+template <class M>
+using value_t = typename value<M>::type;
 /// @}
 
 /// Scalar type that is used with the matrix (can be multiple values in SoA)

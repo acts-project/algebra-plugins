@@ -102,7 +102,7 @@ struct fastor {
   /// Define scalar type
   using value_type = V;
 
-  template <concepts::value T>
+  template <concepts::element T>
   using simd = T;
 
   using boolean = bool;

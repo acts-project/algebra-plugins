@@ -106,7 +106,7 @@ struct vc_soa {
   /// Define scalar precision
   using value_type = V;
 
-  template <concepts::value T>
+  template <concepts::element T>
   using simd = Vc::Vector<T>;
 
   using boolean = Vc::Mask<V>;

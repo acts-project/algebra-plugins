@@ -19,9 +19,18 @@ namespace algebra::concepts {
 template <typename T>
 concept arithmetic = std::is_arithmetic_v<T>;
 
+/// Arithmetic types
+template <typename T>
+concept enumeration = std::is_enum_v<T>;
+
 // Value concept: Single entry
 template <typename T>
 concept value = algebra::concepts::arithmetic<std::decay_t<T>>;
+
+// Element concept: Single entry, not necessarily for vector/matrix operations
+template <typename T>
+concept element = algebra::concepts::value<T> ||
+                  algebra::concepts::enumeration<std::decay_t<T>>;
 
 /// Scalar concept: Elements of vectors/matrices (can be simd vectors)
 template <typename T>

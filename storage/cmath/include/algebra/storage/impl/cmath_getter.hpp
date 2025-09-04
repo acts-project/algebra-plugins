@@ -8,18 +8,14 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/assert.hpp"
 #include "algebra/concepts.hpp"
 #include "algebra/math/common.hpp"
 #include "algebra/qualifiers.hpp"
 
 // System include(s).
-#include <cassert>
 #include <cstddef>
 #include <type_traits>
-
-#if defined(__HIP__)
-#include <hip/hip_runtime.h>
-#endif
 
 namespace algebra::cmath::storage {
 

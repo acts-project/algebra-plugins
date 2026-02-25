@@ -46,6 +46,7 @@ jobs:
     # Run the CMake configuration.
     - name: Configure
       run: cmake --preset default-x86-64
+                 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
                  -DALGEBRA_PLUGINS_INCLUDE_FASTOR=${{ (matrix.PLATFORM.OS == 'macos-latest') && 'OFF' || 'ON' }}
                  -DALGEBRA_PLUGINS_INCLUDE_VC=${{ (matrix.PLATFORM.OS == 'windows-latest') && 'OFF' || 'ON' }}
                  -DALGEBRA_PLUGINS_SETUP_VC=${{ (matrix.PLATFORM.OS == 'windows-latest') && 'OFF' || 'ON' }}

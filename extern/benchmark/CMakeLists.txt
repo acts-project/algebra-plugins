@@ -13,7 +13,7 @@ message( STATUS "Building Google Benchmark as part of the Algebra Plugins projec
 
 # Declare where to get GoogleTest from.
 set( ALGEBRA_PLUGINS_BENCHMARK_SOURCE
-   "URL;https://github.com/google/benchmark/archive/refs/tags/v1.9.1.tar.gz;URL_MD5;92000ef8b4a7b1e9229972f8943070a7"
+   "URL;https://github.com/google/benchmark/archive/refs/tags/v1.9.5.tar.gz;URL_MD5;12c6c0c228fc07106c62634222bd2541"
    CACHE STRING "Source for Google Benchmark, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_BENCHMARK_SOURCE )
 

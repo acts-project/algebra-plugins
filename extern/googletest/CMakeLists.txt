@@ -13,7 +13,7 @@ message( STATUS "Building GoogleTest as part of the Algebra Plugins project" )
 
 # Declare where to get GoogleTest from.
 set( ALGEBRA_PLUGINS_GOOGLETEST_SOURCE
-   "URL;https://github.com/google/googletest/archive/refs/tags/v1.16.0.tar.gz;URL_MD5;9a75eb2ac97300cdb8b65b1a5833f411"
+   "URL;https://github.com/google/googletest/archive/refs/tags/v1.17.0.tar.gz;URL_MD5;b6f100bc2a5853a48046aa168ececf84"
    CACHE STRING "Source for GoogleTest, when built as part of this project" )
 mark_as_advanced( ALGEBRA_PLUGINS_GOOGLETEST_SOURCE )
 

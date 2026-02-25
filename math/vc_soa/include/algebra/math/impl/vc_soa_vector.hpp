@@ -33,7 +33,8 @@ namespace algebra::vc_soa::math {
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr auto phi(
+  requires(N >= 2)
+ALGEBRA_HOST_DEVICE constexpr auto phi(
     const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::atan2(v[1], v[0]);
@@ -48,7 +49,8 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr auto phi(
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr auto perp(
+  requires(N >= 2)
+ALGEBRA_HOST_DEVICE constexpr auto perp(
     const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::sqrt(Vc::fma(v[0], v[0], v[1] * v[1]));
@@ -63,7 +65,8 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr auto perp(
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr auto theta(
+  requires(N >= 3)
+ALGEBRA_HOST_DEVICE constexpr auto theta(
     const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::atan2(perp(v), v[2]);
@@ -81,10 +84,10 @@ requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr auto theta(
 /// @return a vector (expression) representing the cross product
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N == 3) ALGEBRA_HOST_DEVICE
-    constexpr storage::vector<N, Vc::Vector<value_t>, array_t> cross(
-        const storage::vector<N, Vc::Vector<value_t>, array_t> &a,
-        const storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
+  requires(N == 3)
+ALGEBRA_HOST_DEVICE constexpr storage::vector<N, Vc::Vector<value_t>, array_t>
+cross(const storage::vector<N, Vc::Vector<value_t>, array_t> &a,
+      const storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
 
   return {Vc::fma(a[1], b[2], -b[1] * a[2]), Vc::fma(a[2], b[0], -b[2] * a[0]),
           Vc::fma(a[0], b[1], -b[0] * a[1])};
@@ -161,7 +164,8 @@ normalize(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr auto eta(
+  requires(N >= 3)
+ALGEBRA_HOST_DEVICE constexpr auto eta(
     const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   // atanh does not exist in Vc

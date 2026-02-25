@@ -8,9 +8,10 @@
 algebra_add_library(algebra_common_math common_math
    # Math
    "include/algebra/math/boolean.hpp"
-   "include/algebra/math/common.hpp")
-target_link_libraries(algebra_common_math
-   INTERFACE algebra::common)
+   "include/algebra/math/common.hpp"
+)
+target_link_libraries(algebra_common_math INTERFACE algebra::common)
 algebra_test_public_headers( algebra_common_math
    "algebra/math/boolean.hpp"
-   "algebra/math/common.hpp" )
+   "algebra/math/common.hpp"
+)

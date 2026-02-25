@@ -60,8 +60,8 @@ struct matrix_bm : public benchmark_base {
 
 /// Benchmark operations on a single matrix (transpose, inverse etc)
 template <concepts::matrix matrix_t, typename unaryOP>
-requires std::invocable<unaryOP, matrix_t> struct matrix_unaryOP_bm
-    : public matrix_bm<matrix_t> {
+  requires std::invocable<unaryOP, matrix_t>
+struct matrix_unaryOP_bm : public matrix_bm<matrix_t> {
   using base_type = matrix_bm<matrix_t>;
 
   matrix_unaryOP_bm() = delete;
@@ -92,8 +92,8 @@ requires std::invocable<unaryOP, matrix_t> struct matrix_unaryOP_bm
 
 /// Benchmark elementwise addition/subtraction/multiplication of matrices
 template <concepts::matrix matrix_t, typename binaryOP>
-requires std::invocable<binaryOP, matrix_t, matrix_t> struct matrix_binaryOP_bm
-    : public matrix_bm<matrix_t> {
+  requires std::invocable<binaryOP, matrix_t, matrix_t>
+struct matrix_binaryOP_bm : public matrix_bm<matrix_t> {
   using base_type = matrix_bm<matrix_t>;
 
   matrix_binaryOP_bm() = delete;

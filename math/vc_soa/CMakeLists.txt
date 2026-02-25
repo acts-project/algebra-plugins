@@ -10,8 +10,17 @@ algebra_add_library( algebra_vc_soa_math vc_soa_math
    "include/algebra/math/impl/vc_soa_boolean.hpp"
    "include/algebra/math/impl/vc_soa_math.hpp"
    "include/algebra/math/impl/vc_soa_matrix.hpp"
-   "include/algebra/math/impl/vc_soa_vector.hpp")
-target_link_libraries( algebra_vc_soa_math
-   INTERFACE algebra::common algebra::common_math algebra::common_storage  algebra::vc_soa_storage Vc::Vc )
+   "include/algebra/math/impl/vc_soa_vector.hpp"
+)
+target_link_libraries(
+    algebra_vc_soa_math
+    INTERFACE
+        algebra::common
+        algebra::common_math
+        algebra::common_storage
+        algebra::vc_soa_storage
+        Vc::Vc
+)
 algebra_test_public_headers( algebra_vc_soa_math
-   "algebra/math/vc_soa.hpp" )
+   "algebra/math/vc_soa.hpp"
+)

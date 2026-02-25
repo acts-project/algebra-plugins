@@ -30,12 +30,11 @@ namespace algebra {
 ///
 /// @returns true if the two values are approximaterly equal
 template <concepts::scalar scalar_t, concepts::value value_t>
-requires std::convertible_to<scalar_t, value_t>
-    ALGEBRA_HOST_DEVICE constexpr auto approx_equal(
-        const scalar_t a, const scalar_t b,
-        const value_t rel_error = 16.f *
-                                  std::numeric_limits<value_t>::epsilon(),
-        const value_t max_error = std::numeric_limits<value_t>::epsilon()) {
+  requires std::convertible_to<scalar_t, value_t>
+ALGEBRA_HOST_DEVICE constexpr auto approx_equal(
+    const scalar_t a, const scalar_t b,
+    const value_t rel_error = 16.f * std::numeric_limits<value_t>::epsilon(),
+    const value_t max_error = std::numeric_limits<value_t>::epsilon()) {
 
   if constexpr (std::integral<scalar_t>) {
     return a == b;
@@ -65,17 +64,17 @@ requires std::convertible_to<scalar_t, value_t>
 ///
 /// @returns true if the two vectors are approximaterly equal
 template <typename vector1_t, typename vector2_t>
-requires((concepts::vector<vector1_t> || concepts::point<vector1_t>)&&(
-             concepts::vector<vector2_t> ||
-             concepts::point<vector2_t>)&&!concepts::simd_scalar<vector1_t> &&
-         !concepts::simd_scalar<vector2_t>) ALGEBRA_HOST_DEVICE
-    constexpr auto approx_equal(
-        const vector1_t& v1, const vector2_t& v2,
-        const algebra::traits::value_t<vector1_t> rel_error =
-            16.f *
-            std::numeric_limits<algebra::traits::value_t<vector1_t>>::epsilon(),
-        const algebra::traits::value_t<vector1_t> max_error = std::
-            numeric_limits<algebra::traits::value_t<vector1_t>>::epsilon()) {
+  requires((concepts::vector<vector1_t> || concepts::point<vector1_t>) &&
+           (concepts::vector<vector2_t> || concepts::point<vector2_t>) &&
+           !concepts::simd_scalar<vector1_t> &&
+           !concepts::simd_scalar<vector2_t>)
+ALGEBRA_HOST_DEVICE constexpr auto approx_equal(
+    const vector1_t& v1, const vector2_t& v2,
+    const algebra::traits::value_t<vector1_t> rel_error =
+        16.f *
+        std::numeric_limits<algebra::traits::value_t<vector1_t>>::epsilon(),
+    const algebra::traits::value_t<vector1_t> max_error =
+        std::numeric_limits<algebra::traits::value_t<vector1_t>>::epsilon()) {
 
   static_assert(std::same_as<algebra::traits::value_t<vector1_t>,
                              algebra::traits::value_t<vector2_t>>);

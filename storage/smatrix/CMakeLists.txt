@@ -5,13 +5,17 @@
 # Mozilla Public License Version 2.0
 
 # Find Smatrix.
-find_package( ROOT COMPONENTS Smatrix REQUIRED )
+find_package(ROOT COMPONENTS Smatrix REQUIRED)
 
 # Set up the library.
 algebra_add_library( algebra_smatrix_storage smatrix_storage
    "include/algebra/storage/smatrix.hpp"
-   "include/algebra/storage/impl/smatrix_getter.hpp" )
-target_link_libraries( algebra_smatrix_storage
-   INTERFACE algebra::common ROOT::Smatrix algebra::common_math )
+   "include/algebra/storage/impl/smatrix_getter.hpp"
+)
+target_link_libraries(
+    algebra_smatrix_storage
+    INTERFACE algebra::common ROOT::Smatrix algebra::common_math
+)
 algebra_test_public_headers( algebra_smatrix_storage
-   "algebra/storage/smatrix.hpp" )
+   "algebra/storage/smatrix.hpp"
+)

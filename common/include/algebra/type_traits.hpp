@@ -34,7 +34,8 @@ template <class M>
 struct value {};
 
 template <typename T>
-requires(std::is_arithmetic_v<T>&& std::is_scalar_v<T>) struct value<T> {
+  requires(std::is_arithmetic_v<T> && std::is_scalar_v<T>)
+struct value<T> {
   using type = T;
 };
 
@@ -86,7 +87,8 @@ struct dimensions {
 
 /// Specilization for scalar types
 template <typename M>
-requires std::is_fundamental_v<M> struct dimensions<M> {
+  requires std::is_fundamental_v<M>
+struct dimensions<M> {
 
   using size_type = std::size_t;
 
@@ -142,7 +144,8 @@ template <typename T>
 struct get_algebra {};
 
 template <typename T>
-requires(!std::is_same_v<typename T::point3D, void>) struct get_algebra<T> {
+  requires(!std::is_same_v<typename T::point3D, void>)
+struct get_algebra<T> {
   template <typename U>
   using simd = typename T::template simd<U>;
   using size_type = typename T::size_type;

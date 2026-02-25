@@ -8,8 +8,12 @@
 algebra_add_library( algebra_fastor_storage fastor_storage
    "include/algebra/storage/fastor.hpp"
    "include/algebra/storage/impl/fastor_getter.hpp"
-   "include/algebra/storage/impl/fastor_matrix.hpp" )
-target_link_libraries( algebra_fastor_storage
-	INTERFACE Fastor::Fastor algebra::common algebra::common_math )
+   "include/algebra/storage/impl/fastor_matrix.hpp"
+)
+target_link_libraries(
+    algebra_fastor_storage
+    INTERFACE Fastor::Fastor algebra::common algebra::common_math
+)
 algebra_test_public_headers( algebra_fastor_storage
-   "algebra/storage/fastor.hpp" )
+   "algebra/storage/fastor.hpp"
+)

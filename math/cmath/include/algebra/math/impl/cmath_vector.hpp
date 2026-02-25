@@ -21,8 +21,8 @@ namespace algebra::cmath {
 template <concepts::index size_type,
           template <typename, size_type> class array_t,
           concepts::scalar scalar_t, size_type N>
-requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr scalar_t
-    phi(const array_t<scalar_t, N> &v) {
+  requires(N >= 2)
+ALGEBRA_HOST_DEVICE constexpr scalar_t phi(const array_t<scalar_t, N> &v) {
   return algebra::generic::math::phi(v);
 }
 
@@ -32,8 +32,8 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr scalar_t
 template <concepts::index size_type,
           template <typename, size_type> class array_t,
           concepts::scalar scalar_t, size_type N>
-requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr scalar_t
-    perp(const array_t<scalar_t, N> &v) {
+  requires(N >= 2)
+ALGEBRA_HOST_DEVICE constexpr scalar_t perp(const array_t<scalar_t, N> &v) {
   return algebra::generic::math::perp(v);
 }
 
@@ -43,8 +43,8 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr scalar_t
 template <concepts::index size_type,
           template <typename, size_type> class array_t,
           concepts::scalar scalar_t, size_type N>
-requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr scalar_t
-    theta(const array_t<scalar_t, N> &v) {
+  requires(N >= 2)
+ALGEBRA_HOST_DEVICE constexpr scalar_t theta(const array_t<scalar_t, N> &v) {
   return algebra::generic::math::theta(v);
 }
 
@@ -63,16 +63,17 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr scalar_t
 template <concepts::index size_type,
           template <typename, size_type> class array_t,
           concepts::scalar scalar_t, size_type N>
-requires(N >= 3) ALGEBRA_HOST_DEVICE
-    constexpr array_t<scalar_t, N> cross(const array_t<scalar_t, N> &a,
-                                         const array_t<scalar_t, N> &b) {
+  requires(N >= 3)
+ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
+    const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) {
   return algebra::generic::math::cross(a, b);
 }
 
 template <concepts::index size_type,
           template <typename, size_type> class array_t,
           concepts::scalar scalar_t, size_type N>
-requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
+  requires(N >= 3)
+ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
     const array_t<scalar_t, N> &a, const array_t<array_t<scalar_t, N>, 1> &b) {
   return algebra::generic::math::cross(a, b);
 }
@@ -80,7 +81,8 @@ requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
 template <concepts::index size_type,
           template <typename, size_type> class array_t,
           concepts::scalar scalar_t, size_type N>
-requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
+  requires(N >= 3)
+ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
     const array_t<array_t<scalar_t, N>, 1> &a, const array_t<scalar_t, N> &b) {
   return algebra::generic::math::cross(a, b);
 }
@@ -88,7 +90,8 @@ requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
 template <concepts::index size_type,
           template <typename, size_type> class array_t,
           concepts::scalar scalar_t, size_type N>
-requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
+  requires(N >= 3)
+ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
     const array_t<array_t<scalar_t, N>, 1> &a,
     const array_t<array_t<scalar_t, N>, 1> &b) {
   return algebra::generic::math::cross(a, b);
@@ -174,8 +177,8 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t dot(
 template <concepts::index size_type,
           template <typename, size_type> class array_t,
           concepts::scalar scalar_t, size_type N>
-requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr scalar_t
-    norm(const array_t<scalar_t, N> &v) {
+  requires(N >= 2)
+ALGEBRA_HOST_DEVICE constexpr scalar_t norm(const array_t<scalar_t, N> &v) {
 
   return algebra::math::sqrt(dot(v, v));
 }
@@ -187,8 +190,9 @@ requires(N >= 2) ALGEBRA_HOST_DEVICE constexpr scalar_t
 template <concepts::index size_type,
           template <typename, size_type> class array_t,
           concepts::scalar scalar_t, size_type N>
-requires(N >= 3) ALGEBRA_HOST_DEVICE constexpr scalar_t
-    eta(const array_t<scalar_t, N> &v) noexcept {
+  requires(N >= 3)
+ALGEBRA_HOST_DEVICE constexpr scalar_t eta(
+    const array_t<scalar_t, N> &v) noexcept {
 
   return algebra::math::atanh(v[2] / norm(v));
 }

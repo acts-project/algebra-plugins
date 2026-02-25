@@ -6,6 +6,8 @@
 
 # Set up the library.
 algebra_add_library( algebra_common common
-   "include/algebra/qualifiers.hpp" )
+   "include/algebra/qualifiers.hpp"
+)
 algebra_test_public_headers( algebra_common
-   "algebra/qualifiers.hpp" )
+   "algebra/qualifiers.hpp"
+)

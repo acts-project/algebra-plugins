@@ -9,5 +9,6 @@ algebra_add_library(algebra_common_storage common_storage
    "include/algebra/storage/array_operators.hpp"
    "include/algebra/storage/matrix_getter.hpp"
    "include/algebra/storage/matrix.hpp"
-   "include/algebra/storage/vector.hpp")
+   "include/algebra/storage/vector.hpp"
+)
 target_link_libraries(algebra_common_storage INTERFACE algebra::common)

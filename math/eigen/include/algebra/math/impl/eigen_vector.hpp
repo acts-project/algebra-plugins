@@ -63,9 +63,9 @@ ALGEBRA_HOST_DEVICE constexpr auto norm(
 ///
 /// @param v the input vector
 template <typename derived_type>
-requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime >=
-         3) ALGEBRA_HOST_DEVICE
-    constexpr auto eta(const Eigen::MatrixBase<derived_type> &v) noexcept {
+  requires(Eigen::MatrixBase<derived_type>::RowsAtCompileTime >= 3)
+ALGEBRA_HOST_DEVICE constexpr auto eta(
+    const Eigen::MatrixBase<derived_type> &v) noexcept {
   return algebra::math::atanh(v[2] / v.norm());
 }
 

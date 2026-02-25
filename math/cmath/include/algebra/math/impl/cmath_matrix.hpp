@@ -17,8 +17,8 @@ namespace algebra::cmath {
 
 /// @returns zero matrix of type @tparam matrix_t
 template <concepts::matrix matrix_t>
-requires(std::is_scalar_v<typename matrix_t::value_type::value_type>)
-    ALGEBRA_HOST_DEVICE constexpr matrix_t zero() {
+  requires(std::is_scalar_v<typename matrix_t::value_type::value_type>)
+ALGEBRA_HOST_DEVICE constexpr matrix_t zero() {
   matrix_t ret;
 
   for (std::size_t j = 0; j < algebra::traits::columns<matrix_t>; ++j) {
@@ -32,8 +32,8 @@ requires(std::is_scalar_v<typename matrix_t::value_type::value_type>)
 
 /// @returns identity matrix of type @tparam matrix_t
 template <concepts::matrix matrix_t>
-requires(std::is_scalar_v<typename matrix_t::value_type::value_type>)
-    ALGEBRA_HOST_DEVICE constexpr auto identity() {
+  requires(std::is_scalar_v<typename matrix_t::value_type::value_type>)
+ALGEBRA_HOST_DEVICE constexpr auto identity() {
   auto ret{zero<matrix_t>()};
 
   for (std::size_t i = 0; i < algebra::traits::rank<matrix_t>; ++i) {

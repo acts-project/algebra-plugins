@@ -8,8 +8,12 @@
 algebra_add_library( algebra_eigen_storage eigen_storage
    "include/algebra/storage/eigen.hpp"
    "include/algebra/storage/impl/eigen_array.hpp"
-   "include/algebra/storage/impl/eigen_getter.hpp" )
-target_link_libraries( algebra_eigen_storage
-   INTERFACE algebra::common Eigen3::Eigen algebra::common_math )
+   "include/algebra/storage/impl/eigen_getter.hpp"
+)
+target_link_libraries(
+    algebra_eigen_storage
+    INTERFACE algebra::common Eigen3::Eigen algebra::common_math
+)
 algebra_test_public_headers( algebra_eigen_storage
-   "algebra/storage/eigen.hpp" )
+   "algebra/storage/eigen.hpp"
+)

@@ -10,8 +10,12 @@ algebra_add_library(algebra_cmath_math cmath_math
    "include/algebra/math/cmath.hpp"
    "include/algebra/math/impl/cmath_matrix.hpp"
    "include/algebra/math/impl/cmath_operators.hpp"
-   "include/algebra/math/impl/cmath_vector.hpp")
-target_link_libraries(algebra_cmath_math
-   INTERFACE algebra::common algebra::common_math algebra::generic_math)
+   "include/algebra/math/impl/cmath_vector.hpp"
+)
+target_link_libraries(
+    algebra_cmath_math
+    INTERFACE algebra::common algebra::common_math algebra::generic_math
+)
 algebra_test_public_headers( algebra_cmath_math
-   "algebra/math/cmath.hpp" )
+   "algebra/math/cmath.hpp"
+)

@@ -19,8 +19,12 @@ algebra_add_library(algebra_generic_math generic_math
    "include/algebra/math/algorithms/matrix/inverse/cofactor.hpp"
    "include/algebra/math/algorithms/matrix/inverse/hard_coded.hpp"
    "include/algebra/math/algorithms/matrix/inverse/partial_pivot_lud.hpp"
-   "include/algebra/math/algorithms/utils/algorithm_finder.hpp")
-target_link_libraries(algebra_generic_math
-   INTERFACE algebra::common algebra::utils algebra::common_math)
+   "include/algebra/math/algorithms/utils/algorithm_finder.hpp"
+)
+target_link_libraries(
+    algebra_generic_math
+    INTERFACE algebra::common algebra::utils algebra::common_math
+)
 algebra_test_public_headers( algebra_generic_math
-   "algebra/math/generic.hpp" )
+   "algebra/math/generic.hpp"
+)

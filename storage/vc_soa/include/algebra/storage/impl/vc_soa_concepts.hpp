@@ -17,7 +17,7 @@ namespace algebra::concepts {
 
 /// Vc SoA vector
 template <typename T>
-concept vc_soa_vector = (simd_storage_vector<T> ||
-                         vc_simd_vector<typename T::value_type>);
+concept vc_soa_vector =
+    (simd_storage_vector<T> || vc_simd_vector<typename T::value_type>);
 
 }  // namespace algebra::concepts

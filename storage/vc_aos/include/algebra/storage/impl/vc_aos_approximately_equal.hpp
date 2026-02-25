@@ -39,16 +39,16 @@ namespace algebra {
 ///
 /// @returns true if the two simd types are elementwise approximately equal
 template <typename simd1_t, typename simd2_t>
-requires((Vc::is_simd_vector<simd1_t>::value &&
-          std::convertible_to<simd2_t, simd1_t>) ||
-         (Vc::is_simd_vector<simd2_t>::value &&
-          std::convertible_to<simd1_t, simd2_t>)) ALGEBRA_HOST_DEVICE
-    constexpr auto approx_equal(
-        const simd1_t a, const simd2_t b,
-        const typename simd1_t::value_type rel_error =
-            16.f * std::numeric_limits<typename simd1_t::value_type>::epsilon(),
-        const typename simd1_t::value_type max_error =
-            std::numeric_limits<typename simd1_t::value_type>::epsilon()) {
+  requires((Vc::is_simd_vector<simd1_t>::value &&
+            std::convertible_to<simd2_t, simd1_t>) ||
+           (Vc::is_simd_vector<simd2_t>::value &&
+            std::convertible_to<simd1_t, simd2_t>))
+ALGEBRA_HOST_DEVICE constexpr auto approx_equal(
+    const simd1_t a, const simd2_t b,
+    const typename simd1_t::value_type rel_error =
+        16.f * std::numeric_limits<typename simd1_t::value_type>::epsilon(),
+    const typename simd1_t::value_type max_error =
+        std::numeric_limits<typename simd1_t::value_type>::epsilon()) {
   static_assert(
       std::same_as<typename simd1_t::value_type, typename simd2_t::value_type>);
 

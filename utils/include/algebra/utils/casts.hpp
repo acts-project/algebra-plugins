@@ -19,17 +19,16 @@ namespace algebra {
 /// Cast a salar (might be simd) @param s to the precision given by
 /// @tparam value_t
 template <concepts::value value_t, concepts::scalar scalar_t>
-requires std::convertible_to<scalar_t, value_t>
-    ALGEBRA_HOST_DEVICE constexpr auto cast_to(const scalar_t& s) {
+  requires std::convertible_to<scalar_t, value_t>
+ALGEBRA_HOST_DEVICE constexpr auto cast_to(const scalar_t& s) {
   return static_cast<value_t>(s);
 }
 
 /// Cast a generic vector or point @param v to the precision given by
 /// @tparam value_t
 template <concepts::value value_t, typename vector_t>
-requires(concepts::vector<vector_t> ||
-         concepts::point<vector_t>) ALGEBRA_HOST_DEVICE
-    constexpr auto cast_to(const vector_t& v) {
+  requires(concepts::vector<vector_t> || concepts::point<vector_t>)
+ALGEBRA_HOST_DEVICE constexpr auto cast_to(const vector_t& v) {
 
   using index_t = algebra::traits::index_t<vector_t>;
 
@@ -98,9 +97,9 @@ ALGEBRA_HOST_DEVICE constexpr auto cast_to(const matrix_t& m) {
 
 /// Cast a 3D transform @param trf to the precision given by @tparam scalar_t
 template <concepts::scalar scalar_t, concepts::transform3D transform_t>
-requires(!concepts::simd_scalar<scalar_t> &&
-         !concepts::simd_scalar<typename transform_t::scalar_type>)
-    ALGEBRA_HOST_DEVICE constexpr auto cast_to(const transform_t& trf) {
+  requires(!concepts::simd_scalar<scalar_t> &&
+           !concepts::simd_scalar<typename transform_t::scalar_type>)
+ALGEBRA_HOST_DEVICE constexpr auto cast_to(const transform_t& trf) {
   using new_trf3_t = typename transform_t::template other_type<scalar_t>;
 
   return new_trf3_t{::algebra::cast_to<scalar_t>(trf.matrix()),

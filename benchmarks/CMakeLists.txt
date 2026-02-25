@@ -21,47 +21,47 @@ add_library( algebra::bench_common ALIAS algebra_bench_common )
 add_library( algebra_bench_array INTERFACE )
 target_include_directories( algebra_bench_array INTERFACE
    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/array/include>" )
-target_link_libraries(algebra_bench_array INTERFACE algebra::array_cmath
+target_link_libraries(algebra_bench_array INTERFACE algebra::array
                                                     algebra::common_storage)
 algebra_add_benchmark( array_getter
    "array/array_getter.cpp"
    LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                   algebra_bench_array algebra::array_cmath )
+                   algebra_bench_array algebra::array )
 algebra_add_benchmark( array_vector
    "array/array_vector.cpp"
    LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                   algebra_bench_array algebra::array_cmath )
+                   algebra_bench_array algebra::array )
 algebra_add_benchmark( array_transform3
    "array/array_transform3.cpp"
    LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                   algebra_bench_array algebra::array_cmath )
+                   algebra_bench_array algebra::array )
 algebra_add_benchmark( array_matrix
    "array/array_matrix.cpp"
    LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                   algebra_bench_array algebra::array_cmath )
+                   algebra_bench_array algebra::array )
 
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
    add_library( algebra_bench_eigen INTERFACE )
    target_include_directories( algebra_bench_eigen INTERFACE
       "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/eigen/include>" )
-   target_link_libraries(algebra_bench_eigen INTERFACE algebra::eigen_eigen
+   target_link_libraries(algebra_bench_eigen INTERFACE algebra::eigen
                                                     algebra::common_storage)
    algebra_add_benchmark( eigen_getter
       "eigen/eigen_getter.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra_bench_eigen algebra::eigen_eigen )
+                     algebra_bench_eigen algebra::eigen )
    algebra_add_benchmark( eigen_vector
       "eigen/eigen_vector.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra_bench_eigen algebra::eigen_eigen )
+                     algebra_bench_eigen algebra::eigen )
    algebra_add_benchmark( eigen_transform3
       "eigen/eigen_transform3.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra_bench_eigen algebra::eigen_eigen )
+                     algebra_bench_eigen algebra::eigen )
    algebra_add_benchmark( eigen_matrix
       "eigen/eigen_matrix.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra_bench_eigen algebra::eigen_eigen )
+                     algebra_bench_eigen algebra::eigen )
 endif()
 
 if( ALGEBRA_PLUGINS_INCLUDE_VC )
@@ -117,22 +117,22 @@ if( ALGEBRA_PLUGINS_INCLUDE_FASTOR )
    message(STATUS "Include directory: ${CMAKE_CURRENT_SOURCE_DIR}/fastor/include")
    target_include_directories( algebra_bench_fastor INTERFACE
       "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/fastor/include>" )
-   target_link_libraries(algebra_bench_fastor INTERFACE algebra::fastor_fastor
+   target_link_libraries(algebra_bench_fastor INTERFACE algebra::fastor
                                                     algebra::common_storage)
    algebra_add_benchmark( fastor_getter
       "fastor/fastor_getter.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra_bench_fastor algebra::fastor_fastor )
+                     algebra_bench_fastor algebra::fastor )
    algebra_add_benchmark( fastor_vector
       "fastor/fastor_vector.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra_bench_fastor algebra::fastor_fastor )
+                     algebra_bench_fastor algebra::fastor )
    algebra_add_benchmark( fastor_transform3
       "fastor/fastor_transform3.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra_bench_fastor algebra::fastor_fastor )
+                     algebra_bench_fastor algebra::fastor )
    algebra_add_benchmark( fastor_matrix
       "fastor/fastor_matrix.cpp"
       LINK_LIBRARIES benchmark::benchmark algebra::bench_common
-                     algebra_bench_fastor algebra::fastor_fastor )
+                     algebra_bench_fastor algebra::fastor )
 endif()

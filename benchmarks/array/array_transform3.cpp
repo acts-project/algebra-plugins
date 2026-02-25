@@ -6,7 +6,7 @@
  */
 
 // Project include(s)
-#include "algebra/array_cmath.hpp"
+#include "algebra/array.hpp"
 #include "benchmark/array/data_generator.hpp"
 #include "benchmark/common/benchmark_transform3.hpp"
 #include "benchmark/common/register_benchmark.hpp"

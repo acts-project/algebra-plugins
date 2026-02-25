@@ -1,6 +1,6 @@
 # Algebra plugins library, part of the ACTS project (R&D line)
 #
-# (c) 2021-2022 CERN for the benefit of the ACTS project
+# (c) 2021-2026 CERN for the benefit of the ACTS project
 #
 # Mozilla Public License Version 2.0
 
@@ -44,24 +44,16 @@ endif()
 add_library( algebra::tests_cuda_common ALIAS algebra_tests_cuda_common )
 
 # Set up all of the (available) CUDA tests.
-algebra_add_test( array_cuda "array_cmath.cu"
-   LINK_LIBRARIES algebra::array_cmath
+algebra_add_test( array_cuda "array.cu"
+   LINK_LIBRARIES algebra::array
                   algebra::tests_cuda_common GTest::gtest_main )
 target_compile_options( algebra_test_array_cuda
    PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )
 
 if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
-   algebra_add_test( eigen_cuda "eigen_generic.cu" "eigen_eigen.cu"
-      LINK_LIBRARIES algebra::eigen_generic algebra::eigen_eigen
+   algebra_add_test( eigen_cuda "eigen.cu"
+      LINK_LIBRARIES algebra::eigen
                      algebra::tests_cuda_common GTest::gtest_main )
    target_compile_options( algebra_test_eigen_cuda
-      PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )
-endif()
-
-if( ALGEBRA_PLUGINS_INCLUDE_VECMEM )
-   algebra_add_test( vecmem_cuda "vecmem_cmath.cu"
-      LINK_LIBRARIES algebra::vecmem_cmath
-                     algebra::tests_cuda_common GTest::gtest_main )
-   target_compile_options( algebra_test_vecmem_cuda
       PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr> )
 endif()

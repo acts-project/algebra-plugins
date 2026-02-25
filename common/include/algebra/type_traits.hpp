@@ -154,6 +154,7 @@ struct get_algebra<T> {
   using scalar = typename T::scalar;
   using point2D = typename T::point2D;
   using point3D = typename T::point3D;
+  using vector2D = typename T::vector2D;
   using vector3D = typename T::vector3D;
   using transform3D = typename T::transform3D;
   template <std::size_t ROWS, std::size_t COLS>
@@ -182,6 +183,9 @@ using get_point2D_t = typename traits::get_algebra<A>::point2D;
 
 template <typename A>
 using get_point3D_t = typename traits::get_algebra<A>::point3D;
+
+template <typename A>
+using get_vector2D_t = typename traits::get_algebra<A>::vector2D;
 
 template <typename A>
 using get_vector3D_t = typename traits::get_algebra<A>::vector3D;

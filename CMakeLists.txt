@@ -26,6 +26,13 @@ endif()
 include(CTest)
 include(GNUInstallDirs)
 
+include(CheckLanguage)
+check_language(CUDA)
+set(ALGEBRA_BUILD_CUDA_DEFAULT FALSE)
+if(CMAKE_CUDA_COMPILER)
+    set(ALGEBRA_BUILD_CUDA_DEFAULT TRUE)
+endif()
+
 # Flags controlling the meta-build system.
 option(ALGEBRA_PLUGINS_USE_SYSTEM_LIBS "Use system libraries be default" FALSE)
 
@@ -48,7 +55,23 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
     "Directory for the built static libraries"
 )
 
+option(
+    ALGEBRA_BUILD_CUDA
+    "Build the CUDA sources included in algebra-plugins"
+    ${ALGEBRA_BUILD_CUDA_DEFAULT}
+)
+option(
+    ALGEBRA_BUILD_SYCL
+    "Build the SYCL sources included in algebra-plugins"
+    OFF
+)
+
 # Flags controlling how the Algebra Plugins code should behave.
+option(
+    ALGEBRA_PLUGINS_INCLUDE_ARRAY
+    "Include std::array types in Algebra Plugins"
+    TRUE
+)
 option(
     ALGEBRA_PLUGINS_INCLUDE_EIGEN
     "Include Eigen types in Algebra Plugins"

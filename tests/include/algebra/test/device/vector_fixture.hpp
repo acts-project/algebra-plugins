@@ -86,6 +86,7 @@ class vector_fixture : public device_fixture<A, algebra::get_scalar_t<A>> {
     m_p2.reset();
     m_v1.reset();
     m_v2.reset();
+
     // Tear down the base class.
     base_fixture::TearDown();
   }

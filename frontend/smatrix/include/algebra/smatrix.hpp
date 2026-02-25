@@ -102,6 +102,7 @@ struct smatrix {
   using transform3D = algebra::smatrix::transform3<value_type>;
   using point2D = algebra::smatrix::point2<value_type>;
   using point3D = algebra::smatrix::point3<value_type>;
+  using vector2D = algebra::smatrix::vector2<value_type>;
   using vector3D = algebra::smatrix::vector3<value_type>;
 
   template <std::size_t ROWS, std::size_t COLS>

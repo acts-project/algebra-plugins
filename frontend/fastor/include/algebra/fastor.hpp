@@ -111,6 +111,7 @@ struct fastor {
   using transform3D = algebra::fastor::transform3<value_type>;
   using point2D = algebra::fastor::point2<value_type>;
   using point3D = algebra::fastor::point3<value_type>;
+  using vector2D = algebra::fastor::vector2<value_type>;
   using vector3D = algebra::fastor::vector3<value_type>;
 
   template <std::size_t ROWS, std::size_t COLS>

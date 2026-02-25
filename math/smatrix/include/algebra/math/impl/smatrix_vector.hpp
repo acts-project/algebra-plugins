@@ -183,10 +183,10 @@ ALGEBRA_HOST constexpr scalar_t dot(
 /// @param b the second input vector
 ///
 /// @return the scalar dot product value
-template <concepts::scalar scalar_t, class A, auto N>
+template <concepts::scalar scalar_t, class A, class B, auto N>
 ALGEBRA_HOST constexpr scalar_t dot(
     const ROOT::Math::VecExpr<A, scalar_t, N> &a,
-    const ROOT::Math::VecExpr<A, scalar_t, N> &b) {
+    const ROOT::Math::VecExpr<B, scalar_t, N> &b) {
 
   return ROOT::Math::Dot(a, b);
 }
@@ -293,10 +293,10 @@ ALGEBRA_HOST constexpr ROOT::Math::SVector<scalar_t, 3> cross(
 /// @param b the second input vector
 ///
 /// @return a vector (expression) representing the cross product
-template <concepts::scalar scalar_t, class A>
+template <concepts::scalar scalar_t, class A, class B>
 ALGEBRA_HOST constexpr ROOT::Math::SVector<scalar_t, 3> cross(
     const ROOT::Math::VecExpr<A, scalar_t, 3> &a,
-    const ROOT::Math::VecExpr<A, scalar_t, 3> &b) {
+    const ROOT::Math::VecExpr<B, scalar_t, 3> &b) {
 
   return ROOT::Math::Cross(a, b);
 }

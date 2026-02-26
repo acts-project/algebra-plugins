@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s)
-#include "algebra/fastor_fastor.hpp"
+#include "algebra/fastor.hpp"
 
 // System include(s)
 #include <algorithm>

@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s)
-#include "algebra/array_cmath.hpp"
+#include "algebra/array.hpp"
 #include "algebra/concepts.hpp"
 
 // System include(s)

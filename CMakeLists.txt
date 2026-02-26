@@ -48,8 +48,6 @@ option( ALGEBRA_PLUGINS_INCLUDE_VC
    "Include Vc types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_INCLUDE_FASTOR
    "Include Fastor types in Algebra Plugins" FALSE )
-option( ALGEBRA_PLUGINS_INCLUDE_VECMEM
-   "Include VecMem types in Algebra Plugins" FALSE )
 option( ALGEBRA_PLUGINS_BUILD_TESTING "Build the unit tests of Algebra Plugins"
    TRUE )
 option( ALGEBRA_PLUGINS_BUILD_BENCHMARKS "Build the benchmark suite of Algebra Plugins"

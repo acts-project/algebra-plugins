@@ -48,7 +48,7 @@ endfunction( algebra_add_library )
 # care of declaring all of their dependencies correctly for the public
 # headers to work.
 #
-# Usage: algebra_test_public_headers( algebra_array_cmath
+# Usage: algebra_test_public_headers( algebra_array
 #                                     include/header1.hpp ... )
 #
 function( algebra_test_public_headers library )

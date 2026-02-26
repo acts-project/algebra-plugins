@@ -87,10 +87,6 @@ jobs:
             RUN_TESTS: true
           - NAME: "HOST"
             CONTAINER: "ghcr.io/acts-project/ubuntu2404:67"
-            OPTIONS: --preset vecmem
-            RUN_TESTS: true
-          - NAME: "HOST"
-            CONTAINER: "ghcr.io/acts-project/ubuntu2404:67"
             OPTIONS: --preset fastor
             RUN_TESTS: true
           - NAME: "CUDA"

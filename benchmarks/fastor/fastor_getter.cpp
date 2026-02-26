@@ -6,7 +6,7 @@
  */
 
 // Project include(s)
-#include "algebra/fastor_fastor.hpp"
+#include "algebra/fastor.hpp"
 #include "benchmark/common/benchmark_getter.hpp"
 #include "benchmark/fastor/data_generator.hpp"
 

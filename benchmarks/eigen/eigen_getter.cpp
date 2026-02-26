@@ -6,7 +6,7 @@
  */
 
 // Project include(s)
-#include "algebra/eigen_eigen.hpp"
+#include "algebra/eigen.hpp"
 #include "benchmark/common/benchmark_getter.hpp"
 #include "benchmark/eigen/data_generator.hpp"
 

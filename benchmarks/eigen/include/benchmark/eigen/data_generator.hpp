@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s)
-#include "algebra/eigen_eigen.hpp"
+#include "algebra/eigen.hpp"
 
 // System include(s)
 #include <algorithm>

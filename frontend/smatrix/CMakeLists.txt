@@ -6,10 +6,18 @@
 
 # Set up the library.
 algebra_add_library( algebra_smatrix smatrix
-   "include/algebra/smatrix.hpp" )
+   "include/algebra/smatrix.hpp"
+)
 
-target_link_libraries( algebra_smatrix
-   INTERFACE algebra::common algebra::smatrix_storage algebra::smatrix_math algebra::generic_math )
+target_link_libraries(
+    algebra_smatrix
+    INTERFACE
+        algebra::common
+        algebra::smatrix_storage
+        algebra::smatrix_math
+        algebra::generic_math
+)
 
 algebra_test_public_headers( algebra_smatrix
-   "algebra/smatrix.hpp" )
+   "algebra/smatrix.hpp"
+)

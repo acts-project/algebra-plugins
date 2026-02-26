@@ -98,11 +98,10 @@ ALGEBRA_HOST_DEVICE constexpr auto eta(const vector_t &v) noexcept {
 /// @return a vector representing the cross product
 template <algebra::concepts::vc_aos_vector vector_t1,
           algebra::concepts::vc_aos_vector vector_t2>
-requires(std::same_as<algebra::traits::value_t<vector_t1>, float>
-             &&std::same_as<algebra::traits::value_t<vector_t2>, float>)
-    ALGEBRA_HOST_DEVICE
-    constexpr auto cross(const vector_t1 &a, const vector_t2 &b)
-        -> decltype(a * b - b * a) {
+  requires(std::same_as<algebra::traits::value_t<vector_t1>, float> &&
+           std::same_as<algebra::traits::value_t<vector_t2>, float>)
+ALGEBRA_HOST_DEVICE constexpr auto cross(const vector_t1 &a, const vector_t2 &b)
+    -> decltype(a * b - b * a) {
   using T = algebra::traits::value_t<vector_t1>;
   using simd_array_t = Vc::SimdArray<T, 4>;
 
@@ -136,11 +135,10 @@ requires(std::same_as<algebra::traits::value_t<vector_t1>, float>
 /// @return a vector representing the cross product
 template <algebra::concepts::vc_aos_vector vector_t1,
           algebra::concepts::vc_aos_vector vector_t2>
-requires(std::same_as<algebra::traits::value_t<vector_t1>, double> ||
-         std::same_as<algebra::traits::value_t<vector_t2>, double>)
-    ALGEBRA_HOST_DEVICE
-    constexpr auto cross(const vector_t1 &a, const vector_t2 &b)
-        -> decltype(a * b - b * a) {
+  requires(std::same_as<algebra::traits::value_t<vector_t1>, double> ||
+           std::same_as<algebra::traits::value_t<vector_t2>, double>)
+ALGEBRA_HOST_DEVICE constexpr auto cross(const vector_t1 &a, const vector_t2 &b)
+    -> decltype(a * b - b * a) {
 
   return {algebra::math::fma(a[1], b[2], -b[1] * a[2]),
           algebra::math::fma(a[2], b[0], -b[2] * a[0]),

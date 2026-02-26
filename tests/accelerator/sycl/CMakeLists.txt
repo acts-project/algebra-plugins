@@ -5,40 +5,55 @@
 # Mozilla Public License Version 2.0
 
 # Enable SYCL as a language.
-enable_language( SYCL )
+enable_language(SYCL)
 
 # Set the default SYCL compiler flags.
-include( algebra-plugins-compiler-options-sycl )
+include(algebra-plugins-compiler-options-sycl)
 
 if(${CMAKE_SYCL_STANDARD} LESS 20)
-   message(SEND_ERROR "CMAKE_SYCL_STANDARD=${CMAKE_SYCL_STANDARD}, but algebra-plugins requires C++>=20")
+    message(
+        SEND_ERROR
+        "CMAKE_SYCL_STANDARD=${CMAKE_SYCL_STANDARD}, but algebra-plugins requires C++>=20"
+    )
 endif()
 
 # Helper library for the SYCL tests.
-add_library( algebra_tests_sycl_common INTERFACE )
+add_library(algebra_tests_sycl_common INTERFACE)
 
-target_include_directories( algebra_tests_sycl_common INTERFACE
-   "${CMAKE_CURRENT_SOURCE_DIR}/common" )
+target_include_directories(
+    algebra_tests_sycl_common
+    INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/common"
+)
 
-target_link_libraries( algebra_tests_sycl_common
-   INTERFACE GTest::gtest algebra::tests_common algebra::tests_accel_common
-             vecmem::core vecmem::sycl )
+target_link_libraries(
+    algebra_tests_sycl_common
+    INTERFACE
+        GTest::gtest
+        algebra::tests_common
+        algebra::tests_accel_common
+        vecmem::core
+        vecmem::sycl
+)
 
-add_library( algebra::tests_sycl_common ALIAS algebra_tests_sycl_common )
+add_library(algebra::tests_sycl_common ALIAS algebra_tests_sycl_common)
 
 # Set up all of the (available) SYCL tests.
 algebra_add_test( array_sycl "array.sycl"
    LINK_LIBRARIES algebra::array algebra::tests_sycl_common
-                  GTest::gtest_main )
+                  GTest::gtest_main
+)
 
-if( ALGEBRA_PLUGINS_INCLUDE_EIGEN )
-   algebra_add_test( eigen_sycl "eigen.sycl"
-      LINK_LIBRARIES algebra::eigen
-                     algebra::tests_sycl_common GTest::gtest_main )
-   # Prevent Eigen from considering the SYCL device compilation as either:
-   #  - host compilation;
-   #  - CUDA compilation;
-   #  - HIP compilation.
-   target_compile_definitions( algebra_test_eigen_sycl
-      PRIVATE EIGEN_NO_CUDA EIGEN_NO_HIP EIGEN_DONT_VECTORIZE )
+if(ALGEBRA_PLUGINS_INCLUDE_EIGEN)
+    algebra_add_test(eigen_sycl "eigen.sycl"
+       LINK_LIBRARIES algebra::eigen
+                      algebra::tests_sycl_common GTest::gtest_main
+    )
+    # Prevent Eigen from considering the SYCL device compilation as either:
+    #  - host compilation;
+    #  - CUDA compilation;
+    #  - HIP compilation.
+    target_compile_definitions(
+        algebra_test_eigen_sycl
+        PRIVATE EIGEN_NO_CUDA EIGEN_NO_HIP EIGEN_DONT_VECTORIZE
+    )
 endif()

@@ -33,8 +33,8 @@ struct hard_coded {
 
   // 2 X 2 matrix inverse
   template <typename M = matrix_t>
-  requires(algebra::traits::rank<M> == 2) ALGEBRA_HOST_DEVICE constexpr matrix_t
-  operator()(const matrix_t &m) const {
+    requires(algebra::traits::rank<M> == 2)
+  ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(const matrix_t &m) const {
 
     matrix_t ret;
 
@@ -50,8 +50,8 @@ struct hard_coded {
 
   // 4 X 4 matrix inverse
   template <typename M = matrix_t>
-  requires(algebra::traits::rank<M> == 4) ALGEBRA_HOST_DEVICE constexpr matrix_t
-  operator()(const matrix_t &m) const {
+    requires(algebra::traits::rank<M> == 4)
+  ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(const matrix_t &m) const {
 
     matrix_t ret;
     element_getter()(ret, 0, 0) =

@@ -61,8 +61,8 @@ struct vector_bm : public benchmark_base {
 /// Benchmark elementwise addition of vectors
 template <template <typename> class vector_t, concepts::scalar scalar_t,
           typename unaryOP>
-requires std::invocable<unaryOP, vector_t<scalar_t>> struct vector_unaryOP_bm
-    : public vector_bm<vector_t<scalar_t>> {
+  requires std::invocable<unaryOP, vector_t<scalar_t>>
+struct vector_unaryOP_bm : public vector_bm<vector_t<scalar_t>> {
   using base_type = vector_bm<vector_t<scalar_t>>;
 
   vector_unaryOP_bm() = delete;
@@ -94,9 +94,8 @@ requires std::invocable<unaryOP, vector_t<scalar_t>> struct vector_unaryOP_bm
 /// Benchmark elementwise addition of vectors
 template <template <typename> class vector_t, concepts::scalar scalar_t,
           typename binaryOP>
-requires std::invocable<binaryOP, vector_t<scalar_t>,
-                        vector_t<scalar_t>> struct vector_binaryOP_bm
-    : public vector_bm<vector_t<scalar_t>> {
+  requires std::invocable<binaryOP, vector_t<scalar_t>, vector_t<scalar_t>>
+struct vector_binaryOP_bm : public vector_bm<vector_t<scalar_t>> {
   using base_type = vector_bm<vector_t<scalar_t>>;
 
   vector_binaryOP_bm() = delete;

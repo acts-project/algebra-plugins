@@ -8,34 +8,39 @@ cmake_minimum_required(VERSION 3.21)
 
 # Only set these compiler flags if we are the top level project.
 if(PROJECT_IS_TOP_LEVEL)
-# Include the helper function(s).
-include( algebra-plugins-functions )
+    # Include the helper function(s).
+    include(algebra-plugins-functions)
 
-# Figure out the properties of CUDA being used.
-find_package( CUDAToolkit REQUIRED )
+    # Figure out the properties of CUDA being used.
+    find_package(CUDAToolkit REQUIRED)
 
-# Set the architecture to build code for.
-set( CMAKE_CUDA_ARCHITECTURES "52" CACHE STRING
-   "CUDA architectures to build device code for" )
+    # Set the architecture to build code for.
+    set(CMAKE_CUDA_ARCHITECTURES
+        "52"
+        CACHE STRING
+        "CUDA architectures to build device code for"
+    )
 
-# Turn on the correct setting for the __cplusplus macro with MSVC.
-if( "${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC" )
-   algebra_add_flag( CMAKE_CUDA_FLAGS "-Xcompiler /Zc:__cplusplus" )
-endif()
+    # Turn on the correct setting for the __cplusplus macro with MSVC.
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+        algebra_add_flag( CMAKE_CUDA_FLAGS "-Xcompiler /Zc:__cplusplus" )
+    endif()
 
-# Make CUDA generate debug symbols for the device code as well in a debug
-# build.
-if( "${CMAKE_CUDA_COMPILER_ID}" MATCHES "NVIDIA" )
-   algebra_add_flag( CMAKE_CUDA_FLAGS_DEBUG "-G" )
-endif()
+    # Make CUDA generate debug symbols for the device code as well in a debug
+    # build.
+    if("${CMAKE_CUDA_COMPILER_ID}" MATCHES "NVIDIA")
+        algebra_add_flag( CMAKE_CUDA_FLAGS_DEBUG "-G" )
+    endif()
 
-# Fail on warnings, if asked for that behaviour.
-if( ALGEBRA_PLUGINS_FAIL_ON_WARNINGS )
-   if( ( "${CUDAToolkit_VERSION}" VERSION_GREATER_EQUAL "10.2" ) AND
-       ( "${CMAKE_CUDA_COMPILER_ID}" MATCHES "NVIDIA" ) )
-      algebra_add_flag( CMAKE_CUDA_FLAGS "-Werror all-warnings" )
-   elseif( "${CMAKE_CUDA_COMPILER_ID}" MATCHES "Clang" )
-      algebra_add_flag( CMAKE_CUDA_FLAGS "-Werror" )
-   endif()
-endif()
+    # Fail on warnings, if asked for that behaviour.
+    if(ALGEBRA_PLUGINS_FAIL_ON_WARNINGS)
+        if(
+            ("${CUDAToolkit_VERSION}" VERSION_GREATER_EQUAL "10.2")
+            AND ("${CMAKE_CUDA_COMPILER_ID}" MATCHES "NVIDIA")
+        )
+            algebra_add_flag( CMAKE_CUDA_FLAGS "-Werror all-warnings" )
+        elseif("${CMAKE_CUDA_COMPILER_ID}" MATCHES "Clang")
+            algebra_add_flag( CMAKE_CUDA_FLAGS "-Werror" )
+        endif()
+    endif()
 endif()

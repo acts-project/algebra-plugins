@@ -22,15 +22,17 @@ namespace algebra::smatrix::math {
 ///
 /// @param v the input vector
 template <concepts::scalar scalar_t, auto N>
-requires(N >= 2) ALGEBRA_HOST constexpr scalar_t
-    phi(const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
+  requires(N >= 2)
+ALGEBRA_HOST constexpr scalar_t phi(
+    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATan2(v[1], v[0]));
 }
 
 template <concepts::scalar scalar_t, class A, auto N>
-requires(N >= 2) ALGEBRA_HOST constexpr scalar_t
-    phi(const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+  requires(N >= 2)
+ALGEBRA_HOST constexpr scalar_t phi(
+    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATan2(v.apply(1), v.apply(0)));
 }
@@ -39,16 +41,18 @@ requires(N >= 2) ALGEBRA_HOST constexpr scalar_t
 ///
 /// @param v the input vector
 template <concepts::scalar scalar_t, auto N>
-requires(N >= 3) ALGEBRA_HOST constexpr scalar_t
-    theta(const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
+  requires(N >= 3)
+ALGEBRA_HOST constexpr scalar_t theta(
+    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(
       TMath::ATan2(TMath::Sqrt(v[0] * v[0] + v[1] * v[1]), v[2]));
 }
 
 template <concepts::scalar scalar_t, class A, auto N>
-requires(N >= 3) ALGEBRA_HOST constexpr scalar_t
-    theta(const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+  requires(N >= 3)
+ALGEBRA_HOST constexpr scalar_t theta(
+    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATan2(
       TMath::Sqrt(v.apply(0) * v.apply(0) + v.apply(1) * v.apply(1)),
@@ -77,15 +81,17 @@ ALGEBRA_HOST constexpr scalar_t norm(
 ///
 /// @param v the input vector
 template <concepts::scalar scalar_t, auto N>
-requires(N >= 3) ALGEBRA_HOST constexpr scalar_t
-    eta(const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
+  requires(N >= 3)
+ALGEBRA_HOST constexpr scalar_t eta(
+    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATanH(v[2] / norm(v)));
 }
 
 template <concepts::scalar scalar_t, class A, auto N>
-requires(N >= 3) ALGEBRA_HOST constexpr scalar_t
-    eta(const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+  requires(N >= 3)
+ALGEBRA_HOST constexpr scalar_t eta(
+    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::ATanH(v.apply(2) / norm(v)));
 }
@@ -94,15 +100,17 @@ requires(N >= 3) ALGEBRA_HOST constexpr scalar_t
 ///
 /// @param v the input vector
 template <concepts::scalar scalar_t, auto N>
-requires(N >= 2) ALGEBRA_HOST constexpr scalar_t
-    perp(const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
+  requires(N >= 2)
+ALGEBRA_HOST constexpr scalar_t perp(
+    const ROOT::Math::SVector<scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(TMath::Sqrt(v[0] * v[0] + v[1] * v[1]));
 }
 
 template <concepts::scalar scalar_t, class A, auto N>
-requires(N >= 2) ALGEBRA_HOST constexpr scalar_t
-    perp(const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
+  requires(N >= 2)
+ALGEBRA_HOST constexpr scalar_t perp(
+    const ROOT::Math::VecExpr<A, scalar_t, N> &v) noexcept {
 
   return static_cast<scalar_t>(
       TMath::Sqrt(v.apply(0) * v.apply(0) + v.apply(1) * v.apply(1)));

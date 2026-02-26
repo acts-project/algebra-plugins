@@ -85,9 +85,9 @@ ALGEBRA_HOST_DEVICE constexpr auto transpose(const M &m) {
 
 // Set matrix C to the product AB
 template <concepts::matrix MC, concepts::matrix MA, concepts::matrix MB>
-ALGEBRA_HOST_DEVICE constexpr void
-set_product(MC &C, const MA &A, const MB &B) requires(
-    algebra::concepts::matrix_multipliable_into<MA, MB, MC>) {
+ALGEBRA_HOST_DEVICE constexpr void set_product(MC &C, const MA &A, const MB &B)
+  requires(algebra::concepts::matrix_multipliable_into<MA, MB, MC>)
+{
   using index_t = algebra::traits::index_t<MC>;
   using value_t = algebra::traits::value_t<MC>;
 
@@ -107,10 +107,12 @@ set_product(MC &C, const MA &A, const MB &B) requires(
 
 // Set matrix C to the product A^TB
 template <concepts::matrix MC, concepts::matrix MA, concepts::matrix MB>
-ALGEBRA_HOST_DEVICE constexpr void
-set_product_left_transpose(MC &C, const MA &A, const MB &B) requires(
-    algebra::concepts::matrix_multipliable_into<
-        decltype(transpose(std::declval<MA>())), MB, MC>) {
+ALGEBRA_HOST_DEVICE constexpr void set_product_left_transpose(MC &C,
+                                                              const MA &A,
+                                                              const MB &B)
+  requires(algebra::concepts::matrix_multipliable_into<
+           decltype(transpose(std::declval<MA>())), MB, MC>)
+{
   using index_t = algebra::traits::index_t<MC>;
   using value_t = algebra::traits::value_t<MC>;
 
@@ -130,10 +132,12 @@ set_product_left_transpose(MC &C, const MA &A, const MB &B) requires(
 
 // Set matrix C to the product AB^T
 template <concepts::matrix MC, concepts::matrix MA, concepts::matrix MB>
-ALGEBRA_HOST_DEVICE constexpr void
-set_product_right_transpose(MC &C, const MA &A, const MB &B) requires(
-    algebra::concepts::matrix_multipliable_into<
-        MA, decltype(transpose(std::declval<MB>())), MC>) {
+ALGEBRA_HOST_DEVICE constexpr void set_product_right_transpose(MC &C,
+                                                               const MA &A,
+                                                               const MB &B)
+  requires(algebra::concepts::matrix_multipliable_into<
+           MA, decltype(transpose(std::declval<MB>())), MC>)
+{
   using index_t = algebra::traits::index_t<MC>;
   using value_t = algebra::traits::value_t<MC>;
 
@@ -153,9 +157,9 @@ set_product_right_transpose(MC &C, const MA &A, const MB &B) requires(
 
 // Set matrix A to the product AB in place
 template <concepts::matrix MA, concepts::matrix MB>
-ALGEBRA_HOST_DEVICE constexpr void
-set_inplace_product_right(MA &A, const MB &B) requires(
-    algebra::concepts::matrix_multipliable_into<MA, MB, MA>) {
+ALGEBRA_HOST_DEVICE constexpr void set_inplace_product_right(MA &A, const MB &B)
+  requires(algebra::concepts::matrix_multipliable_into<MA, MB, MA>)
+{
   using index_t = algebra::traits::index_t<MA>;
   using value_t = algebra::traits::value_t<MA>;
 
@@ -183,9 +187,9 @@ set_inplace_product_right(MA &A, const MB &B) requires(
 
 // Set matrix A to the product BA in place
 template <concepts::matrix MA, concepts::matrix MB>
-ALGEBRA_HOST_DEVICE constexpr void
-set_inplace_product_left(MA &A, const MB &B) requires(
-    algebra::concepts::matrix_multipliable_into<MB, MA, MA>) {
+ALGEBRA_HOST_DEVICE constexpr void set_inplace_product_left(MA &A, const MB &B)
+  requires(algebra::concepts::matrix_multipliable_into<MB, MA, MA>)
+{
   using index_t = algebra::traits::index_t<MA>;
   using value_t = algebra::traits::value_t<MA>;
 
@@ -213,10 +217,11 @@ set_inplace_product_left(MA &A, const MB &B) requires(
 
 // Set matrix A to the product AB^T in place
 template <concepts::matrix MA, concepts::matrix MB>
-ALGEBRA_HOST_DEVICE constexpr void
-set_inplace_product_right_transpose(MA &A, const MB &B) requires(
-    algebra::concepts::matrix_multipliable_into<
-        MA, decltype(transpose(std::declval<MB>())), MA>) {
+ALGEBRA_HOST_DEVICE constexpr void set_inplace_product_right_transpose(
+    MA &A, const MB &B)
+  requires(algebra::concepts::matrix_multipliable_into<
+           MA, decltype(transpose(std::declval<MB>())), MA>)
+{
   using index_t = algebra::traits::index_t<MA>;
   using value_t = algebra::traits::value_t<MA>;
 
@@ -244,10 +249,11 @@ set_inplace_product_right_transpose(MA &A, const MB &B) requires(
 
 // Set matrix A to the product B^TA in place
 template <concepts::matrix MA, concepts::matrix MB>
-ALGEBRA_HOST_DEVICE constexpr void
-set_inplace_product_left_transpose(MA &A, const MB &B) requires(
-    algebra::concepts::matrix_multipliable_into<
-        decltype(transpose(std::declval<MB>())), MA, MA>) {
+ALGEBRA_HOST_DEVICE constexpr void set_inplace_product_left_transpose(
+    MA &A, const MB &B)
+  requires(algebra::concepts::matrix_multipliable_into<
+           decltype(transpose(std::declval<MB>())), MA, MA>)
+{
   using index_t = algebra::traits::index_t<MA>;
   using value_t = algebra::traits::value_t<MA>;
 
@@ -286,13 +292,13 @@ ALGEBRA_HOST_DEVICE constexpr algebra::traits::value_t<M> transposable_get(
 
 template <bool transpose_left, bool transpose_right, concepts::matrix MA,
           concepts::matrix MB>
-ALGEBRA_HOST_DEVICE constexpr auto
-transposed_product(const MA &A, const MB &B) requires(
-    algebra::concepts::matrix_multipliable<
-        std::conditional_t<transpose_left,
-                           decltype(transpose(std::declval<MA>())), MA>,
-        std::conditional_t<transpose_right,
-                           decltype(transpose(std::declval<MB>())), MB> >) {
+ALGEBRA_HOST_DEVICE constexpr auto transposed_product(const MA &A, const MB &B)
+  requires(algebra::concepts::matrix_multipliable<
+           std::conditional_t<transpose_left,
+                              decltype(transpose(std::declval<MA>())), MA>,
+           std::conditional_t<transpose_right,
+                              decltype(transpose(std::declval<MB>())), MB> >)
+{
   using index_t = algebra::traits::index_t<MA>;
   using value_t = algebra::traits::value_t<MA>;
 

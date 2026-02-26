@@ -6,10 +6,18 @@
 
 # Set up the library.
 algebra_add_library( algebra_array array
-   "include/algebra/array.hpp" )
+   "include/algebra/array.hpp"
+)
 
-target_link_libraries( algebra_array
-   INTERFACE algebra::common algebra::array_storage algebra::cmath_math   algebra::generic_math )
+target_link_libraries(
+    algebra_array
+    INTERFACE
+        algebra::common
+        algebra::array_storage
+        algebra::cmath_math
+        algebra::generic_math
+)
 
 algebra_test_public_headers( algebra_array
-   "algebra/array.hpp" )
+   "algebra/array.hpp"
+)

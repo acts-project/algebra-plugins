@@ -19,9 +19,8 @@ namespace algebra {
 
 /// Print a generic vector or point @param v
 template <typename vector_t>
-requires(concepts::vector<vector_t> ||
-         concepts::point<vector_t>) ALGEBRA_HOST std::ostream&
-operator<<(std::ostream& out, const vector_t& v) {
+  requires(concepts::vector<vector_t> || concepts::point<vector_t>)
+ALGEBRA_HOST std::ostream& operator<<(std::ostream& out, const vector_t& v) {
 
   using index_t = algebra::traits::index_t<vector_t>;
 

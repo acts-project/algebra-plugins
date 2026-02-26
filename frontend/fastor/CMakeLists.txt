@@ -6,10 +6,18 @@
 
 # Set up the library.
 algebra_add_library( algebra_fastor fastor
-   "include/algebra/fastor.hpp" )
+   "include/algebra/fastor.hpp"
+)
 
-target_link_libraries( algebra_fastor
-   INTERFACE algebra::common algebra::fastor_storage algebra::fastor_math algebra::generic_math )
+target_link_libraries(
+    algebra_fastor
+    INTERFACE
+        algebra::common
+        algebra::fastor_storage
+        algebra::fastor_math
+        algebra::generic_math
+)
 
 algebra_test_public_headers( algebra_fastor
-   "algebra/fastor.hpp" )
+   "algebra/fastor.hpp"
+)

@@ -129,6 +129,7 @@ struct vc_aos {
   using transform3D = algebra::vc_aos::transform3<value_type>;
   using point2D = algebra::vc_aos::point2<value_type>;
   using point3D = algebra::vc_aos::point3<value_type>;
+  using vector2D = algebra::vc_aos::vector2<value_type>;
   using vector3D = algebra::vc_aos::vector3<value_type>;
 
   template <std::size_t ROWS, std::size_t COLS>

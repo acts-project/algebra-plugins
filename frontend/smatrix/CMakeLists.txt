@@ -4,6 +4,8 @@
 #
 # Mozilla Public License Version 2.0
 
+message(STATUS "Building the SMatrix algebra plugin")
+
 # Set up the library.
 algebra_add_library( algebra_smatrix smatrix
    "include/algebra/smatrix.hpp"

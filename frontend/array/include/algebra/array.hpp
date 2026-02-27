@@ -141,6 +141,7 @@ struct array {
   using transform3D = algebra::array::transform3<value_type>;
   using point2D = algebra::array::point2<value_type>;
   using point3D = algebra::array::point3<value_type>;
+  using vector2D = algebra::array::vector2<value_type>;
   using vector3D = algebra::array::vector3<value_type>;
 
   template <std::size_t ROWS, std::size_t COLS>

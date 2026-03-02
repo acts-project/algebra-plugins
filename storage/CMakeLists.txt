@@ -7,7 +7,6 @@
 # Set up all enabled libraries.
 add_subdirectory(array)
 add_subdirectory(cmath)
-add_subdirectory(common)
 
 if(ALGEBRA_PLUGINS_INCLUDE_EIGEN)
     add_subdirectory(eigen)

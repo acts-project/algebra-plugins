@@ -1,6 +1,6 @@
 /** Algebra plugins, part of the ACTS project
  *
- * (c) 2023-2024 CERN for the benefit of the ACTS project
+ * (c) 2023-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -12,9 +12,9 @@
 #endif
 
 // Project include(s)
+#include "algebra/array_operators.hpp"
 #include "algebra/concepts.hpp"
 #include "algebra/qualifiers.hpp"
-#include "algebra/storage/array_operators.hpp"
 
 // System include(s).
 #include <array>

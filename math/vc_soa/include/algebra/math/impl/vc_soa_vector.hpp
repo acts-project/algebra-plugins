@@ -11,7 +11,7 @@
 #include "algebra/concepts.hpp"
 #include "algebra/math/impl/vc_soa_math.hpp"
 #include "algebra/qualifiers.hpp"
-#include "algebra/storage/vector.hpp"
+#include "algebra/vector.hpp"
 
 // Vc include(s).
 #ifdef _MSC_VER

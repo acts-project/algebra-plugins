@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/storage/vector.hpp"
+#include "algebra/vector.hpp"
 
 // Vc include(s).
 #ifdef _MSC_VER

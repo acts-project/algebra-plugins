@@ -13,11 +13,7 @@ algebra_add_library( algebra_vc_soa_storage vc_soa_storage
 )
 target_link_libraries(
     algebra_vc_soa_storage
-    INTERFACE
-        algebra::common
-        algebra::common_storage
-        Vc::Vc
-        algebra::vc_aos_storage
+    INTERFACE algebra::common Vc::Vc algebra::vc_aos_storage
 )
 algebra_test_public_headers( algebra_vc_soa_storage
    "algebra/storage/vc_soa.hpp"

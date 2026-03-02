@@ -9,13 +9,13 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
-#include "algebra/math/common.hpp"
+#include "algebra/math.hpp"
+#include "algebra/matrix.hpp"
+#include "algebra/matrix_getter.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/impl/vc_aos_approximately_equal.hpp"
-#include "algebra/storage/matrix.hpp"
-#include "algebra/storage/matrix_getter.hpp"
-#include "algebra/storage/vector.hpp"
 #include "algebra/utils/approximately_equal.hpp"
+#include "algebra/vector.hpp"
 
 // Vc include(s).
 #ifdef _MSC_VER

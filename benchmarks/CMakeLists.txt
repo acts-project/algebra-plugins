@@ -29,7 +29,7 @@ target_include_directories(
 )
 target_link_libraries(
     algebra_bench_array
-    INTERFACE algebra::array algebra::common_storage
+    INTERFACE algebra::array algebra::common
 )
 algebra_add_benchmark( array_getter
    "array/array_getter.cpp"
@@ -60,7 +60,7 @@ if(ALGEBRA_PLUGINS_INCLUDE_EIGEN)
     )
     target_link_libraries(
         algebra_bench_eigen
-        INTERFACE algebra::eigen algebra::common_storage
+        INTERFACE algebra::eigen algebra::common
     )
     algebra_add_benchmark(eigen_getter
       "eigen/eigen_getter.cpp"
@@ -93,7 +93,7 @@ if(ALGEBRA_PLUGINS_INCLUDE_VC)
     )
     target_link_libraries(
         algebra_bench_vc_aos
-        INTERFACE algebra::vc_aos algebra::common_storage
+        INTERFACE algebra::vc_aos algebra::common
     )
     algebra_add_benchmark(vc_aos_getter
       "vc_aos/vc_aos_getter.cpp"
@@ -124,7 +124,7 @@ if(ALGEBRA_PLUGINS_INCLUDE_VC)
     )
     target_link_libraries(
         algebra_bench_vc_soa
-        INTERFACE algebra::vc_soa algebra::common_storage
+        INTERFACE algebra::vc_soa algebra::common
     )
     algebra_add_benchmark(vc_soa_getter
       "vc_soa/vc_soa_getter.cpp"
@@ -161,7 +161,7 @@ if(ALGEBRA_PLUGINS_INCLUDE_FASTOR)
     )
     target_link_libraries(
         algebra_bench_fastor
-        INTERFACE algebra::fastor algebra::common_storage
+        INTERFACE algebra::fastor algebra::common
     )
     algebra_add_benchmark(fastor_getter
       "fastor/fastor_getter.cpp"

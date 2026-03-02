@@ -17,7 +17,6 @@ target_link_libraries(
         Vc::Vc
         algebra::common
         algebra::utils
-        algebra::common_math
         algebra::generic_math
         algebra::vc_aos_storage
 )

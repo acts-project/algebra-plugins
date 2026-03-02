@@ -14,7 +14,7 @@ algebra_add_library( algebra_smatrix_storage smatrix_storage
 )
 target_link_libraries(
     algebra_smatrix_storage
-    INTERFACE algebra::common ROOT::Smatrix algebra::common_math
+    INTERFACE algebra::common ROOT::Smatrix
 )
 algebra_test_public_headers( algebra_smatrix_storage
    "algebra/storage/smatrix.hpp"

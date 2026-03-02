@@ -14,7 +14,7 @@ algebra_add_library(algebra_cmath_math cmath_math
 )
 target_link_libraries(
     algebra_cmath_math
-    INTERFACE algebra::common algebra::common_math algebra::generic_math
+    INTERFACE algebra::common algebra::generic_math
 )
 algebra_test_public_headers( algebra_cmath_math
    "algebra/math/cmath.hpp"

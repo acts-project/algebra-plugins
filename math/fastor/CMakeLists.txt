@@ -17,7 +17,6 @@ target_link_libraries(
         Fastor::Fastor
         algebra::common
         algebra::utils
-        algebra::common_math
         algebra::fastor_storage
 )
 algebra_test_public_headers( algebra_fastor_math

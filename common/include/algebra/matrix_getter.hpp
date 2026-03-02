@@ -1,6 +1,6 @@
 /** Algebra plugins, part of the ACTS project
  *
- * (c) 2024 CERN for the benefit of the ACTS project
+ * (c) 2024-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,8 +8,8 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
-#include "algebra/storage/matrix.hpp"
-#include "algebra/storage/vector.hpp"
+#include "algebra/matrix.hpp"
+#include "algebra/vector.hpp"
 
 // System include(s).
 #include <cassert>

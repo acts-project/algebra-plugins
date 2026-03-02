@@ -12,7 +12,7 @@ algebra_add_library( algebra_fastor_storage fastor_storage
 )
 target_link_libraries(
     algebra_fastor_storage
-    INTERFACE Fastor::Fastor algebra::common algebra::common_math
+    INTERFACE Fastor::Fastor algebra::common
 )
 algebra_test_public_headers( algebra_fastor_storage
    "algebra/storage/fastor.hpp"

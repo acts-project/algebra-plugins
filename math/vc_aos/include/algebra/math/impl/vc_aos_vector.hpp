@@ -9,10 +9,10 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
-#include "algebra/math/common.hpp"
+#include "algebra/math.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/storage/vc_aos.hpp"
-#include "algebra/storage/vector.hpp"
+#include "algebra/vector.hpp"
 
 // Vc include(s).
 #ifdef _MSC_VER

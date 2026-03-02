@@ -17,7 +17,6 @@ target_link_libraries(
         Eigen3::Eigen
         algebra::common
         algebra::utils
-        algebra::common_math
         algebra::eigen_storage
 )
 algebra_test_public_headers( algebra_eigen_math

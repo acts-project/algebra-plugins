@@ -9,12 +9,12 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
+#include "algebra/matrix.hpp"
 #include "algebra/storage/impl/vc_aos_approximately_equal.hpp"
 #include "algebra/storage/impl/vc_aos_concepts.hpp"
 #include "algebra/storage/impl/vc_aos_getter.hpp"
-#include "algebra/storage/matrix.hpp"
-#include "algebra/storage/vector.hpp"
 #include "algebra/type_traits.hpp"
+#include "algebra/vector.hpp"
 
 // System include(s).
 #include <array>

@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/boolean.hpp"
+#include "algebra/boolean.hpp"
 
 // Vc include(s).
 #ifdef _MSC_VER

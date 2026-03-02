@@ -11,14 +11,7 @@ algebra_add_library( algebra_vc_aos_storage vc_aos_storage
    "include/algebra/storage/impl/vc_aos_concepts.hpp"
    "include/algebra/storage/impl/vc_aos_getter.hpp"
 )
-target_link_libraries(
-    algebra_vc_aos_storage
-    INTERFACE
-        algebra::common
-        algebra::common_storage
-        Vc::Vc
-        algebra::common_math
-)
+target_link_libraries(algebra_vc_aos_storage INTERFACE algebra::common Vc::Vc)
 algebra_test_public_headers( algebra_vc_aos_storage
    "algebra/storage/vc_aos.hpp"
 )

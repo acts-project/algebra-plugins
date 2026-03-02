@@ -23,7 +23,7 @@ algebra_add_library(algebra_generic_math generic_math
 )
 target_link_libraries(
     algebra_generic_math
-    INTERFACE algebra::common algebra::utils algebra::common_math
+    INTERFACE algebra::common algebra::utils
 )
 algebra_test_public_headers( algebra_generic_math
    "algebra/math/generic.hpp"

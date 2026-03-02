@@ -10,8 +10,8 @@
 // Project include(s).
 #include "algebra/concepts.hpp"
 #include "algebra/math/impl/vc_soa_vector.hpp"
+#include "algebra/matrix.hpp"
 #include "algebra/qualifiers.hpp"
-#include "algebra/storage/matrix.hpp"
 
 namespace algebra::vc_soa::math {
 

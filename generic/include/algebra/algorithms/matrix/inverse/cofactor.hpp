@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022-2024 CERN for the benefit of the ACTS project
+ * (c) 2022-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -21,50 +21,54 @@ namespace algebra::generic::matrix {
 namespace adjoint {
 
 /// "Adjoint getter", assuming a N X N matrix
-template <concepts::square_matrix matrix_t, class element_getter_t>
+template <concepts::square_matrix matrix_t>
 struct cofactor {
 
-  using scalar_type = algebra::traits::value_t<matrix_t>;
-  using size_type = algebra::traits::index_t<matrix_t>;
-
-  /// Function (object) used for accessing a matrix element
-  using element_getter = element_getter_t;
+  using index_type = algebra::traits::index_t<matrix_t>;
 
   ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(const matrix_t &m) const {
     return adjoint_getter_helper<algebra::traits::rank<matrix_t>>()(m);
   }
 
-  template <size_type N, typename Enable = void>
+  template <index_type N>
   struct adjoint_getter_helper;
 
-  template <size_type N>
-  struct adjoint_getter_helper<N, typename std::enable_if_t<N == 1>> {
+  template <index_type N>
+    requires(N == 1)
+  struct adjoint_getter_helper<N> {
     ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(
         const matrix_t & /*m*/) const {
+
+      using element_getter_t = algebra::traits::element_getter_t<matrix_t>;
+      constexpr element_getter_t elem{};
+
       matrix_t ret;
-      element_getter()(ret, 0, 0) = 1;
+      elem(ret, 0, 0) = 1;
+
       return ret;
     }
   };
 
-  template <size_type N>
-  struct adjoint_getter_helper<N, typename std::enable_if_t<N != 1>> {
+  template <index_type N>
+    requires(N != 1)
+  struct adjoint_getter_helper<N> {
 
-    using determinant_getter =
-        determinant::cofactor<matrix_t, element_getter_t>;
+    using determinant_getter = determinant::cofactor<matrix_t>;
 
     ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(const matrix_t &m) const {
 
-      matrix_t adj;
+      using index_t = algebra::traits::index_t<matrix_t>;
+      using element_getter_t = algebra::traits::element_getter_t<matrix_t>;
+      constexpr element_getter_t elem{};
 
       // temp is used to store cofactors of m
       int sign = 1;
 
-      // To store cofactors
-      matrix_t temp;
+      matrix_t temp;  //< To store cofactors
+      matrix_t adj;
 
-      for (size_type i = 0; i < N; i++) {
-        for (size_type j = 0; j < N; j++) {
+      for (index_t i = 0; i < N; i++) {
+        for (index_t j = 0; j < N; j++) {
           // Get cofactor of m[i][j]
           typename determinant_getter::template determinant_getter_helper<N>()
               .get_cofactor(m, temp, i, j);
@@ -75,7 +79,7 @@ struct cofactor {
 
           // Interchanging rows and columns to get the
           // transpose of the cofactor matrix
-          element_getter()(adj, j, i) =
+          elem(adj, j, i) =
               sign *
               typename determinant_getter::template determinant_getter_helper<
                   N - 1>()(temp);
@@ -92,27 +96,26 @@ struct cofactor {
 namespace inverse {
 
 /// "inverse getter", assuming a N X N matrix
-template <class matrix_t, class element_getter_t>
+template <class matrix_t>
 struct cofactor {
 
-  using scalar_type = algebra::traits::value_t<matrix_t>;
-  using size_type = algebra::traits::index_t<matrix_t>;
+  using scalar_t = algebra::traits::value_t<matrix_t>;
+  using index_t = algebra::traits::index_t<matrix_t>;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = element_getter_t;
-
-  using determinant_getter = determinant::cofactor<matrix_t, element_getter_t>;
-
-  using adjoint_getter = adjoint::cofactor<matrix_t, element_getter_t>;
+  using element_getter_t = algebra::traits::element_getter_t<matrix_t>;
+  using determinant_getter = determinant::cofactor<matrix_t>;
+  using adjoint_getter = adjoint::cofactor<matrix_t>;
 
   ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(const matrix_t &m) const {
 
-    constexpr size_type N{algebra::traits::rank<matrix_t>};
+    constexpr element_getter_t elem{};
+    constexpr index_t N{algebra::traits::rank<matrix_t>};
 
     matrix_t ret;
 
     // Find determinant of A
-    scalar_type det = determinant_getter()(m);
+    scalar_t det = determinant_getter()(m);
 
     // TODO: handle singular matrix error
     // if (det == 0) {
@@ -122,9 +125,9 @@ struct cofactor {
     auto adj = adjoint_getter()(m);
 
     // Find Inverse using formula "inverse(A) = adj(A)/det(A)"
-    for (size_type i = 0; i < N; i++) {
-      for (size_type j = 0; j < N; j++) {
-        element_getter()(ret, j, i) = element_getter()(adj, j, i) / det;
+    for (index_t i = 0; i < N; i++) {
+      for (index_t j = 0; j < N; j++) {
+        elem(ret, j, i) = elem(adj, j, i) / det;
       }
     }
 

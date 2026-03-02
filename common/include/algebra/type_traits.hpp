@@ -77,12 +77,12 @@ using get_matrix_t = typename matrix<M>::template other_type<T, ROWS, COLS>;
 template <typename M>
 struct dimensions {
 
-  using size_type = int;
+  using index_type = int;
 
   // Error case
-  static constexpr size_type dim{-1};
-  static constexpr size_type rows{-1};
-  static constexpr size_type columns{-1};
+  static constexpr index_type _dim{-1};
+  static constexpr index_type _rows{-1};
+  static constexpr index_type _columns{-1};
 };
 
 /// Specilization for scalar types
@@ -90,22 +90,22 @@ template <typename M>
   requires std::is_fundamental_v<M>
 struct dimensions<M> {
 
-  using size_type = std::size_t;
+  using index_type = std::size_t;
 
-  static constexpr size_type dim{0};
-  static constexpr size_type rows{1};
-  static constexpr size_type columns{1};
+  static constexpr index_type _dim{0};
+  static constexpr index_type _rows{1};
+  static constexpr index_type _columns{1};
 };
 
 template <class M>
-inline constexpr index_t<M> dim{dimensions<std::remove_cvref_t<M>>::sim};
+inline constexpr index_t<M> dim{dimensions<std::remove_cvref_t<M>>::_dim};
 
 template <class M>
-inline constexpr index_t<M> rows{dimensions<std::remove_cvref_t<M>>::rows};
+inline constexpr index_t<M> rows{dimensions<std::remove_cvref_t<M>>::_rows};
 
 template <class M>
 inline constexpr index_t<M> columns{
-    dimensions<std::remove_cvref_t<M>>::columns};
+    dimensions<std::remove_cvref_t<M>>::_columns};
 
 template <class M>
 inline constexpr index_t<M> rank{std::min(rows<M>, columns<M>)};
@@ -114,10 +114,10 @@ template <class M>
 inline constexpr index_t<M> size{rows<M> * columns<M>};
 
 template <class V>
-inline constexpr bool is_vector{dimensions<std::remove_cvref_t<V>>::dim == 1};
+inline constexpr bool is_vector{dimensions<std::remove_cvref_t<V>>::_dim == 1};
 
 template <class M>
-inline constexpr bool is_matrix{dimensions<std::remove_cvref_t<M>>::dim == 2};
+inline constexpr bool is_matrix{dimensions<std::remove_cvref_t<M>>::_dim == 2};
 
 template <class M>
 inline constexpr bool is_square{(rows<M> == columns<M>)};
@@ -148,7 +148,7 @@ template <typename T>
 struct get_algebra<T> {
   template <typename U>
   using simd = typename T::template simd<U>;
-  using size_type = typename T::size_type;
+  using index_type = typename T::index_type;
   using boolean = typename T::boolean;
   using value = typename T::value_type;
   using scalar = typename T::scalar;
@@ -173,7 +173,7 @@ template <typename A, typename T>
 using get_simd_t = typename traits::get_algebra<A>::template simd<T>;
 
 template <typename A>
-using get_size_t = typename traits::get_algebra<A>::size_type;
+using get_size_t = typename traits::get_algebra<A>::index_type;
 
 template <typename A>
 using get_scalar_t = typename traits::get_algebra<A>::scalar;
@@ -207,32 +207,32 @@ using get_matrix_t = typename traits::get_algebra<A>::template matrix<R, C>;
                                                                         \
   template <typename T, auto N>                                         \
   struct index<A::vector_type<T, N>> {                                  \
-    using type = algebra::A::size_type;                                 \
+    using type = algebra::A::index_type;                                \
   };                                                                    \
                                                                         \
   template <typename T, auto ROWS, auto COLS>                           \
   struct index<A::matrix_type<T, ROWS, COLS>> {                         \
-    using type = algebra::A::size_type;                                 \
+    using type = algebra::A::index_type;                                \
   };                                                                    \
                                                                         \
   template <typename T, auto N>                                         \
   struct dimensions<A::vector_type<T, N>> {                             \
                                                                         \
-    using size_type = index_t<A::vector_type<T, N>>;                    \
+    using index_type = index_t<A::vector_type<T, N>>;                   \
                                                                         \
-    static constexpr size_type dim{1};                                  \
-    static constexpr size_type rows{N};                                 \
-    static constexpr size_type columns{1};                              \
+    static constexpr index_type _dim{1};                                \
+    static constexpr index_type _rows{N};                               \
+    static constexpr index_type _columns{1};                            \
   };                                                                    \
                                                                         \
   template <typename T, auto ROWS, auto COLS>                           \
   struct dimensions<A::matrix_type<T, ROWS, COLS>> {                    \
                                                                         \
-    using size_type = index_t<A::matrix_type<T, ROWS, COLS>>;           \
+    using index_type = index_t<A::matrix_type<T, ROWS, COLS>>;          \
                                                                         \
-    static constexpr size_type dim{2};                                  \
-    static constexpr size_type rows{ROWS};                              \
-    static constexpr size_type columns{COLS};                           \
+    static constexpr index_type _dim{2};                                \
+    static constexpr index_type _rows{ROWS};                            \
+    static constexpr index_type _columns{COLS};                         \
   };                                                                    \
                                                                         \
   template <typename T, auto N>                                         \

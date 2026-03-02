@@ -42,22 +42,16 @@ struct transform3 {
   using matrix44 = matrix_t<scalar_t, 4, 4>;
   static_assert(concepts::square_matrix<matrix44>);
 
-  /// 3-element "vector" type
   using vector3 = algebra::traits::get_vector_t<matrix44, 3, scalar_t>;
-  /// Point in 3D space
   using point3 = vector3;
-  /// Point in 2D space
   using point2 = algebra::traits::get_vector_t<matrix44, 2, scalar_t>;
 
-  /// Function (object) used for accessing a matrix element
+  /// Function (object) used for accessing a matrix element/block
   using element_getter = algebra::traits::element_getter_t<matrix44>;
-
-  /// Function (object) used for accessing a matrix element
   using block_getter = algebra::traits::block_getter_t<matrix44>;
 
   /// Matrix inversion algorithm
-  using matrix_inversion =
-      generic::matrix::inverse::hard_coded<matrix44, element_getter>;
+  using matrix_inversion = generic::matrix::inverse::hard_coded<matrix44>;
 
   /// Helper type to cast this to another floating point precision
   template <concepts::scalar o_scalar_t>

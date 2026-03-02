@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022-2024 CERN for the benefit of the ACTS project
+ * (c) 2022-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -15,7 +15,7 @@
 
 namespace algebra::generic {
 
-/// Get the type of determinant algorithm acording to matrix dimension
+/// Get the type of determinant algorithm according to matrix dimension
 /// @{
 
 // Default algorithm
@@ -33,11 +33,10 @@ struct determinant_selector<2, Args...> {
 /// @tparam M matrix type
 template <concepts::square_matrix M>
 using determinant_t =
-    typename determinant_selector<algebra::traits::rank<M>, M,
-                                  algebra::traits::element_getter_t<M>>::type;
+    typename determinant_selector<algebra::traits::rank<M>, M>::type;
 /// @}
 
-/// Get the type of inversion algorithm acording to matrix dimension
+/// Get the type of inversion algorithm according to matrix dimension
 /// @{
 template <std::size_t N, typename... Args>
 struct inversion_selector {
@@ -53,8 +52,7 @@ struct inversion_selector<2, Args...> {
 /// @tparam M matrix type
 template <concepts::square_matrix M>
 using inversion_t =
-    typename inversion_selector<algebra::traits::rank<M>, M,
-                                algebra::traits::element_getter_t<M>>::type;
-/// @}generic
+    typename inversion_selector<algebra::traits::rank<M>, M>::type;
+/// @}
 
 }  // namespace algebra::generic

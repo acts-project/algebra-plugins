@@ -287,7 +287,7 @@ struct is_storage_vector : public std::false_type {};
 
 template <std::size_t N, concepts::scalar scalar_t,
           template <typename, std::size_t> class array_t>
-struct is_storage_vector<storage::vector<N, scalar_t, array_t>>
+struct is_storage_vector<algebra::storage::vector<N, scalar_t, array_t>>
     : public std::true_type {};
 
 template <typename T>

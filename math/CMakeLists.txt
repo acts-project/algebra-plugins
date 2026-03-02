@@ -7,8 +7,3 @@
 # Set up all enabled libraries.
 add_subdirectory(cmath)
 add_subdirectory(generic)
-
-if(ALGEBRA_PLUGINS_INCLUDE_VC)
-    add_subdirectory(vc_aos)
-    add_subdirectory(vc_soa)
-endif()

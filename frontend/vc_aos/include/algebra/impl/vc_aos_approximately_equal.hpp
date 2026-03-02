@@ -1,6 +1,6 @@
 /** Algebra plugins, part of the ACTS project
  *
- * (c) 2025 CERN for the benefit of the ACTS project
+ * (c) 2025-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */

@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2024 CERN for the benefit of the ACTS project
+ * (c) 2020-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -9,11 +9,11 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
+#include "algebra/impl/vc_aos_approximately_equal.hpp"
 #include "algebra/math.hpp"
 #include "algebra/matrix.hpp"
 #include "algebra/matrix_getter.hpp"
 #include "algebra/qualifiers.hpp"
-#include "algebra/storage/impl/vc_aos_approximately_equal.hpp"
 #include "algebra/utils/approximately_equal.hpp"
 #include "algebra/vector.hpp"
 
@@ -63,18 +63,18 @@ struct transform3 {
   using array_type = array_t<scalar_type, N>;
 
   /// 3-element "vector" type (does not observe translations)
-  using vector3 = storage::vector<3u, scalar_type, array_t>;
+  using vector3 = algebra::storage::vector<3u, scalar_type, array_t>;
   /// Point in 3D space (does observe translations)
   using point3 = vector3;
   /// Point in 2D space
-  using point2 = storage::vector<2u, scalar_type, array_t>;
+  using point2 = algebra::storage::vector<2u, scalar_type, array_t>;
 
   /// 4x4 matrix type (Last row is {0, 0, 0, 1} and can be omitted)
-  using matrix44 = storage::matrix<array_t, scalar_type, 3u, 4u>;
+  using matrix44 = algebra::storage::matrix<array_t, scalar_type, 3u, 4u>;
   using column_t = typename matrix44::vector_type;
 
   /// Function (object) used for accessing a matrix element
-  using element_getter = storage::element_getter;
+  using element_getter = algebra::storage::element_getter;
 
   /// Helper type to cast this to another floating point precision
   template <concepts::scalar o_scalar_t>
@@ -92,8 +92,8 @@ struct transform3 {
   /// Default constructor: identity
   ALGEBRA_HOST_DEVICE
   constexpr transform3()
-      : _data{storage::identity<matrix44>()},
-        _data_inv{storage::identity<matrix44>()} {}
+      : _data{algebra::storage::identity<matrix44>()},
+        _data_inv{algebra::storage::identity<matrix44>()} {}
 
   /// Contructor with arguments: t, x, y, z
   ///
@@ -261,7 +261,7 @@ struct transform3 {
   ALGEBRA_HOST_DEVICE
   constexpr auto rotation() const {
 
-    using matrix_t = storage::matrix<array_t, scalar_type, 3u, 3u>;
+    using matrix_t = algebra::storage::matrix<array_t, scalar_type, 3u, 3u>;
 
     matrix_t submatrix;
     for (unsigned int icol = 0; icol < 3; ++icol) {

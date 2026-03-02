@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2025 CERN for the benefit of the ACTS project
+ * (c) 2020-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -9,9 +9,9 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
+#include "algebra/impl/vc_aos_types.hpp"
 #include "algebra/math.hpp"
 #include "algebra/qualifiers.hpp"
-#include "algebra/storage/vc_aos.hpp"
 #include "algebra/vector.hpp"
 
 // Vc include(s).

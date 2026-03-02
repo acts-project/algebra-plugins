@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/storage/impl/vc_aos_concepts.hpp"
+#include "algebra/impl/vc_aos_concepts.hpp"
 
 // System include(s).
 #include <concepts>

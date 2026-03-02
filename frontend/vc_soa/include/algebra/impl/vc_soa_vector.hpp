@@ -9,7 +9,7 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
-#include "algebra/math/impl/vc_soa_math.hpp"
+#include "algebra/impl/vc_soa_math.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/vector.hpp"
 
@@ -35,7 +35,7 @@ template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
   requires(N >= 2)
 ALGEBRA_HOST_DEVICE constexpr auto phi(
-    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+    const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::atan2(v[1], v[0]);
 }
@@ -51,7 +51,7 @@ template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
   requires(N >= 2)
 ALGEBRA_HOST_DEVICE constexpr auto perp(
-    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+    const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::sqrt(Vc::fma(v[0], v[0], v[1] * v[1]));
 }
@@ -67,7 +67,7 @@ template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
   requires(N >= 3)
 ALGEBRA_HOST_DEVICE constexpr auto theta(
-    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+    const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::atan2(perp(v), v[2]);
 }
@@ -85,9 +85,10 @@ ALGEBRA_HOST_DEVICE constexpr auto theta(
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
   requires(N == 3)
-ALGEBRA_HOST_DEVICE constexpr storage::vector<N, Vc::Vector<value_t>, array_t>
-cross(const storage::vector<N, Vc::Vector<value_t>, array_t> &a,
-      const storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
+ALGEBRA_HOST_DEVICE constexpr algebra::storage::vector<N, Vc::Vector<value_t>,
+                                                       array_t>
+cross(const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &a,
+      const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
 
   return {Vc::fma(a[1], b[2], -b[1] * a[2]), Vc::fma(a[2], b[0], -b[2] * a[0]),
           Vc::fma(a[0], b[1], -b[0] * a[1])};
@@ -106,8 +107,8 @@ cross(const storage::vector<N, Vc::Vector<value_t>, array_t> &a,
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr Vc::Vector<value_t> dot(
-    const storage::vector<N, Vc::Vector<value_t>, array_t> &a,
-    const storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
+    const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &a,
+    const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
 
   auto ret = a[0] * b[0];
 
@@ -128,7 +129,7 @@ ALGEBRA_HOST_DEVICE constexpr Vc::Vector<value_t> dot(
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr auto norm(
-    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+    const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return Vc::sqrt(dot(v, v));
 }
@@ -142,8 +143,9 @@ ALGEBRA_HOST_DEVICE constexpr auto norm(
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-ALGEBRA_HOST_DEVICE constexpr storage::vector<N, Vc::Vector<value_t>, array_t>
-normalize(const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+ALGEBRA_HOST_DEVICE constexpr algebra::storage::vector<N, Vc::Vector<value_t>,
+                                                       array_t>
+normalize(const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   return (Vc::Vector<value_t>::One() / norm(v)) * v;
 
@@ -166,7 +168,7 @@ template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
   requires(N >= 3)
 ALGEBRA_HOST_DEVICE constexpr auto eta(
-    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+    const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   // atanh does not exist in Vc
   auto atanh_func = [](value_t e) { return std::atanh(e); };
@@ -192,7 +194,7 @@ ALGEBRA_HOST_DEVICE constexpr auto eta(
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr Vc::Vector<value_t> sum(
-    const storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
+    const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
   Vc::Vector<value_t> res{v[0]};
 

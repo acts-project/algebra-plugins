@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s)
-#include "algebra/storage/impl/vc_soa_concepts.hpp"
+#include "algebra/impl/vc_soa_concepts.hpp"
 
 // Vc include(s).
 #ifdef _MSC_VER

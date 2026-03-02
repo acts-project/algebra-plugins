@@ -9,10 +9,10 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
+#include "algebra/impl/vc_aos_approximately_equal.hpp"
+#include "algebra/impl/vc_soa_casts.hpp"
+#include "algebra/impl/vc_soa_getter.hpp"
 #include "algebra/matrix.hpp"
-#include "algebra/storage/impl/vc_aos_approximately_equal.hpp"
-#include "algebra/storage/impl/vc_soa_casts.hpp"
-#include "algebra/storage/impl/vc_soa_getter.hpp"
 #include "algebra/type_traits.hpp"
 #include "algebra/vector.hpp"
 

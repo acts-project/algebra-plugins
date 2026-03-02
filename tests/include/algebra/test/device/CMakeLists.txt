@@ -6,6 +6,8 @@
 
 message(STATUS "Building 'algebra::test_device' component")
 
+vecmem_check_language( SYCL )
+
 # Set up a "common library" for the device tests.
 add_library(
     algebra_test_device

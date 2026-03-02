@@ -5,6 +5,8 @@
 # Mozilla Public License Version 2.0
 
 # Enable SYCL as a language.
+vecmem_check_language( SYCL )
+
 enable_language(SYCL)
 
 # Set the default SYCL compiler flags.

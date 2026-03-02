@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2024 CERN for the benefit of the ACTS project
+ * (c) 2020-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,9 +8,13 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/boolean.hpp"
+#include "algebra/impl/smatrix_getter.hpp"
+#include "algebra/impl/smatrix_matrix.hpp"
+#include "algebra/impl/smatrix_transform.hpp"
+#include "algebra/impl/smatrix_types.hpp"
+#include "algebra/impl/smatrix_vector.hpp"
 #include "algebra/math/generic.hpp"
-#include "algebra/math/smatrix.hpp"
-#include "algebra/storage/smatrix.hpp"
 
 namespace algebra {
 

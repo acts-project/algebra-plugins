@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/boolean.hpp"
 #include "algebra/impl/fastor_getter.hpp"
 #include "algebra/impl/fastor_matrix.hpp"
 #include "algebra/impl/fastor_transform3.hpp"

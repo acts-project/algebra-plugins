@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2024 CERN for the benefit of the ACTS project
+ * (c) 2020-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -9,7 +9,7 @@
 
 // Project include(s)
 #include "algebra/concepts.hpp"
-#include "algebra/storage/impl/smatrix_getter.hpp"
+#include "algebra/impl/smatrix_getter.hpp"
 #include "algebra/type_traits.hpp"
 
 // ROOT/Smatrix include(s).

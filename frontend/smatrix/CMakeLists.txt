@@ -9,14 +9,16 @@ message(STATUS "Building the SMatrix algebra plugin")
 # Set up the library.
 algebra_add_library( algebra_smatrix smatrix
    "include/algebra/smatrix.hpp"
+   "include/algebra/impl/*.hpp"
 )
 
 target_link_libraries(
     algebra_smatrix
     INTERFACE
+        ROOT::Core
+        ROOT::MathCore
+        ROOT::Smatrix
         algebra::common
-        algebra::smatrix_storage
-        algebra::smatrix_math
         algebra::generic_math
 )
 

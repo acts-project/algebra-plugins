@@ -1,6 +1,6 @@
 /** Algebra plugins, part of the ACTS project
  *
- * (c) 2022-2024 CERN for the benefit of the ACTS project
+ * (c) 2022-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,7 +8,7 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/impl/fastor_matrix.hpp"
+#include "algebra/impl/fastor_matrix.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/utils/approximately_equal.hpp"
 

@@ -9,15 +9,12 @@ message(STATUS "Building the Fastor algebra plugin")
 # Set up the library.
 algebra_add_library( algebra_fastor fastor
    "include/algebra/fastor.hpp"
+   "include/algebra/impl/*.hpp"
 )
 
 target_link_libraries(
     algebra_fastor
-    INTERFACE
-        algebra::common
-        algebra::fastor_storage
-        algebra::fastor_math
-        algebra::generic_math
+    INTERFACE Fastor::Fastor algebra::common algebra::generic_math
 )
 
 algebra_test_public_headers( algebra_fastor

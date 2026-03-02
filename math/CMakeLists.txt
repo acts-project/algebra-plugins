@@ -8,10 +8,6 @@
 add_subdirectory(cmath)
 add_subdirectory(generic)
 
-if(ALGEBRA_PLUGINS_INCLUDE_FASTOR)
-    add_subdirectory(fastor)
-endif()
-
 if(ALGEBRA_PLUGINS_INCLUDE_SMATRIX)
     add_subdirectory(smatrix)
 endif()

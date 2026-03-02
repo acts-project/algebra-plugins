@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022-2024 CERN for the benefit of the ACTS project
+ * (c) 2022-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,9 +8,12 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/fastor.hpp"
+#include "algebra/impl/fastor_getter.hpp"
+#include "algebra/impl/fastor_matrix.hpp"
+#include "algebra/impl/fastor_transform3.hpp"
+#include "algebra/impl/fastor_types.hpp"
+#include "algebra/impl/fastor_vector.hpp"
 #include "algebra/math/generic.hpp"
-#include "algebra/storage/fastor.hpp"
 
 // Fastor include(s).
 #ifdef _MSC_VER

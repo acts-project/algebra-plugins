@@ -9,12 +9,12 @@
 
 // Project include(s).
 #include "algebra/boolean.hpp"
+#include "algebra/generic.hpp"
 #include "algebra/impl/vc_aos_getter.hpp"
 #include "algebra/impl/vc_aos_matrix.hpp"
 #include "algebra/impl/vc_aos_transform3.hpp"
 #include "algebra/impl/vc_aos_types.hpp"
 #include "algebra/impl/vc_aos_vector.hpp"
-#include "algebra/math/generic.hpp"
 
 // System include(s).
 #include <cassert>

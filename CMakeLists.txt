@@ -244,7 +244,7 @@ endif()
 # Set up the Algebra Plugin libraries.
 add_subdirectory(common)
 add_subdirectory(frontend)
-add_subdirectory(math)
+add_subdirectory(generic)
 add_subdirectory(utils)
 
 # Set up the test(s).

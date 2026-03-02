@@ -8,9 +8,9 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/algorithms/utils/algorithm_selector.hpp"
 #include "algebra/concepts.hpp"
 #include "algebra/math.hpp"
-#include "algebra/math/algorithms/utils/algorithm_finder.hpp"
 #include "algebra/qualifiers.hpp"
 
 namespace algebra::generic::math {

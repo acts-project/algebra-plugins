@@ -4,7 +4,7 @@
 #
 # Mozilla Public License Version 2.0
 
-# Set up the library.
+# Set up the common library.
 algebra_add_library( algebra_common common
    "include/algebra/array_operators.hpp"
    "include/algebra/assert.hpp"

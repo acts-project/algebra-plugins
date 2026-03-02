@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/impl/generic_matrix.hpp"
 #include "algebra/impl/vc_aos_transform3.hpp"
 #include "algebra/impl/vc_soa_boolean.hpp"
 #include "algebra/impl/vc_soa_casts.hpp"
@@ -16,7 +17,6 @@
 #include "algebra/impl/vc_soa_matrix.hpp"
 #include "algebra/impl/vc_soa_types.hpp"
 #include "algebra/impl/vc_soa_vector.hpp"
-#include "algebra/math/impl/generic_matrix.hpp"
 
 // System include(s).
 #include <cassert>

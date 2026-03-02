@@ -9,12 +9,12 @@
 
 // Project include(s).
 #include "algebra/boolean.hpp"
+#include "algebra/generic.hpp"
 #include "algebra/impl/smatrix_getter.hpp"
 #include "algebra/impl/smatrix_matrix.hpp"
 #include "algebra/impl/smatrix_transform.hpp"
 #include "algebra/impl/smatrix_types.hpp"
 #include "algebra/impl/smatrix_vector.hpp"
-#include "algebra/math/generic.hpp"
 
 namespace algebra {
 

@@ -9,13 +9,13 @@
 
 // Project include(s).
 #include "algebra/boolean.hpp"
+#include "algebra/generic.hpp"
 #include "algebra/impl/eigen_getter.hpp"
 #include "algebra/impl/eigen_matrix.hpp"
 #include "algebra/impl/eigen_transform3.hpp"
 #include "algebra/impl/eigen_types.hpp"
 #include "algebra/impl/eigen_vector.hpp"
 #include "algebra/math.hpp"
-#include "algebra/math/generic.hpp"
 
 // Eigen include(s).
 #ifdef _MSC_VER

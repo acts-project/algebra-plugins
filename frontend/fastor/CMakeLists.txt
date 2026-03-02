@@ -14,7 +14,7 @@ algebra_add_library( algebra_fastor fastor
 
 target_link_libraries(
     algebra_fastor
-    INTERFACE Fastor::Fastor algebra::common algebra::generic_math
+    INTERFACE Fastor::Fastor algebra::common algebra::generic
 )
 
 algebra_test_public_headers( algebra_fastor

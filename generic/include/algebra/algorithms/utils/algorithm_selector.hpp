@@ -8,10 +8,10 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/algorithms/matrix/determinant/hard_coded.hpp"
-#include "algebra/math/algorithms/matrix/determinant/partial_pivot_lud.hpp"
-#include "algebra/math/algorithms/matrix/inverse/hard_coded.hpp"
-#include "algebra/math/algorithms/matrix/inverse/partial_pivot_lud.hpp"
+#include "algebra/algorithms/matrix/determinant/hard_coded.hpp"
+#include "algebra/algorithms/matrix/determinant/partial_pivot_lud.hpp"
+#include "algebra/algorithms/matrix/inverse/hard_coded.hpp"
+#include "algebra/algorithms/matrix/inverse/partial_pivot_lud.hpp"
 
 namespace algebra::generic {
 

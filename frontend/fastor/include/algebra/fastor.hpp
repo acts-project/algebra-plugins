@@ -9,12 +9,12 @@
 
 // Project include(s).
 #include "algebra/boolean.hpp"
+#include "algebra/generic.hpp"
 #include "algebra/impl/fastor_getter.hpp"
 #include "algebra/impl/fastor_matrix.hpp"
 #include "algebra/impl/fastor_transform3.hpp"
 #include "algebra/impl/fastor_types.hpp"
 #include "algebra/impl/fastor_vector.hpp"
-#include "algebra/math/generic.hpp"
 
 // Fastor include(s).
 #ifdef _MSC_VER

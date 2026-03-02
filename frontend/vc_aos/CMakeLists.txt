@@ -14,7 +14,7 @@ algebra_add_library( algebra_vc_aos vc_aos
 
 target_link_libraries(
     algebra_vc_aos
-    INTERFACE Vc::Vc algebra::common algebra::utils algebra::generic_math
+    INTERFACE Vc::Vc algebra::common algebra::utils algebra::generic
 )
 
 algebra_test_public_headers( algebra_vc_aos

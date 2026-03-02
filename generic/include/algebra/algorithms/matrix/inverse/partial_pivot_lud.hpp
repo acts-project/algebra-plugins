@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/algorithms/matrix/decomposition/partial_pivot_lud.hpp"
 #include "algebra/concepts.hpp"
-#include "algebra/math/algorithms/matrix/decomposition/partial_pivot_lud.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/type_traits.hpp"
 

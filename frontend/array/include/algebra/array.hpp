@@ -8,13 +8,13 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/generic.hpp"
 #include "algebra/impl/array_getter.hpp"
 #include "algebra/impl/array_matrix.hpp"
 #include "algebra/impl/array_operators.hpp"
 #include "algebra/impl/array_types.hpp"
 #include "algebra/impl/array_vector.hpp"
-#include "algebra/math/generic.hpp"
-#include "algebra/math/impl/generic_matrix.hpp"
+#include "algebra/impl/generic_matrix.hpp"
 
 namespace algebra {
 

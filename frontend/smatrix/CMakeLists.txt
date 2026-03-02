@@ -19,7 +19,7 @@ target_link_libraries(
         ROOT::MathCore
         ROOT::Smatrix
         algebra::common
-        algebra::generic_math
+        algebra::generic
 )
 
 algebra_test_public_headers( algebra_smatrix

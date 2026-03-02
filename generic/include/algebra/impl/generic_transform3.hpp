@@ -8,9 +8,9 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/algorithms/matrix/inverse/hard_coded.hpp"
-#include "algebra/math/impl/generic_matrix.hpp"
-#include "algebra/math/impl/generic_vector.hpp"
+#include "algebra/algorithms/matrix/inverse/hard_coded.hpp"
+#include "algebra/impl/generic_matrix.hpp"
+#include "algebra/impl/generic_vector.hpp"
 #include "algebra/qualifiers.hpp"
 #include "algebra/type_traits.hpp"
 #include "algebra/utils/approximately_equal.hpp"

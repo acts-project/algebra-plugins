@@ -12,10 +12,7 @@ algebra_add_library( algebra_array array
    "include/algebra/impl/*.hpp"
 )
 
-target_link_libraries(
-    algebra_array
-    INTERFACE algebra::common algebra::generic_math
-)
+target_link_libraries(algebra_array INTERFACE algebra::common algebra::generic)
 
 algebra_test_public_headers( algebra_array
    "algebra/array.hpp"

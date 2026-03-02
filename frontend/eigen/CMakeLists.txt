@@ -14,7 +14,7 @@ algebra_add_library( algebra_eigen eigen
 
 target_link_libraries(
     algebra_eigen
-    INTERFACE algebra::common algebra::generic_math Eigen3::Eigen
+    INTERFACE algebra::common algebra::generic Eigen3::Eigen
 )
 
 algebra_test_public_headers( algebra_eigen

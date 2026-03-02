@@ -9,8 +9,8 @@
 
 // Project include(s).
 #include "algebra/concepts.hpp"
+#include "algebra/generic.hpp"
 #include "algebra/math.hpp"
-#include "algebra/math/generic.hpp"
 #include "algebra/qualifiers.hpp"
 
 namespace algebra::cmath {

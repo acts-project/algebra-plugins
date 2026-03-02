@@ -9,15 +9,12 @@ message(STATUS "Building the std::array algebra plugin")
 # Set up the library.
 algebra_add_library( algebra_array array
    "include/algebra/array.hpp"
+   "include/algebra/impl/*.hpp"
 )
 
 target_link_libraries(
     algebra_array
-    INTERFACE
-        algebra::common
-        algebra::array_storage
-        algebra::cmath_math
-        algebra::generic_math
+    INTERFACE algebra::common algebra::generic_math
 )
 
 algebra_test_public_headers( algebra_array

@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2024 CERN for the benefit of the ACTS project
+ * (c) 2020-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,10 +8,13 @@
 #pragma once
 
 // Project include(s).
-#include "algebra/math/cmath.hpp"
+#include "algebra/impl/array_getter.hpp"
+#include "algebra/impl/array_matrix.hpp"
+#include "algebra/impl/array_operators.hpp"
+#include "algebra/impl/array_types.hpp"
+#include "algebra/impl/array_vector.hpp"
 #include "algebra/math/generic.hpp"
 #include "algebra/math/impl/generic_matrix.hpp"
-#include "algebra/storage/array.hpp"
 
 namespace algebra {
 

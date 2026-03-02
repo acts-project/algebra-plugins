@@ -245,7 +245,6 @@ endif()
 add_subdirectory(common)
 add_subdirectory(frontend)
 add_subdirectory(math)
-add_subdirectory(storage)
 add_subdirectory(utils)
 
 # Set up the test(s).

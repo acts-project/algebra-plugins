@@ -9,16 +9,12 @@ message(STATUS "Building the Eigen3 algebra plugin")
 # Set up the library.
 algebra_add_library( algebra_eigen eigen
    "include/algebra/eigen.hpp"
+   "include/algebra/impl/*.hpp"
 )
 
 target_link_libraries(
     algebra_eigen
-    INTERFACE
-        algebra::common
-        algebra::eigen_storage
-        algebra::eigen_math
-        algebra::generic_math
-        Eigen3::Eigen
+    INTERFACE algebra::common algebra::generic_math Eigen3::Eigen
 )
 
 algebra_test_public_headers( algebra_eigen

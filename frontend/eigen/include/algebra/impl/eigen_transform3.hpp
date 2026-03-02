@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2020-2024 CERN for the benefit of the ACTS project
+ * (c) 2020-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,8 +8,8 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/impl/eigen_array.hpp"
 #include "algebra/qualifiers.hpp"
-#include "algebra/storage/impl/eigen_array.hpp"
 #include "algebra/utils/approximately_equal.hpp"
 
 // Eigen include(s).

@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2022-2024 CERN for the benefit of the ACTS project
+ * (c) 2022-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,8 +8,9 @@
 #pragma once
 
 // Project include(s).
+#include "algebra/concepts.hpp"
+#include "algebra/impl/eigen_types.hpp"
 #include "algebra/qualifiers.hpp"
-#include "algebra/storage/eigen.hpp"
 
 // Eigen include(s).
 #ifdef _MSC_VER

@@ -8,11 +8,21 @@
 include(algebra-plugins-compiler-options-cpp)
 
 # Set up an INTERFACE library for the common header(s).
-add_library(algebra_bench_common INTERFACE)
+add_library(
+    algebra_bench_common
+    INTERFACE
+    "algebra/include/algebra/common/benchmark_base.hpp"
+    "algebra/include/algebra/common/benchmark_getter.hpp"
+    "algebra/include/algebra/common/benchmark_matrix.hpp"
+    "algebra/include/algebra/common/benchmark_transform3.hpp"
+    "algebra/include/algebra/common/benchmark_types.hpp"
+    "algebra/include/algebra/common/benchmark_vector.hpp"
+    "algebra/include/algebra/common/register_benchmark.hpp"
+)
 
 target_include_directories(
     algebra_bench_common
-    INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/common/include"
+    INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/algebra/include/"
 )
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
@@ -28,12 +38,16 @@ add_library(algebra::bench_common ALIAS algebra_bench_common)
 macro(algebra_add_benchmarks plugin)
     string(TOUPPER ${plugin} PLUGIN)
 
-    add_library(algebra_bench_${plugin} INTERFACE)
+    add_library(
+        algebra_bench_${plugin}
+        INTERFACE
+        "algebra/include/algebra/${plugin}/data_generator.hpp"
+    )
 
     target_include_directories(
         algebra_bench_${plugin}
         INTERFACE
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${plugin}/include>"
+            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/algebra/include>"
     )
 
     target_link_libraries(
@@ -42,7 +56,7 @@ macro(algebra_add_benchmarks plugin)
     )
 
     algebra_add_benchmark( ${plugin}_getter
-    "common/src/benchmark_getter.cpp"
+    "algebra/src/benchmark_getter.cpp"
     LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                     algebra_bench_${plugin} algebra::${plugin}
     )
@@ -52,7 +66,7 @@ macro(algebra_add_benchmarks plugin)
     )
 
     algebra_add_benchmark( ${plugin}_vector
-    "common/src/benchmark_vector.cpp"
+    "algebra/src/benchmark_vector.cpp"
     LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                     algebra_bench_${plugin} algebra::${plugin}
     )
@@ -62,7 +76,7 @@ macro(algebra_add_benchmarks plugin)
     )
 
     algebra_add_benchmark( ${plugin}_transform3
-    "common/src/benchmark_transform3.cpp"
+    "algebra/src/benchmark_transform3.cpp"
     LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                     algebra_bench_${plugin} algebra::${plugin}
     )
@@ -72,7 +86,7 @@ macro(algebra_add_benchmarks plugin)
     )
 
     algebra_add_benchmark( ${plugin}_matrix
-    "common/src/benchmark_matrix.cpp"
+    "algebra/src/benchmark_matrix.cpp"
     LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                     algebra_bench_${plugin} algebra::${plugin}
     )
@@ -102,33 +116,40 @@ endif()
 if(ALGEBRA_PLUGINS_INCLUDE_VC)
     algebra_add_benchmarks(vc_aos)
 
-    add_library(algebra_bench_vc_soa INTERFACE)
+    add_library(
+        algebra_bench_vc_soa
+        INTERFACE
+        "algebra/include/algebra/vc_soa/data_generator.hpp"
+    )
+
     target_include_directories(
         algebra_bench_vc_soa
         INTERFACE
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vc_soa/include>"
+            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/algebra/include>"
     )
+
     target_link_libraries(
         algebra_bench_vc_soa
         INTERFACE algebra::vc_soa algebra::common
     )
+
     algebra_add_benchmark(vc_soa_getter
-      "vc_soa/vc_soa_getter.cpp"
+      "algebra/src/vc_soa/vc_soa_getter.cpp"
        LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                       algebra_bench_vc_soa algebra::vc_soa
     )
     algebra_add_benchmark(vc_soa_vector
-      "vc_soa/vc_soa_vector.cpp"
+      "algebra/src/vc_soa/vc_soa_vector.cpp"
        LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                       algebra_bench_vc_soa algebra::vc_soa
     )
     algebra_add_benchmark(vc_soa_transform3
-      "vc_soa/vc_soa_transform3.cpp"
+      "algebra/src/vc_soa/vc_soa_transform3.cpp"
        LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                       algebra_bench_vc_soa algebra::vc_soa
     )
     algebra_add_benchmark(vc_soa_matrix
-      "vc_soa/vc_soa_matrix.cpp"
+      "algebra/src/vc_soa/vc_soa_matrix.cpp"
        LINK_LIBRARIES benchmark::benchmark algebra::bench_common
                       algebra_bench_vc_soa algebra::vc_soa
     )

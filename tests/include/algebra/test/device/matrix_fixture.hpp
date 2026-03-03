@@ -80,6 +80,8 @@ class matrix_fixture : public device_fixture<A, algebra::get_scalar_t<A>> {
     // Delete the matrices.
     m_m1.reset();
     m_m2.reset();
+    // Tear down the base class.
+    base_fixture::TearDown();
   }
 
   /// @name Inputs for the tests

@@ -108,7 +108,7 @@ jobs:
             PLATFORM:
               NAME: "SYCL NVIDIA"
               CONTAINER: "ghcr.io/acts-project/ubuntu2404_cuda_oneapi:69"
-              OPTIONS: --preset sycl -DALGEBRA_PLUGINS_TEST_CUDA=FALSE
+              OPTIONS: --preset sycl -DALGEBRA_BUILD_CUDA=FALSE
               RUN_TESTS: false
 
     # The system to run on.

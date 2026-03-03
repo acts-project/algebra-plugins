@@ -34,8 +34,11 @@ void execute_sycl_test(::sycl::queue& queue, std::size_t array_sizes,
           if (i >= array_sizes) {
             return;
           }
-          // Execute the test functor for this index.
-          functor_t()(i, std::forward<Args>(args)...);
+          // Execute the test functor for this index. Note that std::forward
+          // cannot be used here, as the function arguments are passed through
+          // as copies to the SYCL kernel. So perfect forwarding is out of
+          // question.
+          functor_t()(i, args...);
         });
       })
       .wait_and_throw();

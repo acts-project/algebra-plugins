@@ -9,6 +9,7 @@
 
 // System include(s).
 #include <cstddef>
+#include <utility>
 
 namespace algebra::test {
 

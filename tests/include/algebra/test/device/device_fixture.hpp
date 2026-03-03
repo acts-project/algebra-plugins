@@ -73,7 +73,7 @@ class device_fixture : public testing::Test, public test_base<A> {
                     algebra::concepts::matrix<R>) {
 
         using value_t = algebra::traits::value_t<R>;
-        constexpr value_t max_rel_error{this->m_epsilon};
+        constexpr value_t max_rel_error{test_base<A>::m_epsilon};
 
         EXPECT_TRUE(algebra::approx_equal(
             m_output_host->at(i), m_output_device->at(i), max_rel_error))

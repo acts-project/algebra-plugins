@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023-2024 CERN for the benefit of the ACTS project
+ * (c) 2023-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -8,6 +8,7 @@
 #pragma once
 
 // Project include(s)
+#include "algebra/concepts.hpp"
 #include "benchmark_base.hpp"
 #include "register_benchmark.hpp"
 
@@ -126,7 +127,7 @@ struct vector_binaryOP_bm : public vector_bm<vector_t<scalar_t>> {
 };
 
 // Functions to be benchmarked
-namespace bench_op {
+namespace bench_op::vector {
 
 struct add {
   static constexpr std::string_view name{"add"};
@@ -175,30 +176,76 @@ ALGEBRA_PLUGINS_BENCH_VECTOR(perp, algebra::traits::scalar_t<vector_t>)
 ALGEBRA_PLUGINS_BENCH_VECTOR(norm, algebra::traits::scalar_t<vector_t>)
 ALGEBRA_PLUGINS_BENCH_VECTOR(normalize, vector_t)
 
-}  // namespace bench_op
+}  // namespace bench_op::vector
+
+// Macro for defining all vector benchmark types
+#define ALGEBRA_PLUGINS_DEFINE_VECTOR_BENCH(PLUGIN)                           \
+  using phi_f_t =                                                             \
+      vector_unaryOP_bm<PLUGIN::vector3, float, bench_op::vector::phi>;       \
+  using theta_f_t =                                                           \
+      vector_unaryOP_bm<PLUGIN::vector3, float, bench_op::vector::theta>;     \
+  using perp_f_t =                                                            \
+      vector_unaryOP_bm<PLUGIN::vector3, float, bench_op::vector::perp>;      \
+  using norm_f_t =                                                            \
+      vector_unaryOP_bm<PLUGIN::vector3, float, bench_op::vector::norm>;      \
+  using eta_f_t =                                                             \
+      vector_unaryOP_bm<PLUGIN::vector3, float, bench_op::vector::eta>;       \
+                                                                              \
+  using add_f_t =                                                             \
+      vector_binaryOP_bm<PLUGIN::vector3, float, bench_op::vector::add>;      \
+  using sub_f_t =                                                             \
+      vector_binaryOP_bm<PLUGIN::vector3, float, bench_op::vector::sub>;      \
+  using dot_f_t =                                                             \
+      vector_binaryOP_bm<PLUGIN::vector3, float, bench_op::vector::dot>;      \
+  using cross_f_t =                                                           \
+      vector_binaryOP_bm<PLUGIN::vector3, float, bench_op::vector::cross>;    \
+  using normlz_f_t =                                                          \
+      vector_unaryOP_bm<PLUGIN::vector3, float, bench_op::vector::normalize>; \
+                                                                              \
+  using phi_d_t =                                                             \
+      vector_unaryOP_bm<PLUGIN::vector3, double, bench_op::vector::phi>;      \
+  using theta_d_t =                                                           \
+      vector_unaryOP_bm<PLUGIN::vector3, double, bench_op::vector::theta>;    \
+  using perp_d_t =                                                            \
+      vector_unaryOP_bm<PLUGIN::vector3, double, bench_op::vector::perp>;     \
+  using norm_d_t =                                                            \
+      vector_unaryOP_bm<PLUGIN::vector3, double, bench_op::vector::norm>;     \
+  using eta_d_t =                                                             \
+      vector_unaryOP_bm<PLUGIN::vector3, double, bench_op::vector::eta>;      \
+                                                                              \
+  using add_d_t =                                                             \
+      vector_binaryOP_bm<PLUGIN::vector3, double, bench_op::vector::add>;     \
+  using sub_d_t =                                                             \
+      vector_binaryOP_bm<PLUGIN::vector3, double, bench_op::vector::sub>;     \
+  using dot_d_t =                                                             \
+      vector_binaryOP_bm<PLUGIN::vector3, double, bench_op::vector::dot>;     \
+  using cross_d_t =                                                           \
+      vector_binaryOP_bm<PLUGIN::vector3, double, bench_op::vector::cross>;   \
+  using normlz_d_t =                                                          \
+      vector_unaryOP_bm<PLUGIN::vector3, double, bench_op::vector::normalize>;
 
 // Macro for registering all vector benchmarks
-#define ALGEBRA_PLUGINS_REGISTER_VECTOR_BENCH(CFG)         \
-  algebra::register_benchmark<add_f_t>(CFG, "_single");    \
-  algebra::register_benchmark<add_d_t>(CFG, "_double");    \
-  algebra::register_benchmark<sub_f_t>(CFG, "_single");    \
-  algebra::register_benchmark<sub_d_t>(CFG, "_double");    \
-  algebra::register_benchmark<dot_f_t>(CFG, "_single");    \
-  algebra::register_benchmark<dot_d_t>(CFG, "_double");    \
-  algebra::register_benchmark<cross_f_t>(CFG, "_single");  \
-  algebra::register_benchmark<cross_d_t>(CFG, "_double");  \
-  algebra::register_benchmark<normlz_f_t>(CFG, "_single"); \
-  algebra::register_benchmark<normlz_d_t>(CFG, "_double"); \
-                                                           \
-  algebra::register_benchmark<phi_f_t>(CFG, "_single");    \
-  algebra::register_benchmark<phi_d_t>(CFG, "_double");    \
-  algebra::register_benchmark<theta_f_t>(CFG, "_single");  \
-  algebra::register_benchmark<theta_d_t>(CFG, "_double");  \
-  algebra::register_benchmark<perp_f_t>(CFG, "_single");   \
-  algebra::register_benchmark<perp_d_t>(CFG, "_double");   \
-  algebra::register_benchmark<norm_f_t>(CFG, "_single");   \
-  algebra::register_benchmark<norm_d_t>(CFG, "_double");   \
-  algebra::register_benchmark<eta_f_t>(CFG, "_single");    \
-  algebra::register_benchmark<eta_d_t>(CFG, "_double");
+#define ALGEBRA_PLUGINS_REGISTER_VECTOR_BENCH(CFGS, CFGD)   \
+  algebra::register_benchmark<add_f_t>(CFGS, "_single");    \
+  algebra::register_benchmark<add_d_t>(CFGD, "_double");    \
+  algebra::register_benchmark<sub_f_t>(CFGS, "_single");    \
+  algebra::register_benchmark<sub_d_t>(CFGD, "_double");    \
+  algebra::register_benchmark<dot_f_t>(CFGS, "_single");    \
+  algebra::register_benchmark<dot_d_t>(CFGD, "_double");    \
+  algebra::register_benchmark<cross_f_t>(CFGS, "_single");  \
+  algebra::register_benchmark<cross_d_t>(CFGD, "_double");  \
+  algebra::register_benchmark<normlz_f_t>(CFGS, "_single"); \
+  algebra::register_benchmark<normlz_d_t>(CFGD, "_double"); \
+                                                            \
+  algebra::register_benchmark<phi_f_t>(CFGS, "_single");    \
+  algebra::register_benchmark<phi_d_t>(CFGD, "_double");    \
+  algebra::register_benchmark<theta_f_t>(CFGS, "_single");  \
+  algebra::register_benchmark<theta_d_t>(CFGD, "_double");  \
+  algebra::register_benchmark<perp_f_t>(CFGS, "_single");   \
+  algebra::register_benchmark<perp_d_t>(CFGD, "_double");   \
+  algebra::register_benchmark<norm_f_t>(CFGS, "_single");   \
+  algebra::register_benchmark<norm_d_t>(CFGD, "_double");   \
+  algebra::register_benchmark<eta_f_t>(CFGS, "_single");    \
+  algebra::register_benchmark<eta_d_t>(CFGD, "_double");
 
 }  // namespace algebra

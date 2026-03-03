@@ -79,4 +79,14 @@ struct transform3_bm : public vector_bm<typename transform3_t::vector3> {
   }
 };
 
+// Macro for defining all transform benchmark types
+#define ALGEBRA_PLUGINS_DEFINE_TRANSFORM_BENCH(PLUGIN)      \
+  using trf_f_t = transform3_bm<PLUGIN::transform3<float>>; \
+  using trf_d_t = transform3_bm<PLUGIN::transform3<double>>;
+
+// Macro for registering all transform benchmarks
+#define ALGEBRA_PLUGINS_REGISTER_TRANSFORM_BENCH(CFGS, CFGD) \
+  algebra::register_benchmark<trf_f_t>(CFGS, "_single");     \
+  algebra::register_benchmark<trf_d_t>(CFGD, "_double");
+
 }  // namespace algebra

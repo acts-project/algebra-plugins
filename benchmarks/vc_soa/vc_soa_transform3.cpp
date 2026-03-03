@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023-2024 CERN for the benefit of the ACTS project
+ * (c) 2023-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
   using trf_f_t = transform3_bm<vc_soa::transform3<float>>;
   using trf_d_t = transform3_bm<vc_soa::transform3<double>>;
 
-  std::cout << "-------------------------------------------\n"
+  std::cout << "-----------------------------------------------\n"
             << "Algebra-Plugins 'transform3' benchmark (Vc SoA)\n"
             << "-----------------------------------------------\n\n"
             << "(single)\n"

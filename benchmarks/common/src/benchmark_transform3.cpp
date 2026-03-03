@@ -1,14 +1,15 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023-2024 CERN for the benefit of the ACTS project
+ * (c) 2023-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
 
 // Project include(s)
-#include "algebra/array.hpp"
-#include "benchmark/array/data_generator.hpp"
+// clang-format off
+#include "benchmark/common/benchmark_types.hpp"
 #include "benchmark/common/benchmark_transform3.hpp"
+// clang-format on
 #include "benchmark/common/register_benchmark.hpp"
 
 // Benchmark include
@@ -28,19 +29,28 @@ int main(int argc, char** argv) {
   algebra::benchmark_base::configuration cfg{};
   cfg.n_samples(100000);
 
-  using trf_f_t = transform3_bm<array::transform3<float>>;
-  using trf_d_t = transform3_bm<array::transform3<double>>;
-
   std::cout << "---------------------------------------------------\n"
-            << "Algebra-Plugins 'transform3' benchmark (std::array)\n"
+            << "Algebra-Plugins 'transform3' benchmark ("
+            << algebra::benchmark::plugin_name << ")\n"
             << "---------------------------------------------------\n\n"
             << cfg;
 
-  //
-  // Register all benchmarks
-  //
-  algebra::register_benchmark<trf_f_t>(cfg, "_single");
-  algebra::register_benchmark<trf_d_t>(cfg, "_double");
+//
+// Define and register all benchmarks
+//
+#if ALGEBRA_BENCHMARK_ARRAY
+  ALGEBRA_PLUGINS_DEFINE_TRANSFORM_BENCH(array)
+#elif ALGEBRA_BENCHMARK_EIGEN
+  ALGEBRA_PLUGINS_DEFINE_TRANSFORM_BENCH(eigen)
+#elif ALGEBRA_BENCHMARK_FASTOR
+  ALGEBRA_PLUGINS_DEFINE_TRANSFORM_BENCH(fastor)
+#elif ALGEBRA_BENCHMARK_SMATRIX
+  ALGEBRA_PLUGINS_DEFINE_TRANSFORM_BENCH(smatrix)
+#elif ALGEBRA_BENCHMARK_VC_AOS
+  ALGEBRA_PLUGINS_DEFINE_TRANSFORM_BENCH(vc_aos)
+#endif
+
+  ALGEBRA_PLUGINS_REGISTER_TRANSFORM_BENCH(cfg, cfg)
 
   ::benchmark::Initialize(&argc, argv);
   ::benchmark::RunSpecifiedBenchmarks();

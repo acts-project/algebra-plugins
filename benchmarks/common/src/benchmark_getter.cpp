@@ -1,14 +1,15 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2023-2024 CERN for the benefit of the ACTS project
+ * (c) 2023-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
 
 // Project include(s)
-#include "algebra/array.hpp"
-#include "benchmark/array/data_generator.hpp"
+// clang-format off
+#include "benchmark/common/benchmark_types.hpp"
 #include "benchmark/common/benchmark_getter.hpp"
+// clang-format on
 
 // Benchmark include
 #include <benchmark/benchmark.h>
@@ -28,7 +29,8 @@ int main(int argc, char** argv) {
   cfg.n_samples(100000);
 
   std::cout << "-----------------------------------------------\n"
-            << "Algebra-Plugins 'getter' benchmark (std::array)\n"
+            << "Algebra-Plugins 'getter' benchmark ("
+            << algebra::benchmark::plugin_name << ")\n"
             << "-----------------------------------------------\n\n"
             << cfg;
 

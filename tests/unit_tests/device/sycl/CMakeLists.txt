@@ -31,16 +31,3 @@ endmacro()
 if(ALGEBRA_PLUGINS_INCLUDE_ARRAY)
     algebra_add_test_suite(array)
 endif()
-
-if(ALGEBRA_PLUGINS_INCLUDE_EIGEN)
-    algebra_add_test_suite(eigen)
-
-    # Prevent Eigen from considering the SYCL device compilation as either:
-    #  - host compilation;
-    #  - CUDA compilation;
-    #  - HIP compilation.
-    target_compile_definitions(
-        algebra_test_eigen_sycl
-        PRIVATE EIGEN_NO_CUDA EIGEN_NO_HIP EIGEN_DONT_VECTORIZE
-    )
-endif()

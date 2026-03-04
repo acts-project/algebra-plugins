@@ -40,23 +40,23 @@
 
 namespace algebra::test {
 
-#define ALGEBRA_DEFINE_TEST_TYPES(ALGEBRA)            \
-  template <algebra::concepts::value T>               \
-  using algebra_type = ::algebra::plugin::ALGEBRA<T>; \
-                                                      \
-  struct test_specialisation_name {                   \
-    template <typename T>                             \
-    static std::string GetName(int i) {               \
-      switch (i) {                                    \
-        case 0:                                       \
-          return std::string(#ALGEBRA) + "<float>";   \
-        case 1:                                       \
-          return std::string(#ALGEBRA) + "<double>";  \
-        default:                                      \
-          return "unknown";                           \
-      }                                               \
-    }                                                 \
-  };
+#define ALGEBRA_DEFINE_TEST_TYPES(ALGEBRA)                     \
+    template <algebra::concepts::value T>                      \
+    using algebra_type = ::algebra::plugin::ALGEBRA<T>;        \
+                                                               \
+    struct test_specialisation_name {                          \
+        template <typename T>                                  \
+        static std::string GetName(int i) {                    \
+            switch (i) {                                       \
+                case 0:                                        \
+                    return std::string(#ALGEBRA) + "<float>";  \
+                case 1:                                        \
+                    return std::string(#ALGEBRA) + "<double>"; \
+                default:                                       \
+                    return "unknown";                          \
+            }                                                  \
+        }                                                      \
+    };
 
 // Select algebra-plugin to compile the test with
 #if ALGEBRA_TEST_ARRAY

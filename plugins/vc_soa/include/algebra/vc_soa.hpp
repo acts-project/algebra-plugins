@@ -108,27 +108,27 @@ namespace plugin {
 /// @{
 template <concepts::value V>
 struct vc_soa {
-  /// Define scalar precision
-  using value_type = V;
+    /// Define scalar precision
+    using value_type = V;
 
-  template <concepts::element T>
-  using simd = Vc::Vector<T>;
+    template <concepts::element T>
+    using simd = Vc::Vector<T>;
 
-  using boolean = Vc::Mask<V>;
+    using boolean = Vc::Mask<V>;
 
-  /// Linear Algebra type definitions
-  /// @{
-  using scalar = simd<value_type>;
-  using index_type = algebra::vc_soa::index_type;
-  using transform3D = algebra::vc_soa::transform3<value_type>;
-  using point2D = algebra::vc_soa::point2<value_type>;
-  using point3D = algebra::vc_soa::point3<value_type>;
-  using vector2D = algebra::vc_soa::vector2<value_type>;
-  using vector3D = algebra::vc_soa::vector3<value_type>;
+    /// Linear Algebra type definitions
+    /// @{
+    using scalar = simd<value_type>;
+    using index_type = algebra::vc_soa::index_type;
+    using transform3D = algebra::vc_soa::transform3<value_type>;
+    using point2D = algebra::vc_soa::point2<value_type>;
+    using point3D = algebra::vc_soa::point3<value_type>;
+    using vector2D = algebra::vc_soa::vector2<value_type>;
+    using vector3D = algebra::vc_soa::vector3<value_type>;
 
-  template <std::size_t ROWS, std::size_t COLS>
-  using matrix = algebra::vc_soa::matrix_type<value_type, ROWS, COLS>;
-  /// @}
+    template <std::size_t ROWS, std::size_t COLS>
+    using matrix = algebra::vc_soa::matrix_type<value_type, ROWS, COLS>;
+    /// @}
 };
 /// @}
 

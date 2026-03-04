@@ -19,13 +19,13 @@ namespace algebra::test::cuda {
 template <class base_fixture_t>
 class cuda_test_fixture : public base_fixture_t {
 
- public:
-  /// Constructor, providing CUDA specific infrastructure to the test fixture
-  cuda_test_fixture() : base_fixture_t(m_resource) {}
+    public:
+    /// Constructor, providing CUDA specific infrastructure to the test fixture
+    cuda_test_fixture() : base_fixture_t(m_resource) {}
 
- protected:
-  /// Memory resource for all of the tests.
-  vecmem::cuda::managed_memory_resource m_resource;
+    protected:
+    /// Memory resource for all of the tests.
+    vecmem::cuda::managed_memory_resource m_resource;
 };
 
 }  // namespace algebra::test::cuda

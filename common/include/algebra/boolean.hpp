@@ -12,13 +12,13 @@ namespace algebra::boolean {
 /// Utilities for single booleans: default case
 /// @{
 constexpr bool any_of(bool b) {
-  return b;
+    return b;
 }
 constexpr bool all_of(bool b) {
-  return b;
+    return b;
 }
 constexpr bool none_of(bool b) {
-  return !b;
+    return !b;
 }
 /// @}
 

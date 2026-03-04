@@ -22,36 +22,36 @@ using namespace algebra;
 /// Run vector benchmarks
 int main(int argc, char** argv) {
 
-  //
-  // Prepare benchmarks
-  //
-  algebra::benchmark_base::configuration cfg{};
-  cfg.n_samples(100000);
+    //
+    // Prepare benchmarks
+    //
+    algebra::benchmark_base::configuration cfg{};
+    cfg.n_samples(100000);
 
-  std::cout << "-----------------------------------------------\n"
-            << "Algebra-Plugins 'matrix' benchmark ("
-            << algebra::benchmark::plugin_name << ")\n"
-            << "-----------------------------------------------\n\n"
-            << cfg;
+    std::cout << "-----------------------------------------------\n"
+              << "Algebra-Plugins 'matrix' benchmark ("
+              << algebra::benchmark::plugin_name << ")\n"
+              << "-----------------------------------------------\n\n"
+              << cfg;
 
 //
 // Define and register all benchmarks
 //
 #if ALGEBRA_BENCHMARK_ARRAY
-  ALGEBRA_PLUGINS_DEFINE_MATRIX_BENCH(array)
+    ALGEBRA_PLUGINS_DEFINE_MATRIX_BENCH(array)
 #elif ALGEBRA_BENCHMARK_EIGEN
-  ALGEBRA_PLUGINS_DEFINE_MATRIX_BENCH(eigen)
+    ALGEBRA_PLUGINS_DEFINE_MATRIX_BENCH(eigen)
 #elif ALGEBRA_BENCHMARK_FASTOR
-  ALGEBRA_PLUGINS_DEFINE_MATRIX_BENCH(fastor)
+    ALGEBRA_PLUGINS_DEFINE_MATRIX_BENCH(fastor)
 #elif ALGEBRA_BENCHMARK_SMATRIX
-  ALGEBRA_PLUGINS_DEFINE_MATRIX_BENCH(smatrix)
+    ALGEBRA_PLUGINS_DEFINE_MATRIX_BENCH(smatrix)
 #elif ALGEBRA_BENCHMARK_VC_AOS
-  ALGEBRA_PLUGINS_DEFINE_MATRIX_BENCH(vc_aos)
+    ALGEBRA_PLUGINS_DEFINE_MATRIX_BENCH(vc_aos)
 #endif
 
-  ALGEBRA_PLUGINS_REGISTER_MATRIX_BENCH(cfg, cfg)
+    ALGEBRA_PLUGINS_REGISTER_MATRIX_BENCH(cfg, cfg)
 
-  ::benchmark::Initialize(&argc, argv);
-  ::benchmark::RunSpecifiedBenchmarks();
-  ::benchmark::Shutdown();
+    ::benchmark::Initialize(&argc, argv);
+    ::benchmark::RunSpecifiedBenchmarks();
+    ::benchmark::Shutdown();
 }

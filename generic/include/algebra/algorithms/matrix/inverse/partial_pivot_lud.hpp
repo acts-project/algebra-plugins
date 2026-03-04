@@ -19,55 +19,55 @@ namespace algebra::generic::matrix::inverse {
 template <concepts::square_matrix matrix_t>
 struct partial_pivot_lud {
 
-  using scalar_t = algebra::traits::value_t<matrix_t>;
-  using index_t = algebra::traits::index_t<matrix_t>;
+    using scalar_t = algebra::traits::value_t<matrix_t>;
+    using index_t = algebra::traits::index_t<matrix_t>;
 
-  /// Function (object) used for accessing a matrix element
-  using element_getter_t = algebra::traits::element_getter_t<matrix_t>;
+    /// Function (object) used for accessing a matrix element
+    using element_getter_t = algebra::traits::element_getter_t<matrix_t>;
 
-  using decomposition_t =
-      typename algebra::generic::matrix::decomposition::partial_pivot_lud<
-          matrix_t>;
+    using decomposition_t =
+        typename algebra::generic::matrix::decomposition::partial_pivot_lud<
+            matrix_t>;
 
-  ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(const matrix_t& m) const {
+    ALGEBRA_HOST_DEVICE constexpr matrix_t operator()(const matrix_t& m) const {
 
-    constexpr element_getter_t elem{};
-    constexpr index_t N{algebra::traits::rank<matrix_t>};
+        constexpr element_getter_t elem{};
+        constexpr index_t N{algebra::traits::rank<matrix_t>};
 
-    const typename decomposition_t::template lud<N> decomp_res =
-        decomposition_t()(m);
+        const typename decomposition_t::template lud<N> decomp_res =
+            decomposition_t()(m);
 
-    // Get the LU decomposition matrix equal to (L - I) + U
-    const auto& lu = decomp_res.lu;
+        // Get the LU decomposition matrix equal to (L - I) + U
+        const auto& lu = decomp_res.lu;
 
-    // Permutation vector
-    const auto& P = decomp_res.P;
+        // Permutation vector
+        const auto& P = decomp_res.P;
 
-    // Inverse matrix
-    matrix_t inv;
+        // Inverse matrix
+        matrix_t inv;
 
-    // Calculate inv(A) = inv(U) * inv(L) * P;
-    for (index_t j = 0; j < N; j++) {
-      for (index_t i = 0; i < N; i++) {
-        elem(inv, i, j) = static_cast<index_t>(P[i]) == j
-                              ? static_cast<scalar_t>(1.0)
-                              : static_cast<scalar_t>(0.0);
+        // Calculate inv(A) = inv(U) * inv(L) * P;
+        for (index_t j = 0; j < N; j++) {
+            for (index_t i = 0; i < N; i++) {
+                elem(inv, i, j) = static_cast<index_t>(P[i]) == j
+                                      ? static_cast<scalar_t>(1.0)
+                                      : static_cast<scalar_t>(0.0);
 
-        for (index_t k = 0; k < i; k++) {
-          elem(inv, i, j) -= elem(lu, i, k) * elem(inv, k, j);
+                for (index_t k = 0; k < i; k++) {
+                    elem(inv, i, j) -= elem(lu, i, k) * elem(inv, k, j);
+                }
+            }
+
+            for (index_t i = N - 1; int(i) >= 0; i--) {
+                for (index_t k = i + 1; k < N; k++) {
+                    elem(inv, i, j) -= elem(lu, i, k) * elem(inv, k, j);
+                }
+                elem(inv, i, j) /= elem(lu, i, i);
+            }
         }
-      }
 
-      for (index_t i = N - 1; int(i) >= 0; i--) {
-        for (index_t k = i + 1; k < N; k++) {
-          elem(inv, i, j) -= elem(lu, i, k) * elem(inv, k, j);
-        }
-        elem(inv, i, j) /= elem(lu, i, i);
-      }
+        return inv;
     }
-
-    return inv;
-  }
 };
 
 }  // namespace algebra::generic::matrix::inverse

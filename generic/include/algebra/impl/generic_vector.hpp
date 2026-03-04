@@ -22,10 +22,10 @@ template <concepts::vector vector_t>
 ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> phi(
     const vector_t &v) noexcept {
 
-  using element_getter_t = algebra::traits::element_getter_t<vector_t>;
+    using element_getter_t = algebra::traits::element_getter_t<vector_t>;
 
-  return algebra::math::atan2(element_getter_t{}(v, 1),
-                              element_getter_t{}(v, 0));
+    return algebra::math::atan2(element_getter_t{}(v, 1),
+                                element_getter_t{}(v, 0));
 }
 
 /// This method retrieves the perpendicular magnitude of a vector with rows >= 2
@@ -35,11 +35,11 @@ template <concepts::vector vector_t>
 ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> perp(
     const vector_t &v) noexcept {
 
-  using element_getter_t = algebra::traits::element_getter_t<vector_t>;
+    using element_getter_t = algebra::traits::element_getter_t<vector_t>;
 
-  return algebra::math::sqrt(
-      algebra::math::fma(element_getter_t{}(v, 0), element_getter_t{}(v, 0),
-                         element_getter_t{}(v, 1) * element_getter_t{}(v, 1)));
+    return algebra::math::sqrt(algebra::math::fma(
+        element_getter_t{}(v, 0), element_getter_t{}(v, 0),
+        element_getter_t{}(v, 1) * element_getter_t{}(v, 1)));
 }
 
 /// This method retrieves theta from a vector with rows >= 3
@@ -49,9 +49,9 @@ template <concepts::vector vector_t>
 ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> theta(
     const vector_t &v) noexcept {
 
-  using element_getter_t = algebra::traits::element_getter_t<vector_t>;
+    using element_getter_t = algebra::traits::element_getter_t<vector_t>;
 
-  return algebra::math::atan2(perp(v), element_getter_t{}(v, 2));
+    return algebra::math::atan2(perp(v), element_getter_t{}(v, 2));
 }
 
 /// Cross product between two input vectors - 3 Dim
@@ -64,21 +64,24 @@ ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> theta(
 ///
 /// @return a vector representing the cross product
 template <typename vector1_t, typename vector2_t>
-  requires(
-      (concepts::vector3D<vector1_t> || concepts::column_matrix3D<vector1_t>) &&
-      (concepts::vector3D<vector2_t> || concepts::column_matrix3D<vector2_t>))
+    requires((concepts::vector3D<vector1_t> ||
+              concepts::column_matrix3D<vector1_t>) &&
+             (concepts::vector3D<vector2_t> ||
+              concepts::column_matrix3D<vector2_t>))
 ALGEBRA_HOST_DEVICE constexpr algebra::traits::vector_t<vector1_t> cross(
     const vector1_t &a, const vector2_t &b) {
 
-  using element_getter_t = algebra::traits::element_getter_t<vector1_t>;
+    using element_getter_t = algebra::traits::element_getter_t<vector1_t>;
 
-  return {
-      algebra::math::fma(element_getter_t{}(a, 1), element_getter_t{}(b, 2),
-                         -element_getter_t{}(b, 1) * element_getter_t{}(a, 2)),
-      algebra::math::fma(element_getter_t{}(a, 2), element_getter_t{}(b, 0),
-                         -element_getter_t{}(b, 2) * element_getter_t{}(a, 0)),
-      algebra::math::fma(element_getter_t{}(a, 0), element_getter_t{}(b, 1),
-                         -element_getter_t{}(b, 0) * element_getter_t{}(a, 1))};
+    return {algebra::math::fma(
+                element_getter_t{}(a, 1), element_getter_t{}(b, 2),
+                -element_getter_t{}(b, 1) * element_getter_t{}(a, 2)),
+            algebra::math::fma(
+                element_getter_t{}(a, 2), element_getter_t{}(b, 0),
+                -element_getter_t{}(b, 2) * element_getter_t{}(a, 0)),
+            algebra::math::fma(
+                element_getter_t{}(a, 0), element_getter_t{}(b, 1),
+                -element_getter_t{}(b, 0) * element_getter_t{}(a, 1))};
 }
 
 /// Dot product between two input vectors
@@ -91,23 +94,23 @@ ALGEBRA_HOST_DEVICE constexpr algebra::traits::vector_t<vector1_t> cross(
 ///
 /// @return the scalar dot product value
 template <typename vector1_t, typename vector2_t>
-  requires((concepts::vector<vector1_t> ||
-            concepts::column_matrix<vector1_t>) &&
-           (concepts::vector<vector2_t> || concepts::column_matrix<vector2_t>))
+    requires(
+        (concepts::vector<vector1_t> || concepts::column_matrix<vector1_t>) &&
+        (concepts::vector<vector2_t> || concepts::column_matrix<vector2_t>))
 ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector1_t> dot(
     const vector1_t &a, const vector2_t &b) {
 
-  using scalar_t = algebra::traits::scalar_t<vector1_t>;
-  using index_t = algebra::traits::index_t<vector1_t>;
-  using element_getter_t = algebra::traits::element_getter_t<vector1_t>;
+    using scalar_t = algebra::traits::scalar_t<vector1_t>;
+    using index_t = algebra::traits::index_t<vector1_t>;
+    using element_getter_t = algebra::traits::element_getter_t<vector1_t>;
 
-  scalar_t ret{element_getter_t{}(a, 0) * element_getter_t{}(b, 0)};
+    scalar_t ret{element_getter_t{}(a, 0) * element_getter_t{}(b, 0)};
 
-  for (index_t i = 1; i < algebra::traits::size<vector1_t>; i++) {
-    ret = std::fma(element_getter_t{}(a, i), element_getter_t{}(b, i), ret);
-  }
+    for (index_t i = 1; i < algebra::traits::size<vector1_t>; i++) {
+        ret = std::fma(element_getter_t{}(a, i), element_getter_t{}(b, i), ret);
+    }
 
-  return ret;
+    return ret;
 }
 
 /// This method retrieves the norm of a vector with rows >= 3
@@ -117,7 +120,7 @@ template <concepts::vector vector_t>
 ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> norm(
     const vector_t &v) {
 
-  return algebra::math::sqrt(dot(v, v));
+    return algebra::math::sqrt(dot(v, v));
 }
 
 /// This method retrieves the pseudo-rapidity from a vector or vector base with
@@ -128,9 +131,9 @@ template <concepts::vector vector_t>
 ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> eta(
     const vector_t &v) noexcept {
 
-  using element_getter_t = algebra::traits::element_getter_t<vector_t>;
+    using element_getter_t = algebra::traits::element_getter_t<vector_t>;
 
-  return algebra::math::atanh(element_getter_t{}(v, 2) / norm(v));
+    return algebra::math::atanh(element_getter_t{}(v, 2) / norm(v));
 }
 
 /// Get a normalized version of the input vector
@@ -143,9 +146,9 @@ ALGEBRA_HOST_DEVICE constexpr algebra::traits::scalar_t<vector_t> eta(
 template <concepts::vector vector_t>
 ALGEBRA_HOST_DEVICE constexpr vector_t normalize(const vector_t &v) {
 
-  using scalar_t = algebra::traits::scalar_t<vector_t>;
+    using scalar_t = algebra::traits::scalar_t<vector_t>;
 
-  return v * static_cast<scalar_t>(1.) / norm(v);
+    return v * static_cast<scalar_t>(1.) / norm(v);
 }
 
 }  // namespace algebra::generic::math

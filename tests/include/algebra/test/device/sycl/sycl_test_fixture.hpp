@@ -26,15 +26,15 @@ namespace algebra::test::sycl {
 template <class base_fixture_t>
 class sycl_test_fixture : public base_fixture_t {
 
- public:
-  /// Constructor, setting up the inputs for all of the tests
-  sycl_test_fixture() : base_fixture_t(m_resource) {}
+    public:
+    /// Constructor, setting up the inputs for all of the tests
+    sycl_test_fixture() : base_fixture_t(m_resource) {}
 
- protected:
-  /// Queue to be used by all of the tests.
-  ::sycl::queue m_queue;
-  /// Memory resource for all of the tests.
-  vecmem::sycl::shared_memory_resource m_resource{&m_queue};
+    protected:
+    /// Queue to be used by all of the tests.
+    ::sycl::queue m_queue;
+    /// Memory resource for all of the tests.
+    vecmem::sycl::shared_memory_resource m_resource{&m_queue};
 };
 
 }  // namespace algebra::test::sycl

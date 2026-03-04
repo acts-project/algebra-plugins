@@ -87,13 +87,13 @@ namespace traits {
 template <concepts::value T, std::size_t ROWS, std::size_t COLS>
 struct scalar<
     algebra::storage::matrix<vc_soa::storage_type, Vc::Vector<T>, ROWS, COLS>> {
-  using type = Vc::Vector<T>;
+    using type = Vc::Vector<T>;
 };
 
 template <concepts::value T, std::size_t N>
 struct scalar<
     algebra::storage::vector<N, Vc::Vector<T>, vc_soa::storage_type>> {
-  using type = Vc::Vector<T>;
+    using type = Vc::Vector<T>;
 };
 /// @}
 
@@ -101,7 +101,7 @@ struct scalar<
 /// @{
 template <concepts::value T>
 struct value<Vc::Vector<T>> {
-  using type = T;
+    using type = T;
 };
 /// @}
 
@@ -109,11 +109,11 @@ struct value<Vc::Vector<T>> {
 template <concepts::simd_scalar T, auto N>
 struct dimensions<vc_soa::storage_type<T, N>> {
 
-  using index_type = vc_soa::index_type;
+    using index_type = vc_soa::index_type;
 
-  static constexpr index_type _dim{1};
-  static constexpr index_type _rows{N};
-  static constexpr index_type _columns{1};
+    static constexpr index_type _dim{1};
+    static constexpr index_type _rows{N};
+    static constexpr index_type _columns{1};
 };
 
 }  // namespace traits

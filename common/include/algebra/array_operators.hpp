@@ -23,12 +23,12 @@ template <template <typename, std::size_t> class array_t,
 ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator*(
     const array_t<scalar_t, N> &a, scalar_t s) noexcept {
 
-  array_t<scalar_t, N> result;
-  for (std::size_t i = 0u; i < N; ++i) {
-    result[i] = a[i] * s;
-  }
+    array_t<scalar_t, N> result;
+    for (std::size_t i = 0u; i < N; ++i) {
+        result[i] = a[i] * s;
+    }
 
-  return result;
+    return result;
 }
 
 template <template <typename, std::size_t> class array_t,
@@ -36,12 +36,12 @@ template <template <typename, std::size_t> class array_t,
 ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator*(
     scalar_t s, const array_t<scalar_t, N> &a) noexcept {
 
-  array_t<scalar_t, N> result;
-  for (std::size_t i = 0u; i < N; ++i) {
-    result[i] = s * a[i];
-  }
+    array_t<scalar_t, N> result;
+    for (std::size_t i = 0u; i < N; ++i) {
+        result[i] = s * a[i];
+    }
 
-  return result;
+    return result;
 }
 
 template <template <typename, std::size_t> class array_t,
@@ -49,12 +49,12 @@ template <template <typename, std::size_t> class array_t,
 ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator-(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) noexcept {
 
-  array_t<scalar_t, N> result;
-  for (std::size_t i = 0u; i < N; ++i) {
-    result[i] = a[i] - b[i];
-  }
+    array_t<scalar_t, N> result;
+    for (std::size_t i = 0u; i < N; ++i) {
+        result[i] = a[i] - b[i];
+    }
 
-  return result;
+    return result;
 }
 
 template <template <typename, std::size_t> class array_t,
@@ -62,12 +62,12 @@ template <template <typename, std::size_t> class array_t,
 ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator+(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) noexcept {
 
-  array_t<scalar_t, N> result;
-  for (std::size_t i = 0u; i < N; ++i) {
-    result[i] = a[i] + b[i];
-  }
+    array_t<scalar_t, N> result;
+    for (std::size_t i = 0u; i < N; ++i) {
+        result[i] = a[i] + b[i];
+    }
 
-  return result;
+    return result;
 }
 
 template <template <typename, std::size_t> class array_t,
@@ -75,12 +75,12 @@ template <template <typename, std::size_t> class array_t,
 ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator*(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) noexcept {
 
-  array_t<scalar_t, N> result;
-  for (std::size_t i = 0u; i < N; ++i) {
-    result[i] = a[i] * b[i];
-  }
+    array_t<scalar_t, N> result;
+    for (std::size_t i = 0u; i < N; ++i) {
+        result[i] = a[i] * b[i];
+    }
 
-  return result;
+    return result;
 }
 
 template <template <typename, std::size_t> class array_t,
@@ -88,12 +88,12 @@ template <template <typename, std::size_t> class array_t,
 ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> operator/(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) noexcept {
 
-  array_t<scalar_t, N> result;
-  for (std::size_t i = 0u; i < N; ++i) {
-    result[i] = a[i] / b[i];
-  }
+    array_t<scalar_t, N> result;
+    for (std::size_t i = 0u; i < N; ++i) {
+        result[i] = a[i] / b[i];
+    }
 
-  return result;
+    return result;
 }
 /// @}
 

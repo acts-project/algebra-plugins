@@ -31,21 +31,21 @@ using algebra::boolean::none_of;
 /// Vc overloads of boolean utilities
 /// @{
 template <typename T>
-  requires Vc::Traits::is_simd_mask<T>::value
+    requires Vc::Traits::is_simd_mask<T>::value
 constexpr bool any_of(T &&mask) {
-  return Vc::any_of(std::forward<T>(mask));
+    return Vc::any_of(std::forward<T>(mask));
 }
 
 template <typename T>
-  requires Vc::Traits::is_simd_mask<T>::value
+    requires Vc::Traits::is_simd_mask<T>::value
 constexpr bool all_of(T &&mask) {
-  return Vc::all_of(std::forward<T>(mask));
+    return Vc::all_of(std::forward<T>(mask));
 }
 
 template <typename T>
-  requires Vc::Traits::is_simd_mask<T>::value
+    requires Vc::Traits::is_simd_mask<T>::value
 constexpr bool none_of(T &&mask) {
-  return Vc::none_of(std::forward<T>(mask));
+    return Vc::none_of(std::forward<T>(mask));
 }
 /// @}
 

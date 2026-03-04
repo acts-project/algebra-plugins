@@ -1,6 +1,6 @@
 # Algebra plugins library, part of the ACTS project (R&D line)
 #
-# (c) 2021-2024 CERN for the benefit of the ACTS project
+# (c) 2021-2026 CERN for the benefit of the ACTS project
 #
 # Mozilla Public License Version 2.0
 
@@ -243,9 +243,8 @@ endif()
 
 # Set up the Algebra Plugin libraries.
 add_subdirectory(common)
-add_subdirectory(frontend)
-add_subdirectory(math)
-add_subdirectory(storage)
+add_subdirectory(plugins)
+add_subdirectory(generic)
 add_subdirectory(utils)
 
 # Set up the test(s).

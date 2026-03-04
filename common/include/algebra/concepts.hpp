@@ -1,6 +1,6 @@
 /** Algebra plugins library, part of the ACTS project
  *
- * (c) 2024 CERN for the benefit of the ACTS project
+ * (c) 2024-2026 CERN for the benefit of the ACTS project
  *
  * Mozilla Public License Version 2.0
  */
@@ -144,7 +144,7 @@ concept transform3D = requires(T trf) {
 template <typename A>
 concept algebra = (concepts::value<typename A::value_type> &&
                    concepts::scalar<typename A::scalar> &&
-                   concepts::index<typename A::size_type> &&
+                   concepts::index<typename A::index_type> &&
                    concepts::vector3D<typename A::vector3D> &&
                    concepts::point2D<typename A::point2D> &&
                    concepts::point3D<typename A::point3D> &&

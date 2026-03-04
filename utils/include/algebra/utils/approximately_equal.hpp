@@ -9,7 +9,7 @@
 
 // Project include(s)
 #include "algebra/concepts.hpp"
-#include "algebra/math/common.hpp"
+#include "algebra/math.hpp"
 #include "algebra/qualifiers.hpp"
 
 // System include(s)

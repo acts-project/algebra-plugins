@@ -57,15 +57,15 @@
          "displayName" : "CUDA Developer Configuration",
          "inherits" : [ "eigen" ],
          "cacheVariables" : {
-            "ALGEBRA_PLUGINS_TEST_CUDA" : "TRUE"
+            "ALGEBRA_BUILD_CUDA" : "TRUE"
          }
       },
       {
          "name" : "sycl",
          "displayName" : "SYCL Developer Configuration",
-         "inherits" : ["eigen" ],
+         "inherits" : [ "eigen" ],
          "cacheVariables" : {
-            "ALGEBRA_PLUGINS_TEST_SYCL" : "TRUE",
+            "ALGEBRA_BUILD_SYCL" : "TRUE",
             "VECMEM_BUILD_SYCL_LIBRARY" : "TRUE"
          }
       }

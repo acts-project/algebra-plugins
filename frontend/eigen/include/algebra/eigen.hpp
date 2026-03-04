@@ -104,6 +104,7 @@ struct eigen {
   using transform3D = algebra::eigen::transform3<value_type>;
   using point2D = algebra::eigen::point2<value_type>;
   using point3D = algebra::eigen::point3<value_type>;
+  using vector2D = algebra::eigen::vector2<value_type>;
   using vector3D = algebra::eigen::vector3<value_type>;
 
   template <std::size_t ROWS, std::size_t COLS>

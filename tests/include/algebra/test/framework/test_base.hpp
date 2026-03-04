@@ -20,14 +20,14 @@ namespace algebra::test {
 template <algebra::concepts::algebra A>
 class test_base {
 
-  using scalar_t = algebra::get_scalar_t<A>;
+    using scalar_t = algebra::get_scalar_t<A>;
 
- protected:
-  /// Epsilon parameter for the floating point comparisons
-  static constexpr scalar_t m_epsilon =
-      std::numeric_limits<scalar_t>::epsilon();
-  /// Variable defining when two floating point values are "close"
-  static constexpr scalar_t m_isclose = static_cast<scalar_t>(1e-5);
+    protected:
+    /// Epsilon parameter for the floating point comparisons
+    static constexpr scalar_t m_epsilon =
+        std::numeric_limits<scalar_t>::epsilon();
+    /// Variable defining when two floating point values are "close"
+    static constexpr scalar_t m_isclose = static_cast<scalar_t>(1e-5);
 
 };  // class test_base
 

@@ -17,13 +17,13 @@ namespace algebra::test {
 template <class functor_t, class... Args>
 void execute_host_test(std::size_t array_sizes, Args... args) {
 
-  // Instantiate the functor.
-  constexpr functor_t functor;
+    // Instantiate the functor.
+    constexpr functor_t functor;
 
-  // Execute the functor on all elements of the array(s).
-  for (std::size_t i = 0; i < array_sizes; ++i) {
-    functor(i, std::forward<Args>(args)...);
-  }
+    // Execute the functor on all elements of the array(s).
+    for (std::size_t i = 0; i < array_sizes; ++i) {
+        functor(i, std::forward<Args>(args)...);
+    }
 }
 
 }  // namespace algebra::test

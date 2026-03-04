@@ -34,9 +34,9 @@ template <class M>
 struct value {};
 
 template <typename T>
-  requires(std::is_arithmetic_v<T> && std::is_scalar_v<T>)
+    requires(std::is_arithmetic_v<T> && std::is_scalar_v<T>)
 struct value<T> {
-  using type = T;
+    using type = T;
 };
 
 template <class M>
@@ -47,7 +47,7 @@ using value_t = typename value<M>::type;
 /// @{
 template <class M>
 struct scalar {
-  using type = value_t<M>;
+    using type = value_t<M>;
 };
 
 template <class M>
@@ -77,24 +77,24 @@ using get_matrix_t = typename matrix<M>::template other_type<T, ROWS, COLS>;
 template <typename M>
 struct dimensions {
 
-  using index_type = int;
+    using index_type = int;
 
-  // Error case
-  static constexpr index_type _dim{-1};
-  static constexpr index_type _rows{-1};
-  static constexpr index_type _columns{-1};
+    // Error case
+    static constexpr index_type _dim{-1};
+    static constexpr index_type _rows{-1};
+    static constexpr index_type _columns{-1};
 };
 
 /// Specilization for scalar types
 template <typename M>
-  requires std::is_fundamental_v<M>
+    requires std::is_fundamental_v<M>
 struct dimensions<M> {
 
-  using index_type = std::size_t;
+    using index_type = std::size_t;
 
-  static constexpr index_type _dim{0};
-  static constexpr index_type _rows{1};
-  static constexpr index_type _columns{1};
+    static constexpr index_type _dim{0};
+    static constexpr index_type _rows{1};
+    static constexpr index_type _columns{1};
 };
 
 template <class M>
@@ -144,21 +144,21 @@ template <typename T>
 struct get_algebra {};
 
 template <typename T>
-  requires(!std::is_same_v<typename T::point3D, void>)
+    requires(!std::is_same_v<typename T::point3D, void>)
 struct get_algebra<T> {
-  template <typename U>
-  using simd = typename T::template simd<U>;
-  using index_type = typename T::index_type;
-  using boolean = typename T::boolean;
-  using value = typename T::value_type;
-  using scalar = typename T::scalar;
-  using point2D = typename T::point2D;
-  using point3D = typename T::point3D;
-  using vector2D = typename T::vector2D;
-  using vector3D = typename T::vector3D;
-  using transform3D = typename T::transform3D;
-  template <std::size_t ROWS, std::size_t COLS>
-  using matrix = typename T::template matrix<ROWS, COLS>;
+    template <typename U>
+    using simd = typename T::template simd<U>;
+    using index_type = typename T::index_type;
+    using boolean = typename T::boolean;
+    using value = typename T::value_type;
+    using scalar = typename T::scalar;
+    using point2D = typename T::point2D;
+    using point3D = typename T::point3D;
+    using vector2D = typename T::vector2D;
+    using vector3D = typename T::vector3D;
+    using transform3D = typename T::transform3D;
+    template <std::size_t ROWS, std::size_t COLS>
+    using matrix = typename T::template matrix<ROWS, COLS>;
 };
 
 }  // namespace traits
@@ -201,97 +201,97 @@ using get_matrix_t = typename traits::get_algebra<A>::template matrix<R, C>;
 
 /// Default type trait specializations
 /// @{
-#define ALGEBRA_PLUGINS_DEFINE_TYPE_TRAITS(A)                           \
-                                                                        \
-  namespace traits {                                                    \
-                                                                        \
-  template <typename T, auto N>                                         \
-  struct index<A::vector_type<T, N>> {                                  \
-    using type = algebra::A::index_type;                                \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto ROWS, auto COLS>                           \
-  struct index<A::matrix_type<T, ROWS, COLS>> {                         \
-    using type = algebra::A::index_type;                                \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto N>                                         \
-  struct dimensions<A::vector_type<T, N>> {                             \
-                                                                        \
-    using index_type = index_t<A::vector_type<T, N>>;                   \
-                                                                        \
-    static constexpr index_type _dim{1};                                \
-    static constexpr index_type _rows{N};                               \
-    static constexpr index_type _columns{1};                            \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto ROWS, auto COLS>                           \
-  struct dimensions<A::matrix_type<T, ROWS, COLS>> {                    \
-                                                                        \
-    using index_type = index_t<A::matrix_type<T, ROWS, COLS>>;          \
-                                                                        \
-    static constexpr index_type _dim{2};                                \
-    static constexpr index_type _rows{ROWS};                            \
-    static constexpr index_type _columns{COLS};                         \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto N>                                         \
-  struct value<A::vector_type<T, N>> {                                  \
-    using type = T;                                                     \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto ROWS, auto COLS>                           \
-  struct value<A::matrix_type<T, ROWS, COLS>> {                         \
-    using type = T;                                                     \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto N>                                         \
-  struct vector<A::vector_type<T, N>> {                                 \
-                                                                        \
-    template <typename other_T, auto other_N>                           \
-    using other_type = A::vector_type<other_T, other_N>;                \
-                                                                        \
-    using type = other_type<T, N>;                                      \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto ROWS, auto COLS>                           \
-  struct vector<A::matrix_type<T, ROWS, COLS>> {                        \
-                                                                        \
-    template <typename other_T, auto other_N>                           \
-    using other_type = A::vector_type<other_T, other_N>;                \
-                                                                        \
-    using type = other_type<T, ROWS>;                                   \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto ROWS, auto COLS>                           \
-  struct matrix<A::matrix_type<T, ROWS, COLS>> {                        \
-    template <typename other_T, auto other_ROWS, auto other_COLS>       \
-    using other_type = A::matrix_type<other_T, other_ROWS, other_COLS>; \
-                                                                        \
-    using type = A::matrix_type<T, ROWS, COLS>;                         \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto N>                                         \
-  struct matrix<A::vector_type<T, N>> {                                 \
-    template <typename other_T, auto other_ROWS, auto other_COLS>       \
-    using other_type = A::matrix_type<other_T, other_ROWS, other_COLS>; \
-                                                                        \
-    using type = other_type<T, N, 1>;                                   \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto N>                                         \
-  struct element_getter<A::vector_type<T, N>> {                         \
-    using type = A::element_getter;                                     \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto ROWS, auto COLS>                           \
-  struct element_getter<A::matrix_type<T, ROWS, COLS>> {                \
-    using type = A::element_getter;                                     \
-  };                                                                    \
-                                                                        \
-  template <typename T, auto ROWS, auto COLS>                           \
-  struct block_getter<A::matrix_type<T, ROWS, COLS>> {                  \
-    using type = A::block_getter;                                       \
-  };                                                                    \
-                                                                        \
-  }  // namespace algebra::traits
+#define ALGEBRA_PLUGINS_DEFINE_TYPE_TRAITS(A)                               \
+                                                                            \
+    namespace traits {                                                      \
+                                                                            \
+    template <typename T, auto N>                                           \
+    struct index<A::vector_type<T, N>> {                                    \
+        using type = algebra::A::index_type;                                \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto ROWS, auto COLS>                             \
+    struct index<A::matrix_type<T, ROWS, COLS>> {                           \
+        using type = algebra::A::index_type;                                \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto N>                                           \
+    struct dimensions<A::vector_type<T, N>> {                               \
+                                                                            \
+        using index_type = index_t<A::vector_type<T, N>>;                   \
+                                                                            \
+        static constexpr index_type _dim{1};                                \
+        static constexpr index_type _rows{N};                               \
+        static constexpr index_type _columns{1};                            \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto ROWS, auto COLS>                             \
+    struct dimensions<A::matrix_type<T, ROWS, COLS>> {                      \
+                                                                            \
+        using index_type = index_t<A::matrix_type<T, ROWS, COLS>>;          \
+                                                                            \
+        static constexpr index_type _dim{2};                                \
+        static constexpr index_type _rows{ROWS};                            \
+        static constexpr index_type _columns{COLS};                         \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto N>                                           \
+    struct value<A::vector_type<T, N>> {                                    \
+        using type = T;                                                     \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto ROWS, auto COLS>                             \
+    struct value<A::matrix_type<T, ROWS, COLS>> {                           \
+        using type = T;                                                     \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto N>                                           \
+    struct vector<A::vector_type<T, N>> {                                   \
+                                                                            \
+        template <typename other_T, auto other_N>                           \
+        using other_type = A::vector_type<other_T, other_N>;                \
+                                                                            \
+        using type = other_type<T, N>;                                      \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto ROWS, auto COLS>                             \
+    struct vector<A::matrix_type<T, ROWS, COLS>> {                          \
+                                                                            \
+        template <typename other_T, auto other_N>                           \
+        using other_type = A::vector_type<other_T, other_N>;                \
+                                                                            \
+        using type = other_type<T, ROWS>;                                   \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto ROWS, auto COLS>                             \
+    struct matrix<A::matrix_type<T, ROWS, COLS>> {                          \
+        template <typename other_T, auto other_ROWS, auto other_COLS>       \
+        using other_type = A::matrix_type<other_T, other_ROWS, other_COLS>; \
+                                                                            \
+        using type = A::matrix_type<T, ROWS, COLS>;                         \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto N>                                           \
+    struct matrix<A::vector_type<T, N>> {                                   \
+        template <typename other_T, auto other_ROWS, auto other_COLS>       \
+        using other_type = A::matrix_type<other_T, other_ROWS, other_COLS>; \
+                                                                            \
+        using type = other_type<T, N, 1>;                                   \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto N>                                           \
+    struct element_getter<A::vector_type<T, N>> {                           \
+        using type = A::element_getter;                                     \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto ROWS, auto COLS>                             \
+    struct element_getter<A::matrix_type<T, ROWS, COLS>> {                  \
+        using type = A::element_getter;                                     \
+    };                                                                      \
+                                                                            \
+    template <typename T, auto ROWS, auto COLS>                             \
+    struct block_getter<A::matrix_type<T, ROWS, COLS>> {                    \
+        using type = A::block_getter;                                       \
+    };                                                                      \
+                                                                            \
+    }  // namespace algebra::traits

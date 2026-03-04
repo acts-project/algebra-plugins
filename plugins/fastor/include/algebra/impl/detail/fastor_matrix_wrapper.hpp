@@ -42,45 +42,46 @@ namespace algebra::fastor {
 template <concepts::scalar T, std::size_t M1, std::size_t N>
 class Matrix : public Fastor::Tensor<T, M1, N> {
 
- public:
-  /// Inherit all constructors from the base class
-  using Fastor::Tensor<T, M1, N>::Tensor;
+    public:
+    /// Inherit all constructors from the base class
+    using Fastor::Tensor<T, M1, N>::Tensor;
 
- private:
-  /// When we encounter an `operator*` function call between Matrix objects, we
-  /// will catch it and handle it correctly by invoking `Fastor::matmul()`.
-  ///
-  /// The data type contained in the `other` has a separate template parameter
-  /// dedicated to it because in certain cases, we might want to multiply say, a
-  /// float matrix with a double matrix and not have it produce a compilation
-  /// error.
-  ///
-  /// The `static_cast` is there to signal both to the compiler and the reader
-  /// that we wish to interpret the `Matrix` object as a `Fastor::Tensor` here.
-  /// @{
-  template <std::size_t LR, std::size_t C, std::size_t RC, concepts::scalar S>
-  constexpr friend Matrix<S, LR, RC> operator*(const Matrix<S, LR, C>& lhs,
-                                               const Matrix<S, C, RC>& rhs);
+    private:
+    /// When we encounter an `operator*` function call between Matrix objects,
+    /// we will catch it and handle it correctly by invoking `Fastor::matmul()`.
+    ///
+    /// The data type contained in the `other` has a separate template parameter
+    /// dedicated to it because in certain cases, we might want to multiply say,
+    /// a float matrix with a double matrix and not have it produce a
+    /// compilation error.
+    ///
+    /// The `static_cast` is there to signal both to the compiler and the reader
+    /// that we wish to interpret the `Matrix` object as a `Fastor::Tensor`
+    /// here.
+    /// @{
+    template <std::size_t LR, std::size_t C, std::size_t RC, concepts::scalar S>
+    constexpr friend Matrix<S, LR, RC> operator*(const Matrix<S, LR, C>& lhs,
+                                                 const Matrix<S, C, RC>& rhs);
 
-  template <std::size_t R, std::size_t C, concepts::scalar S>
-  constexpr friend Fastor::Tensor<S, R> operator*(
-      const Matrix<S, R, C>& lhs, const Fastor::Tensor<S, C>& vector);
-  /// @}
+    template <std::size_t R, std::size_t C, concepts::scalar S>
+    constexpr friend Fastor::Tensor<S, R> operator*(
+        const Matrix<S, R, C>& lhs, const Fastor::Tensor<S, C>& vector);
+    /// @}
 
 };  // class Matrix
 
 template <std::size_t LR, std::size_t C, std::size_t RC, concepts::scalar S>
 constexpr Matrix<S, LR, RC> operator*(const Matrix<S, LR, C>& lhs,
                                       const Matrix<S, C, RC>& rhs) {
-  return Fastor::matmul(static_cast<Fastor::Tensor<S, LR, C>>(lhs),
-                        static_cast<Fastor::Tensor<S, C, RC>>(rhs));
+    return Fastor::matmul(static_cast<Fastor::Tensor<S, LR, C>>(lhs),
+                          static_cast<Fastor::Tensor<S, C, RC>>(rhs));
 }
 
 template <std::size_t R, std::size_t C, concepts::scalar S>
 constexpr Fastor::Tensor<S, R> operator*(const Matrix<S, R, C>& lhs,
                                          const Fastor::Tensor<S, C>& vector) {
-  return Fastor::matmul(static_cast<Fastor::Tensor<S, R, C>>(lhs),
-                        static_cast<Fastor::Tensor<S, C>>(vector));
+    return Fastor::matmul(static_cast<Fastor::Tensor<S, R, C>>(lhs),
+                          static_cast<Fastor::Tensor<S, C>>(vector));
 }
 
 }  // namespace algebra::fastor

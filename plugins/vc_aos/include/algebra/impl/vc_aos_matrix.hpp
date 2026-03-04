@@ -26,7 +26,7 @@ template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr value_t determinant(
     const algebra::storage::matrix<array_t, value_t, N, N> &m) noexcept {
-  return algebra::generic::math::determinant(m);
+    return algebra::generic::math::determinant(m);
 }
 
 /// @returns the inverse
@@ -36,7 +36,7 @@ ALGEBRA_HOST_DEVICE constexpr algebra::storage::matrix<array_t, value_t, COL,
                                                        ROW>
 inverse(
     const algebra::storage::matrix<array_t, value_t, ROW, COL> &m) noexcept {
-  return algebra::generic::math::inverse(m);
+    return algebra::generic::math::inverse(m);
 }
 
 /// @returns the transpose
@@ -46,7 +46,7 @@ ALGEBRA_HOST_DEVICE constexpr algebra::storage::matrix<array_t, value_t, COL,
                                                        ROW>
 transpose(
     const algebra::storage::matrix<array_t, value_t, ROW, COL> &m) noexcept {
-  return algebra::generic::math::transpose(m);
+    return algebra::generic::math::transpose(m);
 }
 
 }  // namespace algebra::vc_aos::math

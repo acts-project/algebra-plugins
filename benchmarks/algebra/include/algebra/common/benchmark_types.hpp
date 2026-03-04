@@ -42,7 +42,7 @@
 namespace algebra::benchmark {
 
 #define ALGEBRA_DEFINE_BENCHMARK_NAME(ALGEBRA) \
-  static std::string plugin_name(#ALGEBRA);
+    static std::string plugin_name(#ALGEBRA);
 
 // Select algebra-plugin to compile the test with
 #if ALGEBRA_BENCHMARK_ARRAY

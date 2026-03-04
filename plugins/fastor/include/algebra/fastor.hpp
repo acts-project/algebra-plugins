@@ -103,23 +103,23 @@ namespace plugin {
 /// @{
 template <concepts::value V>
 struct fastor {
-  /// Define scalar type
-  using value_type = V;
+    /// Define scalar type
+    using value_type = V;
 
-  template <concepts::element T>
-  using simd = T;
+    template <concepts::element T>
+    using simd = T;
 
-  using boolean = bool;
-  using scalar = value_type;
-  using index_type = algebra::fastor::index_type;
-  using transform3D = algebra::fastor::transform3<value_type>;
-  using point2D = algebra::fastor::point2<value_type>;
-  using point3D = algebra::fastor::point3<value_type>;
-  using vector2D = algebra::fastor::vector2<value_type>;
-  using vector3D = algebra::fastor::vector3<value_type>;
+    using boolean = bool;
+    using scalar = value_type;
+    using index_type = algebra::fastor::index_type;
+    using transform3D = algebra::fastor::transform3<value_type>;
+    using point2D = algebra::fastor::point2<value_type>;
+    using point3D = algebra::fastor::point3<value_type>;
+    using vector2D = algebra::fastor::vector2<value_type>;
+    using vector3D = algebra::fastor::vector3<value_type>;
 
-  template <std::size_t ROWS, std::size_t COLS>
-  using matrix = algebra::fastor::matrix_type<value_type, ROWS, COLS>;
+    template <std::size_t ROWS, std::size_t COLS>
+    using matrix = algebra::fastor::matrix_type<value_type, ROWS, COLS>;
 };
 /// @}
 

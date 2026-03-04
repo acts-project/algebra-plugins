@@ -35,9 +35,9 @@ namespace algebra::eigen {
 template <concepts::scalar T, int N>
 class array : public Eigen::Matrix<T, N, 1, 0, N, 1> {
 
- public:
-  /// Inherit all constructors from the base class
-  using Eigen::Matrix<T, N, 1, 0, N, 1>::Matrix;
+    public:
+    /// Inherit all constructors from the base class
+    using Eigen::Matrix<T, N, 1, 0, N, 1>::Matrix;
 
 };  // class array
 

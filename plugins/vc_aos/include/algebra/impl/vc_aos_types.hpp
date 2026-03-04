@@ -89,44 +89,44 @@ namespace traits {
 
 template <typename T, auto N>
 struct index<vc_aos::storage_type<T, N>> {
-  using index_type = vc_aos::index_type;
+    using index_type = vc_aos::index_type;
 };
 
 template <typename T, auto N>
 struct index<Vc_1::Vector<T, Vc_1::simd_abi::fixed_size<N>>> {
-  using index_type = vc_aos::index_type;
+    using index_type = vc_aos::index_type;
 };
 
 template <typename T, auto N>
 struct value<vc_aos::storage_type<T, N>> {
-  using type = T;
+    using type = T;
 };
 
 template <typename T, auto N>
 struct value<Vc_1::Vector<T, Vc_1::simd_abi::fixed_size<N>>> {
-  using type = T;
+    using type = T;
 };
 
 // Vector and storage types are different
 template <typename T, auto N>
 struct dimensions<vc_aos::storage_type<T, N>> {
 
-  using index_type = vc_aos::index_type;
+    using index_type = vc_aos::index_type;
 
-  static constexpr index_type _dim{1};
-  static constexpr index_type _rows{N};
-  static constexpr index_type _columns{1};
+    static constexpr index_type _dim{1};
+    static constexpr index_type _rows{N};
+    static constexpr index_type _columns{1};
 };
 
 // Vector and storage types are different
 template <typename T, auto N>
 struct dimensions<Vc_1::Vector<T, Vc_1::simd_abi::fixed_size<N>>> {
 
-  using index_type = vc_aos::index_type;
+    using index_type = vc_aos::index_type;
 
-  static constexpr index_type _dim{1};
-  static constexpr index_type _rows{N};
-  static constexpr index_type _columns{1};
+    static constexpr index_type _dim{1};
+    static constexpr index_type _rows{N};
+    static constexpr index_type _columns{1};
 };
 
 }  // namespace traits

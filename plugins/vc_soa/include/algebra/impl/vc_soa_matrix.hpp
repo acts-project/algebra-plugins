@@ -25,8 +25,8 @@ template <std::size_t ROW, std::size_t COL, concepts::simd_scalar scalar_t,
           template <typename, std::size_t> class array_t>
 ALGEBRA_HOST_DEVICE constexpr scalar_t determinant(
     const algebra::storage::matrix<array_t, scalar_t, ROW, COL> &) noexcept {
-  // @TODO: Implement
-  return scalar_t(0);
+    // @TODO: Implement
+    return scalar_t(0);
 }
 
 template <std::size_t ROW, std::size_t COL, concepts::simd_scalar scalar_t,
@@ -35,8 +35,8 @@ ALGEBRA_HOST_DEVICE constexpr algebra::storage::matrix<array_t, scalar_t, ROW,
                                                        COL>
 inverse(
     const algebra::storage::matrix<array_t, scalar_t, ROW, COL> &m) noexcept {
-  // @TODO: Implement
-  return m;
+    // @TODO: Implement
+    return m;
 }
 
 }  // namespace algebra::vc_soa::math

@@ -19,15 +19,15 @@
 namespace algebra {
 
 template <typename benchmark_t>
-  requires std::derived_from<benchmark_t, benchmark_base>
+    requires std::derived_from<benchmark_t, benchmark_base>
 inline void register_benchmark(const benchmark_base::configuration& cfg,
                                const std::string& suffix) {
-  benchmark_t bench{cfg};
+    benchmark_t bench{cfg};
 
-  ::benchmark::RegisterBenchmark((bench.name() + suffix).c_str(), bench)
-      ->UseRealTime()
-      ->MeasureProcessCPUTime()
-      ->ThreadPerCpu();
+    ::benchmark::RegisterBenchmark((bench.name() + suffix).c_str(), bench)
+        ->UseRealTime()
+        ->MeasureProcessCPUTime()
+        ->ThreadPerCpu();
 }
 
 }  // namespace algebra

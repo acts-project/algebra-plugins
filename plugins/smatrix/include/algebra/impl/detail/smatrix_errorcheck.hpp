@@ -11,11 +11,12 @@
 #include <TError.h>
 
 /// Macro helping with checking ROOT return/error codes
-#define SMATRIX_CHECK(EXP)                                                  \
-  do {                                                                      \
-    const int _error_code = EXP;                                            \
-    if (_error_code != 0) {                                                 \
-      Fatal("algebra::smatrix", "%s:%i Failure detected in expression: %s", \
-            __FILE__, __LINE__, #EXP);                                      \
-    }                                                                       \
-  } while (false)
+#define SMATRIX_CHECK(EXP)                                              \
+    do {                                                                \
+        const int _error_code = EXP;                                    \
+        if (_error_code != 0) {                                         \
+            Fatal("algebra::smatrix",                                   \
+                  "%s:%i Failure detected in expression: %s", __FILE__, \
+                  __LINE__, #EXP);                                      \
+        }                                                               \
+    } while (false)

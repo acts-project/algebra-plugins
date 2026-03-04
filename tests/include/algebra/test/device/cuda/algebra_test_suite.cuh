@@ -36,97 +36,97 @@ TYPED_TEST_SUITE_P(cuda_transform_test);
 /// Test for some basic 2D "vector operations"
 TYPED_TEST_P(cuda_vector_test, vector_2d_ops) {
 
-  // Run the test on the host, and on the/a device.
-  execute_host_test<vector_2d_ops_functor<TypeParam>>(
-      this->m_p1->size(), vecmem::get_data(*(this->m_p1)),
-      vecmem::get_data(*(this->m_p2)),
-      vecmem::get_data(*(this->m_output_host)));
+    // Run the test on the host, and on the/a device.
+    execute_host_test<vector_2d_ops_functor<TypeParam>>(
+        this->m_p1->size(), vecmem::get_data(*(this->m_p1)),
+        vecmem::get_data(*(this->m_p2)),
+        vecmem::get_data(*(this->m_output_host)));
 
-  execute_cuda_test<vector_2d_ops_functor<TypeParam>>(
-      this->m_p1->size(), vecmem::get_data(*(this->m_p1)),
-      vecmem::get_data(*(this->m_p2)),
-      vecmem::get_data(*(this->m_output_device)));
+    execute_cuda_test<vector_2d_ops_functor<TypeParam>>(
+        this->m_p1->size(), vecmem::get_data(*(this->m_p1)),
+        vecmem::get_data(*(this->m_p2)),
+        vecmem::get_data(*(this->m_output_device)));
 
-  // Compare the outputs.
-  this->compareOutputs();
+    // Compare the outputs.
+    this->compareOutputs();
 }
 
 /// Test for some basic 3D "vector operations"
 TYPED_TEST_P(cuda_vector_test, vector_3d_ops) {
 
-  // This test is just not numerically stable at float precision in optimized
-  // mode for some reason. :-(
+    // This test is just not numerically stable at float precision in optimized
+    // mode for some reason. :-(
 #ifdef NDEBUG
-  if (typeid(get_scalar_t<TypeParam>) == typeid(float)) {
-    GTEST_SKIP();
-  }
+    if (typeid(get_scalar_t<TypeParam>) == typeid(float)) {
+        GTEST_SKIP();
+    }
 #endif  // NDEBUG
 
-  // Run the test on the host, and on the/a device.
-  execute_host_test<vector_3d_ops_functor<TypeParam>>(
-      this->m_v1->size(), vecmem::get_data(*(this->m_v1)),
-      vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_host)));
+    // Run the test on the host, and on the/a device.
+    execute_host_test<vector_3d_ops_functor<TypeParam>>(
+        this->m_v1->size(), vecmem::get_data(*(this->m_v1)),
+        vecmem::get_data(*(this->m_v2)),
+        vecmem::get_data(*(this->m_output_host)));
 
-  execute_cuda_test<vector_3d_ops_functor<TypeParam>>(
-      this->m_v1->size(), vecmem::get_data(*(this->m_v1)),
-      vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_device)));
+    execute_cuda_test<vector_3d_ops_functor<TypeParam>>(
+        this->m_v1->size(), vecmem::get_data(*(this->m_v1)),
+        vecmem::get_data(*(this->m_v2)),
+        vecmem::get_data(*(this->m_output_device)));
 
-  // Compare the outputs.
-  this->compareOutputs();
+    // Compare the outputs.
+    this->compareOutputs();
 }
 
 /// Test for handling matrices
 TYPED_TEST_P(cuda_matrix_test, matrix64_ops) {
 
-  // Run the test on the host, and on the/a device.
-  execute_host_test<matrix64_ops_functor<TypeParam>>(
-      this->m_m1->size(), vecmem::get_data(*(this->m_m1)),
-      vecmem::get_data(*(this->m_output_host)));
+    // Run the test on the host, and on the/a device.
+    execute_host_test<matrix64_ops_functor<TypeParam>>(
+        this->m_m1->size(), vecmem::get_data(*(this->m_m1)),
+        vecmem::get_data(*(this->m_output_host)));
 
-  execute_cuda_test<matrix64_ops_functor<TypeParam>>(
-      this->m_m1->size(), vecmem::get_data(*(this->m_m1)),
-      vecmem::get_data(*(this->m_output_device)));
+    execute_cuda_test<matrix64_ops_functor<TypeParam>>(
+        this->m_m1->size(), vecmem::get_data(*(this->m_m1)),
+        vecmem::get_data(*(this->m_output_device)));
 
-  // Compare the outputs.
-  this->compareOutputs();
+    // Compare the outputs.
+    this->compareOutputs();
 }
 
 /// Test for handling matrices
 TYPED_TEST_P(cuda_matrix_test, matrix22_ops) {
 
-  // Run the test on the host, and on the/a device.
-  execute_host_test<matrix22_ops_functor<TypeParam>>(
-      this->m_m2->size(), vecmem::get_data(*(this->m_m2)),
-      vecmem::get_data(*(this->m_output_host)));
+    // Run the test on the host, and on the/a device.
+    execute_host_test<matrix22_ops_functor<TypeParam>>(
+        this->m_m2->size(), vecmem::get_data(*(this->m_m2)),
+        vecmem::get_data(*(this->m_output_host)));
 
-  execute_cuda_test<matrix22_ops_functor<TypeParam>>(
-      this->m_m2->size(), vecmem::get_data(*(this->m_m2)),
-      vecmem::get_data(*(this->m_output_device)));
+    execute_cuda_test<matrix22_ops_functor<TypeParam>>(
+        this->m_m2->size(), vecmem::get_data(*(this->m_m2)),
+        vecmem::get_data(*(this->m_output_device)));
 
-  // Compare the outputs.
-  this->compareOutputs();
+    // Compare the outputs.
+    this->compareOutputs();
 }
 
 /// Test for some operations with @c transform3
 TYPED_TEST_P(cuda_transform_test, transform3D) {
 
-  // Run the test on the host, and on the/a device.
-  execute_host_test<transform3_ops_functor<TypeParam>>(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_host)));
+    // Run the test on the host, and on the/a device.
+    execute_host_test<transform3_ops_functor<TypeParam>>(
+        this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+        vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
+        vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
+        vecmem::get_data(*(this->m_output_host)));
 
-  execute_cuda_test<transform3_ops_functor<TypeParam>>(
-      this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
-      vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
-      vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
-      vecmem::get_data(*(this->m_output_device)));
+    execute_cuda_test<transform3_ops_functor<TypeParam>>(
+        this->m_t1->size(), vecmem::get_data(*(this->m_t1)),
+        vecmem::get_data(*(this->m_t2)), vecmem::get_data(*(this->m_t3)),
+        vecmem::get_data(*(this->m_v1)), vecmem::get_data(*(this->m_v2)),
+        vecmem::get_data(*(this->m_output_device)));
 
-  // Compare the outputs.
-  this->compareOutputs();
+    // Compare the outputs.
+    this->compareOutputs();
 }
 
 }  // namespace algebra::test::cuda

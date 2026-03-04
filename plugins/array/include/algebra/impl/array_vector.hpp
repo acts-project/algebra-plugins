@@ -21,9 +21,9 @@ namespace algebra::array {
 /// @param v the input vector
 template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
-  requires(N >= 2)
+    requires(N >= 2)
 ALGEBRA_HOST_DEVICE constexpr scalar_t phi(const array_t<scalar_t, N> &v) {
-  return algebra::generic::math::phi(v);
+    return algebra::generic::math::phi(v);
 }
 
 /// This method retrieves the perpendicular magnitude of a vector with rows >= 2
@@ -31,9 +31,9 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t phi(const array_t<scalar_t, N> &v) {
 /// @param v the input vector
 template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
-  requires(N >= 2)
+    requires(N >= 2)
 ALGEBRA_HOST_DEVICE constexpr scalar_t perp(const array_t<scalar_t, N> &v) {
-  return algebra::generic::math::perp(v);
+    return algebra::generic::math::perp(v);
 }
 
 /// This method retrieves theta from a vector with rows >= 3
@@ -41,9 +41,9 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t perp(const array_t<scalar_t, N> &v) {
 /// @param v the input vector
 template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
-  requires(N >= 2)
+    requires(N >= 2)
 ALGEBRA_HOST_DEVICE constexpr scalar_t theta(const array_t<scalar_t, N> &v) {
-  return algebra::generic::math::theta(v);
+    return algebra::generic::math::theta(v);
 }
 
 /// Cross product between two input vectors - 3 Dim
@@ -60,35 +60,35 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t theta(const array_t<scalar_t, N> &v) {
 /// @{
 template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
-  requires(N >= 3)
+    requires(N >= 3)
 ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
     const array_t<scalar_t, N> &a, const array_t<scalar_t, N> &b) {
-  return algebra::generic::math::cross(a, b);
+    return algebra::generic::math::cross(a, b);
 }
 
 template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
-  requires(N >= 3)
+    requires(N >= 3)
 ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
     const array_t<scalar_t, N> &a, const array_t<array_t<scalar_t, N>, 1> &b) {
-  return algebra::generic::math::cross(a, b);
+    return algebra::generic::math::cross(a, b);
 }
 
 template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
-  requires(N >= 3)
+    requires(N >= 3)
 ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
     const array_t<array_t<scalar_t, N>, 1> &a, const array_t<scalar_t, N> &b) {
-  return algebra::generic::math::cross(a, b);
+    return algebra::generic::math::cross(a, b);
 }
 
 template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
-  requires(N >= 3)
+    requires(N >= 3)
 ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> cross(
     const array_t<array_t<scalar_t, N>, 1> &a,
     const array_t<array_t<scalar_t, N>, 1> &b) {
-  return algebra::generic::math::cross(a, b);
+    return algebra::generic::math::cross(a, b);
 }
 /// @}
 
@@ -103,45 +103,45 @@ template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
 ALGEBRA_HOST_DEVICE constexpr scalar_t dot(const array_t<scalar_t, N> &a,
                                            const array_t<scalar_t, N> &b) {
-  array_t<scalar_t, N> tmp;
-  for (index_t i = 0; i < N; i++) {
-    tmp[i] = a[i] * b[i];
-  }
-  scalar_t ret{0.f};
-  for (index_t i = 0; i < N; i++) {
-    ret += tmp[i];
-  }
-  return ret;
+    array_t<scalar_t, N> tmp;
+    for (index_t i = 0; i < N; i++) {
+        tmp[i] = a[i] * b[i];
+    }
+    scalar_t ret{0.f};
+    for (index_t i = 0; i < N; i++) {
+        ret += tmp[i];
+    }
+    return ret;
 }
 
 template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
 ALGEBRA_HOST_DEVICE constexpr scalar_t dot(
     const array_t<scalar_t, N> &a, const array_t<array_t<scalar_t, N>, 1> &b) {
-  array_t<scalar_t, N> tmp;
-  for (index_t i = 0; i < N; i++) {
-    tmp[i] = a[i] * b[0][i];
-  }
-  scalar_t ret{0.f};
-  for (index_t i = 0; i < N; i++) {
-    ret += tmp[i];
-  }
-  return ret;
+    array_t<scalar_t, N> tmp;
+    for (index_t i = 0; i < N; i++) {
+        tmp[i] = a[i] * b[0][i];
+    }
+    scalar_t ret{0.f};
+    for (index_t i = 0; i < N; i++) {
+        ret += tmp[i];
+    }
+    return ret;
 }
 
 template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
 ALGEBRA_HOST_DEVICE constexpr scalar_t dot(
     const array_t<array_t<scalar_t, N>, 1> &a, const array_t<scalar_t, N> &b) {
-  array_t<scalar_t, N> tmp;
-  for (index_t i = 0; i < N; i++) {
-    tmp[i] = a[0][i] * b[i];
-  }
-  scalar_t ret{0.f};
-  for (index_t i = 0; i < N; i++) {
-    ret += tmp[i];
-  }
-  return ret;
+    array_t<scalar_t, N> tmp;
+    for (index_t i = 0; i < N; i++) {
+        tmp[i] = a[0][i] * b[i];
+    }
+    scalar_t ret{0.f};
+    for (index_t i = 0; i < N; i++) {
+        ret += tmp[i];
+    }
+    return ret;
 }
 
 template <concepts::index index_t, template <typename, index_t> class array_t,
@@ -149,15 +149,15 @@ template <concepts::index index_t, template <typename, index_t> class array_t,
 ALGEBRA_HOST_DEVICE constexpr scalar_t dot(
     const array_t<array_t<scalar_t, N>, 1> &a,
     const array_t<array_t<scalar_t, N>, 1> &b) {
-  array_t<scalar_t, N> tmp;
-  for (index_t i = 0; i < N; i++) {
-    tmp[i] = a[0][i] * b[0][i];
-  }
-  scalar_t ret{0.f};
-  for (index_t i = 0; i < N; i++) {
-    ret += tmp[i];
-  }
-  return ret;
+    array_t<scalar_t, N> tmp;
+    for (index_t i = 0; i < N; i++) {
+        tmp[i] = a[0][i] * b[0][i];
+    }
+    scalar_t ret{0.f};
+    for (index_t i = 0; i < N; i++) {
+        ret += tmp[i];
+    }
+    return ret;
 }
 /// @}
 
@@ -166,10 +166,10 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t dot(
 /// @param v the input vector
 template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
-  requires(N >= 2)
+    requires(N >= 2)
 ALGEBRA_HOST_DEVICE constexpr scalar_t norm(const array_t<scalar_t, N> &v) {
 
-  return algebra::math::sqrt(dot(v, v));
+    return algebra::math::sqrt(dot(v, v));
 }
 
 /// This method retrieves the pseudo-rapidity from a vector or vector base with
@@ -178,11 +178,11 @@ ALGEBRA_HOST_DEVICE constexpr scalar_t norm(const array_t<scalar_t, N> &v) {
 /// @param v the input vector
 template <concepts::index index_t, template <typename, index_t> class array_t,
           concepts::scalar scalar_t, index_t N>
-  requires(N >= 3)
+    requires(N >= 3)
 ALGEBRA_HOST_DEVICE constexpr scalar_t eta(
     const array_t<scalar_t, N> &v) noexcept {
 
-  return algebra::math::atanh(v[2] / norm(v));
+    return algebra::math::atanh(v[2] / norm(v));
 }
 
 /// Get a normalized version of the input vector
@@ -193,7 +193,7 @@ template <concepts::index index_t, template <typename, index_t> class array_t,
 ALGEBRA_HOST_DEVICE constexpr array_t<scalar_t, N> normalize(
     const array_t<scalar_t, N> &v) {
 
-  return (static_cast<scalar_t>(1.) / norm(v)) * v;
+    return (static_cast<scalar_t>(1.) / norm(v)) * v;
 }
 
 }  // namespace algebra::array

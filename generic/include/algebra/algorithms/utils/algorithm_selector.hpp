@@ -21,13 +21,13 @@ namespace algebra::generic {
 // Default algorithm
 template <std::size_t N, typename... Args>
 struct determinant_selector {
-  using type = matrix::determinant::partial_pivot_lud<Args...>;
+    using type = matrix::determinant::partial_pivot_lud<Args...>;
 };
 
 /// Always use hard coded implementation for very small matrices
 template <typename... Args>
 struct determinant_selector<2, Args...> {
-  using type = matrix::determinant::hard_coded<Args...>;
+    using type = matrix::determinant::hard_coded<Args...>;
 };
 
 /// @tparam M matrix type
@@ -40,13 +40,13 @@ using determinant_t =
 /// @{
 template <std::size_t N, typename... Args>
 struct inversion_selector {
-  using type = matrix::inverse::partial_pivot_lud<Args...>;
+    using type = matrix::inverse::partial_pivot_lud<Args...>;
 };
 
 /// Always use hard coded implementation for very small matrices
 template <typename... Args>
 struct inversion_selector<2, Args...> {
-  using type = matrix::inverse::hard_coded<Args...>;
+    using type = matrix::inverse::hard_coded<Args...>;
 };
 
 /// @tparam M matrix type

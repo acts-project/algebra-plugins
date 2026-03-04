@@ -33,11 +33,11 @@ namespace algebra::vc_soa::math {
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-  requires(N >= 2)
+    requires(N >= 2)
 ALGEBRA_HOST_DEVICE constexpr auto phi(
     const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
-  return Vc::atan2(v[1], v[0]);
+    return Vc::atan2(v[1], v[0]);
 }
 
 /// This method retrieves the perpendicular magnitude of a vector with rows >= 2
@@ -49,11 +49,11 @@ ALGEBRA_HOST_DEVICE constexpr auto phi(
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-  requires(N >= 2)
+    requires(N >= 2)
 ALGEBRA_HOST_DEVICE constexpr auto perp(
     const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
-  return Vc::sqrt(Vc::fma(v[0], v[0], v[1] * v[1]));
+    return Vc::sqrt(Vc::fma(v[0], v[0], v[1] * v[1]));
 }
 
 /// This method retrieves theta from a vector, vector base with rows >= 3
@@ -65,11 +65,11 @@ ALGEBRA_HOST_DEVICE constexpr auto perp(
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-  requires(N >= 3)
+    requires(N >= 3)
 ALGEBRA_HOST_DEVICE constexpr auto theta(
     const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
-  return Vc::atan2(perp(v), v[2]);
+    return Vc::atan2(perp(v), v[2]);
 }
 
 /// Cross product between two input vectors - 3 Dim
@@ -84,14 +84,15 @@ ALGEBRA_HOST_DEVICE constexpr auto theta(
 /// @return a vector (expression) representing the cross product
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-  requires(N == 3)
+    requires(N == 3)
 ALGEBRA_HOST_DEVICE constexpr algebra::storage::vector<N, Vc::Vector<value_t>,
                                                        array_t>
 cross(const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &a,
       const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
 
-  return {Vc::fma(a[1], b[2], -b[1] * a[2]), Vc::fma(a[2], b[0], -b[2] * a[0]),
-          Vc::fma(a[0], b[1], -b[0] * a[1])};
+    return {Vc::fma(a[1], b[2], -b[1] * a[2]),
+            Vc::fma(a[2], b[0], -b[2] * a[0]),
+            Vc::fma(a[0], b[1], -b[0] * a[1])};
 }
 
 /// Dot product between two input vectors
@@ -110,13 +111,13 @@ ALGEBRA_HOST_DEVICE constexpr Vc::Vector<value_t> dot(
     const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &a,
     const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &b) {
 
-  auto ret = a[0] * b[0];
+    auto ret = a[0] * b[0];
 
-  for (unsigned int i{1u}; i < N; i++) {
-    ret = Vc::fma(a[i], b[i], ret);
-  }
+    for (unsigned int i{1u}; i < N; i++) {
+        ret = Vc::fma(a[i], b[i], ret);
+    }
 
-  return ret;
+    return ret;
 }
 
 /// This method retrieves the norm of a vector, no dimension restriction
@@ -131,7 +132,7 @@ template <std::size_t N, concepts::value value_t,
 ALGEBRA_HOST_DEVICE constexpr auto norm(
     const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
-  return Vc::sqrt(dot(v, v));
+    return Vc::sqrt(dot(v, v));
 }
 
 /// Get a normalized version of the input vector
@@ -147,13 +148,13 @@ ALGEBRA_HOST_DEVICE constexpr algebra::storage::vector<N, Vc::Vector<value_t>,
                                                        array_t>
 normalize(const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
-  return (Vc::Vector<value_t>::One() / norm(v)) * v;
+    return (Vc::Vector<value_t>::One() / norm(v)) * v;
 
-  // Less accurate, but faster
-  // return Vc::reciprocal(norm(v)) * v;
+    // Less accurate, but faster
+    // return Vc::reciprocal(norm(v)) * v;
 
-  // Even less accurate, but even faster
-  // return Vc::rsqrt(dot(v, v)) * v;
+    // Even less accurate, but even faster
+    // return Vc::rsqrt(dot(v, v)) * v;
 }
 
 /// This method retrieves the pseudo-rapidity from a vector or vector base with
@@ -166,20 +167,20 @@ normalize(const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 /// @param v the input vector
 template <std::size_t N, concepts::value value_t,
           template <typename, std::size_t> class array_t>
-  requires(N >= 3)
+    requires(N >= 3)
 ALGEBRA_HOST_DEVICE constexpr auto eta(
     const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
-  // atanh does not exist in Vc
-  auto atanh_func = [](value_t e) { return std::atanh(e); };
+    // atanh does not exist in Vc
+    auto atanh_func = [](value_t e) { return std::atanh(e); };
 
-  return (v[2] / norm(v)).apply(atanh_func);
+    return (v[2] / norm(v)).apply(atanh_func);
 
-  // Faster, but less accurate
-  // return (Vc::reciprocal(norm(v)) * v[2]).apply(atanh_func);
+    // Faster, but less accurate
+    // return (Vc::reciprocal(norm(v)) * v[2]).apply(atanh_func);
 
-  // Even faster, but even less accurate
-  // return (Vc::rsqrt(dot(v, v)) * v[2]).apply(atanh_func);
+    // Even faster, but even less accurate
+    // return (Vc::rsqrt(dot(v, v)) * v[2]).apply(atanh_func);
 }
 
 /// Elementwise sum
@@ -196,13 +197,13 @@ template <std::size_t N, concepts::value value_t,
 ALGEBRA_HOST_DEVICE constexpr Vc::Vector<value_t> sum(
     const algebra::storage::vector<N, Vc::Vector<value_t>, array_t> &v) {
 
-  Vc::Vector<value_t> res{v[0]};
+    Vc::Vector<value_t> res{v[0]};
 
-  for (std::size_t i = 1u; i < Vc::Vector<value_t>::size(); ++i) {
-    res = res + v[i];
-  }
+    for (std::size_t i = 1u; i < Vc::Vector<value_t>::size(); ++i) {
+        res = res + v[i];
+    }
 
-  return res;
+    return res;
 }
 
 }  // namespace algebra::vc_soa::math

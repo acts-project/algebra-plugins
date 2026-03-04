@@ -24,34 +24,34 @@ using namespace algebra;
 /// Run vector benchmarks
 int main(int argc, char** argv) {
 
-  constexpr std::size_t n_samples{100000};
+    constexpr std::size_t n_samples{100000};
 
-  //
-  // Prepare benchmarks
-  //
-  algebra::benchmark_base::configuration cfg_s{};
-  // Reduce the number of samples, since a single SoA struct contains multiple
-  // vectors
-  cfg_s.n_samples(n_samples / Vc::float_v::Size);
+    //
+    // Prepare benchmarks
+    //
+    algebra::benchmark_base::configuration cfg_s{};
+    // Reduce the number of samples, since a single SoA struct contains multiple
+    // vectors
+    cfg_s.n_samples(n_samples / Vc::float_v::Size);
 
-  // For double precision we need more samples (less vectors per SoA)
-  algebra::benchmark_base::configuration cfg_d{cfg_s};
-  cfg_d.n_samples(n_samples / Vc::double_v::Size);
+    // For double precision we need more samples (less vectors per SoA)
+    algebra::benchmark_base::configuration cfg_d{cfg_s};
+    cfg_d.n_samples(n_samples / Vc::double_v::Size);
 
-  std::cout << "-------------------------------------------\n"
-            << "Algebra-Plugins 'vector' benchmark (Vc SoA)\n"
-            << "-------------------------------------------\n\n"
-            << "(single)\n"
-            << cfg_s << "(double)\n"
-            << cfg_d;
+    std::cout << "-------------------------------------------\n"
+              << "Algebra-Plugins 'vector' benchmark (Vc SoA)\n"
+              << "-------------------------------------------\n\n"
+              << "(single)\n"
+              << cfg_s << "(double)\n"
+              << cfg_d;
 
-  //
-  // Define and register all benchmarks
-  //
-  ALGEBRA_PLUGINS_DEFINE_VECTOR_BENCH(vc_soa)
-  ALGEBRA_PLUGINS_REGISTER_VECTOR_BENCH(cfg_s, cfg_d)
+    //
+    // Define and register all benchmarks
+    //
+    ALGEBRA_PLUGINS_DEFINE_VECTOR_BENCH(vc_soa)
+    ALGEBRA_PLUGINS_REGISTER_VECTOR_BENCH(cfg_s, cfg_d)
 
-  ::benchmark::Initialize(&argc, argv);
-  ::benchmark::RunSpecifiedBenchmarks();
-  ::benchmark::Shutdown();
+    ::benchmark::Initialize(&argc, argv);
+    ::benchmark::RunSpecifiedBenchmarks();
+    ::benchmark::Shutdown();
 }

@@ -62,15 +62,16 @@ namespace generic {
 template <concepts::scalar T, auto ROWS, auto COLS>
 struct determinant_selector<4, vc_aos::matrix_type<T, ROWS, COLS>,
                             vc_aos::element_getter> {
-  using type =
-      matrix::determinant::hard_coded<vc_aos::matrix_type<T, ROWS, COLS>>;
+    using type =
+        matrix::determinant::hard_coded<vc_aos::matrix_type<T, ROWS, COLS>>;
 };
 
 // Inversion algorithms
 template <concepts::scalar T, auto ROWS, auto COLS>
 struct inversion_selector<4, vc_aos::matrix_type<T, ROWS, COLS>,
                           vc_aos::element_getter> {
-  using type = matrix::inverse::hard_coded<vc_aos::matrix_type<T, ROWS, COLS>>;
+    using type =
+        matrix::inverse::hard_coded<vc_aos::matrix_type<T, ROWS, COLS>>;
 };
 
 }  // namespace generic
@@ -119,23 +120,23 @@ namespace plugin {
 /// @{
 template <concepts::value V>
 struct vc_aos {
-  /// Define scalar type
-  using value_type = V;
+    /// Define scalar type
+    using value_type = V;
 
-  template <concepts::element T>
-  using simd = T;
+    template <concepts::element T>
+    using simd = T;
 
-  using boolean = bool;
-  using scalar = value_type;
-  using index_type = algebra::vc_aos::index_type;
-  using transform3D = algebra::vc_aos::transform3<value_type>;
-  using point2D = algebra::vc_aos::point2<value_type>;
-  using point3D = algebra::vc_aos::point3<value_type>;
-  using vector2D = algebra::vc_aos::vector2<value_type>;
-  using vector3D = algebra::vc_aos::vector3<value_type>;
+    using boolean = bool;
+    using scalar = value_type;
+    using index_type = algebra::vc_aos::index_type;
+    using transform3D = algebra::vc_aos::transform3<value_type>;
+    using point2D = algebra::vc_aos::point2<value_type>;
+    using point3D = algebra::vc_aos::point3<value_type>;
+    using vector2D = algebra::vc_aos::vector2<value_type>;
+    using vector3D = algebra::vc_aos::vector3<value_type>;
 
-  template <std::size_t ROWS, std::size_t COLS>
-  using matrix = algebra::vc_aos::matrix_type<value_type, ROWS, COLS>;
+    template <std::size_t ROWS, std::size_t COLS>
+    using matrix = algebra::vc_aos::matrix_type<value_type, ROWS, COLS>;
 };
 /// @}
 

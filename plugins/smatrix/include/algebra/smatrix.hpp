@@ -94,23 +94,23 @@ namespace plugin {
 /// @{
 template <concepts::value V>
 struct smatrix {
-  /// Define scalar type
-  using value_type = V;
+    /// Define scalar type
+    using value_type = V;
 
-  template <concepts::element T>
-  using simd = T;
+    template <concepts::element T>
+    using simd = T;
 
-  using boolean = bool;
-  using scalar = value_type;
-  using index_type = algebra::smatrix::index_type;
-  using transform3D = algebra::smatrix::transform3<value_type>;
-  using point2D = algebra::smatrix::point2<value_type>;
-  using point3D = algebra::smatrix::point3<value_type>;
-  using vector2D = algebra::smatrix::vector2<value_type>;
-  using vector3D = algebra::smatrix::vector3<value_type>;
+    using boolean = bool;
+    using scalar = value_type;
+    using index_type = algebra::smatrix::index_type;
+    using transform3D = algebra::smatrix::transform3<value_type>;
+    using point2D = algebra::smatrix::point2<value_type>;
+    using point3D = algebra::smatrix::point3<value_type>;
+    using vector2D = algebra::smatrix::vector2<value_type>;
+    using vector3D = algebra::smatrix::vector3<value_type>;
 
-  template <std::size_t ROWS, std::size_t COLS>
-  using matrix = algebra::smatrix::matrix_type<value_type, ROWS, COLS>;
+    template <std::size_t ROWS, std::size_t COLS>
+    using matrix = algebra::smatrix::matrix_type<value_type, ROWS, COLS>;
 };
 /// @}
 

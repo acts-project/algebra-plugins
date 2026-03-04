@@ -36,10 +36,10 @@ concept element = algebra::concepts::value<T> ||
 template <typename T>
 concept scalar = !algebra::traits::is_matrix<T> &&
                  !algebra::traits::is_vector<T> && requires(T a, T b) {
-                   { a + b } -> std::convertible_to<T>;
-                   { a - b } -> std::convertible_to<T>;
-                   { a* b } -> std::convertible_to<T>;
-                   { a / b } -> std::convertible_to<T>;
+                     { a + b } -> std::convertible_to<T>;
+                     { a - b } -> std::convertible_to<T>;
+                     { a* b } -> std::convertible_to<T>;
+                     { a / b } -> std::convertible_to<T>;
                  };
 
 /// Check if a scalar is simd
@@ -107,7 +107,7 @@ concept matrix_multipliable =
     (algebra::traits::columns<MA> == algebra::traits::rows<MB>) &&
     requires(algebra::traits::scalar_t<MA> sa,
              algebra::traits::scalar_t<MB> sb) {
-      { (sa * sb) + (sa * sb) };
+        { (sa * sb) + (sa * sb) };
     };
 
 template <typename MA, typename MB, typename MC>
@@ -118,26 +118,26 @@ concept matrix_multipliable_into =
     (algebra::traits::columns<MC> == algebra::traits::columns<MB>) &&
     requires(algebra::traits::scalar_t<MA> sa, algebra::traits::scalar_t<MB> sb,
              algebra::traits::scalar_t<MC>& sc) {
-      { sc += (sa * sb) };
+        { sc += (sa * sb) };
     };
 /// @}
 
 /// Transform concept
 template <typename T>
 concept transform3D = requires(T trf) {
-  // Local type definitions
-  requires scalar<typename T::scalar_type>;
-  requires vector3D<typename T::vector3>;
-  requires point2D<typename T::point2>;
-  requires point3D<typename T::point3>;
+    // Local type definitions
+    requires scalar<typename T::scalar_type>;
+    requires vector3D<typename T::vector3>;
+    requires point2D<typename T::point2>;
+    requires point3D<typename T::point3>;
 
-  // Methods
-  trf.rotation();
-  trf.translation();
-  trf.point_to_global(typename T::vector3());
-  trf.point_to_local(typename T::vector3());
-  trf.vector_to_global(typename T::vector3());
-  trf.vector_to_local(typename T::vector3());
+    // Methods
+    trf.rotation();
+    trf.translation();
+    trf.point_to_global(typename T::vector3());
+    trf.point_to_local(typename T::vector3());
+    trf.vector_to_global(typename T::vector3());
+    trf.vector_to_local(typename T::vector3());
 };
 
 /// Algebra plugin concept
